@@ -1,6 +1,7 @@
 """Command-line interface for RIPPLE."""
 
 import argparse
+import json
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -8,6 +9,7 @@ from time import perf_counter
 
 from ripple.cache import ScanResult, scan_repository_cached
 from ripple.scanner import ScanError
+from ripple.tools import ToolSession, error_result
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -28,6 +30,13 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help="bypass cache reads and writes",
     )
+
+    tool_parser = subparsers.add_parser(
+        "tool", help="invoke a deterministic repository tool"
+    )
+    tool_parser.add_argument("repo", type=Path, help="path to a Git repository")
+    tool_parser.add_argument("name", help="tool name")
+    tool_parser.add_argument("arguments", help="tool arguments as a JSON object")
     return parser
 
 
@@ -39,10 +48,7 @@ def _cache_summary(result: ScanResult) -> str:
     return f"{status} ({relative_path})"
 
 
-def main(argv: Sequence[str] | None = None) -> int:
-    """Run the RIPPLE command-line interface."""
-
-    args = _parser().parse_args(argv)
+def _run_scan(args: argparse.Namespace) -> int:
     started_at = perf_counter()
     try:
         result = scan_repository_cached(args.repo, use_cache=not args.no_cache)
@@ -69,6 +75,40 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"Cache: {_cache_summary(result)}")
     print(f"Scan time: {elapsed:.2f}s")
     return 0
+
+
+def _run_tool(args: argparse.Namespace) -> int:
+    try:
+        arguments = json.loads(args.arguments)
+    except json.JSONDecodeError as error:
+        result = error_result(
+            "e1",
+            "invalid_json",
+            "tool arguments must be valid JSON",
+            str(error),
+        )
+        print(result.model_dump_json(indent=2))
+        return 1
+
+    try:
+        scan_result = scan_repository_cached(args.repo)
+    except ScanError as error:
+        result = error_result("e1", "repository_error", str(error))
+        print(result.model_dump_json(indent=2))
+        return 1
+
+    result = ToolSession(scan_result.index).invoke(args.name, arguments)
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Run the RIPPLE command-line interface."""
+
+    args = _parser().parse_args(argv)
+    if args.command == "tool":
+        return _run_tool(args)
+    return _run_scan(args)
 
 
 if __name__ == "__main__":

@@ -7,8 +7,10 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
+from ripple.graph import build_dependency_graph
 from ripple.models import FileRecord, ImportRecord, RepositoryIndex, SymbolRecord
 from ripple.references import extract_references
+from ripple.test_mapping import build_test_mappings
 
 
 class ScanError(ValueError):
@@ -412,6 +414,8 @@ def _scan_repository_state(state: _RepositoryState) -> RepositoryIndex:
             modules_by_path,
         )
     )
+    dependency_graph = build_dependency_graph(files, imports)
+    test_mappings = build_test_mappings(files, symbols, imports, references)
     return RepositoryIndex(
         repo_root=state.repo_root,
         commit=state.commit,
@@ -421,6 +425,8 @@ def _scan_repository_state(state: _RepositoryState) -> RepositoryIndex:
         symbols=symbols,
         imports=imports,
         references=references,
+        dependency_graph=dependency_graph,
+        test_mappings=test_mappings,
     )
 
 

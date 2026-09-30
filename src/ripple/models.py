@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
-INDEX_SCHEMA_VERSION = 2
+INDEX_SCHEMA_VERSION = 3
 
 
 class SymbolRecord(BaseModel):
@@ -58,6 +58,29 @@ class ReferenceRecord(BaseModel):
     confidence: Literal["high", "low"]
 
 
+class DependencyNode(BaseModel):
+    """Deterministic module-level dependency facts for one tracked file."""
+
+    model_config = ConfigDict(frozen=True)
+
+    path: Path
+    dependencies: tuple[Path, ...]
+    dependents: tuple[Path, ...]
+    type_checking_dependencies: tuple[Path, ...]
+
+
+class TestMappingRecord(BaseModel):
+    """Static evidence connecting a test file to a likely source file."""
+
+    model_config = ConfigDict(frozen=True)
+
+    test_path: Path
+    source_path: Path
+    test_symbols: tuple[str, ...]
+    source_symbols: tuple[str, ...]
+    reasons: tuple[Literal["imports", "references", "naming"], ...]
+
+
 class FileRecord(BaseModel):
     """A tracked Python file and its derived repository facts."""
 
@@ -84,3 +107,5 @@ class RepositoryIndex(BaseModel):
     symbols: tuple[SymbolRecord, ...]
     imports: tuple[ImportRecord, ...]
     references: tuple[ReferenceRecord, ...]
+    dependency_graph: tuple[DependencyNode, ...]
+    test_mappings: tuple[TestMappingRecord, ...]

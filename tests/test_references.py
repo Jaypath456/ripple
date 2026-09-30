@@ -188,7 +188,7 @@ def test_resolves_imported_and_same_file_references(
     assert f"References: {len(first_scan.references)}" in output
 
 
-def test_schema_one_cache_is_rebuilt_with_references(repository: Path) -> None:
+def test_schema_two_cache_is_rebuilt_with_phase_two_facts(repository: Path) -> None:
     write(
         repository,
         "module.py",
@@ -206,14 +206,15 @@ def run():
     assert initial.index.references
 
     old_payload = json.loads(initial.cache_path.read_text())
-    old_payload["schema_version"] = 1
-    old_payload.pop("references")
+    old_payload["schema_version"] = 2
+    old_payload.pop("dependency_graph")
+    old_payload.pop("test_mappings")
     initial.cache_path.write_text(json.dumps(old_payload))
 
     rebuilt = scan_repository_cached(repository)
 
     assert rebuilt.cache_hit is False
-    assert rebuilt.index.schema_version == INDEX_SCHEMA_VERSION == 2
+    assert rebuilt.index.schema_version == INDEX_SCHEMA_VERSION == 3
     assert rebuilt.index.references[0].target_symbol == "module.py::helper"
     round_tripped = RepositoryIndex.model_validate_json(rebuilt.cache_path.read_text())
     assert round_tripped.references == rebuilt.index.references
