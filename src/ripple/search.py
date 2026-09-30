@@ -4,6 +4,7 @@ import ast
 import math
 import re
 import tokenize as source_tokenize
+import warnings
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -59,7 +60,11 @@ def _string_documents(index: RepositoryIndex) -> tuple[_Document, ...]:
         if file.parse_error is not None:
             continue
         try:
-            with source_tokenize.open(index.repo_root / file.path) as source_file:
+            with (
+                source_tokenize.open(index.repo_root / file.path) as source_file,
+                warnings.catch_warnings(),
+            ):
+                warnings.simplefilter("ignore", SyntaxWarning)
                 tree = ast.parse(source_file.read(), filename=file.path.as_posix())
         except (OSError, SyntaxError, UnicodeError):
             continue

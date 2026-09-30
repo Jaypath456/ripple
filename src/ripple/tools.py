@@ -85,6 +85,19 @@ _ARGUMENT_MODELS: dict[str, type[_Arguments]] = {
 TOOL_NAMES = tuple(_ARGUMENT_MODELS)
 
 
+def validate_tool_arguments(name: str, arguments: object) -> dict[str, Any]:
+    """Return canonical validated arguments or raise ``ValueError``."""
+
+    argument_model = _ARGUMENT_MODELS.get(name)
+    if argument_model is None:
+        raise ValueError(f"unknown tool: {name}")
+    try:
+        validated = argument_model.model_validate(arguments)
+    except ValidationError as error:
+        raise ValueError("tool arguments failed validation") from error
+    return validated.model_dump(mode="json")
+
+
 def error_result(
     evidence_id: str,
     code: str,

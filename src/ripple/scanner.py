@@ -3,6 +3,7 @@
 import ast
 import subprocess
 import tokenize
+import warnings
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -287,7 +288,11 @@ def _scan_file(
     ast.Module | None,
 ]:
     try:
-        with tokenize.open(repo_root / path) as source_file:
+        with (
+            tokenize.open(repo_root / path) as source_file,
+            warnings.catch_warnings(),
+        ):
+            warnings.simplefilter("ignore", SyntaxWarning)
             tree = ast.parse(source_file.read(), filename=path.as_posix())
     except SyntaxError as error:
         return (
