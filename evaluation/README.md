@@ -194,7 +194,11 @@ ripple evaluate-agent --verbose \
   --output evaluation/results/mvp_agent_results.json
 ```
 
-The result records `AGENT_CONFIG_VERSION = "mvp-v1"`, per-system metrics,
+The v1.1 result records `AGENT_CONFIG_VERSION = "mvp-v1.1"`, per-system metrics,
 agent status, tool/LLM/token counts, dropped-claim count, stop reason, runtime,
-and report/trace paths. This remains development-only evidence; historical PRs
-are one implementation rather than the only valid implementation.
+and report/trace paths. For evaluation only, masked requests longer than 2,000
+Python characters are deterministically prefix-truncated once; the exact same
+prepared text is supplied to B0, B1, and RIPPLE. Per-task results record the
+original length, used length, and truncation flag. This remains development-only
+evidence; historical PRs are one implementation rather than the only valid
+implementation.

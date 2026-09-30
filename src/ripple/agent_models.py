@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-AGENT_CONFIG_VERSION = "mvp-v1"
+AGENT_CONFIG_VERSION = "mvp-v1.1"
 
 
 class FrozenModel(BaseModel):

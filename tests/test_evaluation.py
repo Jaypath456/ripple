@@ -7,9 +7,11 @@ import pytest
 from pydantic import ValidationError
 
 from ripple import evaluation
+from ripple.agent_models import AGENT_CONFIG_VERSION, FeatureRequest
 from ripple.baselines import RankedFile, bm25_baseline, structural_baseline
 from ripple.cli import main
 from ripple.evaluation import (
+    EVALUATION_REQUEST_LIMIT,
     BaselineTaskResult,
     EvaluationError,
     EvaluationManifest,
@@ -20,6 +22,7 @@ from ripple.evaluation import (
     classify_gold_files,
     cluster_bootstrap,
     load_tasks,
+    prepare_evaluation_request,
     sanitize_request,
     score_ranking,
 )
@@ -101,6 +104,43 @@ def test_checked_in_manifest_is_stable_and_has_ten_tasks() -> None:
     assert len({item.id for item in manifest.tasks}) == 10
     assert len({item.repository for item in manifest.tasks}) == 10
     assert all(item.benchmark_split == "lite" for item in manifest.tasks)
+
+
+def test_evaluation_request_preparation_is_deterministic_prefix_only() -> None:
+    short = "Add deterministic authentication support"
+    assert prepare_evaluation_request(short).model_dump() == {
+        "text": short,
+        "original_length": len(short),
+        "used_length": len(short),
+        "truncated": False,
+    }
+
+    long = "alpha beta " * 200 + "discarded"
+    first = prepare_evaluation_request(long)
+    second = prepare_evaluation_request(long)
+    assert first == second
+    assert first.text == long[:EVALUATION_REQUEST_LIMIT]
+    assert first.original_length == len(long)
+    assert first.used_length == EVALUATION_REQUEST_LIMIT
+    assert first.truncated is True
+    assert FeatureRequest(text=first.text).text == first.text
+
+
+def test_mvp_v1_1_prepares_all_twenty_requests_without_gold_inputs() -> None:
+    manifest = load_tasks("evaluation/data/mvp_tasks.json", expected_count=20)
+    prepared = {
+        task.id: prepare_evaluation_request(task.masked_request)
+        for task in manifest.tasks
+    }
+    assert AGENT_CONFIG_VERSION == "mvp-v1.1"
+    assert all(
+        item.used_length <= EVALUATION_REQUEST_LIMIT for item in prepared.values()
+    )
+    assert {task_id for task_id, item in prepared.items() if item.truncated} == {
+        "aws-powertools__powertools-lambda-python-5588",
+        "aws__sagemaker-python-sdk-3432",
+        "embeddings-benchmark__mteb-1256",
+    }
 
 
 def test_task_rejects_inconsistent_mask_and_gold_groups() -> None:

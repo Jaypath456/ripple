@@ -29,6 +29,7 @@ from ripple.llm import LLMClient
 from ripple.scanner import is_test_file, scan_repository
 
 EVALUATION_SCHEMA_VERSION = 1
+EVALUATION_REQUEST_LIMIT = 2000
 DEFAULT_BOOTSTRAP_SAMPLES = 1000
 DEFAULT_BOOTSTRAP_SEED = 1729
 DEFAULT_TASK_COUNT = 10
@@ -246,6 +247,25 @@ class MVPSystemResult(BaseModel):
     runtime_seconds: float
 
 
+class PreparedEvaluationRequest(BaseModel):
+    """One deterministic benchmark input shared by every evaluated system."""
+
+    model_config = ConfigDict(frozen=True)
+
+    text: str = Field(max_length=EVALUATION_REQUEST_LIMIT)
+    original_length: int = Field(ge=0)
+    used_length: int = Field(ge=0, le=EVALUATION_REQUEST_LIMIT)
+    truncated: bool
+
+    @model_validator(mode="after")
+    def _consistent_lengths(self) -> "PreparedEvaluationRequest":
+        if self.used_length != len(self.text):
+            raise ValueError("used length must match prepared request text")
+        if self.truncated != (self.original_length > self.used_length):
+            raise ValueError("truncation flag must match request lengths")
+        return self
+
+
 class MVPTaskResult(BaseModel):
     model_config = ConfigDict(frozen=True)
 
@@ -253,6 +273,9 @@ class MVPTaskResult(BaseModel):
     repository: str
     base_commit: str
     masked_request: str
+    masked_request_original_length: int = Field(ge=0)
+    masked_request_used_length: int = Field(ge=0, le=EVALUATION_REQUEST_LIMIT)
+    masked_request_truncated: bool
     gold_files: GoldFileGroups
     agent_k: int = Field(ge=0)
     systems: tuple[MVPSystemResult, ...]
@@ -292,6 +315,7 @@ class MVPEvaluationResults(BaseModel):
     task_manifest: str
     task_ids: tuple[str, ...]
     agent_config_version: str
+    request_preparation: str
     llm_model: str
     fair_cutoff: str
     total_tasks: int
@@ -834,6 +858,18 @@ def _dedupe_paths(paths: Iterable[str | Path]) -> tuple[Path, ...]:
     return tuple(dict.fromkeys(_relative_path(path) for path in paths))
 
 
+def prepare_evaluation_request(masked_request: str) -> PreparedEvaluationRequest:
+    """Apply the frozen non-LLM prefix limit before any evaluated system runs."""
+
+    prepared = masked_request[:EVALUATION_REQUEST_LIMIT]
+    return PreparedEvaluationRequest(
+        text=prepared,
+        original_length=len(masked_request),
+        used_length=len(prepared),
+        truncated=len(masked_request) > len(prepared),
+    )
+
+
 def _mvp_aggregate(
     system: Literal["B0", "B1", "RIPPLE"], results: Sequence[MVPTaskResult]
 ) -> MVPAggregateResult:
@@ -881,10 +917,11 @@ def evaluate_agent_manifest(
         try:
             repo, leak_checks = prepare_repository(task, workspace_path)
             index = scan_repository(repo)
+            prepared_request = prepare_evaluation_request(task.masked_request)
             # Only the masked request and base-checkout index cross this boundary.
             agent_run = analyze_repository(
                 index,
-                FeatureRequest(text=task.masked_request),
+                FeatureRequest(text=prepared_request.text),
                 llm,
                 output_root=workspace_path / "_agent_artifacts" / task.id,
             )
@@ -901,7 +938,7 @@ def evaluate_agent_manifest(
             systems: list[MVPSystemResult] = []
             for name, runner in (("B0", bm25_baseline), ("B1", structural_baseline)):
                 started = perf_counter()
-                prediction = runner(index, task.masked_request)
+                prediction = runner(index, prepared_request.text)
                 runtime = perf_counter() - started
                 source_ranking = _dedupe_paths(
                     item.path for item in prediction.source_predictions
@@ -950,7 +987,10 @@ def evaluate_agent_manifest(
                     task_id=task.id,
                     repository=task.repository,
                     base_commit=task.base_commit,
-                    masked_request=task.masked_request,
+                    masked_request=prepared_request.text,
+                    masked_request_original_length=prepared_request.original_length,
+                    masked_request_used_length=prepared_request.used_length,
+                    masked_request_truncated=prepared_request.truncated,
                     gold_files=task.gold_files,
                     agent_k=agent_k,
                     systems=tuple(systems),
@@ -978,6 +1018,10 @@ def evaluate_agent_manifest(
         task_manifest=str(Path(manifest_path)),
         task_ids=tuple(task.id for task in tasks),
         agent_config_version=AGENT_CONFIG_VERSION,
+        request_preparation=(
+            "Deterministic Python character-prefix truncation to at most 2000 "
+            "characters, performed once and shared unchanged by B0, B1, and RIPPLE."
+        ),
         llm_model=llm.model,
         fair_cutoff=(
             "Per task, B0 and B1 set metrics use agent_k, the number of validated "
