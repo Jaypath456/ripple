@@ -202,11 +202,54 @@ ripple evaluate-phase5 --tasks evaluation/data/mvp_tasks.json
 
 It writes `evaluation/results/phase5_dev_comparison.json` and is labeled
 `DEVELOPMENT / PHASE 5 — NOT FINAL HELD-OUT RESULTS`. Phase 5 still never executes
-or edits target code. Stage B diff verification, `ripple verify`, and every Phase
-6/7 feature remain intentionally unimplemented. No Phase 5 aggregate is currently
-claimed: the first full comparison attempt exhausted the configured provider's
-daily request quota before all 20 tasks completed, so no partial aggregate was
-published.
+or edits target code. No Phase 5 aggregate is currently claimed: the first full
+comparison attempt exhausted the configured provider's daily request quota before
+all 20 tasks completed, so no partial aggregate was published.
+
+## Stage B verification
+
+Stage A predicts the likely change surface before implementation. Phase 6 Stage B
+compares that saved prediction with an actual Git implementation range:
+
+```shell
+ripple verify /path/to/repository \
+  --report latest \
+  --range main..feature/soft-delete
+
+ripple verify /path/to/repository \
+  --report 20260930T120000-abcdef0-runid \
+  --range <base-sha>..<head-sha>
+```
+
+The report commit is the expected base. A differing supplied base produces a
+visible warning and RIPPLE uses a valid report/head merge base rather than silently
+comparing unrelated histories. Fixed Git commands parse added, modified, deleted,
+renamed, binary, and zero-context hunk records. Python ASTs map hunks to symbols and
+ignore formatting, comments, and docstrings when marking cosmetic-only changes.
+
+Stage B classifications are:
+
+- `expected`: changed and originally predicted.
+- `adjacent`: unpredicted, but one import hop or a top-three pre-base co-change
+  partner from an original prediction.
+- `unexpected`: changed without either deterministic relationship.
+- `missing_predicted`: unchanged original medium/high-confidence prediction.
+- `missing_test`: changed source symbols without a changed statically mapped test.
+- `stale_caller`: an unchanged base-index caller of an incompatibly changed
+  function signature.
+
+Only non-cosmetic unexpected files and useful high-confidence missing predictions
+may receive bounded model investigation, with at most eight safe tool calls per
+file. An `unexpected` finding with verdict `unexplained` is intentionally prominent
+for human review. Model verdicts cannot change deterministic categories and require
+path-related evidence.
+
+Canonical verification JSON, deterministic Markdown, and a separate JSONL trace
+are written under `.ripple/verifications/` using configuration `stage-b-v1`.
+Static analysis does not prove runtime coverage or implementation correctness, and
+RIPPLE never imports target modules or executes target tests. Phase 7 benchmarking,
+ablations, adjudication, integrations, and final performance claims remain
+intentionally unimplemented.
 
 Run the checks with:
 

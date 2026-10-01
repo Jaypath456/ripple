@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -24,6 +25,7 @@ from ripple.llm import LLMError, OpenAILLM
 from ripple.scanner import ScanError
 from ripple.show_run import RunNotFoundError, replay_run
 from ripple.tools import ToolSession, error_result
+from ripple.verification import VerificationError, verify_repository
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -137,6 +139,17 @@ def _parser() -> argparse.ArgumentParser:
     )
     show_parser.add_argument("identifier", help="run ID or report ID")
     show_parser.add_argument("--repo", type=Path, default=Path.cwd())
+
+    verify_parser = subparsers.add_parser(
+        "verify", help="compare a saved prediction with an implementation Git range"
+    )
+    verify_parser.add_argument("repo", type=Path)
+    verify_parser.add_argument(
+        "--report", required=True, help="report ID, path, or latest"
+    )
+    verify_parser.add_argument(
+        "--range", dest="git_range", required=True, help="Git range base..head"
+    )
     return parser
 
 
@@ -325,6 +338,36 @@ def _run_show(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_verify(args: argparse.Namespace) -> int:
+    try:
+        llm = (
+            OpenAILLM.from_env()
+            if os.environ.get("RIPPLE_LLM_API_KEY")
+            and os.environ.get("RIPPLE_LLM_MODEL")
+            else None
+        )
+        run = verify_repository(
+            args.repo,
+            report_value=args.report,
+            requested_range=args.git_range,
+            llm=llm,
+        )
+    except (VerificationError, LLMError, ValueError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    if run.analysis.base_warning:
+        print(f"warning: {run.analysis.base_warning}", file=sys.stderr)
+    print(f"Status: {run.analysis.status}")
+    print(f"Changed files: {len(run.analysis.changes)}")
+    print(f"Findings: {len(run.analysis.findings)}")
+    print(f"File precision: {run.analysis.file_precision:.3f}")
+    print(f"File recall: {run.analysis.file_recall:.3f}")
+    print(f"Verification: {run.json_path}")
+    print(f"Markdown: {run.markdown_path}")
+    print(f"Trace: {run.trace_path}")
+    return 0 if run.analysis.status in {"completed", "partial"} else 1
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the RIPPLE command-line interface."""
 
@@ -341,6 +384,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_show(args)
     if args.command == "evaluate-phase5":
         return _run_evaluate_phase5(args)
+    if args.command == "verify":
+        return _run_verify(args)
     return _run_scan(args)
 
 

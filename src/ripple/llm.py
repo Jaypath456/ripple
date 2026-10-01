@@ -18,6 +18,7 @@ from ripple.agent_models import (
     RankedPathDraft,
     ReportDraft,
 )
+from ripple.diff_models import InvestigationDecision
 
 
 class LLMError(RuntimeError):
@@ -47,6 +48,8 @@ class LLMClient(Protocol):
     def one_shot_rank(self, prompt: str) -> LLMResponse: ...
 
     def react_decide(self, prompt: str) -> LLMResponse: ...
+
+    def investigate_diff(self, prompt: str) -> LLMResponse: ...
 
 
 class OpenAILLM:
@@ -211,6 +214,9 @@ class OpenAILLM:
     def react_decide(self, prompt: str) -> LLMResponse:
         return self._call(prompt, BaselineDecision)
 
+    def investigate_diff(self, prompt: str) -> LLMResponse:
+        return self._call(prompt, InvestigationDecision)
+
 
 class ScriptedLLM:
     """Queue-backed fake implementing the same interface for paid-API-free tests."""
@@ -223,6 +229,7 @@ class ScriptedLLM:
         reports: Iterable[object] = (),
         rankings: Iterable[object] = (),
         react_decisions: Iterable[object] = (),
+        investigations: Iterable[object] = (),
         model: str = "scripted",
     ) -> None:
         self.model = model
@@ -231,6 +238,7 @@ class ScriptedLLM:
         self._reports = deque(reports)
         self._rankings = deque(rankings)
         self._react_decisions = deque(react_decisions)
+        self._investigations = deque(investigations)
 
     def _next(self, queue: deque[object], operation: str) -> LLMResponse:
         if not queue:
@@ -254,3 +262,6 @@ class ScriptedLLM:
 
     def react_decide(self, prompt: str) -> LLMResponse:
         return self._next(self._react_decisions, "react decision")
+
+    def investigate_diff(self, prompt: str) -> LLMResponse:
+        return self._next(self._investigations, "diff investigation")
