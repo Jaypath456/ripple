@@ -6,6 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from ripple.history import HistoryError, co_changed
 from ripple.models import RepositoryIndex
 from ripple.search import SearchIndex
 
@@ -30,7 +31,7 @@ class BaselinePrediction(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
-    baseline: Literal["B0", "B1"]
+    baseline: Literal["B0", "B1", "B2", "B3", "B4"]
     source_predictions: tuple[RankedFile, ...]
     test_predictions: tuple[RankedFile, ...] = ()
 
@@ -146,4 +147,56 @@ def structural_baseline(
         baseline="B1",
         source_predictions=tuple(ranked),
         test_predictions=tests,
+    )
+
+
+def cochange_baseline(index: RepositoryIndex, request: str) -> BaselinePrediction:
+    """Expand the top three BM25 seeds with pre-HEAD co-change partners."""
+
+    b0 = bm25_baseline(index, request)
+    seeds = b0.source_predictions[:3]
+    source_paths = {file.path for file in index.files if not file.is_test}
+    scores = {item.path: item.score for item in b0.source_predictions}
+    reasons = {item.path: list(item.reasons) for item in b0.source_predictions}
+    maximum = max((item.score for item in seeds), default=1.0) or 1.0
+    expanded: set[Path] = set()
+    for seed in seeds:
+        try:
+            history = co_changed(index.repo_root, seed.path.as_posix(), limit=10)
+        except HistoryError:
+            continue
+        for partner in history.partners:
+            path = Path(partner.path)
+            if path not in source_paths:
+                continue
+            scores[path] += maximum * partner.support_ratio
+            reasons[path].append(
+                f"co_changed:{seed.path.as_posix()}:{partner.count}/{history.commits_with_path}"
+            )
+            expanded.add(path)
+    ranked = tuple(
+        RankedFile(
+            path=path, score=round(scores[path], 6), reasons=tuple(reasons[path])
+        )
+        for path in sorted(source_paths, key=lambda item: (-scores[item], item))
+    )
+    rank = {item.path: position for position, item in enumerate(ranked, 1)}
+    candidates = {item.path for item in seeds} | expanded
+    test_sources: dict[Path, set[Path]] = defaultdict(set)
+    for mapping in index.test_mappings:
+        if mapping.source_path in candidates:
+            test_sources[mapping.test_path].add(mapping.source_path)
+    tests = tuple(
+        RankedFile(
+            path=path,
+            score=round(1.0 / min(rank[item] for item in sources), 6),
+            reasons=tuple(f"mapped_from:{item.as_posix()}" for item in sorted(sources)),
+        )
+        for path, sources in sorted(
+            test_sources.items(),
+            key=lambda item: (min(rank[p] for p in item[1]), item[0]),
+        )
+    )
+    return BaselinePrediction(
+        baseline="B2", source_predictions=ranked, test_predictions=tests
     )

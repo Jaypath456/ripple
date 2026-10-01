@@ -1,4 +1,4 @@
-"""Validated public models for the bounded Phase 4 agent."""
+"""Validated public models for the bounded change-impact agent."""
 
 from enum import StrEnum
 from pathlib import Path
@@ -7,6 +7,8 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 AGENT_CONFIG_VERSION = "mvp-v1.1"
+MVP_CONFIG_VERSION = AGENT_CONFIG_VERSION
+FULL_REPORT_CONFIG_VERSION = "full-report-v1"
 
 
 class FrozenModel(BaseModel):
@@ -70,6 +72,8 @@ class AgentDecision(FrozenModel):
         "find_references",
         "get_dependencies",
         "find_tests",
+        "repo_facts",
+        "co_changed",
         "submit_report",
     ]
     arguments: dict[str, Any]
@@ -94,16 +98,41 @@ class SuggestedTest(FrozenModel):
     evidence: tuple[str, ...] = Field(min_length=1)
 
 
+class GroundedClaim(FrozenModel):
+    description: str = Field(min_length=3, max_length=1000)
+    targets: tuple[str, ...] = Field(min_length=1)
+    evidence: tuple[str, ...] = Field(min_length=1)
+
+
+class RegressionArea(FrozenModel):
+    target: str
+    reason: str = Field(min_length=3, max_length=800)
+    evidence: tuple[str, ...] = Field(min_length=1)
+    score: int = Field(default=0, ge=0)
+
+
+class Risk(FrozenModel):
+    description: str = Field(min_length=3, max_length=1000)
+    severity: Literal["low", "medium", "high"]
+    related_targets: tuple[str, ...] = Field(min_length=1)
+    evidence: tuple[str, ...] = Field(min_length=1)
+
+
+class BlindSpot(FrozenModel):
+    description: str = Field(min_length=3, max_length=1000)
+    evidence: tuple[str, ...] = ()
+
+
 class ReportDraft(FrozenModel):
     affected_components: tuple[AffectedComponent, ...]
-    schema_changes: tuple[str, ...] = ()
-    api_changes: tuple[str, ...] = ()
-    config_changes: tuple[str, ...] = ()
-    regression_areas: tuple[str, ...] = ()
+    schema_changes: tuple[GroundedClaim | str, ...] = ()
+    api_changes: tuple[GroundedClaim | str, ...] = ()
+    config_changes: tuple[GroundedClaim | str, ...] = ()
+    regression_areas: tuple[RegressionArea | str, ...] = ()
     suggested_tests: tuple[SuggestedTest, ...] = ()
     implementation_order: tuple[str, ...] = ()
-    risks: tuple[str, ...] = ()
-    blind_spots: tuple[str, ...] = ()
+    risks: tuple[Risk | str, ...] = ()
+    blind_spots: tuple[BlindSpot | str, ...] = ()
 
 
 class RunStats(FrozenModel):
@@ -117,7 +146,7 @@ class RunStats(FrozenModel):
     runtime_seconds: float = Field(ge=0)
     stop_reason: str
     dirty: bool
-    config_version: str = AGENT_CONFIG_VERSION
+    config_version: str = FULL_REPORT_CONFIG_VERSION
 
 
 RunStatus = Literal["completed", "partial", "abstained", "failed"]
@@ -129,14 +158,14 @@ class ChangeImpactReport(FrozenModel):
     commit: str
     status: RunStatus
     affected_components: tuple[AffectedComponent, ...]
-    schema_changes: tuple[str, ...] = ()
-    api_changes: tuple[str, ...] = ()
-    config_changes: tuple[str, ...] = ()
-    regression_areas: tuple[str, ...] = ()
+    schema_changes: tuple[GroundedClaim, ...] = ()
+    api_changes: tuple[GroundedClaim, ...] = ()
+    config_changes: tuple[GroundedClaim, ...] = ()
+    regression_areas: tuple[RegressionArea, ...] = ()
     suggested_tests: tuple[SuggestedTest, ...] = ()
     implementation_order: tuple[str, ...] = ()
-    risks: tuple[str, ...] = ()
-    blind_spots: tuple[str, ...] = ()
+    risks: tuple[Risk, ...] = ()
+    blind_spots: tuple[BlindSpot, ...] = ()
     dropped_claims: tuple[str, ...] = ()
     run_stats: RunStats
 
@@ -145,3 +174,23 @@ class AgentRun(FrozenModel):
     report: ChangeImpactReport
     report_path: Path
     trace_path: Path
+    markdown_path: Path
+
+
+class RankedPathDraft(FrozenModel):
+    paths: tuple[str, ...]
+
+
+class BaselineDecision(FrozenModel):
+    tool_name: Literal[
+        "search_code",
+        "inspect_symbol",
+        "find_references",
+        "get_dependencies",
+        "find_tests",
+        "repo_facts",
+        "co_changed",
+        "submit_report",
+    ]
+    arguments: dict[str, Any] = {}
+    predicted_paths: tuple[str, ...] = ()

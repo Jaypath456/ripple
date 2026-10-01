@@ -1,6 +1,7 @@
 """Deterministic bounded tools over a cached RepositoryIndex."""
 
 import difflib
+import json
 import tokenize
 from dataclasses import dataclass
 from pathlib import Path
@@ -8,7 +9,9 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from ripple.facts import FACT_KINDS, FACT_LIMIT, FactModel, extract_repository_facts
 from ripple.graph import fan_in, neighbors
+from ripple.history import HistoryError, co_changed
 from ripple.models import RepositoryIndex, SymbolRecord
 from ripple.search import SearchIndex
 
@@ -67,6 +70,16 @@ class FindTestsArgs(_Arguments):
     target: str
 
 
+class RepoFactsArgs(_Arguments):
+    kind: str
+    filter: str | None = None
+
+
+class CoChangedArgs(_Arguments):
+    path: str
+    limit: int = Field(default=10, ge=1, le=10)
+
+
 @dataclass(frozen=True)
 class _ToolFailure(Exception):
     code: str
@@ -80,6 +93,8 @@ _ARGUMENT_MODELS: dict[str, type[_Arguments]] = {
     "find_references": FindReferencesArgs,
     "get_dependencies": GetDependenciesArgs,
     "find_tests": FindTestsArgs,
+    "repo_facts": RepoFactsArgs,
+    "co_changed": CoChangedArgs,
 }
 
 TOOL_NAMES = tuple(_ARGUMENT_MODELS)
@@ -118,6 +133,7 @@ class ToolSession:
         self.index = index
         self._next_evidence = 1
         self._search_index: SearchIndex | None = None
+        self._fact_cache: dict[str, tuple[FactModel, ...]] | None = None
 
     def _evidence_id(self) -> str:
         evidence_id = f"e{self._next_evidence}"
@@ -480,4 +496,57 @@ class ToolSession:
             },
             evidence_id=evidence_id,
             truncated=len(results) > TEST_LIMIT,
+        )
+
+    def _repo_facts(self, arguments: RepoFactsArgs, evidence_id: str) -> ToolResult:
+        if arguments.kind not in FACT_KINDS:
+            return error_result(
+                evidence_id,
+                "unsupported_kind",
+                f"unsupported repository fact kind: {arguments.kind}",
+                f"supported kinds: {', '.join(FACT_KINDS)}",
+            )
+        if self._fact_cache is None:
+            self._fact_cache = extract_repository_facts(self.index)
+        facts = [
+            fact.model_dump(mode="json") for fact in self._fact_cache[arguments.kind]
+        ]
+        if arguments.filter:
+            needle = arguments.filter.casefold()
+            facts = [
+                fact
+                for fact in facts
+                if needle in json.dumps(fact, sort_keys=True).casefold()
+            ]
+        truncated = len(facts) > FACT_LIMIT
+        facts = facts[:FACT_LIMIT]
+        if not facts:
+            return error_result(
+                evidence_id,
+                "none_detected",
+                f"no {arguments.kind} facts were detected",
+            )
+        return ToolResult(
+            ok=True,
+            data={
+                "kind": arguments.kind,
+                "facts": facts,
+            },
+            evidence_id=evidence_id,
+            truncated=truncated,
+        )
+
+    def _co_changed(self, arguments: CoChangedArgs, evidence_id: str) -> ToolResult:
+        path = self._safe_path(arguments.path)
+        try:
+            result = co_changed(
+                self.index.repo_root, path.as_posix(), limit=arguments.limit
+            )
+        except HistoryError as error:
+            return error_result(evidence_id, error.code, str(error), error.hint)
+        return ToolResult(
+            ok=True,
+            data=result.model_dump(mode="json"),
+            evidence_id=evidence_id,
+            truncated=result.truncated,
         )

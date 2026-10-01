@@ -14,10 +14,11 @@ from typing import Any
 from pydantic import ValidationError
 
 from ripple.agent_models import (
-    AGENT_CONFIG_VERSION,
+    FULL_REPORT_CONFIG_VERSION,
     AffectedComponent,
     AgentDecision,
     AgentRun,
+    BlindSpot,
     ChangeImpactReport,
     ChangeKind,
     FeatureIntent,
@@ -26,9 +27,11 @@ from ripple.agent_models import (
     RunStats,
     SuggestedTest,
 )
+from ripple.expand import ExpansionResult, expand_report
 from ripple.ledger import CandidateLedger, EvidenceRecord
 from ripple.llm import LLMClient, LLMError, LLMResponse
 from ripple.models import RepositoryIndex
+from ripple.render import render_markdown
 from ripple.tools import ToolResult, ToolSession, validate_tool_arguments
 from ripple.validate import validate_report_draft
 
@@ -175,6 +178,16 @@ def _touched_targets(
         touched.add(str(data.get("target", arguments.get("target", ""))))
         touched.add(str(arguments.get("target", "")))
         touched.update(str(item.get("test_path")) for item in data.get("tests", []))
+    elif name == "repo_facts":
+        for fact in data.get("facts", []):
+            if isinstance(fact, dict):
+                for key in ("path", "symbol_id", "directory", "handler"):
+                    if fact.get(key):
+                        touched.add(str(fact[key]))
+                touched.update(str(item) for item in fact.get("files", []))
+    elif name == "co_changed":
+        touched.add(str(data.get("path", arguments.get("path", ""))))
+        touched.update(str(item.get("path")) for item in data.get("partners", []))
     return frozenset(item for item in touched if item)
 
 
@@ -280,7 +293,9 @@ class AgentController:
         )
         return intent
 
-    def _execute(self, name: str, arguments: object) -> tuple[ToolResult | None, bool]:
+    def _execute(
+        self, name: str, arguments: object, *, count_explore: bool = True
+    ) -> tuple[ToolResult | None, bool]:
         try:
             canonical = validate_tool_arguments(name, arguments)
         except ValueError as error:
@@ -291,7 +306,8 @@ class AgentController:
             return None, False
         key = json.dumps([name, canonical], sort_keys=True, separators=(",", ":"))
         if key in self.cache:
-            self.duplicate_calls += 1
+            if count_explore:
+                self.duplicate_calls += 1
             result = self.cache[key]
             self.trace.write(
                 "tool_result",
@@ -310,11 +326,12 @@ class AgentController:
                 }
             )
             return result, False
-        if self.tool_calls >= MAX_TOOL_CALLS:
+        if count_explore and self.tool_calls >= MAX_TOOL_CALLS:
             return None, False
         self.trace.write("tool_call", tool=name, arguments=canonical)
         result = self.session.invoke(name, canonical)
-        self.tool_calls += 1
+        if count_explore:
+            self.tool_calls += 1
         self.cache[key] = result
         record = EvidenceRecord(
             evidence_id=result.evidence_id,
@@ -396,6 +413,8 @@ class AgentController:
             "any|symbol|file|string, limit:1..15}; inspect_symbol={target}; "
             "find_references={symbol_id, limit:1..40}; get_dependencies={path, "
             "direction:imports|imported_by, depth:1|2}; find_tests={target}; "
+            "repo_facts={kind:routes|models|settings|migrations|entry_points, "
+            "filter:string|null}; co_changed={path, limit:1..10}; "
             "submit_report={}. Do not add any other argument keys.\n"
             + _prompt_data("repository_data", context)
         )
@@ -414,19 +433,61 @@ class AgentController:
             )
         return changed
 
+    def _expand(self, intent: FeatureIntent) -> ExpansionResult:
+        self.trace.write("expand_started", confirmed=len(self.ledger.confirmed()))
+        confirmed_paths = sorted(
+            {item.target.partition("::")[0] for item in self.ledger.confirmed()}
+        )
+        for path in confirmed_paths:
+            self._execute(
+                "get_dependencies",
+                {"path": path, "direction": "imported_by", "depth": 1},
+                count_explore=False,
+            )
+            self._execute("find_tests", {"target": path}, count_explore=False)
+            self._execute(
+                "co_changed", {"path": path, "limit": 10}, count_explore=False
+            )
+        kinds = {"routes", "models", "settings", "migrations"}
+        for kind in sorted(kinds):
+            self._execute("repo_facts", {"kind": kind}, count_explore=False)
+        expansion = expand_report(self.index, intent, self.ledger)
+        self.trace.write(
+            "expand_completed",
+            regression_areas=len(expansion.regression_areas),
+            tests=len(expansion.tests),
+            proposed_components=len(expansion.components),
+            implementation_order=list(expansion.implementation_order),
+        )
+        return expansion
+
     def _draft(
-        self, request: FeatureRequest, intent: FeatureIntent
+        self,
+        request: FeatureRequest,
+        intent: FeatureIntent,
+        expansion: ExpansionResult,
     ) -> ReportDraft | None:
         prompt = (
             "Draft a conservative change-impact report using only confirmed ledger targets "
             "and cited evidence. Existing components cannot be new_file. Test suggestions "
-            "must cite find_tests evidence. Leave speculative Phase 5 narratives empty.\n"
+            "must cite find_tests evidence. You may phrase grounded schema/API/config claims "
+            "and explain risks, but cannot remove, reorder, or override deterministic Expand. "
+            "Every risk needs related targets and evidence IDs.\n"
             + _prompt_data(
                 "repository_data",
                 {
                     "request": request.text,
                     "intent": intent.model_dump(mode="json"),
                     "ledger": self.ledger.prompt_view(),
+                    "deterministic_expand": {
+                        "schema_changes": expansion.schema_changes,
+                        "api_changes": expansion.api_changes,
+                        "config_changes": expansion.config_changes,
+                        "regression_areas": expansion.regression_areas,
+                        "suggested_tests": expansion.tests,
+                        "implementation_order": expansion.implementation_order,
+                        "blind_spots": expansion.blind_spots,
+                    },
                 },
             )
         )
@@ -462,7 +523,9 @@ class AgentController:
             affected_components=tuple(components),
             suggested_tests=tuple(tests),
             blind_spots=(
-                "The model report was invalid; deterministic partial output used.",
+                BlindSpot(
+                    description="The model report was invalid; deterministic partial output used."
+                ),
             ),
         )
 
@@ -473,7 +536,9 @@ class AgentController:
             run_id=self.run_id,
             commit=self.index.commit,
             dirty=self.index.dirty,
-            config_version=AGENT_CONFIG_VERSION,
+            config_version=FULL_REPORT_CONFIG_VERSION,
+            request=request.text,
+            model=self.llm.model,
         )
         stop_reason = "unknown"
         requested_completion = False
@@ -534,12 +599,11 @@ class AgentController:
                     stop_reason = "submitted"
                     requested_completion = True
                     break
-                result, tool_progress = self._execute(
-                    decision.tool_name, decision.arguments
-                )
+                _, tool_progress = self._execute(decision.tool_name, decision.arguments)
                 no_progress = 0 if ledger_changed or tool_progress else no_progress + 1
+            expansion = self._expand(intent)
             draft = (
-                self._draft(request, intent)
+                self._draft(request, intent, expansion)
                 if requested_completion
                 else self._fallback_draft()
             )
@@ -547,7 +611,7 @@ class AgentController:
                 draft = self._fallback_draft()
                 requested_completion = False
                 stop_reason = "invalid_report"
-            validated = validate_report_draft(draft, self.index, self.ledger)
+            validated = validate_report_draft(draft, self.index, self.ledger, expansion)
             if requested_completion and validated.components:
                 status = "completed"
             elif validated.components:
@@ -568,8 +632,14 @@ class AgentController:
             commit=self.index.commit,
             status=status,
             affected_components=validated.components,
+            schema_changes=validated.schema_changes,
+            api_changes=validated.api_changes,
+            config_changes=validated.config_changes,
+            regression_areas=validated.regression_areas,
             suggested_tests=validated.tests,
-            blind_spots=draft.blind_spots if "draft" in locals() else (),
+            implementation_order=validated.implementation_order,
+            risks=validated.risks,
+            blind_spots=validated.blind_spots,
             dropped_claims=validated.dropped_claims,
             run_stats=RunStats(
                 model=self.llm.model,
@@ -592,15 +662,35 @@ class AgentController:
             stream.write(report.model_dump_json(indent=2))
             temporary = Path(stream.name)
         temporary.replace(report_path)
+        markdown_path = report_path.with_suffix(".md")
+        with tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", dir=markdown_path.parent, delete=False
+        ) as stream:
+            stream.write(render_markdown(report))
+            markdown_temporary = Path(stream.name)
+        markdown_temporary.replace(markdown_path)
         self.trace.write(
             "report_validated",
             components=len(report.affected_components),
             dropped=len(report.dropped_claims),
         )
         self.trace.write("report_written", path=str(report_path), status=report.status)
-        self.trace.write("run_finished", status=report.status, stop_reason=stop_reason)
+        self.trace.write("markdown_written", path=str(markdown_path))
+        self.trace.write(
+            "run_finished",
+            status=report.status,
+            stop_reason=stop_reason,
+            tool_calls=report.run_stats.tool_calls,
+            duplicate_calls=report.run_stats.duplicate_calls,
+            llm_calls=report.run_stats.llm_calls,
+            total_tokens=report.run_stats.total_tokens,
+            runtime_seconds=report.run_stats.runtime_seconds,
+        )
         return AgentRun(
-            report=report, report_path=report_path, trace_path=self.trace.path
+            report=report,
+            report_path=report_path,
+            trace_path=self.trace.path,
+            markdown_path=markdown_path,
         )
 
 

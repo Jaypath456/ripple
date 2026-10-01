@@ -11,7 +11,13 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel
 
-from ripple.agent_models import AgentDecision, FeatureIntent, ReportDraft
+from ripple.agent_models import (
+    AgentDecision,
+    BaselineDecision,
+    FeatureIntent,
+    RankedPathDraft,
+    ReportDraft,
+)
 
 
 class LLMError(RuntimeError):
@@ -37,6 +43,10 @@ class LLMClient(Protocol):
     def choose_next_action(self, prompt: str) -> LLMResponse: ...
 
     def draft_report(self, prompt: str) -> LLMResponse: ...
+
+    def one_shot_rank(self, prompt: str) -> LLMResponse: ...
+
+    def react_decide(self, prompt: str) -> LLMResponse: ...
 
 
 class OpenAILLM:
@@ -195,6 +205,12 @@ class OpenAILLM:
     def draft_report(self, prompt: str) -> LLMResponse:
         return self._call(prompt, ReportDraft)
 
+    def one_shot_rank(self, prompt: str) -> LLMResponse:
+        return self._call(prompt, RankedPathDraft)
+
+    def react_decide(self, prompt: str) -> LLMResponse:
+        return self._call(prompt, BaselineDecision)
+
 
 class ScriptedLLM:
     """Queue-backed fake implementing the same interface for paid-API-free tests."""
@@ -205,12 +221,16 @@ class ScriptedLLM:
         interpretations: Iterable[object] = (),
         decisions: Iterable[object] = (),
         reports: Iterable[object] = (),
+        rankings: Iterable[object] = (),
+        react_decisions: Iterable[object] = (),
         model: str = "scripted",
     ) -> None:
         self.model = model
         self._interpretations = deque(interpretations)
         self._decisions = deque(decisions)
         self._reports = deque(reports)
+        self._rankings = deque(rankings)
+        self._react_decisions = deque(react_decisions)
 
     def _next(self, queue: deque[object], operation: str) -> LLMResponse:
         if not queue:
@@ -228,3 +248,9 @@ class ScriptedLLM:
 
     def draft_report(self, prompt: str) -> LLMResponse:
         return self._next(self._reports, "report")
+
+    def one_shot_rank(self, prompt: str) -> LLMResponse:
+        return self._next(self._rankings, "ranking")
+
+    def react_decide(self, prompt: str) -> LLMResponse:
+        return self._next(self._react_decisions, "react decision")

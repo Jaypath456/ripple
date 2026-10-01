@@ -17,10 +17,12 @@ from ripple.evaluation import (
     EvaluationError,
     evaluate_agent_manifest,
     evaluate_manifest,
+    evaluate_phase5_manifest,
     format_results_table,
 )
 from ripple.llm import LLMError, OpenAILLM
 from ripple.scanner import ScanError
+from ripple.show_run import RunNotFoundError, replay_run
 from ripple.tools import ToolSession, error_result
 
 
@@ -99,6 +101,23 @@ def _parser() -> argparse.ArgumentParser:
     agent_eval_parser.add_argument("--task-limit", type=int)
     agent_eval_parser.add_argument("--verbose", action="store_true")
 
+    phase5_eval_parser = subparsers.add_parser(
+        "evaluate-phase5", help="run the six-system Phase 5 development comparison"
+    )
+    phase5_eval_parser.add_argument(
+        "--tasks", type=Path, default=Path("evaluation/data/mvp_tasks.json")
+    )
+    phase5_eval_parser.add_argument(
+        "--workspace", type=Path, default=Path(".ripple/evaluation/phase5-repos")
+    )
+    phase5_eval_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("evaluation/results/phase5_dev_comparison.json"),
+    )
+    phase5_eval_parser.add_argument("--task-limit", type=int)
+    phase5_eval_parser.add_argument("--verbose", action="store_true")
+
     analyze_parser = subparsers.add_parser(
         "analyze", help="run bounded evidence-led change-impact analysis"
     )
@@ -112,6 +131,12 @@ def _parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument(
         "--json", action="store_true", help="write only the report JSON to stdout"
     )
+
+    show_parser = subparsers.add_parser(
+        "show-run", help="replay a saved investigation trace"
+    )
+    show_parser.add_argument("identifier", help="run ID or report ID")
+    show_parser.add_argument("--repo", type=Path, default=Path.cwd())
     return parser
 
 
@@ -228,6 +253,7 @@ def _run_analyze(args: argparse.Namespace) -> int:
         print(f"Tool calls: {run.report.run_stats.tool_calls}")
         print(f"Stop reason: {run.report.run_stats.stop_reason}")
         print(f"Report: {run.report_path}")
+        print(f"Markdown: {run.markdown_path}")
         print(f"Trace: {run.trace_path}")
     return 0 if run.report.status in {"completed", "partial", "abstained"} else 1
 
@@ -262,6 +288,43 @@ def _run_evaluate_agent(args: argparse.Namespace) -> int:
     return 0 if results.valid_tasks == results.total_tasks else 1
 
 
+def _run_evaluate_phase5(args: argparse.Namespace) -> int:
+    if args.task_limit is not None and not 1 <= args.task_limit <= 20:
+        print("error: task-limit must be between 1 and 20", file=sys.stderr)
+        return 1
+    try:
+        results = evaluate_phase5_manifest(
+            args.tasks,
+            workspace=args.workspace,
+            output_path=args.output,
+            llm=OpenAILLM.from_env(),
+            task_limit=args.task_limit,
+            verbose=args.verbose,
+        )
+    except (EvaluationError, LLMError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    for aggregate in results.aggregates:
+        print(
+            f"{aggregate.system}: P={aggregate.mean_precision:.3f} "
+            f"R={aggregate.mean_recall:.3f} F1={aggregate.mean_f1:.3f} "
+            f"R@5={aggregate.mean_recall_at_5:.3f} "
+            f"R@10={aggregate.mean_recall_at_10:.3f} "
+            f"MRR={aggregate.mean_mrr:.3f}"
+        )
+    print(f"Results: {args.output}")
+    return 0 if results.valid_tasks == results.total_tasks else 1
+
+
+def _run_show(args: argparse.Namespace) -> int:
+    try:
+        print(replay_run(args.identifier, args.repo))
+    except RunNotFoundError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the RIPPLE command-line interface."""
 
@@ -274,6 +337,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_analyze(args)
     if args.command == "evaluate-agent":
         return _run_evaluate_agent(args)
+    if args.command == "show-run":
+        return _run_show(args)
+    if args.command == "evaluate-phase5":
+        return _run_evaluate_phase5(args)
     return _run_scan(args)
 
 

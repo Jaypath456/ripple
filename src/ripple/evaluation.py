@@ -18,14 +18,21 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ripple.agent import analyze_repository
-from ripple.agent_models import AGENT_CONFIG_VERSION, FeatureRequest, RunStatus
+from ripple.agent_models import (
+    AGENT_CONFIG_VERSION,
+    FULL_REPORT_CONFIG_VERSION,
+    FeatureRequest,
+    RunStatus,
+)
 from ripple.baselines import (
     DEFAULT_PREDICTION_K,
     BaselinePrediction,
     bm25_baseline,
+    cochange_baseline,
     structural_baseline,
 )
 from ripple.llm import LLMClient
+from ripple.phase5_baselines import one_shot_baseline, react_baseline
 from ripple.scanner import is_test_file, scan_repository
 
 EVALUATION_SCHEMA_VERSION = 1
@@ -327,6 +334,72 @@ class MVPEvaluationResults(BaseModel):
     ground_truth_limitation: str
 
 
+Phase5SystemName = Literal["B0", "B1", "B2", "B3", "B4", "RIPPLE"]
+
+
+class Phase5SystemResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    system: Phase5SystemName
+    source_ranking: tuple[Path, ...]
+    test_ranking: tuple[Path, ...]
+    metrics: SetMetrics
+    test_precision: float
+    test_recall: float
+    runtime_seconds: float
+    dropped_predictions: tuple[str, ...] = ()
+    llm_calls: int = 0
+    tool_calls: int = 0
+
+
+class Phase5TaskResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    task_id: str
+    repository: str
+    base_commit: str
+    masked_request_original_length: int
+    masked_request_used_length: int
+    masked_request_truncated: bool
+    agent_k: int
+    systems: tuple[Phase5SystemResult, ...]
+    agent_status: RunStatus
+    leak_checks: tuple[str, ...]
+
+
+class Phase5AggregateResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    system: Phase5SystemName
+    task_count: int
+    mean_precision: float
+    mean_recall: float
+    mean_f1: float
+    mean_recall_at_5: float
+    mean_recall_at_10: float
+    mean_mrr: float
+    mean_false_positives: float
+
+
+class Phase5EvaluationResults(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    schema_version: int = EVALUATION_SCHEMA_VERSION
+    label: Literal["DEVELOPMENT / PHASE 5 — NOT FINAL HELD-OUT RESULTS"]
+    created_at: datetime
+    task_manifest: str
+    agent_config_version: str
+    llm_model: str
+    history_policy: str
+    total_tasks: int
+    valid_tasks: int
+    failed_setup_tasks: tuple[dict[str, str], ...]
+    status_counts: dict[str, int]
+    per_task: tuple[Phase5TaskResult, ...]
+    aggregates: tuple[Phase5AggregateResult, ...]
+    ground_truth_limitation: str
+
+
 def _relative_path(path: str | Path) -> Path:
     candidate = Path(PurePosixPath(str(path).replace("\\", "/")))
     if candidate.is_absolute() or ".." in candidate.parts or candidate == Path("."):
@@ -533,7 +606,7 @@ def check_repository_leaks(repo: Path, task: EvaluationTask) -> tuple[str, ...]:
 
 
 def prepare_repository(
-    task: EvaluationTask, workspace: str | Path
+    task: EvaluationTask, workspace: str | Path, *, history_depth: int = 1
 ) -> tuple[Path, tuple[str, ...]]:
     """Create a fresh base-only clone and remove all remote/future refs."""
 
@@ -552,7 +625,7 @@ def prepare_repository(
             temporary,
             "fetch",
             "--quiet",
-            "--depth=1",
+            f"--depth={history_depth}",
             "--no-tags",
             "origin",
             task.base_commit,
@@ -1035,6 +1108,210 @@ def evaluate_agent_manifest(
         aggregates=tuple(
             _mvp_aggregate(system, per_task) for system in ("B0", "B1", "RIPPLE")
         ),
+        ground_truth_limitation=(
+            "A historical PR is one valid implementation, not necessarily the only "
+            "valid implementation; exact-diff precision may penalize alternatives."
+        ),
+    )
+    _write_results(Path(output_path), results)
+    return results
+
+
+def _phase5_aggregate(
+    system: Phase5SystemName, results: Sequence[Phase5TaskResult]
+) -> Phase5AggregateResult:
+    selected = [
+        item for task in results for item in task.systems if item.system == system
+    ]
+    if not selected:
+        raise EvaluationError(f"no Phase 5 results for {system}")
+    return Phase5AggregateResult(
+        system=system,
+        task_count=len(selected),
+        mean_precision=fmean(item.metrics.precision for item in selected),
+        mean_recall=fmean(item.metrics.recall for item in selected),
+        mean_f1=fmean(item.metrics.f1 for item in selected),
+        mean_recall_at_5=fmean(item.metrics.recall_at_5 for item in selected),
+        mean_recall_at_10=fmean(item.metrics.recall_at_10 for item in selected),
+        mean_mrr=fmean(item.metrics.mrr for item in selected),
+        mean_false_positives=fmean(item.metrics.false_positives for item in selected),
+    )
+
+
+def evaluate_phase5_manifest(
+    manifest_path: str | Path,
+    *,
+    workspace: str | Path,
+    output_path: str | Path,
+    llm: LLMClient,
+    task_limit: int | None = None,
+    verbose: bool = False,
+) -> Phase5EvaluationResults:
+    """Run the separate six-system Phase 5 development comparison."""
+
+    manifest = load_tasks(manifest_path, expected_count=20)
+    tasks = manifest.tasks[:task_limit] if task_limit is not None else manifest.tasks
+    per_task: list[Phase5TaskResult] = []
+    failures: list[dict[str, str]] = []
+    workspace_path = Path(workspace).resolve()
+    for task in tasks:
+        try:
+            repo, leak_checks = prepare_repository(
+                task, workspace_path, history_depth=501
+            )
+            index = scan_repository(repo)
+            prepared = prepare_evaluation_request(task.masked_request)
+            request = FeatureRequest(text=prepared.text)
+
+            agent_run = analyze_repository(
+                index,
+                request,
+                llm,
+                output_root=workspace_path / "_agent_artifacts" / task.id,
+            )
+            source_paths = {item.path for item in index.files if not item.is_test}
+            agent_sources = _dedupe_paths(
+                item.target.partition("::")[0]
+                for item in agent_run.report.affected_components
+                if Path(item.target.partition("::")[0]) in source_paths
+            )
+            agent_tests = _dedupe_paths(
+                item.test_path for item in agent_run.report.suggested_tests
+            )
+            agent_k = len(agent_sources)
+            systems: list[Phase5SystemResult] = []
+
+            for name, runner in (
+                ("B0", bm25_baseline),
+                ("B1", structural_baseline),
+                ("B2", cochange_baseline),
+            ):
+                started = perf_counter()
+                prediction = runner(index, prepared.text)
+                runtime = perf_counter() - started
+                source_ranking = _dedupe_paths(
+                    item.path for item in prediction.source_predictions
+                )
+                test_ranking = _dedupe_paths(
+                    item.path for item in prediction.test_predictions
+                )
+                test_precision, test_recall = test_set_metrics(
+                    test_ranking, task.gold_files.test_python, cutoff=agent_k
+                )
+                systems.append(
+                    Phase5SystemResult(
+                        system=name,
+                        source_ranking=source_ranking,
+                        test_ranking=test_ranking,
+                        metrics=score_ranking(
+                            source_ranking,
+                            task.gold_files.source_python,
+                            prediction_k=agent_k,
+                        ),
+                        test_precision=test_precision,
+                        test_recall=test_recall,
+                        runtime_seconds=runtime,
+                    )
+                )
+
+            for name, runner in (("B3", one_shot_baseline), ("B4", react_baseline)):
+                started = perf_counter()
+                baseline_run = runner(index, request, llm)
+                runtime = perf_counter() - started
+                source_ranking = _dedupe_paths(
+                    item.path for item in baseline_run.prediction.source_predictions
+                )
+                test_ranking = _dedupe_paths(
+                    item.path for item in baseline_run.prediction.test_predictions
+                )
+                test_precision, test_recall = test_set_metrics(
+                    test_ranking, task.gold_files.test_python, cutoff=agent_k
+                )
+                systems.append(
+                    Phase5SystemResult(
+                        system=name,
+                        source_ranking=source_ranking,
+                        test_ranking=test_ranking,
+                        metrics=score_ranking(
+                            source_ranking,
+                            task.gold_files.source_python,
+                            prediction_k=agent_k,
+                        ),
+                        test_precision=test_precision,
+                        test_recall=test_recall,
+                        runtime_seconds=runtime,
+                        dropped_predictions=baseline_run.dropped_predictions,
+                        llm_calls=baseline_run.llm_calls,
+                        tool_calls=baseline_run.tool_calls,
+                    )
+                )
+
+            test_precision, test_recall = test_set_metrics(
+                agent_tests, task.gold_files.test_python, cutoff=agent_k
+            )
+            systems.append(
+                Phase5SystemResult(
+                    system="RIPPLE",
+                    source_ranking=agent_sources,
+                    test_ranking=agent_tests,
+                    metrics=score_ranking(
+                        agent_sources,
+                        task.gold_files.source_python,
+                        prediction_k=agent_k,
+                    ),
+                    test_precision=test_precision,
+                    test_recall=test_recall,
+                    runtime_seconds=agent_run.report.run_stats.runtime_seconds,
+                    llm_calls=agent_run.report.run_stats.llm_calls,
+                    tool_calls=agent_run.report.run_stats.tool_calls,
+                )
+            )
+            per_task.append(
+                Phase5TaskResult(
+                    task_id=task.id,
+                    repository=task.repository,
+                    base_commit=task.base_commit,
+                    masked_request_original_length=prepared.original_length,
+                    masked_request_used_length=prepared.used_length,
+                    masked_request_truncated=prepared.truncated,
+                    agent_k=agent_k,
+                    systems=tuple(systems),
+                    agent_status=agent_run.report.status,
+                    leak_checks=leak_checks,
+                )
+            )
+            if verbose:
+                print(f"evaluated {task.id}: {agent_run.report.status}, k={agent_k}")
+        except (EvaluationError, OSError, ValueError) as error:
+            failures.append({"task_id": task.id, "reason": str(error)})
+            if verbose:
+                print(f"failed {task.id}: {error}")
+    if not per_task:
+        raise EvaluationError("no tasks completed Phase 5 evaluation")
+    systems_order: tuple[Phase5SystemName, ...] = (
+        "B0",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "RIPPLE",
+    )
+    results = Phase5EvaluationResults(
+        label="DEVELOPMENT / PHASE 5 — NOT FINAL HELD-OUT RESULTS",
+        created_at=datetime.now(UTC),
+        task_manifest=str(Path(manifest_path)),
+        agent_config_version=FULL_REPORT_CONFIG_VERSION,
+        llm_model=llm.model,
+        history_policy=(
+            "Each checkout fetches at most 501 commits ending at the exact base SHA, "
+            "removes the remote and all refs, and co-change queries HEAD only."
+        ),
+        total_tasks=len(tasks),
+        valid_tasks=len(per_task),
+        failed_setup_tasks=tuple(failures),
+        status_counts=dict(Counter(item.agent_status for item in per_task)),
+        per_task=tuple(per_task),
+        aggregates=tuple(_phase5_aggregate(name, per_task) for name in systems_order),
         ground_truth_limitation=(
             "A historical PR is one valid implementation, not necessarily the only "
             "valid implementation; exact-diff precision may penalize alternatives."
