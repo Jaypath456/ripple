@@ -3,6 +3,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from time import perf_counter
 
 from pydantic import ValidationError
 
@@ -22,6 +23,11 @@ class LLMBaselineRun:
     dropped_predictions: tuple[str, ...]
     llm_calls: int
     tool_calls: int
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    total_tokens: int | None = None
+    runtime_seconds: float = 0.0
+    malformed_outputs: int = 0
 
 
 def _validated_prediction(
@@ -78,13 +84,26 @@ def one_shot_baseline(
         + "\n"
         + _prompt_data("symbol_outline", _outline(index))
     )
+    started = perf_counter()
     response = llm.one_shot_rank(prompt)
+    malformed = 0
     try:
         raw = RankedPathDraft.model_validate(response.payload).paths
     except ValidationError:
         raw = ()
+        malformed = 1
     prediction, dropped = _validated_prediction("B3", raw, index)
-    return LLMBaselineRun(prediction, dropped, llm_calls=1, tool_calls=0)
+    return LLMBaselineRun(
+        prediction,
+        dropped,
+        llm_calls=1,
+        tool_calls=0,
+        input_tokens=response.input_tokens,
+        output_tokens=response.output_tokens,
+        total_tokens=response.total_tokens,
+        runtime_seconds=perf_counter() - started,
+        malformed_outputs=malformed,
+    )
 
 
 def react_baseline(
@@ -97,6 +116,10 @@ def react_baseline(
     calls = 0
     llm_calls = 0
     raw_paths: tuple[str, ...] = ()
+    input_tokens = output_tokens = total_tokens = 0
+    usage_known = False
+    malformed = 0
+    started = perf_counter()
     while calls < MAX_TOOL_CALLS and llm_calls < MAX_TOOL_CALLS:
         prompt = (
             "Choose one registered tool, or submit_report with predicted_paths ranked "
@@ -114,9 +137,19 @@ def react_baseline(
         )
         response = llm.react_decide(prompt)
         llm_calls += 1
+        if response.input_tokens is not None:
+            input_tokens += response.input_tokens
+            usage_known = True
+        if response.output_tokens is not None:
+            output_tokens += response.output_tokens
+            usage_known = True
+        if response.total_tokens is not None:
+            total_tokens += response.total_tokens
+            usage_known = True
         try:
             decision = BaselineDecision.model_validate(response.payload)
         except ValidationError as error:
+            malformed += 1
             observations.append({"error": f"invalid decision: {error}"})
             continue
         if decision.tool_name == "submit_report":
@@ -137,4 +170,14 @@ def react_baseline(
             }
         )
     prediction, dropped = _validated_prediction("B4", raw_paths, index)
-    return LLMBaselineRun(prediction, dropped, llm_calls=llm_calls, tool_calls=calls)
+    return LLMBaselineRun(
+        prediction,
+        dropped,
+        llm_calls=llm_calls,
+        tool_calls=calls,
+        input_tokens=input_tokens if usage_known else None,
+        output_tokens=output_tokens if usage_known else None,
+        total_tokens=total_tokens if usage_known else None,
+        runtime_seconds=perf_counter() - started,
+        malformed_outputs=malformed,
+    )

@@ -224,3 +224,39 @@ def validate_report_draft(
         blind_spots=expansion.blind_spots,
         dropped_claims=tuple(dropped),
     )
+
+
+def unvalidated_report_draft(
+    draft: ReportDraft, expansion: ExpansionResult
+) -> ValidatedDraft:
+    """Materialize A3 without applying RIPPLE's evidence validator."""
+
+    def typed(name: str, kind: type[Any]) -> tuple[Any, ...]:
+        return tuple(item for item in getattr(draft, name) if isinstance(item, kind))
+
+    return ValidatedDraft(
+        components=_dedupe(
+            draft.affected_components + expansion.components, lambda item: item.target
+        ),
+        schema_changes=_dedupe(
+            typed("schema_changes", GroundedClaim) + expansion.schema_changes,
+            lambda item: (item.description, item.targets),
+        ),
+        api_changes=_dedupe(
+            typed("api_changes", GroundedClaim) + expansion.api_changes,
+            lambda item: (item.description, item.targets),
+        ),
+        config_changes=_dedupe(
+            typed("config_changes", GroundedClaim) + expansion.config_changes,
+            lambda item: (item.description, item.targets),
+        ),
+        regression_areas=expansion.regression_areas,
+        tests=_dedupe(
+            draft.suggested_tests + expansion.tests,
+            lambda item: (item.action, item.test_path),
+        ),
+        implementation_order=expansion.implementation_order,
+        risks=typed("risks", Risk),
+        blind_spots=expansion.blind_spots,
+        dropped_claims=(),
+    )

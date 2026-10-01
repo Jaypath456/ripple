@@ -6,6 +6,7 @@ import re
 import tempfile
 import uuid
 from collections import Counter
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
@@ -33,12 +34,31 @@ from ripple.llm import LLMClient, LLMError, LLMResponse
 from ripple.models import RepositoryIndex
 from ripple.render import render_markdown
 from ripple.tools import ToolResult, ToolSession, validate_tool_arguments
-from ripple.validate import validate_report_draft
+from ripple.validate import unvalidated_report_draft, validate_report_draft
 
 MAX_TOOL_CALLS = 25
 MAX_NO_PROGRESS = 4
 MAX_CANDIDATES = 30
 SEED_LIMIT = 8
+
+
+@dataclass(frozen=True)
+class AgentVariant:
+    """Evaluation-only gates; the default exactly matches full RIPPLE."""
+
+    name: str = "RIPPLE"
+    co_changed: bool = True
+    dependencies: bool = True
+    references: bool = True
+    validator: bool = True
+
+
+AGENT_VARIANTS = {
+    "RIPPLE": AgentVariant(),
+    "A1": AgentVariant(name="A1", co_changed=False),
+    "A2": AgentVariant(name="A2", dependencies=False, references=False),
+    "A3": AgentVariant(name="A3", validator=False),
+}
 
 
 class TraceWriter:
@@ -208,11 +228,13 @@ class AgentController:
         *,
         output_root: Path | None = None,
         max_tokens: int | None = None,
+        variant: AgentVariant = AGENT_VARIANTS["RIPPLE"],
     ) -> None:
         self.index = index
         self.llm = llm
         self.output_root = output_root or index.repo_root / ".ripple"
         self.max_tokens = max_tokens
+        self.variant = variant
         self.ledger = CandidateLedger(index, MAX_CANDIDATES)
         self.session = ToolSession(index)
         self.cache: dict[str, ToolResult] = {}
@@ -296,6 +318,16 @@ class AgentController:
     def _execute(
         self, name: str, arguments: object, *, count_explore: bool = True
     ) -> tuple[ToolResult | None, bool]:
+        disabled = {
+            "co_changed": not self.variant.co_changed,
+            "get_dependencies": not self.variant.dependencies,
+            "find_references": not self.variant.references,
+        }
+        if disabled.get(name, False):
+            message = f"tool disabled by {self.variant.name} ablation: {name}"
+            self.trace.write("tool_disabled", tool=name, variant=self.variant.name)
+            self.observations.append({"tool": name, "error": message})
+            return None, False
         try:
             canonical = validate_tool_arguments(name, arguments)
         except ValueError as error:
@@ -404,11 +436,26 @@ class AgentController:
                 "tokens_max": self.max_tokens,
             },
         }
+        tools = ["search_code", "inspect_symbol"]
+        if self.variant.references:
+            tools.append("find_references")
+        if self.variant.dependencies:
+            tools.append("get_dependencies")
+        tools.extend(["find_tests", "repo_facts"])
+        if self.variant.co_changed:
+            tools.append("co_changed")
+        tools.append("submit_report")
+        reference_requirement = (
+            "find_references and find_tests"
+            if self.variant.references
+            else "find_tests"
+        )
         return (
             "Choose exactly one registered tool or submit_report. Do not propose shell, "
             "file edits, or new tools. Ledger updates must cite the most recent observation "
             "and only targets it touched. Confirm only plausible affected source targets. "
-            "Before submission, every confirmed target needs find_references and find_tests. "
+            f"Before submission, every confirmed target needs {reference_requirement}. "
+            f"Available tools: {', '.join(tools)}. "
             "Use only these exact argument shapes: search_code={query, kind: "
             "any|symbol|file|string, limit:1..15}; inspect_symbol={target}; "
             "find_references={symbol_id, limit:1..40}; get_dependencies={path, "
@@ -439,15 +486,17 @@ class AgentController:
             {item.target.partition("::")[0] for item in self.ledger.confirmed()}
         )
         for path in confirmed_paths:
-            self._execute(
-                "get_dependencies",
-                {"path": path, "direction": "imported_by", "depth": 1},
-                count_explore=False,
-            )
+            if self.variant.dependencies:
+                self._execute(
+                    "get_dependencies",
+                    {"path": path, "direction": "imported_by", "depth": 1},
+                    count_explore=False,
+                )
             self._execute("find_tests", {"target": path}, count_explore=False)
-            self._execute(
-                "co_changed", {"path": path, "limit": 10}, count_explore=False
-            )
+            if self.variant.co_changed:
+                self._execute(
+                    "co_changed", {"path": path, "limit": 10}, count_explore=False
+                )
         kinds = {"routes", "models", "settings", "migrations"}
         for kind in sorted(kinds):
             self._execute("repo_facts", {"kind": kind}, count_explore=False)
@@ -589,7 +638,9 @@ class AgentController:
                 )
                 ledger_changed = self._apply_updates(decision, latest_evidence)
                 if decision.tool_name == "submit_report":
-                    problem = self.ledger.submission_problem()
+                    problem = self.ledger.submission_problem(
+                        require_refs=self.variant.references
+                    )
                     if problem:
                         self.trace.write("submit_rejected", reason=problem)
                         self.observations.append({"controller": problem})
@@ -611,7 +662,11 @@ class AgentController:
                 draft = self._fallback_draft()
                 requested_completion = False
                 stop_reason = "invalid_report"
-            validated = validate_report_draft(draft, self.index, self.ledger, expansion)
+            validated = (
+                validate_report_draft(draft, self.index, self.ledger, expansion)
+                if self.variant.validator
+                else unvalidated_report_draft(draft, expansion)
+            )
             if requested_completion and validated.components:
                 status = "completed"
             elif validated.components:
@@ -700,9 +755,14 @@ def analyze_repository(
     llm: LLMClient,
     *,
     output_root: Path | None = None,
+    variant: AgentVariant = AGENT_VARIANTS["RIPPLE"],
 ) -> AgentRun:
     max_tokens_text = os.environ.get("RIPPLE_MAX_TOKENS", "")
     max_tokens = int(max_tokens_text) if max_tokens_text.isdigit() else None
     return AgentController(
-        index, llm, output_root=output_root, max_tokens=max_tokens
+        index,
+        llm,
+        output_root=output_root,
+        max_tokens=max_tokens,
+        variant=variant,
     ).run(request)

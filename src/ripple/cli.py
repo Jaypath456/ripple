@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import sys
+from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
 from time import perf_counter
@@ -21,6 +22,7 @@ from ripple.evaluation import (
     evaluate_phase5_manifest,
     format_results_table,
 )
+from ripple.final_evaluation import freeze_config, run_final, run_smoke
 from ripple.llm import LLMError, OpenAILLM
 from ripple.scanner import ScanError
 from ripple.show_run import RunNotFoundError, replay_run
@@ -119,6 +121,69 @@ def _parser() -> argparse.ArgumentParser:
     )
     phase5_eval_parser.add_argument("--task-limit", type=int)
     phase5_eval_parser.add_argument("--verbose", action="store_true")
+
+    smoke_parser = subparsers.add_parser(
+        "final-smoke", help="run the five-development-task Phase 7 provider gate"
+    )
+    smoke_parser.add_argument(
+        "--tasks", type=Path, default=Path("evaluation/data/mvp_tasks.json")
+    )
+    smoke_parser.add_argument(
+        "--workspace", type=Path, default=Path(".ripple/evaluation/final-smoke")
+    )
+    smoke_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("evaluation/results/bullsai_compatibility_smoke.json"),
+    )
+    smoke_parser.add_argument(
+        "--force", action="store_true", help="intentionally replace smoke checkpoints"
+    )
+
+    freeze_parser = subparsers.add_parser(
+        "freeze-final-config", help="freeze the credential-free Phase 7 configuration"
+    )
+    freeze_parser.add_argument(
+        "--smoke",
+        type=Path,
+        default=Path("evaluation/results/bullsai_compatibility_smoke.json"),
+    )
+    freeze_parser.add_argument(
+        "--output", type=Path, default=Path("evaluation/final_config.json")
+    )
+
+    final_parser = subparsers.add_parser(
+        "evaluate-final", help="run or resume the frozen Phase 7 schedule"
+    )
+    final_parser.add_argument(
+        "--tasks", type=Path, default=Path("evaluation/data/final_fea_tasks.json")
+    )
+    final_parser.add_argument(
+        "--workspace", type=Path, default=Path(".ripple/evaluation/final-v1")
+    )
+    final_parser.add_argument(
+        "--raw", type=Path, default=Path("evaluation/raw/final-v1")
+    )
+    final_parser.add_argument(
+        "--schedule", type=Path, default=Path("evaluation/final_schedule.json")
+    )
+    final_parser.add_argument(
+        "--config", type=Path, default=Path("evaluation/final_config.json")
+    )
+    final_parser.add_argument("--force", action="store_true")
+
+    results_parser = subparsers.add_parser(
+        "build-results", help="regenerate all Phase 7 metrics and the results README"
+    )
+    results_parser.add_argument(
+        "--manifest", type=Path, default=Path("evaluation/data/final_fea_tasks.json")
+    )
+    results_parser.add_argument(
+        "--raw", type=Path, default=Path("evaluation/raw/final-v1")
+    )
+    results_parser.add_argument(
+        "--config", type=Path, default=Path("evaluation/final_config.json")
+    )
 
     analyze_parser = subparsers.add_parser(
         "analyze", help="run bounded evidence-led change-impact analysis"
@@ -281,6 +346,7 @@ def _run_evaluate_agent(args: argparse.Namespace) -> int:
             workspace=args.workspace,
             output_path=args.output,
             llm=OpenAILLM.from_env(),
+            force=args.force,
             task_limit=args.task_limit,
             verbose=args.verbose,
         )
@@ -327,6 +393,96 @@ def _run_evaluate_phase5(args: argparse.Namespace) -> int:
         )
     print(f"Results: {args.output}")
     return 0 if results.valid_tasks == results.total_tasks else 1
+
+
+def _run_final_smoke(args: argparse.Namespace) -> int:
+    try:
+        result = run_smoke(
+            args.tasks,
+            workspace=args.workspace,
+            output_path=args.output,
+            llm=OpenAILLM.from_env(),
+        )
+    except (EvaluationError, LLMError, OSError, ValueError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    estimate = result["estimated_full_40_task_llm_workload"]
+    print(
+        f"Smoke: {result['successful_runs']}/{result['required_runs']} successful; "
+        f"requests={result['totals']['requests']}, "
+        f"tokens={result['totals']['total_tokens']}, "
+        f"runtime={result['totals']['runtime_seconds']:.1f}s"
+    )
+    print(
+        "Estimated 40-task LLM workload: "
+        f"requests={estimate['requests']:.0f}, tokens={estimate['total_tokens']:.0f}, "
+        f"runtime={estimate['runtime_seconds']:.0f}s"
+    )
+    print(f"Results: {args.output}")
+    return 0 if result["successful_runs"] == result["required_runs"] else 1
+
+
+def _run_freeze(args: argparse.Namespace) -> int:
+    try:
+        smoke = json.loads(args.smoke.read_text(encoding="utf-8"))
+        if smoke.get("successful_runs") != smoke.get("required_runs"):
+            raise EvaluationError("provider smoke has not passed")
+        llm = OpenAILLM.from_env()
+        result = freeze_config(
+            args.output,
+            model=llm.model,
+            base_url=os.environ.get("RIPPLE_LLM_BASE_URL", ""),
+        )
+    except (EvaluationError, LLMError, OSError, ValueError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    print(f"Final config: {args.output}")
+    print(f"Config hash: {result['config_hash']}")
+    return 0
+
+
+def _run_final(args: argparse.Namespace) -> int:
+    try:
+        runs = run_final(
+            args.tasks,
+            workspace=args.workspace,
+            raw_root=args.raw,
+            schedule_path=args.schedule,
+            config_path=args.config,
+            llm=OpenAILLM.from_env(),
+            force=args.force,
+        )
+    except (EvaluationError, LLMError, OSError, ValueError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    statuses = Counter(item.status for item in runs)
+    print(f"Runs: {len(runs)}; statuses: {dict(statuses)}")
+    print(f"Raw results: {args.raw}")
+    return 0 if not statuses.get("provider_failed") else 1
+
+
+def _run_build_results(args: argparse.Namespace) -> int:
+    from ripple.evaluation_results import build_results
+
+    try:
+        summary = build_results(
+            manifest_path=args.manifest,
+            raw_root=args.raw,
+            config_path=args.config,
+            output_readme=Path("evaluation/results/README.md"),
+            output_summary=Path("evaluation/results/final_summary.json"),
+            symbol_gold_path=Path("evaluation/gold/final_symbols.json"),
+            stage_b_path=Path("evaluation/results/stage_b_anomalies.json"),
+            adjudication_path=Path(
+                "evaluation/adjudication/adjudication_template.json"
+            ),
+        )
+    except (EvaluationError, OSError, ValueError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    print(f"Runs: {summary['run_count']}")
+    print("Results: evaluation/results/README.md")
+    return 0
 
 
 def _run_show(args: argparse.Namespace) -> int:
@@ -384,6 +540,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_show(args)
     if args.command == "evaluate-phase5":
         return _run_evaluate_phase5(args)
+    if args.command == "final-smoke":
+        return _run_final_smoke(args)
+    if args.command == "freeze-final-config":
+        return _run_freeze(args)
+    if args.command == "evaluate-final":
+        return _run_final(args)
+    if args.command == "build-results":
+        return _run_build_results(args)
     if args.command == "verify":
         return _run_verify(args)
     return _run_scan(args)

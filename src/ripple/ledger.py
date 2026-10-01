@@ -133,14 +133,17 @@ class CandidateLedger:
             if candidate.status == "confirmed"
         )
 
-    def submission_problem(self) -> str | None:
+    def submission_problem(
+        self, *, require_refs: bool = True, require_tests: bool = True
+    ) -> str | None:
         confirmed = self.confirmed()
         if not confirmed:
             return "no candidates are confirmed"
         unchecked = [
             item.target
             for item in confirmed
-            if not item.checked_refs or not item.checked_tests
+            if (require_refs and not item.checked_refs)
+            or (require_tests and not item.checked_tests)
         ]
         if unchecked:
             return (
