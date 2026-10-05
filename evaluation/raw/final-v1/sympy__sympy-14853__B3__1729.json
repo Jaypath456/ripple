@@ -1,0 +1,44 @@
+{
+  "completed_at": "2026-10-02T23:09:53.120293Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: sympy/discrete/mobius.py",
+    "missing or non-source path: tests/sympy/discrete/test_mobius_transform.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 7201,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 971,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "89ba70e3729fb8df434350be2b2c76caf2044c65109d8d433949019310f30750",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "sympy/sympy",
+  "request_original_length": 702,
+  "request_truncated": false,
+  "request_used_length": 702,
+  "requested_seed": 1729,
+  "run_id": "sympy__sympy-14853__B3__1729",
+  "runtime_seconds": 2.5321358750006766,
+  "schema_version": 1,
+  "source_ranking": [
+    "sympy/discrete/__init__.py"
+  ],
+  "status": "completed",
+  "system": "B3",
+  "task_id": "sympy__sympy-14853",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 8172,
+  "trace_path": null
+}

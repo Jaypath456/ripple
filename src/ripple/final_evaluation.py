@@ -35,6 +35,7 @@ from ripple.evaluation import (
     prepare_repository,
 )
 from ripple.llm import LLMClient, LLMError
+from ripple.models import RepositoryIndex
 from ripple.phase5_baselines import one_shot_baseline, react_baseline
 from ripple.scanner import scan_repository
 
@@ -259,6 +260,7 @@ def _run_one(
     config_hash: str,
     *,
     force: bool,
+    index: RepositoryIndex | None = None,
 ) -> RawRun:
     path = _raw_path(raw_root, entry.run_id)
     if path.exists() and not force:
@@ -282,7 +284,7 @@ def _run_one(
     }
     started = perf_counter()
     try:
-        index = scan_repository(repo)
+        index = index or scan_repository(repo)
         if entry.system in DETERMINISTIC_SYSTEMS:
             runner = {
                 "B0": bm25_baseline,
@@ -534,6 +536,8 @@ def run_final(
             },
         )
     prepared_repos: dict[str, tuple[Path, tuple[str, ...]]] = {}
+    # The index is deterministic and frozen; build it once per task, not per run.
+    indexes: dict[str, RepositoryIndex] = {}
     results: list[RawRun] = []
     for entry in schedule:
         checkpoint = _raw_path(raw_root, entry.run_id)
@@ -548,6 +552,9 @@ def run_final(
                 task, workspace, history_depth=501
             )
         repo, checks = prepared_repos[task.id]
+        if task.id not in indexes:
+            indexes.clear()
+            indexes[task.id] = scan_repository(repo)
         results.append(
             _run_one(
                 entry,
@@ -559,6 +566,7 @@ def run_final(
                 workspace / "_artifacts",
                 expected_hash,
                 force=force,
+                index=indexes[task.id],
             )
         )
     return tuple(results)

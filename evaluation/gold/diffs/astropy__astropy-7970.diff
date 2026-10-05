@@ -1,0 +1,178 @@
+diff --git a/CHANGES.rst b/CHANGES.rst
+index bbd4ad7014dc..ca55537547af 100644
+--- a/CHANGES.rst
++++ b/CHANGES.rst
+@@ -224,6 +224,8 @@ astropy.units
+ - ``AB`` and ``ST`` are now enabled by default, and have alternate names
+   ``ABflux`` and ``STflux`` [#7891]
+ 
++- Added ``littleh`` unit and associated ``with_H0`` equivalency. [#7970]
++
+ astropy.utils
+ ^^^^^^^^^^^^^
+ 
+diff --git a/astropy/units/astrophys.py b/astropy/units/astrophys.py
+index e894402a5b1c..a57ab925e9d5 100644
+--- a/astropy/units/astrophys.py
++++ b/astropy/units/astrophys.py
+@@ -160,6 +160,14 @@
+ def_unit(['beam'], namespace=_ns, prefixes=True)
+ def_unit(['electron'], doc="Number of electrons", namespace=_ns,
+          format={'latex': r'e^{-}', 'unicode': 'e⁻'})
++# This is not formally a unit, but is used in that way in many contexts, and
++# an appropriate equivalency is only possible if it's treated as a unit (see
++# https://arxiv.org/pdf/1308.4150.pdf for more)
++# Also note that h or h100 or h_100 would be a better name, but they either
++# conflict or have numbers in them, which is apparently disallowed
++def_unit(['littleh'], namespace=_ns, prefixes=False,
++         doc="Reduced/\"dimensionless\" Hubble constant",
++         format={'latex': r'h_{100}'})
+ 
+ 
+ ###########################################################################
+diff --git a/astropy/units/equivalencies.py b/astropy/units/equivalencies.py
+index d416243f04e0..2a9bbda3b4b0 100644
+--- a/astropy/units/equivalencies.py
++++ b/astropy/units/equivalencies.py
+@@ -20,7 +20,7 @@
+            'brightness_temperature', 'thermodynamic_temperature',
+            'beam_angular_area', 'dimensionless_angles', 'logarithmic',
+            'temperature', 'temperature_energy', 'molar_mass_amu',
+-           'pixel_scale', 'plate_scale']
++           'pixel_scale', 'plate_scale', 'with_H0']
+ 
+ 
+ def dimensionless_angles():
+@@ -687,3 +687,29 @@ def plate_scale(platescale):
+                          "distance/angle")
+ 
+     return [(si.m, si.radian, lambda d: d*platescale_val, lambda rad: rad/platescale_val)]
++
++
++def with_H0(H0=None):
++    """
++    Convert between quantities with little-h and the equivalent physical units.
++
++    Parameters
++    ----------
++    H0 : `None` or `~astropy.units.Quantity`
++        The value of the Hubble constant to assume. If a `~astropy.units.Quantity`,
++        will assume the quantity *is* ``H0``.  If `None` (default), use the
++        ``H0`` attribute from the default `astropy.cosmology` cosmology.
++
++    References
++    ----------
++    For an illuminating discussion on why you may or may not want to use
++    little-h at all, see https://arxiv.org/pdf/1308.4150.pdf
++    """
++
++    if H0 is None:
++        from .. import cosmology
++        H0 = cosmology.default_cosmology.get().H0
++
++    h100_val_unit = Unit(H0.to((si.km/si.s)/astrophys.Mpc).value/100 * astrophys.littleh)
++
++    return [(h100_val_unit, None)]
+diff --git a/astropy/units/tests/test_equivalencies.py b/astropy/units/tests/test_equivalencies.py
+index 1ddd556627a3..5b7b2a7fe434 100644
+--- a/astropy/units/tests/test_equivalencies.py
++++ b/astropy/units/tests/test_equivalencies.py
+@@ -10,7 +10,7 @@
+ 
+ # LOCAL
+ from ... import units as u
+-from ... import constants
++from ... import constants, cosmology
+ from ...tests.helper import assert_quantity_allclose
+ 
+ 
+@@ -752,3 +752,26 @@ def test_plate_scale():
+ 
+     assert_quantity_allclose(asec.to(u.mm, u.plate_scale(platescale)), mm)
+     assert_quantity_allclose(asec.to(u.mm, u.plate_scale(platescale2)), mm)
++
++
++def test_littleh():
++    H0_70 = 70*u.km/u.s/u.Mpc
++    h100dist = 100 * u.Mpc/u.littleh
++
++    assert_quantity_allclose(h100dist.to(u.Mpc, u.with_H0(H0_70)), 70*u.Mpc)
++
++    # make sure using the default cosmology works
++    H0_default_cosmo = cosmology.default_cosmology.get().H0
++    assert_quantity_allclose(h100dist.to(u.Mpc, u.with_H0()),
++                             H0_default_cosmo.value*u.Mpc)
++
++    # Now try a luminosity scaling
++    h1lum = 1 * u.Lsun * u.littleh**-2
++    assert_quantity_allclose(h1lum.to(u.Lsun, u.with_H0(H0_70)), .49*u.Lsun)
++
++    # And the trickiest one: magnitudes.  Using H0=10 here for the round numbers
++    H0_10 = 10*u.km/u.s/u.Mpc
++    # assume the "true" magnitude M = 12.
++    # Then M - 5*log_10(h)  = M + 5 = 17
++    withlittlehmag = 17 * (u.mag + u.MagUnit(u.littleh**2))
++    assert_quantity_allclose(withlittlehmag.to(u.mag, u.with_H0(H0_10)), 12*u.mag)
+diff --git a/docs/units/equivalencies.rst b/docs/units/equivalencies.rst
+index 86206968e1e9..7236ad0f8a66 100644
+--- a/docs/units/equivalencies.rst
++++ b/docs/units/equivalencies.rst
+@@ -347,8 +347,8 @@ and you want to know how big your pixels need to be to cover half an arcsecond::
+     >>> (0.5*u.arcsec).to(u.micron, tel_platescale)  # doctest: +FLOAT_CMP
+     <Quantity 18.9077335632719 micron>
+ 
+-Photometric Zero Point Equivalencies
+-------------------------------------
++Photometric Zero Point Equivalency
++----------------------------------
+ 
+ This equivalency provides an easy way to move between photometric systems (i.e.,
+ those defined relative to a particular zero-point flux) and absolute fluxes.
+@@ -361,6 +361,47 @@ standard zero point of 3631.1 Jy::
+     >>> u.Magnitude(target_flux.to(u.AB, zero_point_star_equiv))  # doctest: +FLOAT_CMP
+     <Magnitude 22.30195136 mag(AB)>
+ 
++Reduced Hubble constant/"little-h" Equivalency
++----------------------------------------------
++
++The dimensionless version of the Hubble constant - often known as "little h" -
++is a frequently-used quantity in extragalactic astrophysics.  It is also widely
++known as the bane of beginners' existence in such fields (See e.g., the title of
++`this paper <https://doi.org/10.1017/pasa.2013.31>`__, which also provides
++valuable advice on the use of little h).  Astropy provides an equivalency that
++helps keep this straight in at least some of these cases, by providing a way to
++convert to/from physical to "little h" units.  Two example conversions:
++
++    >>> import astropy.units as u
++    >>> H0_70 = 70 * u.km/u.s / u.Mpc
++    >>> distance = 100 * (u.Mpc/u.littleh)
++    >>> distance.to(u.Mpc, u.with_H0(H0_70))  # doctest: +FLOAT_CMP
++    <Quantity 70.0 Mpc>
++    >>> luminosity = 1 * u.Lsun * u.littleh**-2
++    >>> luminosity.to(u.Lsun, u.with_H0(H0_70))  # doctest: +FLOAT_CMP
++    <Quantity 0.49 solLum>
++
++Note the unit name ``littleh`` - while this unit is usually expressed in the
++literature as just ``h``, here it is ``littleh`` to not cause confusion with
++"hours".
++
++If no argument is given (or the argument is `None`), this equivalency assumes
++the ``H0`` from the current default cosmology:
++
++    >>> distance = 100 * (u.Mpc/u.littleh)
++    >>> distance.to(u.Mpc, u.with_H0())  # doctest: +FLOAT_CMP
++    <Quantity 69.32 Mpc>
++
++This equivalency also allows the common magnitude formulation of little h
++scaling:
++
++    >>> mag_quantity = 12 * (u.mag + u.MagUnit(u.littleh**2))
++    >>> mag_quantity  # doctest: +FLOAT_CMP
++    <Magnitude 12. mag(littleh2)>
++    >>> mag_quantity.to(u.mag, u.with_H0(H0_70))  # doctest: +FLOAT_CMP
++    <Quantity 11.2254902 mag>
++
++
+ Writing new equivalencies
+ =========================
+ 

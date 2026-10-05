@@ -1,0 +1,44 @@
+{
+  "completed_at": "2026-10-02T19:35:45.083569Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: optax/tree_utils/_tree_rng_keys.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 674,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 740,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "2c939c977cb83339ca704da1b8b526dbc3d98632300aef3df97e7b015a928432",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "google-deepmind/optax",
+  "request_original_length": 266,
+  "request_truncated": false,
+  "request_used_length": 266,
+  "requested_seed": 17,
+  "run_id": "google-deepmind__optax-1063__B4__17",
+  "runtime_seconds": 2.016937616999712,
+  "schema_version": 1,
+  "source_ranking": [
+    "optax/tree_utils/__init__.py",
+    "optax/tree_utils/_state_utils.py"
+  ],
+  "status": "completed",
+  "system": "B4",
+  "task_id": "google-deepmind__optax-1063",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 1414,
+  "trace_path": null
+}

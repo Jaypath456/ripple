@@ -1,0 +1,212 @@
+diff --git a/docs/api/losses.rst b/docs/api/losses.rst
+index 95cef9f99..41ceab134 100644
+--- a/docs/api/losses.rst
++++ b/docs/api/losses.rst
+@@ -14,6 +14,7 @@ Losses
+     kl_divergence
+     l2_loss
+     log_cosh
++    ntxent
+     safe_softmax_cross_entropy
+     sigmoid_binary_cross_entropy
+     sigmoid_focal_loss
+@@ -61,6 +62,10 @@ Log hyperbolic cosine loss
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .. autofunction:: log_cosh
+ 
++Normalized temperature scaled cross-entropy (NT-Xent) loss
++~~~~~~~~~~~~~~~~
++.. autofunction:: ntxent
++
+ Sigmoid binary cross-entropy
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .. autofunction:: sigmoid_binary_cross_entropy
+diff --git a/optax/__init__.py b/optax/__init__.py
+index 5edae96d1..4225d7ef2 100644
+--- a/optax/__init__.py
++++ b/optax/__init__.py
+@@ -203,6 +203,7 @@
+ kl_divergence = losses.kl_divergence
+ l2_loss = losses.l2_loss
+ log_cosh = losses.log_cosh
++ntxent = losses.ntxent
+ sigmoid_binary_cross_entropy = losses.sigmoid_binary_cross_entropy
+ smooth_labels = losses.smooth_labels
+ softmax_cross_entropy = losses.softmax_cross_entropy
+@@ -306,6 +307,7 @@
+     "MultiTransformState",
+     "nadam",
+     "nadamw",
++    "ntxent",
+     "noisy_sgd",
+     "novograd",
+     "NonNegativeParamsState",
+diff --git a/optax/losses/__init__.py b/optax/losses/__init__.py
+index 8393dc310..65c171f24 100644
+--- a/optax/losses/__init__.py
++++ b/optax/losses/__init__.py
+@@ -35,3 +35,4 @@
+ from optax.losses._regression import log_cosh
+ from optax.losses._regression import squared_error
+ from optax.losses._smoothing import smooth_labels
++from optax.losses._self_supervised import ntxent
+diff --git a/optax/losses/_classification_test.py b/optax/losses/_classification_test.py
+index b87d520ea..b75f3a088 100644
+--- a/optax/losses/_classification_test.py
++++ b/optax/losses/_classification_test.py
+@@ -862,6 +862,5 @@ def test_ignore_negative(self):
+     assert all(ce_loss[self.ts == 0] > 0)
+     assert all(focal_loss[self.ts == 0] == 0)
+ 
+-
+ if __name__ == '__main__':
+   absltest.main()
+diff --git a/optax/losses/_self_supervised.py b/optax/losses/_self_supervised.py
+new file mode 100644
+index 000000000..8c756a591
+--- /dev/null
++++ b/optax/losses/_self_supervised.py
+@@ -0,0 +1,86 @@
++# Copyright 2024 DeepMind Technologies Limited. All Rights Reserved.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++# ==============================================================================
++"""Self supervised losses."""
++
++import chex
++from jax import lax
++import jax.numpy as jnp
++from optax.losses._regression import cosine_similarity
++
++
++def ntxent(
++    embeddings: chex.Array,
++    labels: chex.Array,
++    temperature: chex.Numeric = 0.07
++) -> chex.Numeric:
++  """Normalized temperature scaled cross entropy loss (NT-Xent).
++
++  References:
++    T. Chen et al `A Simple Framework for Contrastive Learning of Visual 
++    Representations <http://arxiv.org/abs/2002.05709>`_, 2020
++    kevinmusgrave.github.io/pytorch-metric-learning/losses/#ntxentloss
++
++  Args:
++    emeddings: batch of embeddings, with shape [batch, feature_length]
++    labels: labels for groups that are positive pairs. e.g. if you have
++      a batch of 4 embeddings and the first two and last two were positive
++      pairs your `labels` should look like [0, 0, 1, 1]. labels SHOULD NOT
++      be all the same (e.g. [0, 0, 0, 0]) you will get a NaN result. 
++      Shape [batch]
++    temperature: temperature scaling parameter.
++
++  Returns:
++    A scalar loss value of NT-Xent values averaged over all positive
++    pairs
++
++  .. versionadded:: 0.2.3
++  """
++  chex.assert_type([embeddings], float)
++  if labels.shape[0] != embeddings.shape[0]:
++    raise ValueError(
++      'label dimension should match batch dimension in embeddings'
++    )
++
++  # cosine similarity matrix
++  xcs = cosine_similarity(
++  embeddings[None, :, :], embeddings[:, None, :]
++  ) / temperature
++
++  # finding positive and negative pairs
++  labels1 = jnp.expand_dims(labels, axis=1)
++  labels2 = jnp.expand_dims(labels, axis=0)
++  matches = labels1 == labels2
++  diffs = matches ^ 1
++  matches = jnp.bool_(matches - jnp.eye(matches.shape[0])) # no self cos
++
++  # replace 0 with -inf
++  xcs_diffs = jnp.where(diffs == 1, xcs, -jnp.inf)
++  xcs_matches = jnp.where(matches == 1, xcs, -jnp.inf)
++
++  # shifting for numeric stability
++  comb = jnp.concatenate((xcs_diffs, xcs_matches), axis=-1)
++  xcs_max = jnp.max(comb, axis=1, keepdims=True)
++  xcs_shift_diffs = xcs_diffs - lax.stop_gradient(xcs_max)
++  xcs_shift_matches = xcs_matches - lax.stop_gradient(xcs_max)
++
++  # calc loss
++  numer = xcs_shift_matches
++  numer_exp = jnp.exp(xcs_shift_matches)
++  denom = jnp.sum(jnp.exp(xcs_shift_diffs), axis=1, keepdims=True)
++  denom += numer_exp
++  log_softm = numer - jnp.log(denom)
++  loss = -jnp.where(matches == 1, log_softm, 0.0).sum() / matches.sum()
++
++  return loss
+diff --git a/optax/losses/_self_supervised_test.py b/optax/losses/_self_supervised_test.py
+new file mode 100644
+index 000000000..43823f6a3
+--- /dev/null
++++ b/optax/losses/_self_supervised_test.py
+@@ -0,0 +1,51 @@
++# Copyright 2024 DeepMind Technologies Limited. All Rights Reserved.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++# ==============================================================================
++"""Tests for optax.losses._self_supervised."""
++
++from absl.testing import parameterized
++
++import chex
++import jax.numpy as jnp
++import numpy as np
++
++from optax.losses import _self_supervised
++
++
++class NtxentTest(parameterized.TestCase):
++
++  def setUp(self):
++    super().setUp()
++    self.ys = jnp.array([
++    [-1.9540, 1.0780],
++    [ 0.2380, -0.5703],
++    [ 1.8745, -0.0195],
++    [-0.6719, -1.9210],
++    ])
++    self.ts_1 = jnp.array([0,0,1,1])
++    self.ts_2 = jnp.array([0,0,0,1])
++    # Calculated expected output
++    self.exp_1 = jnp.array(14.01032)
++    self.exp_2 = jnp.array(8.968544)
++
++  @chex.all_variants
++  def test_batched(self):
++    """Tests for a full batch."""
++    np.testing.assert_allclose(
++        self.variant(_self_supervised.ntxent)(self.ys, self.ts_1),
++        self.exp_1, atol=1e-4)
++
++    np.testing.assert_allclose(
++        self.variant(_self_supervised.ntxent)(self.ys, self.ts_2),
++        self.exp_2, atol=1e-4)

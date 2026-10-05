@@ -1,0 +1,689 @@
+{
+  "metrics": {
+    "control_false_alarm_rate": 1.0,
+    "control_runs": 15,
+    "drop_tests_applicable": 15,
+    "drop_tests_detection_recall": 1.0,
+    "drop_tests_inapplicable": 0,
+    "stale_caller_applicable": 15,
+    "stale_caller_detection_recall": 1.0,
+    "stale_caller_inapplicable": 0,
+    "unrelated_applicable": 15,
+    "unrelated_detection_recall": 1.0,
+    "unrelated_inapplicable": 0
+  },
+  "records": [
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "astropy/units/quantity.py",
+        "astropy/units/structured.py",
+        "astropy/units/tests/test_structured.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-13676",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-13676",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-13676",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "astropy/config/configuration.py::generate_config",
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-13676",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "astropy/modeling/core.py",
+        "astropy/modeling/fitting.py",
+        "astropy/modeling/tests/test_core.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-16677",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-16677",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-16677",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "astropy/config/configuration.py::generate_config",
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-16677",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "astropy/units/astrophys.py",
+        "astropy/units/equivalencies.py",
+        "astropy/units/tests/test_equivalencies.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-7970",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-7970",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-7970",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "astropy/config/configuration.py::get_config",
+      "report_source": "ripple_seed_17",
+      "task_id": "astropy__astropy-7970",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "conan/tools/files/__init__.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10154",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10154",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10154",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10154",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "conan/tools/microsoft/__init__.py",
+        "conan/tools/microsoft/visual.py",
+        "conans/test/unittests/tools/microsoft/test_msbuild.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10437",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10437",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10437",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10437",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/files.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10874",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10874",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10874",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-10874",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "conan/tools/gnu/autotools.py",
+        "conan/tools/gnu/autotoolstoolchain.py",
+        "conans/assets/templates/new_v2_autotools.py",
+        "conans/test/functional/toolchains/gnu/autotools/test_basic.py",
+        "conans/test/functional/toolchains/gnu/autotools/test_ios.py",
+        "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py",
+        "conans/test/unittests/tools/gnu/autotools_test.py",
+        "conans/test/utils/mocks.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11284",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11284",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11284",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11284",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "conans/model/conanfile_interface.py",
+        "conans/test/integration/conanfile/folders_access_test.py"
+      ],
+      "detected_categories": [
+        "adjacent",
+        "expected",
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11585",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11585",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11585",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+      "report_source": "ripple_seed_17",
+      "task_id": "conan-io__conan-11585",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "haystack/document_stores/types/__init__.py",
+        "haystack/document_stores/types/filter_policy.py",
+        "test/document_stores/test_filter_policy.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "deepset-ai__haystack-8042",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "deepset-ai__haystack-8042",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "deepset-ai__haystack-8042",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "haystack/components/converters/utils.py::get_bytestream_from_source",
+      "report_source": "ripple_seed_17",
+      "task_id": "deepset-ai__haystack-8042",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "optax/tree_utils/__init__.py",
+        "optax/tree_utils/_random.py",
+        "optax/tree_utils/_random_test.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-1063",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-1063",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-1063",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "optax/_src/alias.py::adagrad",
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-1063",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "optax/__init__.py",
+        "optax/losses/__init__.py",
+        "optax/losses/_classification_test.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-897",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-897",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-897",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "optax/_src/alias.py::adagrad",
+      "report_source": "ripple_seed_17",
+      "task_id": "google-deepmind__optax-897",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "src/accelerate/accelerator.py",
+        "src/accelerate/utils.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__accelerate-255",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__accelerate-255",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__accelerate-255",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "src/accelerate/commands/config/__init__.py::config_command_parser",
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__accelerate-255",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "datasets/wikipedia/wikipedia.py",
+        "src/nlp/arrow_dataset.py"
+      ],
+      "detected_categories": [
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__datasets-214",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__datasets-214",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__datasets-214",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "metrics/squad/evaluate.py::evaluate",
+      "report_source": "ripple_seed_17",
+      "task_id": "huggingface__datasets-214",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "lib/matplotlib/axes/_base.py",
+        "lib/matplotlib/axis.py",
+        "lib/matplotlib/tests/test_axes.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-23692",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-23692",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-23692",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "lib/matplotlib/_api/__init__.py::check_getitem",
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-23692",
+      "variant": "stale_caller"
+    },
+    {
+      "applicable": true,
+      "control_unexpected_paths": [
+        "lib/matplotlib/axes/_base.py",
+        "lib/matplotlib/axes/_base.pyi",
+        "lib/matplotlib/tests/test_axes.py",
+        "lib/mpl_toolkits/mplot3d/axes3d.py",
+        "lib/mpl_toolkits/mplot3d/tests/test_axes3d.py"
+      ],
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "false_alarm": true,
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-26293",
+      "variant": "control"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test",
+        "unexpected"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-26293",
+      "variant": "unrelated"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "missing_test"
+      ],
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-26293",
+      "variant": "drop_tests"
+    },
+    {
+      "applicable": true,
+      "detected_categories": [
+        "stale_caller"
+      ],
+      "planted_symbol": "lib/matplotlib/_api/__init__.py::check_getitem",
+      "report_source": "ripple_seed_17",
+      "task_id": "matplotlib__matplotlib-26293",
+      "variant": "stale_caller"
+    }
+  ],
+  "skipped": {}
+}

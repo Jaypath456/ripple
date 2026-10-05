@@ -1,0 +1,142 @@
+diff --git a/sqlglot/expressions.py b/sqlglot/expressions.py
+index dc0c0ca20d..f6ca8f5403 100644
+--- a/sqlglot/expressions.py
++++ b/sqlglot/expressions.py
+@@ -1155,6 +1155,72 @@ def order_by(self, *expressions, append=True, dialect=None, copy=True, **opts):
+             **opts,
+         )
+ 
++    def sort_by(self, *expressions, append=True, dialect=None, copy=True, **opts):
++        """
++        Set the SORT BY expression.
++
++        Example:
++            >>> Select().from_("tbl").select("x").sort_by("x DESC").sql()
++            'SELECT x FROM tbl SORT BY x DESC'
++
++        Args:
++            *expressions (str or Expression): the SQL code strings to parse.
++                If a `Group` instance is passed, this is used as-is.
++                If another `Expression` instance is passed, it will be wrapped in a `SORT`.
++            append (bool): if `True`, add to any existing expressions.
++                Otherwise, this flattens all the `Order` expression into a single expression.
++            dialect (str): the dialect used to parse the input expression.
++            copy (bool): if `False`, modify this expression instance in-place.
++            opts (kwargs): other options to use to parse the input expressions.            
++
++        Returns:
++            Select: the modified expression.
++        """
++        return _apply_child_list_builder(
++            *expressions,
++            instance=self,
++            arg="sort",
++            append=append,
++            copy=copy,
++            prefix="SORT BY",
++            into=Sort,
++            dialect=dialect,
++            **opts,
++        )
++
++    def cluster_by(self, *expressions, append=True, dialect=None, copy=True, **opts):
++        """
++        Set the CLUSTER BY expression.
++
++        Example:
++            >>> Select().from_("tbl").select("x").cluster_by("x DESC").sql()
++            'SELECT x FROM tbl CLUSTER BY x DESC'
++
++        Args:
++            *expressions (str or Expression): the SQL code strings to parse.
++                If a `Group` instance is passed, this is used as-is.
++                If another `Expression` instance is passed, it will be wrapped in a `Cluster`.
++            append (bool): if `True`, add to any existing expressions.
++                Otherwise, this flattens all the `Order` expression into a single expression.
++            dialect (str): the dialect used to parse the input expression.
++            copy (bool): if `False`, modify this expression instance in-place.
++            opts (kwargs): other options to use to parse the input expressions.            
++
++        Returns:
++            Select: the modified expression.
++        """
++        return _apply_child_list_builder(
++            *expressions,
++            instance=self,
++            arg="cluster",
++            append=append,
++            copy=copy,
++            prefix="CLUSTER BY",
++            into=Cluster,
++            dialect=dialect,
++            **opts,
++        )
++
+     def limit(self, expression, dialect=None, copy=True, **opts):
+         """
+         Set the LIMIT expression.
+diff --git a/sqlglot/parser.py b/sqlglot/parser.py
+index 1c4e7ba4ee..162384aeda 100644
+--- a/sqlglot/parser.py
++++ b/sqlglot/parser.py
+@@ -273,6 +273,8 @@ class Parser:
+         exp.Lateral: lambda self: self._parse_lateral(),
+         exp.Join: lambda self: self._parse_join(),
+         exp.Order: lambda self: self._parse_order(),
++        exp.Cluster: lambda self: self._parse_sort(TokenType.CLUSTER_BY, exp.Cluster),
++        exp.Sort: lambda self: self._parse_sort(TokenType.SORT_BY, exp.Sort),
+         exp.Lambda: lambda self: self._parse_lambda(),
+         exp.Limit: lambda self: self._parse_limit(),
+         exp.Offset: lambda self: self._parse_offset(),
+diff --git a/tests/test_build.py b/tests/test_build.py
+index 10c485728a..a4cffde9ea 100644
+--- a/tests/test_build.py
++++ b/tests/test_build.py
+@@ -169,10 +169,26 @@ def test_build(self):
+                 lambda: select("x").from_("tbl").order_by("y"),
+                 "SELECT x FROM tbl ORDER BY y",
+             ),
++            (
++                lambda: select("x").from_("tbl").cluster_by("y"),
++                "SELECT x FROM tbl CLUSTER BY y",
++            ),
++            (
++                lambda: select("x").from_("tbl").sort_by("y"),
++                "SELECT x FROM tbl SORT BY y",
++            ),
+             (
+                 lambda: select("x").from_("tbl").order_by("x, y DESC"),
+                 "SELECT x FROM tbl ORDER BY x, y DESC",
+             ),
++            (
++                lambda: select("x").from_("tbl").cluster_by("x, y DESC"),
++                "SELECT x FROM tbl CLUSTER BY x, y DESC",
++            ),
++            (
++                lambda: select("x").from_("tbl").sort_by("x, y DESC"),
++                "SELECT x FROM tbl SORT BY x, y DESC",
++            ),
+             (
+                 lambda: select("x", "y", "z", "a")
+                 .from_("tbl")
+@@ -180,6 +196,20 @@ def test_build(self):
+                 .order_by("a"),
+                 "SELECT x, y, z, a FROM tbl ORDER BY x, y, z, a",
+             ),
++            (
++                lambda: select("x", "y", "z", "a")
++                .from_("tbl")
++                .cluster_by("x, y", "z")
++                .cluster_by("a"),
++                "SELECT x, y, z, a FROM tbl CLUSTER BY x, y, z, a",
++            ),
++            (
++                lambda: select("x", "y", "z", "a")
++                .from_("tbl")
++                .sort_by("x, y", "z")
++                .sort_by("a"),
++                "SELECT x, y, z, a FROM tbl SORT BY x, y, z, a",
++            ),
+             (lambda: select("x").from_("tbl").limit(10), "SELECT x FROM tbl LIMIT 10"),
+             (
+                 lambda: select("x").from_("tbl").offset(10),

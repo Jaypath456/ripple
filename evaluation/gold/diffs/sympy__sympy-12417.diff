@@ -1,0 +1,81 @@
+diff --git a/sympy/vector/__init__.py b/sympy/vector/__init__.py
+index 8e484bf3a739..dfa5168cc802 100644
+--- a/sympy/vector/__init__.py
++++ b/sympy/vector/__init__.py
+@@ -8,7 +8,7 @@
+ from sympy.vector.functions import (express, matrix_to_vector,
+                                     curl, divergence, gradient,
+                                     is_conservative, is_solenoidal,
+-                                    scalar_potential,
++                                    scalar_potential, directional_derivative,
+                                     scalar_potential_difference)
+ from sympy.vector.point import Point
+ from sympy.vector.orienters import (AxisOrienter, BodyOrienter,
+diff --git a/sympy/vector/functions.py b/sympy/vector/functions.py
+index 26c98503d6a3..e0df22c05593 100644
+--- a/sympy/vector/functions.py
++++ b/sympy/vector/functions.py
+@@ -214,6 +214,39 @@ def gradient(scalar, coord_sys):
+ 
+     return coord_sys.delop(scalar).doit()
+ 
++def directional_derivative(scalar, vect):
++    """
++    Returns the directional derivative of a scalar field computed along a given vector
++    in given coordinate system.
++
++    Parameters
++    ==========
++
++    scalar : SymPy Expr
++        The scalar field to compute the gradient of
++
++    vect : Vector
++        The vector operand
++
++    coord_sys : CoordSysCartesian
++        The coordinate system to calculate the gradient in
++
++    Examples
++    ========
++
++    >>> from sympy.vector import CoordSysCartesian, directional_derivative
++    >>> R = CoordSysCartesian('R')
++    >>> f1 = R.x*R.y*R.z
++    >>> v1 = 3*R.i + 4*R.j + R.k
++    >>> directional_derivative(f1, v1)
++    R.x*R.y + 4*R.x*R.z + 3*R.y*R.z
++    >>> f2 = 5*R.x**2*R.z
++    >>> directional_derivative(f2, v1)
++    5*R.x**2 + 30*R.x*R.z
++
++    """
++    coord_sys = vect._sys
++    return gradient(scalar, coord_sys).dot(vect).doit()
+ 
+ def is_conservative(field):
+     """
+diff --git a/sympy/vector/tests/test_field_functions.py b/sympy/vector/tests/test_field_functions.py
+index 73946517324a..2d831cbdc489 100644
+--- a/sympy/vector/tests/test_field_functions.py
++++ b/sympy/vector/tests/test_field_functions.py
+@@ -7,7 +7,7 @@
+ from sympy import sin, cos
+ from sympy.vector.functions import (curl, divergence, gradient,
+                                     is_conservative, is_solenoidal,
+-                                    scalar_potential,
++                                    scalar_potential, directional_derivative,
+                                     scalar_potential_difference)
+ from sympy.utilities.pytest import raises
+ 
+@@ -185,6 +185,10 @@ def test_solenoidal():
+     assert is_solenoidal(cos(q)*i + sin(q)*j + cos(q)*P.k) is True
+     assert is_solenoidal(z*P.i + P.x*k) is True
+ 
++def test_directional_derivative():
++    assert directional_derivative(C.x*C.y*C.z, 3*C.i + 4*C.j + C.k) == C.x*C.y + 4*C.x*C.z + 3*C.y*C.z
++    assert directional_derivative(5*C.x**2*C.z, 3*C.i + 4*C.j + C.k) == 5*C.x**2 + 30*C.x*C.z
++    assert directional_derivative(5*C.x**2*C.z, 4*C.j) == S.Zero
+ 
+ def test_scalar_potential():
+     assert scalar_potential(Vector.zero, C) == 0

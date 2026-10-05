@@ -1,0 +1,107 @@
+diff --git a/sqlglot/__init__.py b/sqlglot/__init__.py
+index e272b9f1c5..f3e97f01b1 100644
+--- a/sqlglot/__init__.py
++++ b/sqlglot/__init__.py
+@@ -32,6 +32,7 @@
+     func as func,
+     intersect as intersect,
+     maybe_parse as maybe_parse,
++    merge as merge,
+     not_ as not_,
+     or_ as or_,
+     select as select,
+diff --git a/sqlglot/expressions.py b/sqlglot/expressions.py
+index ac48541c15..6bbd0fb4fa 100644
+--- a/sqlglot/expressions.py
++++ b/sqlglot/expressions.py
+@@ -6885,6 +6885,49 @@ def insert(
+     return insert
+ 
+ 
++def merge(
++    *when_exprs: ExpOrStr,
++    into: ExpOrStr,
++    using: ExpOrStr,
++    on: ExpOrStr,
++    dialect: DialectType = None,
++    copy: bool = True,
++    **opts,
++) -> Merge:
++    """
++    Builds a MERGE statement.
++
++    Example:
++        >>> merge("WHEN MATCHED THEN UPDATE SET col1 = source_table.col1",
++        ...       "WHEN NOT MATCHED THEN INSERT (col1) VALUES (source_table.col1)",
++        ...       into="my_table",
++        ...       using="source_table",
++        ...       on="my_table.id = source_table.id").sql()
++        'MERGE INTO my_table USING source_table ON my_table.id = source_table.id WHEN MATCHED THEN UPDATE SET col1 = source_table.col1 WHEN NOT MATCHED THEN INSERT (col1) VALUES (source_table.col1)'
++
++    Args:
++        *when_exprs: The WHEN clauses specifying actions for matched and unmatched rows.
++        into: The target table to merge data into.
++        using: The source table to merge data from.
++        on: The join condition for the merge.
++        dialect: The dialect used to parse the input expressions.
++        copy: Whether to copy the expression.
++        **opts: Other options to use to parse the input expressions.
++
++    Returns:
++        Merge: The syntax tree for the MERGE statement.
++    """
++    return Merge(
++        this=maybe_parse(into, dialect=dialect, copy=copy, **opts),
++        using=maybe_parse(using, dialect=dialect, copy=copy, **opts),
++        on=maybe_parse(on, dialect=dialect, copy=copy, **opts),
++        expressions=[
++            maybe_parse(when_expr, dialect=dialect, copy=copy, into=When, **opts)
++            for when_expr in when_exprs
++        ],
++    )
++
++
+ def condition(
+     expression: ExpOrStr, dialect: DialectType = None, copy: bool = True, **opts
+ ) -> Condition:
+diff --git a/tests/test_build.py b/tests/test_build.py
+index e074fea119..d169530461 100644
+--- a/tests/test_build.py
++++ b/tests/test_build.py
+@@ -731,6 +731,36 @@ def test_build(self):
+                 lambda: exp.rename_column("table1", "c1", "c2"),
+                 "ALTER TABLE table1 RENAME COLUMN c1 TO c2",
+             ),
++            (
++                lambda: exp.merge(
++                    "WHEN MATCHED THEN UPDATE SET col1 = source.col1",
++                    "WHEN NOT MATCHED THEN INSERT (col1) VALUES (source.col1)",
++                    into="target_table",
++                    using="source_table",
++                    on="target_table.id = source_table.id",
++                ),
++                "MERGE INTO target_table USING source_table ON target_table.id = source_table.id WHEN MATCHED THEN UPDATE SET col1 = source.col1 WHEN NOT MATCHED THEN INSERT (col1) VALUES (source.col1)",
++            ),
++            (
++                lambda: exp.merge(
++                    "WHEN MATCHED AND source.is_deleted = 1 THEN DELETE",
++                    "WHEN MATCHED THEN UPDATE SET val = source.val",
++                    "WHEN NOT MATCHED THEN INSERT (id, val) VALUES (source.id, source.val)",
++                    into="target_table",
++                    using="source_table",
++                    on="target_table.id = source_table.id",
++                ),
++                "MERGE INTO target_table USING source_table ON target_table.id = source_table.id WHEN MATCHED AND source.is_deleted = 1 THEN DELETE WHEN MATCHED THEN UPDATE SET val = source.val WHEN NOT MATCHED THEN INSERT (id, val) VALUES (source.id, source.val)",
++            ),
++            (
++                lambda: exp.merge(
++                    "WHEN MATCHED THEN UPDATE SET target.name = source.name",
++                    into=exp.table_("target_table").as_("target"),
++                    using=exp.table_("source_table").as_("source"),
++                    on="target.id = source.id",
++                ),
++                "MERGE INTO target_table AS target USING source_table AS source ON target.id = source.id WHEN MATCHED THEN UPDATE SET target.name = source.name",
++            ),
+         ]:
+             with self.subTest(sql):
+                 self.assertEqual(expression().sql(dialect[0] if dialect else None), sql)

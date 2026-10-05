@@ -1,0 +1,127 @@
+diff --git a/astropy/units/quantity.py b/astropy/units/quantity.py
+index 7043156e91d7..0512e969291a 100644
+--- a/astropy/units/quantity.py
++++ b/astropy/units/quantity.py
+@@ -29,7 +29,7 @@
+ from .quantity_helper import can_have_arbitrary_unit, check_output, converters_and_unit
+ from .quantity_helper.function_helpers import (
+     DISPATCHED_FUNCTIONS, FUNCTION_HELPERS, SUBCLASS_SAFE_FUNCTIONS, UNSUPPORTED_FUNCTIONS)
+-from .structured import StructuredUnit
++from .structured import StructuredUnit, _structured_unit_like_dtype
+ from .utils import is_effectively_unity
+ 
+ __all__ = ["Quantity", "SpecificTypeQuantity",
+@@ -481,6 +481,7 @@ def __new__(cls, value, unit=None, dtype=np.inexact, copy=True, order=None,
+                     # structured dtype of the value.
+                     dtype = unit._recursively_get_dtype(value)
+ 
++        using_default_unit = False
+         if value_unit is None:
+             # If the value has a `unit` attribute and if not None
+             # (for Columns with uninitialized unit), treat it like a quantity.
+@@ -488,6 +489,7 @@ def __new__(cls, value, unit=None, dtype=np.inexact, copy=True, order=None,
+             if value_unit is None:
+                 # Default to dimensionless for no (initialized) unit attribute.
+                 if unit is None:
++                    using_default_unit = True
+                     unit = cls._default_unit
+                 value_unit = unit  # signal below that no conversion is needed
+             else:
+@@ -507,6 +509,11 @@ def __new__(cls, value, unit=None, dtype=np.inexact, copy=True, order=None,
+         value = np.array(value, dtype=dtype, copy=copy, order=order,
+                          subok=True, ndmin=ndmin)
+ 
++        # For no-user-input unit, make sure the constructed unit matches the
++        # structure of the data.
++        if using_default_unit and value.dtype.names is not None:
++            unit = value_unit = _structured_unit_like_dtype(value_unit, value.dtype)
++
+         # check that array contains numbers or long int objects
+         if (value.dtype.kind in 'OSU' and
+             not (value.dtype.kind == 'O' and
+diff --git a/astropy/units/structured.py b/astropy/units/structured.py
+index ead091e4b9db..a28ff6fb873c 100644
+--- a/astropy/units/structured.py
++++ b/astropy/units/structured.py
+@@ -3,6 +3,8 @@
+ This module defines structured units and quantities.
+ """
+ 
++from __future__ import annotations  # For python < 3.10
++
+ # Standard library
+ import operator
+ 
+@@ -515,3 +517,34 @@ def __ne__(self, other):
+             other = other.item()
+ 
+         return self.item() != other
++
++
++def _structured_unit_like_dtype(unit: UnitBase | StructuredUnit, dtype: np.dtype) -> StructuredUnit:
++    """Make a `StructuredUnit` of one unit, with the structure of a `numpy.dtype`.
++
++    Parameters
++    ----------
++    unit : UnitBase
++        The unit that will be filled into the structure.
++    dtype : `numpy.dtype`
++        The structure for the StructuredUnit.
++
++    Returns
++    -------
++    StructuredUnit
++    """
++    if isinstance(unit, StructuredUnit):
++        # If unit is structured, it should match the dtype. This function is
++        # only used in Quantity, which performs this check, so it's fine to
++        # return as is.
++        return unit
++
++    # Make a structured unit
++    units = []
++    for name in dtype.names:
++        subdtype = dtype.fields[name][0]
++        if subdtype.names is not None:
++            units.append(_structured_unit_like_dtype(unit, subdtype))
++        else:
++            units.append(unit)
++    return StructuredUnit(tuple(units), names=dtype.names)
+diff --git a/astropy/units/tests/test_structured.py b/astropy/units/tests/test_structured.py
+index fe4134ac05b2..78ab03a7c022 100644
+--- a/astropy/units/tests/test_structured.py
++++ b/astropy/units/tests/test_structured.py
+@@ -12,6 +12,7 @@
+ from astropy import units as u
+ from astropy.tests.helper import check_pickling_recovery, pickle_protocol
+ from astropy.units import Quantity, StructuredUnit, Unit, UnitBase
++from astropy.units.quantity import _structured_unit_like_dtype
+ from astropy.utils.compat import NUMPY_LT_1_21_1
+ from astropy.utils.masked import Masked
+ 
+@@ -433,6 +434,17 @@ def test_initialization_by_shifting_to_unit(self):
+         assert np.all(q_pv_t.value == self.pv_t)
+         assert np.may_share_memory(q_pv_t, self.pv_t)
+ 
++    def test_initialization_without_unit(self):
++        q_pv_t = u.Quantity(self.pv_t, unit=None)
++
++        assert np.all(q_pv_t.value == self.pv_t)
++
++        # Test that unit is a structured unit like the dtype
++        expected_unit = _structured_unit_like_dtype(u.Quantity._default_unit, self.pv_t.dtype)
++        assert q_pv_t.unit == expected_unit
++        # A more explicit test
++        assert q_pv_t.unit == u.StructuredUnit(((u.one, u.one), u.one))
++
+     def test_getitem(self):
+         q_pv_t = Quantity(self.pv_t, self.pv_t_unit)
+         q_pv_t01 = q_pv_t[:2]
+diff --git a/docs/changes/units/13676.api.rst b/docs/changes/units/13676.api.rst
+new file mode 100644
+index 000000000000..966372f06cef
+--- /dev/null
++++ b/docs/changes/units/13676.api.rst
+@@ -0,0 +1,2 @@
++When ``Quantity`` is constructed from a structured array and ``unit`` is
++``None``, the default unit is now structured like the input data.

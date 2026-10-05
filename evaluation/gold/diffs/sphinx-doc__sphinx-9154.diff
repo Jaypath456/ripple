@@ -1,0 +1,173 @@
+diff --git a/CHANGES b/CHANGES
+index 3a5750418b2..6be49a67bb2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -13,6 +13,9 @@ Deprecated
+ Features added
+ --------------
+ 
++* #8107: autodoc: Add ``class-doc-from`` option to :rst:dir:`autoclass`
++  directive to control the content of the specific class like
++  :confval:`autoclass_content`
+ * #9129: html search: Show search summaries when html_copy_source = False
+ * #9097: Optimize the paralell build
+ 
+diff --git a/doc/usage/extensions/autodoc.rst b/doc/usage/extensions/autodoc.rst
+index da0ff7c994c..13a2b30107f 100644
+--- a/doc/usage/extensions/autodoc.rst
++++ b/doc/usage/extensions/autodoc.rst
+@@ -343,6 +343,10 @@ inserting them into the page source under a suitable :rst:dir:`py:module`,
+ 
+         .. autoclass:: module.name::Noodle
+ 
++   * :rst:dir:`autoclass` also recognizes the ``class-doc-from`` option that
++     can be used to override the global value of :confval:`autoclass_content`.
++
++     .. versionadded:: 4.1
+ 
+ .. rst:directive:: autofunction
+                    autodecorator
+@@ -507,7 +511,7 @@ There are also config values that you can set:
+    The supported options are ``'members'``, ``'member-order'``,
+    ``'undoc-members'``, ``'private-members'``, ``'special-members'``,
+    ``'inherited-members'``, ``'show-inheritance'``, ``'ignore-module-all'``,
+-   ``'imported-members'`` and ``'exclude-members'``.
++   ``'imported-members'``, ``'exclude-members'`` and ``'class-doc-from'``.
+ 
+    .. versionadded:: 1.8
+ 
+@@ -517,6 +521,9 @@ There are also config values that you can set:
+    .. versionchanged:: 2.1
+       Added ``'imported-members'``.
+ 
++   .. versionchanged:: 4.1
++      Added ``'class-doc-from'``.
++
+ .. confval:: autodoc_docstring_signature
+ 
+    Functions imported from C modules cannot be introspected, and therefore the
+diff --git a/sphinx/ext/autodoc/__init__.py b/sphinx/ext/autodoc/__init__.py
+index c92709deb93..6ccfd9c7fc0 100644
+--- a/sphinx/ext/autodoc/__init__.py
++++ b/sphinx/ext/autodoc/__init__.py
+@@ -129,6 +129,14 @@ def member_order_option(arg: Any) -> Optional[str]:
+         raise ValueError(__('invalid value for member-order option: %s') % arg)
+ 
+ 
++def class_doc_from_option(arg: Any) -> Optional[str]:
++    """Used to convert the :class-doc-from: option to autoclass directives."""
++    if arg in ('both', 'class', 'init'):
++        return arg
++    else:
++        raise ValueError(__('invalid value for class-doc-from option: %s') % arg)
++
++
+ SUPPRESS = object()
+ 
+ 
+@@ -1417,6 +1425,7 @@ class ClassDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # type:
+         'show-inheritance': bool_option, 'member-order': member_order_option,
+         'exclude-members': exclude_members_option,
+         'private-members': members_option, 'special-members': members_option,
++        'class-doc-from': class_doc_from_option,
+     }
+ 
+     _signature_class: Any = None
+@@ -1651,7 +1660,7 @@ def get_doc(self, ignore: int = None) -> Optional[List[List[str]]]:
+         if lines is not None:
+             return lines
+ 
+-        content = self.config.autoclass_content
++        classdoc_from = self.options.get('class-doc-from', self.config.autoclass_content)
+ 
+         docstrings = []
+         attrdocstring = self.get_attr(self.object, '__doc__', None)
+@@ -1660,7 +1669,7 @@ def get_doc(self, ignore: int = None) -> Optional[List[List[str]]]:
+ 
+         # for classes, what the "docstring" is can be controlled via a
+         # config value; the default is only the class docstring
+-        if content in ('both', 'init'):
++        if classdoc_from in ('both', 'init'):
+             __init__ = self.get_attr(self.object, '__init__', None)
+             initdocstring = getdoc(__init__, self.get_attr,
+                                    self.config.autodoc_inherit_docstrings,
+@@ -1682,7 +1691,7 @@ def get_doc(self, ignore: int = None) -> Optional[List[List[str]]]:
+                      initdocstring.strip() == object.__new__.__doc__)):  # for !pypy
+                     initdocstring = None
+             if initdocstring:
+-                if content == 'init':
++                if classdoc_from == 'init':
+                     docstrings = [initdocstring]
+                 else:
+                     docstrings.append(initdocstring)
+diff --git a/sphinx/ext/autodoc/directive.py b/sphinx/ext/autodoc/directive.py
+index c58d0c41181..a554adf688b 100644
+--- a/sphinx/ext/autodoc/directive.py
++++ b/sphinx/ext/autodoc/directive.py
+@@ -30,7 +30,7 @@
+ AUTODOC_DEFAULT_OPTIONS = ['members', 'undoc-members', 'inherited-members',
+                            'show-inheritance', 'private-members', 'special-members',
+                            'ignore-module-all', 'exclude-members', 'member-order',
+-                           'imported-members']
++                           'imported-members', 'class-doc-from']
+ 
+ AUTODOC_EXTENDABLE_OPTIONS = ['members', 'private-members', 'special-members',
+                               'exclude-members']
+diff --git a/tests/test_ext_autodoc_autoclass.py b/tests/test_ext_autodoc_autoclass.py
+index d879f8e1491..096dc939738 100644
+--- a/tests/test_ext_autodoc_autoclass.py
++++ b/tests/test_ext_autodoc_autoclass.py
+@@ -264,6 +264,53 @@ def test_show_inheritance_for_subclass_of_generic_type(app):
+     ]
+ 
+ 
++@pytest.mark.sphinx('html', testroot='ext-autodoc')
++def test_class_doc_from_class(app):
++    options = {"members": None,
++               "class-doc-from": "class"}
++    actual = do_autodoc(app, 'class', 'target.autoclass_content.C', options)
++    assert list(actual) == [
++        '',
++        '.. py:class:: C()',
++        '   :module: target.autoclass_content',
++        '',
++        '   A class having __init__, no __new__',
++        '',
++    ]
++
++
++@pytest.mark.sphinx('html', testroot='ext-autodoc')
++def test_class_doc_from_init(app):
++    options = {"members": None,
++               "class-doc-from": "init"}
++    actual = do_autodoc(app, 'class', 'target.autoclass_content.C', options)
++    assert list(actual) == [
++        '',
++        '.. py:class:: C()',
++        '   :module: target.autoclass_content',
++        '',
++        '   __init__ docstring',
++        '',
++    ]
++
++
++@pytest.mark.sphinx('html', testroot='ext-autodoc')
++def test_class_doc_from_both(app):
++    options = {"members": None,
++               "class-doc-from": "both"}
++    actual = do_autodoc(app, 'class', 'target.autoclass_content.C', options)
++    assert list(actual) == [
++        '',
++        '.. py:class:: C()',
++        '   :module: target.autoclass_content',
++        '',
++        '   A class having __init__, no __new__',
++        '',
++        '   __init__ docstring',
++        '',
++    ]
++
++
+ def test_class_alias(app):
+     def autodoc_process_docstring(*args):
+         """A handler always raises an error.

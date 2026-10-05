@@ -1,0 +1,62 @@
+{
+  "ablations": {
+    "A1": "RIPPLE without co_changed",
+    "A2": "RIPPLE without get_dependencies and find_references",
+    "A3": "RIPPLE without report validator"
+  },
+  "agent_config_version": "full-report-v1",
+  "bootstrap": {
+    "cluster": "repository",
+    "samples": 1000,
+    "seed": 1729
+  },
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "controller": {
+    "candidate_cap": 30,
+    "no_progress_limit": 4,
+    "report_validator": true,
+    "tool_call_budget": 25
+  },
+  "provider": {
+    "api_key": "excluded",
+    "base_url": "https://gateway.bullsai.buffalo.edu/v1",
+    "model": "openai/gpt-oss-20b"
+  },
+  "provider_seed_control": false,
+  "ranking": "full deterministic ranking; LLM submitted/validated set",
+  "request_preparation": {
+    "mask": "evaluation.sanitize_request",
+    "maximum_characters": 2000,
+    "truncation": "deterministic prefix"
+  },
+  "requested_seeds": [
+    17,
+    42,
+    1729
+  ],
+  "retry_policy": "OpenAILLM bounded: at most three attempts",
+  "scoring": {
+    "deterministic_set_k": "matched to RIPPLE confirmed source count per seed",
+    "k_zero": "preserved",
+    "llm_seed_reduction": "mean within task before task aggregation"
+  },
+  "stage_b_config_version": "stage-b-v1",
+  "systems": {
+    "B0": "BM25",
+    "B1": "BM25 plus dependency expansion",
+    "B2": "co-change",
+    "B3": "one-shot LLM",
+    "B4": "plain ReAct",
+    "RIPPLE": "full controller"
+  },
+  "tools": [
+    "search_code",
+    "inspect_symbol",
+    "find_references",
+    "get_dependencies",
+    "find_tests",
+    "repo_facts",
+    "co_changed"
+  ],
+  "version": "final-v1"
+}

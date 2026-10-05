@@ -15,7 +15,9 @@ from ripple.evaluation import (
 from ripple.evaluation_results import (
     _score_runs,
     adjudicated_precision,
+    adjudicated_task_precision,
     average_seeds,
+    build_adjudication_template,
     build_results,
     cluster_bootstrap_values,
     paired_cluster_bootstrap,
@@ -183,6 +185,7 @@ def test_status_denominator_stage_b_and_adjudication() -> None:
     assert metrics["unrelated_detection_recall"] == 1.0
     assert metrics["drop_tests_detection_recall"] == 0.0
     assert metrics["stale_caller_detection_recall"] is None
+    assert metrics["stale_caller_inapplicable"] == 1
     assert metrics["control_false_alarm_rate"] == 1.0
     assert adjudicated_precision(2, ["plausible_alternative", "wrong"]) == 0.75
     assert adjudicated_precision(2, [""]) is None
@@ -219,7 +222,12 @@ def test_results_regeneration_is_byte_deterministic(tmp_path: Path) -> None:
         (raw / f"{payload.run_id}.json").write_text(payload.model_dump_json(indent=2))
     readme = tmp_path / "README.md"
     summary = tmp_path / "summary.json"
+    root = tmp_path / "ROOT.md"
+    root.write_text(
+        "intro\n<!-- final-results:start -->\nstale\n<!-- final-results:end -->\nend\n"
+    )
     kwargs = {
+        "root_readme": root,
         "manifest_path": manifest_path,
         "raw_root": raw,
         "config_path": config_path,
@@ -227,6 +235,37 @@ def test_results_regeneration_is_byte_deterministic(tmp_path: Path) -> None:
         "output_summary": summary,
     }
     build_results(**kwargs)
-    first = (readme.read_bytes(), summary.read_bytes())
+    first = (readme.read_bytes(), summary.read_bytes(), root.read_bytes())
     build_results(**kwargs)
-    assert first == (readme.read_bytes(), summary.read_bytes())
+    assert first == (readme.read_bytes(), summary.read_bytes(), root.read_bytes())
+    text = root.read_text()
+    assert "stale" not in text and text.startswith("intro") and text.endswith("end\n")
+
+
+def test_adjudicated_task_precision_uses_true_positives_and_seed_means(
+    tmp_path: Path,
+) -> None:
+    task = _task("task", "owner/repo", 2)
+    gold = {path.as_posix() for path in task.gold_files.source_python}  # file_0, file_1
+    runs = [
+        _raw(task, "RIPPLE", 17, ("src/file_0.py", "src/file_1.py", "src/extra.py")),
+        _raw(task, "RIPPLE", 42, ("src/file_0.py", "src/extra.py")),
+    ]
+    rows = _score_runs(runs, {task.id: task}, {})
+    assert {row["predicted_count"] for row in rows} == {3, 2}
+    assert gold == {"src/file_0.py", "src/file_1.py"}
+    labels = {(task.id, "src/extra.py"): "plausible_alternative"}
+    # Seed 17: 2 TP + 1 plausible FP = 3/3. The old derivation inferred TP=1 here.
+    # Seed 42: 1 TP + 1 plausible FP = 2/2. Seed mean is 1.0.
+    assert adjudicated_task_precision(rows, labels, {task.id}) == 1.0
+    labels[(task.id, "src/extra.py")] = "wrong"
+    assert adjudicated_task_precision(rows, labels, {task.id}) == pytest.approx(
+        (2 / 3 + 1 / 2) / 2
+    )
+    assert adjudicated_task_precision(rows, {}, {task.id}) is None
+
+    template = build_adjudication_template(
+        (task,), rows, tmp_path / "adjudication.json"
+    )
+    assert len(template["entries"]) == 1  # one label covers both seeds
+    assert template["entries"][0]["seeds"] == [17, 42]

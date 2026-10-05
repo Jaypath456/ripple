@@ -1,0 +1,43 @@
+{
+  "completed_at": "2026-10-02T18:23:10.219980Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 6797,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 530,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "63d03f2a3efc694ff038eb1bab5b5ed9c3c3e2cbf0b1ec1dedb9540938d46412",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "astropy/astropy",
+  "request_original_length": 399,
+  "request_truncated": false,
+  "request_used_length": 399,
+  "requested_seed": 17,
+  "run_id": "astropy__astropy-7970__B3__17",
+  "runtime_seconds": 1.9262416279998433,
+  "schema_version": 1,
+  "source_ranking": [
+    "astropy/units/equivalencies.py",
+    "astropy/units/__init__.py",
+    "astropy/constants/__init__.py"
+  ],
+  "status": "completed",
+  "system": "B3",
+  "task_id": "astropy__astropy-7970",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 7327,
+  "trace_path": null
+}

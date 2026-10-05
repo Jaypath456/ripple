@@ -1,0 +1,505 @@
+diff --git a/conan/tools/gnu/autotools.py b/conan/tools/gnu/autotools.py
+index dc93aca2e51..37520577c9e 100644
+--- a/conan/tools/gnu/autotools.py
++++ b/conan/tools/gnu/autotools.py
+@@ -11,57 +11,47 @@
+ 
+ class Autotools(object):
+ 
+-    def __init__(self, conanfile, namespace=None, build_script_folder=None):
++    def __init__(self, conanfile, namespace=None):
+         self._conanfile = conanfile
+ 
+         toolchain_file_content = load_toolchain_args(self._conanfile.generators_folder,
+                                                      namespace=namespace)
++
+         self._configure_args = toolchain_file_content.get("configure_args")
+         self._make_args = toolchain_file_content.get("make_args")
+-        self.default_configure_install_args = True
+-        self.build_script_folder = os.path.join(self._conanfile.source_folder, build_script_folder) \
+-            if build_script_folder else self._conanfile.source_folder
++        self._autoreconf_args = toolchain_file_content.get("autoreconf_args")
+ 
+-    def configure(self):
++    def configure(self, build_script_folder=None, args=None):
+         """
+         http://jingfenghanmax.blogspot.com.es/2010/09/configure-with-host-target-and-build.html
+         https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html
+         """
++        script_folder = os.path.join(self._conanfile.source_folder, build_script_folder) \
++            if build_script_folder else self._conanfile.source_folder
++
+         configure_args = []
+-        if self.default_configure_install_args and self._conanfile.package_folder:
+-            def _get_argument(argument_name, cppinfo_name):
+-                elements = getattr(self._conanfile.cpp.package, cppinfo_name)
+-                return "--{}=${{prefix}}/{}".format(argument_name, elements[0]) if elements else ""
+-
+-            # If someone want arguments but not the defaults can pass them in args manually
+-            configure_args.extend(["--prefix=%s" % self._conanfile.package_folder.replace("\\", "/"),
+-                                   _get_argument("bindir", "bindirs"),
+-                                   _get_argument("sbindir", "bindirs"),
+-                                   _get_argument("libdir", "libdirs"),
+-                                   _get_argument("includedir", "includedirs"),
+-                                   _get_argument("oldincludedir", "includedirs"),
+-                                   _get_argument("datarootdir", "resdirs")])
+-
+-        self._configure_args = "{} {}".format(self._configure_args, args_to_string(configure_args)) \
+-                               if configure_args else self._configure_args
+-
+-        configure_cmd = "{}/configure".format(self.build_script_folder)
++        configure_args.extend(args or [])
++
++        self._configure_args = "{} {}".format(self._configure_args, args_to_string(configure_args))
++
++        configure_cmd = "{}/configure".format(script_folder)
+         subsystem = deduce_subsystem(self._conanfile, scope="build")
+         configure_cmd = subsystem_path(subsystem, configure_cmd)
+         cmd = '"{}" {}'.format(configure_cmd, self._configure_args)
+         self._conanfile.output.info("Calling:\n > %s" % cmd)
+         self._conanfile.run(cmd)
+ 
+-    def make(self, target=None):
++    def make(self, target=None, args=None):
+         make_program = self._conanfile.conf.get("tools.gnu:make_program",
+                                                 default="mingw32-make" if self._use_win_mingw() else "make")
+         str_args = self._make_args
++        str_extra_args = " ".join(args) if args is not None else ""
+         jobs = ""
+         if "-j" not in str_args and "nmake" not in make_program.lower():
+             njobs = build_jobs(self._conanfile)
+             if njobs:
+                 jobs = "-j{}".format(njobs)
+-        command = join_arguments([make_program, target, str_args, jobs])
++        command = join_arguments([make_program, target, str_args, str_extra_args, jobs])
+         self._conanfile.run(command)
+ 
+     def _fix_osx_shared_install_name(self):
+@@ -75,36 +65,33 @@ def _fix_install_name(lib_name, lib_folder):
+                                                                                          lib_name))
+             self._conanfile.run(command)
+ 
+-        def _is_modified_install_name(lib_name, lib_folder):
++        def _is_modified_install_name(lib_name, full_folder, libdir):
+             """
+             Check that the user did not change the default install_name using the install_name
+             linker flag in that case we do not touch this field
+             """
+-            command = "otool -D {}".format(os.path.join(lib_folder, lib_name))
+-            out = check_output_runner(command).strip().split(":")[1]
+-            return False if str(os.path.join(lib_folder, shared_lib)) in out else True
++            command = "otool -D {}".format(os.path.join(full_folder, lib_name))
++            install_path = check_output_runner(command).strip().split(":")[1].strip()
++            default_path = str(os.path.join("/", libdir, shared_lib))
++            return False if default_path == install_path else True
+ 
+         libdirs = getattr(self._conanfile.cpp.package, "libdirs")
+-        for folder in libdirs:
+-            full_folder = os.path.join(self._conanfile.package_folder, folder)
++        for libdir in libdirs:
++            full_folder = os.path.join(self._conanfile.package_folder, libdir)
+             shared_libs = _osx_collect_dylibs(full_folder)
+             for shared_lib in shared_libs:
+-                if not _is_modified_install_name(shared_lib, full_folder):
++                if not _is_modified_install_name(shared_lib, full_folder, libdir):
+                     _fix_install_name(shared_lib, full_folder)
+ 
+-    def install(self):
+-        # FIXME: we have to run configure twice because the local flow won't work otherwise
+-        #  because there's no package_folder until the package step
+-        self.configure()
+-        self.make(target="install")
++    def install(self, args=None):
++        args = args if args is not None else ["DESTDIR={}".format(self._conanfile.package_folder)]
++        self.make(target="install", args=args)
+         if self._conanfile.settings.get_safe("os") == "Macos" and self._conanfile.options.get_safe("shared", False):
+             self._fix_osx_shared_install_name()
+ 
+     def autoreconf(self, args=None):
+-        command = ["autoreconf"]
+-        args = args or ["--force", "--install"]
+-        command.extend(args)
+-        command = join_arguments(command)
++        args = args or []
++        command = join_arguments(["autoreconf", self._autoreconf_args, args_to_string(args)])
+         with chdir(self, self._conanfile.source_folder):
+             self._conanfile.run(command)
+ 
+diff --git a/conan/tools/gnu/autotoolstoolchain.py b/conan/tools/gnu/autotoolstoolchain.py
+index 0f5c7b89679..1a428d8978b 100644
+--- a/conan/tools/gnu/autotoolstoolchain.py
++++ b/conan/tools/gnu/autotoolstoolchain.py
+@@ -17,7 +17,8 @@ def __init__(self, conanfile, namespace=None):
+         self._conanfile = conanfile
+         self._namespace = namespace
+ 
+-        self.configure_args = []
++        self.configure_args = self._default_configure_shared_flags() + self._default_configure_install_flags()
++        self.autoreconf_args = self._default_autoreconf_flags()
+         self.make_args = []
+ 
+         # Flags
+@@ -167,19 +168,42 @@ def generate(self, env=None, scope="build"):
+         self.generate_args()
+         VCVars(self._conanfile).generate(scope=scope)
+ 
+-    def _shared_static_args(self):
++    def _default_configure_shared_flags(self):
+         args = []
+-        if self._conanfile.options.get_safe("shared", False):
+-            args.extend(["--enable-shared", "--disable-static"])
+-        else:
+-            args.extend(["--disable-shared", "--enable-static", "--with-pic"
+-                        if self._conanfile.options.get_safe("fPIC", True)
+-                        else "--without-pic"])
++        # Just add these flags if there's a shared option defined (never add to exe's)
++        # FIXME: For Conan 2.0 use the package_type to decide if adding these flags or not
++        try:
++            if self._conanfile.options.shared:
++                args.extend(["--enable-shared", "--disable-static"])
++            else:
++                args.extend(["--disable-shared", "--enable-static"])
++        except ConanException:
++            pass
++
+         return args
+ 
++    def _default_configure_install_flags(self):
++        configure_install_flags = []
++
++        def _get_argument(argument_name, cppinfo_name):
++            elements = getattr(self._conanfile.cpp.package, cppinfo_name)
++            return "--{}=${{prefix}}/{}".format(argument_name, elements[0]) if elements else ""
++
++        # If someone want arguments but not the defaults can pass them in args manually
++        configure_install_flags.extend(["--prefix=/",
++                                       _get_argument("bindir", "bindirs"),
++                                       _get_argument("sbindir", "bindirs"),
++                                       _get_argument("libdir", "libdirs"),
++                                       _get_argument("includedir", "includedirs"),
++                                       _get_argument("oldincludedir", "includedirs"),
++                                       _get_argument("datarootdir", "resdirs")])
++        return configure_install_flags
++
++    def _default_autoreconf_flags(self):
++        return ["--force", "--install"]
++
+     def generate_args(self):
+         configure_args = []
+-        configure_args.extend(self._shared_static_args())
+         configure_args.extend(self.configure_args)
+         user_args_str = args_to_string(self.configure_args)
+         for flag, var in (("host", self._host), ("build", self._build), ("target", self._target)):
+@@ -187,6 +211,7 @@ def generate_args(self):
+                 configure_args.append('--{}={}'.format(flag, var))
+ 
+         args = {"configure_args": args_to_string(configure_args),
+-                "make_args":  args_to_string(self.make_args)}
++                "make_args":  args_to_string(self.make_args),
++                "autoreconf_args": args_to_string(self.autoreconf_args)}
+ 
+         save_toolchain_args(args, namespace=self._namespace)
+diff --git a/conans/assets/templates/new_v2_autotools.py b/conans/assets/templates/new_v2_autotools.py
+index 4134889763c..0039d7b7beb 100644
+--- a/conans/assets/templates/new_v2_autotools.py
++++ b/conans/assets/templates/new_v2_autotools.py
+@@ -8,7 +8,6 @@
+     from conan import ConanFile
+     from conan.tools.gnu import AutotoolsToolchain, Autotools
+     from conan.tools.layout import basic_layout
+-    from conan.tools.files import chdir
+ 
+ 
+     class {package_name}Conan(ConanFile):
+@@ -79,10 +78,9 @@ def package_info(self):
+     import os
+ 
+     from conan import ConanFile
+-    from conan.tools.gnu import AutotoolsToolchain, Autotools, AutotoolsDeps
++    from conan.tools.gnu import Autotools
+     from conan.tools.layout import basic_layout
+     from conan.tools.build import cross_building
+-    from conan.tools.files import chdir
+ 
+ 
+     class {package_name}TestConan(ConanFile):
+diff --git a/conans/test/functional/toolchains/gnu/autotools/test_basic.py b/conans/test/functional/toolchains/gnu/autotools/test_basic.py
+index ec0933fbfdf..3ef85610ae6 100644
+--- a/conans/test/functional/toolchains/gnu/autotools/test_basic.py
++++ b/conans/test/functional/toolchains/gnu/autotools/test_basic.py
+@@ -7,7 +7,7 @@
+ import pytest
+ 
+ from conan.tools.env.environment import environment_wrap_command
+-from conans.model.ref import ConanFileReference
++from conans.model.ref import ConanFileReference, PackageReference
+ from conans.test.assets.autotools import gen_makefile_am, gen_configure_ac, gen_makefile
+ from conans.test.assets.sources import gen_function_cpp
+ from conans.test.functional.utils import check_exe_run
+@@ -245,3 +245,150 @@ def test_autotools_with_pkgconfigdeps():
+     assert re.search("I.*hello.*1.0.*include", str(client.out))
+     assert "-lhello" in client.out
+     assert re.search("L.*hello.*1.0.*package", str(client.out))
++
++
++@pytest.mark.skipif(platform.system() not in ["Linux", "Darwin"], reason="Requires Autotools")
++@pytest.mark.tool_autotools()
++def test_autotools_option_checking():
++    # https://github.com/conan-io/conan/issues/11265
++    client = TestClient(path_with_spaces=False)
++    client.run("new mylib/1.0@ -m autotools_lib")
++    conanfile = textwrap.dedent("""
++        import os
++
++        from conan import ConanFile
++        from conan.tools.gnu import AutotoolsToolchain, Autotools
++        from conan.tools.layout import basic_layout
++        from conan.tools.build import cross_building
++        from conan.tools.files import chdir
++
++
++        class MylibTestConan(ConanFile):
++            settings = "os", "compiler", "build_type", "arch"
++            # VirtualBuildEnv and VirtualRunEnv can be avoided if "tools.env.virtualenv:auto_use" is defined
++            # (it will be defined in Conan 2.0)
++            generators = "AutotoolsDeps", "VirtualBuildEnv", "VirtualRunEnv"
++            apply_env = False
++            test_type = "explicit"
++
++            def requirements(self):
++                self.requires(self.tested_reference_str)
++
++            def generate(self):
++                at_toolchain = AutotoolsToolchain(self)
++                # we override the default shared/static flags here
++                at_toolchain.configure_args = ['--enable-option-checking=fatal']
++                at_toolchain.generate()
++
++            def build(self):
++                autotools = Autotools(self)
++                autotools.autoreconf()
++                autotools.configure()
++                autotools.make()
++
++            def layout(self):
++                basic_layout(self)
++
++            def test(self):
++                if not cross_building(self):
++                    cmd = os.path.join(self.cpp.build.bindirs[0], "main")
++                    self.run(cmd, env="conanrun")
++            """)
++
++    client.save({"test_package/conanfile.py": conanfile})
++    client.run("create . -tf=None")
++
++    # check that the shared flags are not added to the exe's configure, making it fail
++    client.run("test test_package mylib/1.0@")
++    assert "configure: error: unrecognized options: --disable-shared, --enable-static, --with-pic" \
++           not in client.out
++
++
++@pytest.mark.skipif(platform.system() not in ["Linux", "Darwin"], reason="Requires Autotools")
++@pytest.mark.tool_autotools()
++def test_autotools_arguments_override():
++    client = TestClient(path_with_spaces=False)
++    client.run("new mylib/1.0@ -m autotools_lib")
++    conanfile = textwrap.dedent("""
++        import os
++
++        from conan import ConanFile
++        from conan.tools.gnu import AutotoolsToolchain, Autotools
++        from conan.tools.layout import basic_layout
++
++
++        class MyLibConan(ConanFile):
++            name = "mylib"
++            version = "1.0"
++
++            # Binary configuration
++            settings = "os", "compiler", "build_type", "arch"
++
++            exports_sources = "configure.ac", "Makefile.am", "src/*"
++
++            def config_options(self):
++                if self.settings.os == "Windows":
++                    del self.options.fPIC
++
++            def layout(self):
++                basic_layout(self)
++
++            def generate(self):
++                at_toolchain = AutotoolsToolchain(self)
++                at_toolchain.configure_args = ['--disable-shared']
++                at_toolchain.make_args = ['--warn-undefined-variables']
++                at_toolchain.autoreconf_args = ['--verbose']
++                at_toolchain.generate()
++
++            def build(self):
++                autotools = Autotools(self)
++                autotools.autoreconf(args=['--install'])
++                autotools.configure(args=['--prefix=/', '--libdir=${prefix}/customlibfolder',
++                                          '--includedir=${prefix}/customincludefolder',
++                                          '--pdfdir=${prefix}/res'])
++                autotools.make(args=['--keep-going'])
++
++            def package(self):
++                autotools = Autotools(self)
++                autotools.install(args=['DESTDIR={}/somefolder'.format(self.package_folder)])
++
++            def package_info(self):
++                self.cpp_info.libs = ["mylib"]
++                self.cpp_info.libdirs = ["somefolder/customlibfolder"]
++                self.cpp_info.includedirs = ["somefolder/customincludefolder"]
++        """)
++    client.run("config set log.print_run_commands=1")
++    client.save({"conanfile.py": conanfile})
++    client.run("create . -tf=None")
++
++    # autoreconf args --force that is default should not be there
++    assert "--force" not in client.out
++    assert "--install" in client.out
++
++    package_id = re.search(r"mylib\/1.0: Package (\S+)", str(client.out)).group(1).replace("'", "")
++    pref = PackageReference(ConanFileReference.loads("mylib/1.0"), package_id)
++    package_folder = client.cache.package_layout(pref.ref).package(pref)
++
++    # we override the default DESTDIR in the install
++    assert 'DESTDIR={} '.format(package_folder) not in client.out
++    assert 'DESTDIR={}/somefolder '.format(package_folder) in client.out
++
++    # we did override the default install args
++    for arg in ['--bindir=${prefix}/bin', '--sbindir=${prefix}/bin',
++                '--libdir=${prefix}/lib', '--includedir=${prefix}/include',
++                '--oldincludedir=${prefix}/include', '--datarootdir=${prefix}/res']:
++        assert arg not in client.out
++
++    # and use our custom arguments
++    for arg in ['--prefix=/', '--libdir=${prefix}/customlibfolder',
++                '--includedir=${prefix}/customincludefolder', '--pdfdir=${prefix}/res']:
++        assert arg in client.out
++
++    # check the other arguments we set are there
++    assert "--disable-shared" in client.out
++    assert "--warn-undefined-variables" in client.out
++    assert "--verbose" in client.out
++    assert "--keep-going" in client.out
++
++    client.run("test test_package mylib/1.0@")
++    assert "mylib/1.0: Hello World Release!" in client.out
+diff --git a/conans/test/functional/toolchains/gnu/autotools/test_ios.py b/conans/test/functional/toolchains/gnu/autotools/test_ios.py
+index 272d9571c9a..d0a6c45c2de 100644
+--- a/conans/test/functional/toolchains/gnu/autotools/test_ios.py
++++ b/conans/test/functional/toolchains/gnu/autotools/test_ios.py
+@@ -54,10 +54,8 @@ class TestConan(ConanFile):
+             generators = "AutotoolsToolchain", "AutotoolsDeps"
+ 
+             def build(self):
+-                self.run("aclocal")
+-                self.run("autoconf")
+-                self.run("automake --add-missing --foreign")
+                 autotools = Autotools(self)
++                autotools.autoreconf()
+                 autotools.configure()
+                 autotools.make()
+         """)
+@@ -76,5 +74,11 @@ def build(self):
+ 
+     conanbuild = load_toolchain_args(client.current_folder)
+     configure_args = conanbuild["configure_args"]
+-    assert configure_args == "'--disable-shared' '--enable-static' '--with-pic' " \
++    make_args = conanbuild["make_args"]
++    autoreconf_args = conanbuild["autoreconf_args"]
++    assert configure_args == "'--prefix=/' '--bindir=${prefix}/bin' '--sbindir=${prefix}/bin' " \
++                             "'--libdir=${prefix}/lib' '--includedir=${prefix}/include' " \
++                             "'--oldincludedir=${prefix}/include' '--datarootdir=${prefix}/res' " \
+                              "'--host=aarch64-apple-ios' '--build=x86_64-apple-darwin'"
++    assert make_args == ""
++    assert autoreconf_args == "'--force' '--install'"
+diff --git a/conans/test/functional/toolchains/gnu/test_v2_autotools_template.py b/conans/test/functional/toolchains/gnu/test_v2_autotools_template.py
+index 32382f7674c..c9c568e93cb 100644
+--- a/conans/test/functional/toolchains/gnu/test_v2_autotools_template.py
++++ b/conans/test/functional/toolchains/gnu/test_v2_autotools_template.py
+@@ -57,9 +57,14 @@ def test_autotools_exe_template():
+ 
+     # Create works
+     client.run("create .")
++    # check that for exe's we don't add any static/shared flag
++    for flag in ["--enable-static", "--disable-static", "--disable-shared", "--with-pic"]:
++        assert flag not in client.out
+     assert "greet/0.1: Hello World Release!" in client.out
+ 
+     client.run("create . -s build_type=Debug")
++    for flag in ["--enable-static", "--disable-static", "--disable-shared", "--with-pic"]:
++        assert flag not in client.out
+     assert "greet/0.1: Hello World Debug!" in client.out
+ 
+ 
+diff --git a/conans/test/unittests/tools/gnu/autotools_test.py b/conans/test/unittests/tools/gnu/autotools_test.py
+index 50a312f2b50..1493942673b 100644
+--- a/conans/test/unittests/tools/gnu/autotools_test.py
++++ b/conans/test/unittests/tools/gnu/autotools_test.py
+@@ -11,16 +11,17 @@ def test_source_folder_works():
+     os.chdir(folder)
+     save_toolchain_args({
+         "configure_args": "-foo bar",
+-        "make_args": ""}
++        "make_args": "",
++        "autoreconf_args": ""}
+     )
+     conanfile = ConanFileMock()
+     conanfile.folders.set_base_install(folder)
+     sources = "/path/to/sources"
+     conanfile.folders.set_base_source(sources)
+-    autotools = Autotools(conanfile, build_script_folder="subfolder")
+-    autotools.configure()
+-    assert conanfile.command.replace("\\", "/") == '"/path/to/sources/subfolder/configure" -foo bar'
++    autotools = Autotools(conanfile)
++    autotools.configure(build_script_folder="subfolder")
++    assert conanfile.command.replace("\\", "/") == '"/path/to/sources/subfolder/configure" -foo bar '
+ 
+     autotools = Autotools(conanfile)
+     autotools.configure()
+-    assert conanfile.command.replace("\\", "/") == '"/path/to/sources/configure" -foo bar'
++    assert conanfile.command.replace("\\", "/") == '"/path/to/sources/configure" -foo bar '
+diff --git a/conans/test/utils/mocks.py b/conans/test/utils/mocks.py
+index 45997592a69..4103bc4f3a9 100644
+--- a/conans/test/utils/mocks.py
++++ b/conans/test/utils/mocks.py
+@@ -9,9 +9,10 @@
+ from conans import ConanFile, Options
+ from conans.client.output import ConanOutput
+ from conans.client.userio import UserIO
++from conans.errors import ConanException
+ from conans.model.conf import ConfDefinition
+ from conans.model.env_info import DepsEnvInfo, EnvInfo, EnvValues
+-from conans.model.layout import Folders
++from conans.model.layout import Folders, Infos
+ from conans.model.options import PackageOptions
+ from conans.model.user_info import DepsUserInfo
+ 
+@@ -83,8 +84,14 @@ class MockSettings(object):
+     def __init__(self, values):
+         self.values = values
+ 
+-    def get_safe(self, value):
+-        return self.values.get(value, None)
++    def get_safe(self, value, default=None):
++        return self.values.get(value, default)
++
++    def __getattr__(self, name):
++        try:
++            return self.values[name]
++        except KeyError:
++            raise ConanException("'%s' value not defined" % name)
+ 
+ 
+ class MockCppInfo(object):
+@@ -182,6 +189,7 @@ def __init__(self, shared=None, options=None, options_values=None):
+         self.env_scripts = {}
+         self.win_bash = None
+         self.conf = ConfDefinition().get_conanfile_conf(None)
++        self.cpp = Infos()
+ 
+     def run(self, command, win_bash=False, subsystem=None, env=None, ignore_errors=False):
+         assert win_bash is False

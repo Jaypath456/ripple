@@ -1,0 +1,643 @@
+[
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-13676",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-13676",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-13676",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "astropy/config/configuration.py::generate_config",
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-13676",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-16677",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-16677",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-16677",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "astropy/config/configuration.py::generate_config",
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-16677",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [
+      "astropy/units/tests/test_equivalencies.py"
+    ],
+    "detected_categories": [
+      "expected",
+      "unexpected"
+    ],
+    "false_alarm": true,
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-7970",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-7970",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-7970",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "astropy/config/configuration.py::get_config",
+    "report_source": "oracle",
+    "task_id": "astropy__astropy-7970",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "unexpected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10154",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10154",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10154",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10154",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10437",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10437",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10437",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10437",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "expected",
+      "missing_test",
+      "unexpected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10874",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10874",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10874",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-10874",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [
+      "conans/test/functional/toolchains/gnu/autotools/test_basic.py",
+      "conans/test/functional/toolchains/gnu/autotools/test_ios.py",
+      "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py"
+    ],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test",
+      "unexpected"
+    ],
+    "false_alarm": true,
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11284",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11284",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11284",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11284",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [
+      "conans/test/integration/conanfile/folders_access_test.py"
+    ],
+    "detected_categories": [
+      "expected",
+      "missing_test",
+      "unexpected"
+    ],
+    "false_alarm": true,
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11585",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11585",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11585",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "conan/tools/_check_build_profile.py::check_using_build_profile",
+    "report_source": "oracle",
+    "task_id": "conan-io__conan-11585",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "unexpected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "deepset-ai__haystack-8042",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "deepset-ai__haystack-8042",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "deepset-ai__haystack-8042",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "haystack/components/converters/utils.py::get_bytestream_from_source",
+    "report_source": "oracle",
+    "task_id": "deepset-ai__haystack-8042",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-1063",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-1063",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-1063",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "optax/_src/alias.py::adagrad",
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-1063",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [
+      "optax/losses/_classification_test.py"
+    ],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "unexpected"
+    ],
+    "false_alarm": true,
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-897",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-897",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-897",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "optax/_src/alias.py::adagrad",
+    "report_source": "oracle",
+    "task_id": "google-deepmind__optax-897",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "huggingface__accelerate-255",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "huggingface__accelerate-255",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "huggingface__accelerate-255",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "src/accelerate/commands/config/__init__.py::config_command_parser",
+    "report_source": "oracle",
+    "task_id": "huggingface__accelerate-255",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "expected",
+      "unexpected"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "huggingface__datasets-214",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "huggingface__datasets-214",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "huggingface__datasets-214",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "metrics/squad/evaluate.py::evaluate",
+    "report_source": "oracle",
+    "task_id": "huggingface__datasets-214",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test"
+    ],
+    "false_alarm": false,
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-23692",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-23692",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-23692",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "lib/matplotlib/_api/__init__.py::check_getitem",
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-23692",
+    "variant": "stale_caller"
+  },
+  {
+    "applicable": true,
+    "control_unexpected_paths": [
+      "lib/matplotlib/axes/_base.pyi",
+      "lib/matplotlib/tests/test_axes.py"
+    ],
+    "detected_categories": [
+      "adjacent",
+      "expected",
+      "missing_test",
+      "unexpected"
+    ],
+    "false_alarm": true,
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-26293",
+    "variant": "control"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test",
+      "unexpected"
+    ],
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-26293",
+    "variant": "unrelated"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "missing_test"
+    ],
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-26293",
+    "variant": "drop_tests"
+  },
+  {
+    "applicable": true,
+    "detected_categories": [
+      "stale_caller"
+    ],
+    "planted_symbol": "lib/matplotlib/_api/__init__.py::check_getitem",
+    "report_source": "oracle",
+    "task_id": "matplotlib__matplotlib-26293",
+    "variant": "stale_caller"
+  }
+]

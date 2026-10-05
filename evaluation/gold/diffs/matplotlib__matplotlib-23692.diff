@@ -1,0 +1,229 @@
+diff --git a/doc/api/axis_api.rst b/doc/api/axis_api.rst
+index d950d1e253a4..e7da26a11706 100644
+--- a/doc/api/axis_api.rst
++++ b/doc/api/axis_api.rst
+@@ -100,6 +100,7 @@ Ticks, tick labels and Offset text
+    Axis.get_offset_text
+ 
+    Axis.get_tick_padding
++   Axis.get_tick_params
+    Axis.get_ticklabels
+    Axis.get_ticklines
+    Axis.get_ticklocs
+diff --git a/doc/users/next_whats_new/view_current_axis_format.rst b/doc/users/next_whats_new/view_current_axis_format.rst
+new file mode 100644
+index 000000000000..eb7e03600f0e
+--- /dev/null
++++ b/doc/users/next_whats_new/view_current_axis_format.rst
+@@ -0,0 +1,29 @@
++View current appearance settings for ticks, tick labels, and gridlines
++----------------------------------------------------------------------
++
++The new `~matplotlib.axis.Axis.get_tick_params` method can be used to
++retrieve the appearance settings that will be applied to any
++additional ticks, tick labels, and gridlines added to the plot:
++
++.. code-block:: pycon
++
++    >>> import matplotlib.pyplot as plt
++
++    >>> fig, ax = plt.subplots()
++    >>> ax.yaxis.set_tick_params(labelsize=30, labelcolor='red',
++    ...                          direction='out', which='major')
++    >>> ax.yaxis.get_tick_params(which='major')
++    {'direction': 'out',
++    'left': True,
++    'right': False,
++    'labelleft': True,
++    'labelright': False,
++    'gridOn': False,
++    'labelsize': 30,
++    'labelcolor': 'red'}
++    >>> ax.yaxis.get_tick_params(which='minor')
++    {'left': True,
++    'right': False,
++    'labelleft': True,
++    'labelright': False,
++    'gridOn': False}
+diff --git a/lib/matplotlib/axes/_base.py b/lib/matplotlib/axes/_base.py
+index 015fd3294589..d3ea2cd0e9ac 100644
+--- a/lib/matplotlib/axes/_base.py
++++ b/lib/matplotlib/axes/_base.py
+@@ -3403,7 +3403,8 @@ def tick_params(self, axis='both', **kwargs):
+         Change the appearance of ticks, tick labels, and gridlines.
+ 
+         Tick properties that are not explicitly set using the keyword
+-        arguments remain unchanged unless *reset* is True.
++        arguments remain unchanged unless *reset* is True. For the current
++        style settings, see `.Axis.get_tick_params`.
+ 
+         Parameters
+         ----------
+diff --git a/lib/matplotlib/axis.py b/lib/matplotlib/axis.py
+index af0815d41d9c..ae38dd28676b 100644
+--- a/lib/matplotlib/axis.py
++++ b/lib/matplotlib/axis.py
+@@ -916,6 +916,12 @@ def set_tick_params(self, which='major', reset=False, **kwargs):
+ 
+         For documentation of keyword arguments, see
+         :meth:`matplotlib.axes.Axes.tick_params`.
++
++        See Also
++        --------
++        .Axis.get_tick_params
++            View the current style settings for ticks, ticklabels, and
++            gridlines.
+         """
+         _api.check_in_list(['major', 'minor', 'both'], which=which)
+         kwtrans = self._translate_tick_params(kwargs)
+@@ -949,8 +955,62 @@ def set_tick_params(self, which='major', reset=False, **kwargs):
+ 
+         self.stale = True
+ 
++    def get_tick_params(self, which='major'):
++        """
++        Get appearance parameters for ticks, ticklabels, and gridlines.
++
++        .. versionadded:: 3.7
++
++        Parameters
++        ----------
++        which : {'major', 'minor'}, default: 'major'
++            The group of ticks for which the parameters are retrieved.
++
++        Returns
++        -------
++        dict
++            Properties for styling tick elements added to the axis.
++
++        Notes
++        -----
++        This method returns the appearance parameters for styling *new*
++        elements added to this axis and may be different from the values
++        on current elements if they were modified directly by the user
++        (e.g., via ``set_*`` methods on individual tick objects).
++
++        Examples
++        --------
++        ::
++
++            >>> ax.yaxis.set_tick_params(labelsize=30, labelcolor='red',
++                                         direction='out', which='major')
++            >>> ax.yaxis.get_tick_params(which='major')
++            {'direction': 'out',
++            'left': True,
++            'right': False,
++            'labelleft': True,
++            'labelright': False,
++            'gridOn': False,
++            'labelsize': 30,
++            'labelcolor': 'red'}
++            >>> ax.yaxis.get_tick_params(which='minor')
++            {'left': True,
++            'right': False,
++            'labelleft': True,
++            'labelright': False,
++            'gridOn': False}
++
++
++        """
++        _api.check_in_list(['major', 'minor'], which=which)
++        if which == 'major':
++            return self._translate_tick_params(
++                self._major_tick_kw, reverse=True
++            )
++        return self._translate_tick_params(self._minor_tick_kw, reverse=True)
++
+     @staticmethod
+-    def _translate_tick_params(kw):
++    def _translate_tick_params(kw, reverse=False):
+         """
+         Translate the kwargs supported by `.Axis.set_tick_params` to kwargs
+         supported by `.Tick._apply_params`.
+@@ -961,9 +1021,12 @@ def _translate_tick_params(kw):
+ 
+         Returns a new dict of translated kwargs.
+ 
+-        Note: The input *kwargs* are currently modified, but that's ok for
+-        the only caller.
++        Note: Use reverse=True to translate from those supported by
++        `.Tick._apply_params` back to those supported by
++        `.Axis.set_tick_params`.
+         """
++        kw_ = {**kw}
++
+         # The following lists may be moved to a more accessible location.
+         allowed_keys = [
+             'size', 'width', 'color', 'tickdir', 'pad',
+@@ -988,19 +1051,27 @@ def _translate_tick_params(kw):
+             'labelright': 'label2On',
+             'labeltop': 'label2On',
+         }
+-        kwtrans = {newkey: kw.pop(oldkey)
+-                   for oldkey, newkey in keymap.items() if oldkey in kw}
+-        if 'colors' in kw:
+-            c = kw.pop('colors')
++        if reverse:
++            kwtrans = {
++                oldkey: kw_.pop(newkey)
++                for oldkey, newkey in keymap.items() if newkey in kw_
++            }
++        else:
++            kwtrans = {
++                newkey: kw_.pop(oldkey)
++                for oldkey, newkey in keymap.items() if oldkey in kw_
++            }
++        if 'colors' in kw_:
++            c = kw_.pop('colors')
+             kwtrans['color'] = c
+             kwtrans['labelcolor'] = c
+         # Maybe move the checking up to the caller of this method.
+-        for key in kw:
++        for key in kw_:
+             if key not in allowed_keys:
+                 raise ValueError(
+                     "keyword %s is not recognized; valid keywords are %s"
+                     % (key, allowed_keys))
+-        kwtrans.update(kw)
++        kwtrans.update(kw_)
+         return kwtrans
+ 
+     def set_clip_path(self, clippath, transform=None):
+diff --git a/lib/matplotlib/tests/test_axes.py b/lib/matplotlib/tests/test_axes.py
+index 3699c9df133d..aed45743d66b 100644
+--- a/lib/matplotlib/tests/test_axes.py
++++ b/lib/matplotlib/tests/test_axes.py
+@@ -6452,6 +6452,33 @@ def test_pandas_bar_align_center(pd):
+     fig.canvas.draw()
+ 
+ 
++def test_axis_get_tick_params():
++    axis = plt.subplot().yaxis
++    initial_major_style_translated = {**axis.get_tick_params(which='major')}
++    initial_minor_style_translated = {**axis.get_tick_params(which='minor')}
++
++    translated_major_kw = axis._translate_tick_params(
++        axis._major_tick_kw, reverse=True
++    )
++    translated_minor_kw = axis._translate_tick_params(
++        axis._minor_tick_kw, reverse=True
++    )
++
++    assert translated_major_kw == initial_major_style_translated
++    assert translated_minor_kw == initial_minor_style_translated
++    axis.set_tick_params(labelsize=30, labelcolor='red',
++                         direction='out', which='both')
++
++    new_major_style_translated = {**axis.get_tick_params(which='major')}
++    new_minor_style_translated = {**axis.get_tick_params(which='minor')}
++    new_major_style = axis._translate_tick_params(new_major_style_translated)
++    new_minor_style = axis._translate_tick_params(new_minor_style_translated)
++    assert initial_major_style_translated != new_major_style_translated
++    assert axis._major_tick_kw == new_major_style
++    assert initial_minor_style_translated != new_minor_style_translated
++    assert axis._minor_tick_kw == new_minor_style
++
++
+ def test_axis_set_tick_params_labelsize_labelcolor():
+     # Tests fix for issue 4346
+     axis_1 = plt.subplot()

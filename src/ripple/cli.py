@@ -462,27 +462,22 @@ def _run_final(args: argparse.Namespace) -> int:
 
 
 def _run_build_results(args: argparse.Namespace) -> int:
-    from ripple.evaluation_results import build_results
+    from ripple.evaluation_results import main
 
     try:
-        summary = build_results(
-            manifest_path=args.manifest,
-            raw_root=args.raw,
-            config_path=args.config,
-            output_readme=Path("evaluation/results/README.md"),
-            output_summary=Path("evaluation/results/final_summary.json"),
-            symbol_gold_path=Path("evaluation/gold/final_symbols.json"),
-            stage_b_path=Path("evaluation/results/stage_b_anomalies.json"),
-            adjudication_path=Path(
-                "evaluation/adjudication/adjudication_template.json"
-            ),
+        return main(
+            [
+                "--manifest",
+                str(args.manifest),
+                "--raw",
+                str(args.raw),
+                "--config",
+                str(args.config),
+            ]
         )
     except (EvaluationError, OSError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
-    print(f"Runs: {summary['run_count']}")
-    print("Results: evaluation/results/README.md")
-    return 0
 
 
 def _run_show(args: argparse.Namespace) -> int:

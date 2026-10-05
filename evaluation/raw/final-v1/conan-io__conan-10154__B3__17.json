@@ -1,0 +1,42 @@
+{
+  "completed_at": "2026-10-02T18:33:16.024350Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 6424,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 547,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "ac29718a8e73d9acf2f6838d8fefc9de3c72f6bf8bbb96a0c2fa8bf6f2161e98",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "conan-io/conan",
+  "request_original_length": 553,
+  "request_truncated": false,
+  "request_used_length": 553,
+  "requested_seed": 17,
+  "run_id": "conan-io__conan-10154__B3__17",
+  "runtime_seconds": 1.7190982430001895,
+  "schema_version": 1,
+  "source_ranking": [
+    "conan/tools/files/files.py",
+    "conan/tools/files/__init__.py"
+  ],
+  "status": "completed",
+  "system": "B3",
+  "task_id": "conan-io__conan-10154",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 6971,
+  "trace_path": null
+}

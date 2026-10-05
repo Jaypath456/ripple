@@ -1,0 +1,251 @@
+diff --git a/astropy/modeling/core.py b/astropy/modeling/core.py
+index b469f32cdf72..f0fd3619f2d4 100644
+--- a/astropy/modeling/core.py
++++ b/astropy/modeling/core.py
+@@ -747,6 +747,10 @@ def __init__(self, *args, meta=None, name=None, **kwargs):
+         self._initialize_slices()
+         self._initialize_unit_support()
+ 
++        # Initialize the cache for the constraints (used primarily when
++        # sync_constraints is False)
++        self._constraints_cache = {}
++
+     def _default_inputs_outputs(self):
+         if self.n_inputs == 1 and self.n_outputs == 1:
+             self._inputs = ("x",)
+@@ -1293,14 +1297,30 @@ def sync_constraints(self, value):
+             raise ValueError("sync_constraints only accepts True or False as values")
+         self._sync_constraints = value
+ 
++        # We need to invalidate the cache whenever sync_constraints is changed.
++        # If we are setting sync_constraints to True, then this will ensure
++        # that we recompute the properties next time they are called, and if
++        # setting to False, it will allow us to make sure the cache is up-to-date
++        # below before disabling syncing.
++        self._constraints_cache.clear()
++
++        # If setting to False, cache all the values with the present state
++        # to make sure we don't ever update the cache once the syncing is
++        # disabled. Note that these will automatically then cause 'fixed',
++        # 'bounds' and 'tied' to be called.
++        if not value:
++            _ = self.has_fixed
++            _ = self.has_bounds
++            _ = self.has_tied
++
+     @property
+     def fixed(self):
+         """
+         A ``dict`` mapping parameter names to their fixed constraint.
+         """
+-        if not hasattr(self, "_fixed") or self.sync_constraints:
+-            self._fixed = _ConstraintsDict(self, "fixed")
+-        return self._fixed
++        if "fixed" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["fixed"] = _ConstraintsDict(self, "fixed")
++        return self._constraints_cache["fixed"]
+ 
+     @property
+     def bounds(self):
+@@ -1308,18 +1328,47 @@ def bounds(self):
+         A ``dict`` mapping parameter names to their upper and lower bounds as
+         ``(min, max)`` tuples or ``[min, max]`` lists.
+         """
+-        if not hasattr(self, "_bounds") or self.sync_constraints:
+-            self._bounds = _ConstraintsDict(self, "bounds")
+-        return self._bounds
++        if "bounds" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["bounds"] = _ConstraintsDict(self, "bounds")
++        return self._constraints_cache["bounds"]
+ 
+     @property
+     def tied(self):
+         """
+         A ``dict`` mapping parameter names to their tied constraint.
+         """
+-        if not hasattr(self, "_tied") or self.sync_constraints:
+-            self._tied = _ConstraintsDict(self, "tied")
+-        return self._tied
++        if "tied" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["tied"] = _ConstraintsDict(self, "tied")
++        return self._constraints_cache["tied"]
++
++    @property
++    def has_fixed(self):
++        """
++        Whether the model has any fixed constraints.
++        """
++        if "has_fixed" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["has_fixed"] = any(self.fixed.values())
++        return self._constraints_cache["has_fixed"]
++
++    @property
++    def has_bounds(self):
++        """
++        Whether the model has any bounds constraints.
++        """
++        if "has_bounds" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["has_bounds"] = any(
++                b != (None, None) for b in self.bounds.values()
++            )
++        return self._constraints_cache["has_bounds"]
++
++    @property
++    def has_tied(self):
++        """
++        Whether the model has any tied constraints.
++        """
++        if "has_tied" not in self._constraints_cache or self.sync_constraints:
++            self._constraints_cache["has_tied"] = any(self.tied.values())
++        return self._constraints_cache["has_tied"]
+ 
+     @property
+     def eqcons(self):
+@@ -3171,6 +3220,10 @@ def __init__(self, op, left, right, name=None):
+         self.n_left_params = len(self.left.parameters)
+         self._map_parameters()
+ 
++        # Initialize the cache for the constraints (used primarily when
++        # sync_constraints is False)
++        self._constraints_cache = {}
++
+     def _get_left_inputs_from_args(self, args):
+         return args[: self.left.n_inputs]
+ 
+diff --git a/astropy/modeling/fitting.py b/astropy/modeling/fitting.py
+index 84d8866d0260..a0c6c34b45a6 100644
+--- a/astropy/modeling/fitting.py
++++ b/astropy/modeling/fitting.py
+@@ -1176,7 +1176,7 @@ def _wrap_deriv(params, model, weights, x, y, z=None):
+         if weights is None:
+             weights = 1.0
+ 
+-        if any(model.fixed.values()) or any(model.tied.values()):
++        if model.has_fixed or model.has_tied:
+             # update the parameters with the current values from the fitter
+             fitter_to_model_params(model, params)
+             if z is None:
+@@ -2002,9 +2002,9 @@ def fitter_to_model_params(model, fps, use_min_max_bounds=True):
+     """
+     _, fit_param_indices, _ = model_to_fit_params(model)
+ 
+-    has_tied = any(model.tied.values())
+-    has_fixed = any(model.fixed.values())
+-    has_bound = any(b != (None, None) for b in model.bounds.values())
++    has_tied = model.has_tied
++    has_fixed = model.has_fixed
++    has_bound = model.has_bounds
+     parameters = model.parameters
+ 
+     if not (has_tied or has_fixed or has_bound):
+@@ -2069,7 +2069,7 @@ def model_to_fit_params(model):
+     fitparam_indices = list(range(len(model.param_names)))
+     model_params = model.parameters
+     model_bounds = list(model.bounds.values())
+-    if any(model.fixed.values()) or any(model.tied.values()):
++    if model.has_fixed or model.has_tied:
+         params = list(model_params)
+         param_metrics = model._param_metrics
+         for idx, name in list(enumerate(model.param_names))[::-1]:
+@@ -2100,16 +2100,13 @@ def _validate_constraints(supported_constraints, model):
+     """Make sure model constraints are supported by the current fitter."""
+     message = "Optimizer cannot handle {0} constraints."
+ 
+-    if any(model.fixed.values()) and "fixed" not in supported_constraints:
++    if model.has_fixed and "fixed" not in supported_constraints:
+         raise UnsupportedConstraintError(message.format("fixed parameter"))
+ 
+-    if any(model.tied.values()) and "tied" not in supported_constraints:
++    if model.has_tied and "tied" not in supported_constraints:
+         raise UnsupportedConstraintError(message.format("tied parameter"))
+ 
+-    if (
+-        any(tuple(b) != (None, None) for b in model.bounds.values())
+-        and "bounds" not in supported_constraints
+-    ):
++    if model.has_bounds and "bounds" not in supported_constraints:
+         raise UnsupportedConstraintError(message.format("bound parameter"))
+ 
+     if model.eqcons and "eqcons" not in supported_constraints:
+diff --git a/astropy/modeling/tests/test_core.py b/astropy/modeling/tests/test_core.py
+index d1dbe011a61e..097a35cd60d2 100644
+--- a/astropy/modeling/tests/test_core.py
++++ b/astropy/modeling/tests/test_core.py
+@@ -1505,3 +1505,68 @@ def test_model_string_indexing():
+ 
+     assert compound["Model1"] == gauss
+     assert compound["Model2"] == airy
++
++
++def test_has_constraints():
++    model1 = models.Gaussian1D()
++
++    assert not model1.has_tied
++    assert not model1.has_fixed
++    assert model1.has_bounds
++
++    model1.amplitude.fixed = True
++
++    assert model1.has_fixed
++
++    model1.mean.tied = lambda model: model.amplitude
++
++    assert model1.has_tied
++
++    model2 = models.Linear1D()
++
++    assert not model2.has_tied
++    assert not model2.has_fixed
++    assert not model2.has_bounds
++
++    model2.slope.bounds = (1, 2)
++
++    assert model2.has_bounds
++
++
++def test_has_constraints_with_sync_constraints():
++    # Check that has_tied/has_fixed/has_bounds works when sync_constraints is used
++
++    model = models.Linear1D()
++
++    assert not model.has_tied
++    assert not model.has_fixed
++    assert not model.has_bounds
++
++    model.sync_constraints = False
++
++    model.slope.fixed = True
++    model.intercept.tied = lambda model: model.slope
++    model.intercept.bounds = (1, 2)
++
++    assert not model.has_tied
++    assert not model.has_fixed
++    assert not model.has_bounds
++
++    model.slope.fixed = False
++
++    model.sync_constraints = True
++
++    assert model.has_tied
++    assert not model.has_fixed
++    assert model.has_bounds
++
++    model.slope.fixed = True
++
++    # If we set sync_constraints to False, model.has_fixed should then still
++    # return the correct result because the above line was called before
++    # sync_constraints was set to False. Basically we need any change in
++    # sync_constraints to invalidate the cache.
++
++    model.sync_constraints = False
++
++    assert model.has_fixed
+diff --git a/docs/changes/modeling/16677.feature.rst b/docs/changes/modeling/16677.feature.rst
+new file mode 100644
+index 000000000000..8c7d14e8555d
+--- /dev/null
++++ b/docs/changes/modeling/16677.feature.rst
+@@ -0,0 +1,3 @@
++Added ``Model.has_tied``, ``Model.has_fixed``, and ``Model.has_bounds`` attributes to make
++it easy to check whether models have various kinds of constraints set without having to
++inspect ``Model.tied``, ``Model.fixed``, and ``Model.bounds`` in detail.

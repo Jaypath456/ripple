@@ -1,0 +1,69 @@
+diff --git a/conan/tools/microsoft/__init__.py b/conan/tools/microsoft/__init__.py
+index eb506393f75..e86a8b19dd3 100644
+--- a/conan/tools/microsoft/__init__.py
++++ b/conan/tools/microsoft/__init__.py
+@@ -1,6 +1,6 @@
+ from conan.tools.microsoft.toolchain import MSBuildToolchain
+ from conan.tools.microsoft.msbuild import MSBuild
+ from conan.tools.microsoft.msbuilddeps import MSBuildDeps
+-from conan.tools.microsoft.visual import msvc_runtime_flag, VCVars, is_msvc
++from conan.tools.microsoft.visual import msvc_runtime_flag, VCVars, is_msvc, is_msvc_static_runtime
+ from conan.tools.microsoft.subsystems import subsystem_path
+ from conan.tools.microsoft.layout import vs_layout
+diff --git a/conan/tools/microsoft/visual.py b/conan/tools/microsoft/visual.py
+index 9dbdc5986fa..fefb5df6590 100644
+--- a/conan/tools/microsoft/visual.py
++++ b/conan/tools/microsoft/visual.py
+@@ -181,3 +181,11 @@ def is_msvc(conanfile):
+     """
+     settings = conanfile.settings
+     return settings.get_safe("compiler") in ["Visual Studio", "msvc"]
++
++
++def is_msvc_static_runtime(conanfile):
++    """ Validate when building with Visual Studio or msvc and MT on runtime
++    :param conanfile: ConanFile instance
++    :return: True, if msvc + runtime MT. Otherwise, False
++    """
++    return is_msvc(conanfile) and "MT" in msvc_runtime_flag(conanfile)
+diff --git a/conans/test/unittests/tools/microsoft/test_msbuild.py b/conans/test/unittests/tools/microsoft/test_msbuild.py
+index f6aab1c5dff..14bfbb02a47 100644
+--- a/conans/test/unittests/tools/microsoft/test_msbuild.py
++++ b/conans/test/unittests/tools/microsoft/test_msbuild.py
+@@ -4,10 +4,10 @@
+ import pytest
+ from mock import Mock
+ 
+-from conan.tools.microsoft import MSBuild, MSBuildToolchain, is_msvc
++from conan.tools.microsoft import MSBuild, MSBuildToolchain, is_msvc, is_msvc_static_runtime
+ from conans.model.conf import ConfDefinition, Conf
+ from conans.model.env_info import EnvValues
+-from conans.test.utils.mocks import ConanFileMock, MockSettings
++from conans.test.utils.mocks import ConanFileMock, MockSettings, MockOptions, MockConanfile
+ from conans.test.utils.test_files import temp_folder
+ from conans.tools import load
+ from conans import ConanFile, Settings
+@@ -189,3 +189,23 @@ def test_is_msvc(compiler, expected):
+     conanfile.initialize(settings, EnvValues())
+     conanfile.settings.compiler = compiler
+     assert is_msvc(conanfile) == expected
++
++
++@pytest.mark.parametrize("compiler,shared,runtime,build_type,expected", [
++    ("Visual Studio", True, "MT", "Release", True),
++    ("msvc", True, "static", "Release", True),
++    ("Visual Studio", False, "MT", "Release", True),
++    ("Visual Studio", True, "MD", "Release", False),
++    ("msvc", True, "static", "Debug", True),
++    ("clang", True, None, "Debug", False),
++])
++def test_is_msvc_static_runtime(compiler, shared, runtime, build_type, expected):
++    options = MockOptions({"shared": shared})
++    settings = MockSettings({"build_type": build_type,
++                             "arch": "x86_64",
++                             "compiler": compiler,
++                             "compiler.runtime": runtime,
++                             "compiler.version": "17",
++                             "cppstd": "17"})
++    conanfile = MockConanfile(settings, options)
++    assert is_msvc_static_runtime(conanfile) == expected

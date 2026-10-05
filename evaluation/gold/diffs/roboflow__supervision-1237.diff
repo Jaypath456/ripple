@@ -1,0 +1,278 @@
+diff --git a/supervision/detection/core.py b/supervision/detection/core.py
+index be61048203..f93aed1c43 100644
+--- a/supervision/detection/core.py
++++ b/supervision/detection/core.py
+@@ -23,7 +23,7 @@
+     xywh_to_xyxy,
+ )
+ from supervision.geometry.core import Position
+-from supervision.utils.internal import deprecated
++from supervision.utils.internal import deprecated, get_instance_variables
+ from supervision.validators import validate_detections_fields
+ 
+ 
+@@ -1379,7 +1379,7 @@ def validate_fields_both_defined_or_none(
+     Raises:
+         ValueError: If one field is None and the other is not, for any of the fields.
+     """
+-    attributes = ["mask", "confidence", "class_id", "tracker_id"]
++    attributes = get_instance_variables(detections_1)
+     for attribute in attributes:
+         value_1 = getattr(detections_1, attribute)
+         value_2 = getattr(detections_2, attribute)
+diff --git a/supervision/utils/internal.py b/supervision/utils/internal.py
+index 978a144854..072c03b79a 100644
+--- a/supervision/utils/internal.py
++++ b/supervision/utils/internal.py
+@@ -1,7 +1,8 @@
+ import functools
++import inspect
+ import os
+ import warnings
+-from typing import Callable
++from typing import Any, Callable, Set
+ 
+ 
+ class SupervisionWarnings(Warning):
+@@ -141,3 +142,42 @@ def __get__(self, owner_self: object, owner_cls: type) -> object:
+         The result of calling the function stored in 'fget' with 'owner_cls'.
+         """
+         return self.fget(owner_cls)
++
++
++def get_instance_variables(instance: Any, include_properties=False) -> Set[str]:
++    """
++    Get the public variables of a class instance.
++
++    Args:
++        instance (Any): The instance of a class
++        include_properties (bool): Whether to include properties in the result
++
++    Usage:
++        ```python
++        detections = Detections(xyxy=np.array([1,2,3,4]))
++        variables = get_class_variables(detections)
++        # ["xyxy", "mask", "confidence", ..., "data"]
++        ```
++    """
++    if isinstance(instance, type):
++        raise ValueError("Only class instances are supported, not classes.")
++
++    fields = set(
++        (
++            name
++            for name, val in inspect.getmembers(instance)
++            if not callable(val) and not name.startswith("_")
++        )
++    )
++
++    if not include_properties:
++        properties = set(
++            (
++                name
++                for name, val in inspect.getmembers(instance.__class__)
++                if isinstance(val, property)
++            )
++        )
++        fields -= properties
++
++    return fields
+diff --git a/test/utils/test_internal.py b/test/utils/test_internal.py
+new file mode 100644
+index 0000000000..eee614e6cf
+--- /dev/null
++++ b/test/utils/test_internal.py
+@@ -0,0 +1,193 @@
++from contextlib import ExitStack as DoesNotRaise
++from dataclasses import dataclass, field
++from typing import Any, Set
++
++import numpy as np
++import pytest
++
++from supervision.detection.core import Detections
++from supervision.utils.internal import get_instance_variables
++
++
++class MockClass:
++    def __init__(self):
++        self.public = 0
++        self._protected = 1
++        self.__private = 2
++
++    def public_method(self):
++        pass
++
++    def _protected_method(self):
++        pass
++
++    def __private_method(self):
++        pass
++
++    @property
++    def public_property(self):
++        return 0
++
++    @property
++    def _protected_property(self):
++        return 1
++
++    @property
++    def __private_property(self):
++        return 2
++
++
++@dataclass
++class MockDataclass:
++    public: int = 0
++    _protected: int = 1
++    __private: int = 2
++
++    public_field: int = field(default=0)
++    _protected_field: int = field(default=1)
++    __private_field: int = field(default=2)
++
++    public_field_with_factory: dict = field(default_factory=dict)
++    _protected_field_with_factory: dict = field(default_factory=dict)
++    __private_field_with_factory: dict = field(default_factory=dict)
++
++    def public_method(self):
++        pass
++
++    def _protected_method(self):
++        pass
++
++    def __private_method(self):
++        pass
++
++    @property
++    def public_property(self):
++        return 0
++
++    @property
++    def _protected_property(self):
++        return 1
++
++    @property
++    def __private_property(self):
++        return 2
++
++
++@pytest.mark.parametrize(
++    "input_instance, include_properties, expected, exception",
++    [
++        (
++            MockClass,
++            False,
++            None,
++            pytest.raises(ValueError),
++        ),
++        (
++            MockClass(),
++            False,
++            {"public"},
++            DoesNotRaise(),
++        ),
++        (
++            MockClass(),
++            True,
++            {"public", "public_property"},
++            DoesNotRaise(),
++        ),
++        (
++            MockDataclass(),
++            False,
++            {"public", "public_field", "public_field_with_factory"},
++            DoesNotRaise(),
++        ),
++        (
++            MockDataclass(),
++            True,
++            {"public", "public_field", "public_field_with_factory", "public_property"},
++            DoesNotRaise(),
++        ),
++        (
++            Detections,
++            False,
++            None,
++            pytest.raises(ValueError),
++        ),
++        (
++            Detections,
++            True,
++            None,
++            pytest.raises(ValueError),
++        ),
++        (
++            Detections.empty(),
++            False,
++            {"xyxy", "class_id", "confidence", "mask", "tracker_id", "data"},
++            DoesNotRaise(),
++        ),
++        (
++            Detections.empty(),
++            True,
++            {
++                "xyxy",
++                "class_id",
++                "confidence",
++                "mask",
++                "tracker_id",
++                "data",
++                "area",
++                "box_area",
++            },
++            DoesNotRaise(),
++        ),
++        (
++            Detections(xyxy=np.array([[1, 2, 3, 4]])),
++            False,
++            {
++                "xyxy",
++                "class_id",
++                "confidence",
++                "mask",
++                "tracker_id",
++                "data",
++            },
++            DoesNotRaise(),
++        ),
++        (
++            Detections(
++                xyxy=np.array([[1, 2, 3, 4], [5, 6, 7, 8]]),
++                class_id=np.array([1, 2]),
++                confidence=np.array([0.1, 0.2]),
++                mask=np.array([[[1]], [[2]]]),
++                tracker_id=np.array([1, 2]),
++                data={"key_1": [1, 2], "key_2": [3, 4]},
++            ),
++            False,
++            {
++                "xyxy",
++                "class_id",
++                "confidence",
++                "mask",
++                "tracker_id",
++                "data",
++            },
++            DoesNotRaise(),
++        ),
++        (
++            Detections.empty(),
++            False,
++            {"xyxy", "class_id", "confidence", "mask", "tracker_id", "data"},
++            DoesNotRaise(),
++        ),
++    ],
++)
++def test_get_instance_variables(
++    input_instance: Any,
++    include_properties: bool,
++    expected: Set[str],
++    exception: Exception,
++) -> None:
++    with exception:
++        result = get_instance_variables(
++            input_instance, include_properties=include_properties
++        )
++        assert result == expected

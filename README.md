@@ -1,257 +1,324 @@
 # RIPPLE
 
-RIPPLE is a personal developer-tool project that will eventually predict which
-parts of a Python repository are likely to change for a proposed feature, then
-compare that prediction with the resulting Git diff.
+RIPPLE predicts which files in a Python repository a feature request is likely to
+touch. Later, it checks the actual Git implementation against that saved
+prediction. The design rule is that the model may only *propose*. Python code
+validates every tool call, owns all evidence, enforces budgets, and makes every
+final classification.
 
-RIPPLE records a Git repository's current commit and dirty state, discovers its
-tracked Python files, derives module names, identifies test files, and uses
-Python's AST to index structural symbols and imports. Imports include aliases,
-relative levels, `TYPE_CHECKING` status, and deterministic resolution to tracked
-modules when possible. RIPPLE also resolves common symbol references, builds a
-module dependency graph and likely test mappings, supports BM25 lexical search,
-and exposes seven bounded deterministic tools. Repository code is never imported
-or executed.
+## Problem
 
-## Setup
+Before you implement a feature in an unfamiliar codebase, you want to know the
+change surface: the files to edit, the tests to update, and the callers that could
+break. After you implement it, you want to know whether the diff matches the plan:
+unplanned files, dropped tests, and callers left behind by a signature change.
+Plain LLM agents answer the first question with unverifiable guesses and rarely
+answer the second at all. RIPPLE separates the two questions and keeps the
+LLM's role narrow.
 
-RIPPLE requires Python 3.11 or newer. Install it and the development tools in an
-active virtual environment:
+## Architecture
+
+```text
+            ┌──────────── deterministic, never executes target code ────────────┐
+repo ──► scan (AST index, imports, references, tests, BM25, co-change history)
+                │
+request ──► Stage A: bounded agent ──► validator ──► Expand ──► change-impact report
+                │   (LLM picks tools,     (drops claims     (tests, regression
+                │    Python runs them)     without evidence) areas, order)
+                ▼
+git range ──► Stage B: diff ⟷ saved report ──► expected / adjacent / unexpected /
+                                              missing_test / stale_caller / ...
+```
+
+- **Index.** RIPPLE scans only Python files tracked by Git. It uses Python's
+  `ast` module to extract symbols, imports, references, and test mappings. Target
+  code is never imported, executed, or installed. Indexes are cached per commit
+  under `<repo>/.ripple/index/`.
+- **Seven deterministic tools.** `search_code` (BM25), `inspect_symbol`,
+  `find_references`, `get_dependencies`, `find_tests`, `repo_facts` (routes,
+  models, settings, entry points), and `co_changed` (pre-base Git history). Every
+  result carries an invocation-local evidence ID.
+
+### Deterministic trust boundary
+
+The model never touches the filesystem, Git, or the report directly. It emits
+tool requests and a draft report as JSON. Python then:
+
+- validates each argument against the tool schema;
+- treats repository text as delimited untrusted data;
+- owns the candidate ledger and the evidence IDs;
+- drops every claim that does not cite evidence it actually produced.
+
+Stage B categories come from fixed Git and AST rules. A model verdict can add an
+explanation to an `unexpected` file, but it cannot change the file's category.
+
+### Bounded agent
+
+A Stage A run stops at the first of these limits:
+
+- 25 unique tool executions;
+- four iterations without progress;
+- 30 candidates;
+- an accepted submission;
+- an optional token ceiling.
+
+Duplicate tool calls reuse the earlier result. If the model never submits a
+supported report, RIPPLE **abstains**: it returns an empty prediction rather than
+an unsupported guess.
+
+### Pre-change prediction (Stage A)
+
+`ripple analyze` writes a validated JSON report and a Markdown report, plus a
+JSONL trace. The report covers:
+
+- affected components, each with a reason, a confidence, and evidence IDs;
+- mapped tests and regression areas;
+- an implementation order;
+- blind spots.
+
+### Post-change verification (Stage B)
+
+`ripple verify` diffs a Git range against a saved report and classifies each file
+or finding:
+
+| Category | Meaning |
+| --- | --- |
+| `expected` | changed and originally predicted |
+| `adjacent` | unpredicted, but one import hop from, or a top-three co-change partner of, a prediction |
+| `unexpected` | changed with neither relationship |
+| `missing_predicted` | a medium- or high-confidence prediction that was not changed |
+| `missing_test` | changed source symbols without a changed, statically mapped test |
+| `stale_caller` | an unchanged caller of a function whose signature changed incompatibly |
+
+## Install
+
+You need Python 3.11+ and Git.
 
 ```shell
+python -m venv .venv && . .venv/bin/activate
 python -m pip install -e '.[dev]'
+```
+
+## Configuration
+
+Only Stage A and the LLM baselines need a model. Copy `.env.example` to `.env`
+(both `.env` and `.ripple/` are gitignored) and set:
+
+```shell
+RIPPLE_LLM_API_KEY=...            # never committed, never written to reports
+RIPPLE_LLM_BASE_URL=...           # any OpenAI-compatible endpoint
+RIPPLE_LLM_MODEL=...
+# RIPPLE_MAX_TOKENS=50000         # optional run-wide ceiling
 ```
 
 ## Usage
 
 ```shell
-ripple scan /path/to/repository
+ripple scan /path/to/repo                          # index summary (--json, --no-cache)
+ripple tool /path/to/repo search_code '{"query":"user auth","limit":5}'
+ripple analyze /path/to/repo "Add token refresh support"   # Stage A (--json)
+ripple show-run <run-id> --repo /path/to/repo      # replay a trace, no model call
+ripple verify /path/to/repo --report latest --range main..feature-branch  # Stage B
 ```
 
-The scan considers only Python files tracked by Git. Its summary reports the
-repository name, abbreviated current commit, Python and test file counts, symbol,
-import, and reference counts, parse errors, cache status, and elapsed scan time.
-Syntax and file-reading errors are recorded without stopping the rest of the
-scan.
+`ripple analyze` refuses a dirty checkout unless you pass `--allow-dirty`. Reports
+go to `.ripple/reports/`, traces to `.ripple/runs/`, and verifications to
+`.ripple/verifications/`.
 
-Indexes are cached as JSON under `<repo>/.ripple/index/`. A clean index is named
-for its full commit SHA. A dirty index also includes a deterministic hash of the
-current contents of tracked Python files, so changed source states do not share a
-cache entry. Cache files are written atomically.
+## Benchmark methodology
 
-Use JSON output for tooling:
+The held-out benchmark is built from [FEA-Bench](https://huggingface.co/datasets/microsoft/FEA-Bench)
+Lite feature-implementation pull requests. Its frozen configuration is
+`evaluation/final_config.json` (version `final-v1`), and its hash is recorded in
+that file.
+
+- **Tasks.** The manifest `evaluation/data/final_fea_tasks.json` excludes every
+  Phase 3–5 development task. It was meant to be stratified by source-file count,
+  but every eligible Lite candidate changed 2–4 primary Python source files.
+  Larger strata were not available in the eligible pool, so all final tasks are
+  small changes.
+- **Leak safety.** Each run uses a fresh depth-limited checkout of the exact base
+  commit, with no remote and no future refs. The request is the PR title and body,
+  with paths masked. A fail-closed structural audit
+  (`evaluation/audits/pre_run_leak_audit.json`) passed for every task. A
+  post-run audit records future-only symbol names that appear at base, for
+  sensitivity analysis.
+- **Gold.** Gold is the set of Python source files in the official PR diff. Tests
+  are scored separately. Symbol gold is derived from the same diffs only after
+  every prediction checkpoint exists.
+- **Systems.** There are six systems:
+  - B0: BM25.
+  - B1: BM25 plus one-hop dependency expansion.
+  - B2: BM25 plus co-change expansion.
+  - B3: a one-shot LLM call.
+  - B4: plain ReAct with the same tools and call ceiling.
+  - RIPPLE: the full controller.
+
+  There are also three ablations of RIPPLE:
+  - A1: without `co_changed`.
+  - A2: without `get_dependencies` and `find_references`.
+  - A3: without the report validator.
+
+  Each LLM system ran with requested seeds 17, 42, and 1729. The provider did
+  not offer deterministic seed control. All model systems used
+  `openai/gpt-oss-20b` through the BullsAI gateway.
+- **Metrics.** The headline metrics are set precision, recall, and F1, plus
+  Recall@5, Recall@10, MRR, false positives per task, test precision and recall,
+  symbol recall, runtime, and tool, model, and token counts.
+  - For B0–B2, set metrics use a matched *k*: RIPPLE's confirmed source-file count
+    for the same task and seed. An abstention (*k* = 0) scores zero.
+  - Seeds are averaged within each task first, then results are averaged across
+    tasks.
+  - Confidence intervals come from a 95% repository-cluster bootstrap (1,000
+    samples, seed 1729), and paired differences from the same bootstrap.
+  - Abstentions and provider failures stay in every denominator.
+- **Stage B planted anomalies.** Stage B runs on 15 tasks that were selected
+  before any results were seen. For each task, the official diff is applied to the
+  base checkout (nothing is executed), and four variants are committed:
+  - **control:** the diff unchanged;
+  - **unrelated:** the diff plus an unrelated new file, which should be flagged
+    `unexpected`;
+  - **drop_tests:** the diff with its tests removed, which should be flagged
+    `missing_test`;
+  - **stale_caller:** the diff plus an incompatible signature change to a function
+    whose caller is left unchanged (applied only when such a function exists),
+    which should be flagged `stale_caller`.
+
+  Each variant is verified twice: once against an oracle Stage A report and once
+  against RIPPLE's actual seed-17 report.
+
+## Final held-out results
+
+Everything between the markers below is generated by `ripple build-results` from
+saved artifacts. Full tables, confidence intervals, paired differences, provider
+reconciliation, and artifact hashes are in
+[`evaluation/results/README.md`](evaluation/results/README.md) and
+[`evaluation/results/final_summary.json`](evaluation/results/final_summary.json).
+
+<!-- final-results:start -->
+Generated by `ripple build-results` from `evaluation/raw/final-v1` (735 checkpoints, 35 tasks, 14 repositories). Model systems are averaged over seeds within task, then over tasks.
+
+| System | P | R | F1 | R@5 | R@10 | MRR | FP/task | Test P | Test R | Symbol R | Runtime (s) | Tools | Calls | Tokens |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| B0 | 0.010 | 0.005 | 0.006 | 0.305 | 0.362 | 0.386 | 0.019 | 0.000 | 0.000 | 0.000 | 8.039 | 0.000 | 0.000 | n/a |
+| B1 | 0.010 | 0.005 | 0.006 | 0.290 | 0.352 | 0.387 | 0.019 | 0.013 | 0.633 | 0.000 | 8.247 | 0.000 | 0.000 | n/a |
+| B2 | 0.010 | 0.003 | 0.005 | 0.319 | 0.343 | 0.360 | 0.019 | 0.015 | 0.271 | 0.000 | 8.226 | 0.000 | 0.000 | n/a |
+| B3 | 0.310 | 0.342 | 0.299 | 0.327 | 0.342 | 0.483 | 1.952 | 0.000 | 0.000 | 0.000 | 2.136 | 0.000 | 1.000 | 7630.800 |
+| B4 | 0.092 | 0.065 | 0.074 | 0.065 | 0.065 | 0.117 | 0.171 | 0.000 | 0.000 | 0.000 | 3.133 | 0.105 | 1.571 | 3028.819 |
+| RIPPLE | 0.029 | 0.011 | 0.016 | 0.011 | 0.011 | 0.029 | 0.000 | 0.010 | 0.010 | 0.001 | 50.088 | 12.943 | 21.333 | 69987.419 |
+| A1 | 0.010 | 0.005 | 0.006 | 0.005 | 0.005 | 0.010 | 0.000 | 0.010 | 0.010 | 0.000 | 49.378 | 12.200 | 20.819 | 66134.314 |
+| A2 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.010 | 0.019 | 0.000 | 40.316 | 11.362 | 19.390 | 62215.162 |
+| A3 | 0.029 | 0.013 | 0.017 | 0.013 | 0.013 | 0.029 | 0.010 | 0.010 | 0.010 | 0.001 | 50.544 | 13.086 | 21.476 | 67542.257 |
+
+Status mix by system (runs):
+
+| System | abstained | completed | partial | provider_failed |
+|---|---|---|---|---|
+| B0 | 0 | 35 | 0 | 0 |
+| B1 | 0 | 35 | 0 | 0 |
+| B2 | 0 | 35 | 0 | 0 |
+| B3 | 0 | 105 | 0 | 0 |
+| B4 | 0 | 105 | 0 | 0 |
+| RIPPLE | 102 | 3 | 0 | 0 |
+| A1 | 104 | 1 | 0 | 0 |
+| A2 | 105 | 0 | 0 | 0 |
+| A3 | 100 | 2 | 2 | 1 |
+
+Paired repository-cluster bootstrap (RIPPLE minus baseline, F1 and recall):
+
+| Comparison | Metric | Mean diff | 95% CI |
+|---|---|---|---|
+| RIPPLE − B0 | recall | 0.006 | [0.000, 0.013] |
+| RIPPLE − B0 | f1 | 0.010 | [0.000, 0.019] |
+| RIPPLE − B1 | recall | 0.006 | [0.000, 0.013] |
+| RIPPLE − B1 | f1 | 0.010 | [0.000, 0.019] |
+| RIPPLE − B2 | recall | 0.008 | [0.000, 0.017] |
+| RIPPLE − B2 | f1 | 0.011 | [0.000, 0.023] |
+| RIPPLE − B3 | recall | -0.331 | [-0.482, -0.206] |
+| RIPPLE − B3 | f1 | -0.284 | [-0.393, -0.192] |
+| RIPPLE − B4 | recall | -0.054 | [-0.100, -0.012] |
+| RIPPLE − B4 | f1 | -0.058 | [-0.110, -0.011] |
+
+Stage B planted anomalies (15 tasks):
+
+| Report | Anomaly | Applicable | Inapplicable | Rate |
+|---|---|---|---|---|
+| Oracle Stage A | unrelated file → unexpected/unexplained | 15 | 0 | 1.000 |
+| Oracle Stage A | dropped tests → missing_test | 15 | 0 | 1.000 |
+| Oracle Stage A | stale caller → stale_caller | 15 | 0 | 1.000 |
+| Oracle Stage A | control false-alarm rate | 15 | 0 | 0.333 |
+| RIPPLE seed-17 report | unrelated file → unexpected/unexplained | 15 | 0 | 1.000 |
+| RIPPLE seed-17 report | dropped tests → missing_test | 15 | 0 | 1.000 |
+| RIPPLE seed-17 report | stale caller → stale_caller | 15 | 0 | 1.000 |
+| RIPPLE seed-17 report | control false-alarm rate | 15 | 0 | 1.000 |
+
+Secondary human-adjudicated RIPPLE precision on the 15 pre-selected tasks: `0.022` (0 false-positive judgments; RIPPLE made no false-positive predictions on the selected tasks, so no human judgment was required and the secondary value equals primary precision on this subset.).
+
+Totals across all 735 runs: 8987 model calls, 29036571 tokens (25198768 input, 3837803 output), 5218 tool calls, 5.943 hours of recorded runtime. Provider failures still in the denominator: 1.
+<!-- final-results:end -->
+
+### Reading these results
+
+- **Abstention dominates.** With `gpt-oss-20b`, RIPPLE and its ablations almost
+  always stopped on the no-progress or tool-budget limit without submitting a
+  supported report, so they abstained. Their set precision, recall, and F1 are
+  therefore near zero, and the matched-*k* deterministic baselines inherit the
+  same *k* = 0. This frozen model behavior was not tuned after the held-out
+  results were seen. The status table above shows the exact counts.
+- **RIPPLE did not beat the baselines on this benchmark.** The one-shot LLM
+  baseline (B3) scored highest on set and ranked metrics. The plain ReAct baseline
+  (B4) also beat RIPPLE, and the paired intervals against B3 and B4 exclude zero.
+  RIPPLE's near-zero false-positive rate comes from rarely answering, not from
+  ranking well.
+- **Ranked metrics are independent of abstention.** Recall@5, Recall@10, and MRR
+  use each system's own full ranking. RIPPLE's ranking is its validated submitted
+  set, so it is empty when RIPPLE abstains. That is why the lexical baselines
+  (B0–B2) lead on ranked metrics.
+- **Stage B is deterministic.** The oracle rows measure the verifier on its own.
+  The RIPPLE-report rows show what verification does when Stage A abstained. An
+  empty prediction makes every changed file look `unexpected`, so those rows are
+  not a measure of verifier quality.
+
+## Reproducing
 
 ```shell
-ripple scan /path/to/repository --json
+ripple build-results            # regenerates every number above from evaluation/raw/final-v1
 ```
 
-Standard output contains only the complete `RepositoryIndex` JSON in this mode.
-Use `--no-cache` to perform a fresh scan without reading or writing cache files:
+Running `ripple build-results` is byte-deterministic. Rerunning predictions
+(`ripple evaluate-final`) needs network access to GitHub and the model gateway.
+It resumes from the checkpoints in `evaluation/raw/final-v1` and refuses a config
+whose hash does not match. Stage B is `python evaluation/run_stage_b.py`. Before running it against RIPPLE
+reports, extract `evaluation/raw/final-v1-reports-and-traces.tar.gz` into
+`.ripple/evaluation/final-v1/`. The
+post-prediction gold/audit/adjudication step is `python evaluation/post_run.py`.
+Provenance for the development phases (Phases 3–5) is in
+[`evaluation/README.md`](evaluation/README.md). Those phases are development
+results, not held-out results.
 
-```shell
-ripple scan /path/to/repository --no-cache
-```
+## Limitations
 
-## Deterministic tools
+- **Python only.** RIPPLE analyzes Python repositories only.
+- **Static analysis only.** Target repository code and tests are never imported
+  or executed. Dynamic Python behavior can hide dependencies, and a static test
+  mapping is not runtime coverage.
+- **Small benchmark.** Only the tasks listed above qualified, all of them 2–4
+  source-file changes from a limited set of repositories, so confidence intervals
+  are wide. Medium and large changes are untested.
+- **One historical diff as gold.** A historical PR is one valid implementation,
+  so exact-diff precision can penalize reasonable alternatives. The secondary
+  human-adjudicated precision exists for that reason.
+- **Model-dependent.** Results depend on the model and provider. Under
+  `gpt-oss-20b`, RIPPLE's conservative controller mostly abstained, which means
+  it was precise only when it answered at all.
+- **No contamination split.** No recent-PR contamination split is claimed,
+  because no authoritative training cutoff for `gpt-oss-20b` could be established.
+- **Provider outages.** BullsAI gateway outages caused provider failures. Original
+  failure artifacts are preserved under `evaluation/raw/final-v1-provider-*`. Only
+  the exact failed checkpoints were retried, and any checkpoint that still failed
+  is counted as a provider failure.
 
-Every tool accepts a repository followed by its name and one JSON argument
-object. Results are JSON envelopes containing data or a structured error, an
-invocation-local evidence ID, and a truncation flag.
-
-```shell
-ripple tool ./sample search_code '{"query":"user auth","limit":5}'
-
-ripple tool ./sample inspect_symbol \
-  '{"target":"app/models/user.py::User"}'
-
-ripple tool ./sample find_references \
-  '{"symbol_id":"app/models/user.py::User","limit":20}'
-
-ripple tool ./sample get_dependencies \
-  '{"path":"app/models/user.py","direction":"imported_by","depth":2}'
-
-ripple tool ./sample find_tests \
-  '{"target":"app/models/user.py::User"}'
-
-ripple tool ./sample repo_facts \
-  '{"kind":"models","filter":"User"}'
-
-ripple tool ./sample co_changed \
-  '{"path":"app/models/user.py","limit":10}'
-```
-
-Tool paths must be repository-relative. Search results are capped at 15,
-reference results at 40, dependency traversal at depth 2, symbol source at 120
-lines, and likely-test results at 50.
-
-Symbol signatures and expressions are reconstructed from the AST, so they are
-deterministic and readable but may normalize whitespace and quote style from the
-original source.
-
-Import resolution uses only tracked module names. Star imports are recorded but
-not expanded, and ambiguous or external modules remain unresolved.
-
-Reference resolution covers directly imported symbols and aliases, imported
-module attributes, same-file top-level symbols, class-method attributes,
-subclasses, and decorators. Resolved references are high confidence. Unresolved
-attribute calls are retained as low confidence without guessing the receiver's
-type; ordinary unresolved names are omitted.
-
-Untracked files are intentionally absent from both the index and dirty-state
-calculation. RIPPLE-owned `.ripple/` contents are always excluded.
-
-## Deterministic evaluation
-
-Phase 3 adds a leak-safe development harness over ten fixed official FEA-Bench
-Lite tasks. It reconstructs fresh base-only checkouts, masks location-revealing
-request text, classifies PR-diff gold files, runs BM25 (B0) and BM25 plus
-one-hop dependency expansion (B1), and reports per-task and aggregate metrics
-with deterministic repository-cluster bootstrap intervals.
-
-```shell
-ripple evaluate --tasks evaluation/data/dev_tasks.json
-```
-
-The command writes the auditable full result to
-`evaluation/results/dev_baselines.json` and prints a concise aggregate table.
-See [`evaluation/README.md`](evaluation/README.md) for provenance, exact
-algorithms, leak controls, task IDs, results, and limitations.
-
-## Evidence-led agent and full reports
-
-Phase 4 added a bounded LLM controller over the original five deterministic tools.
-The model interprets the request, chooses one tool at a time, and drafts a
-report; Python validates every argument, owns candidate state and evidence IDs,
-enforces budgets, and drops unsupported claims. Repository text is always
-delimited as untrusted data. A run stops after at most 25 unique tool
-executions, four no-progress iterations, 30 candidates, accepted submission, or
-an optional token ceiling. Duplicate calls reuse their earlier result.
-
-Configure the provider with environment variables (see `.env.example`):
-
-```shell
-export RIPPLE_LLM_API_KEY=...
-export RIPPLE_LLM_BASE_URL=https://api.openai.com/v1  # optional
-export RIPPLE_LLM_MODEL=...
-# export RIPPLE_MAX_TOKENS=50000                     # optional
-```
-
-Analyze a clean checkout with:
-
-```shell
-ripple analyze /path/to/repository "Add token refresh support"
-ripple analyze /path/to/repository "Add token refresh support" --json
-```
-
-Dirty repositories are refused by default. `--allow-dirty` uses the dirty-state
-index cache and marks both the report and trace.
-
-Phase 5 keeps that Explore controller and adds deterministic expansion after it.
-`repo_facts` statically extracts conservative FastAPI, Flask, and Django routes;
-Django, SQLAlchemy, and Pydantic models; environment/settings reads; migration
-directories; and common entry points. `co_changed` counts partners in up to 500
-commits reachable from the checkout's `HEAD` and never examines another ref.
-
-Expand adds mapped tests, ranks one-hop reverse dependencies and reference sites
-as regression areas (without promoting them to predicted changed files), proposes
-a migration only when a confirmed model change and an existing migration directory
-are both proven, and computes dependency-first implementation order with tests
-last. Schema/API/config claims and model-authored risks retain evidence IDs; the
-validator removes unsupported claims. Blind spots describe observed static-analysis
-limits rather than generic caveats.
-
-Canonical JSON and deterministic Markdown reports are atomically written beside
-one another under `.ripple/reports/`; JSONL traces go to `.ripple/runs/`. JSON mode
-emits only the validated report on standard output and never includes the API key.
-Replay a trace without making a model call:
-
-```shell
-ripple show-run <run-id> --repo /path/to/repository
-```
-
-The fixed Phase 4 MVP comparison retains the original ten development tasks and
-adds ten eligible tasks from distinct repositories:
-
-```shell
-ripple evaluate-agent --tasks evaluation/data/mvp_tasks.json
-```
-
-B0 and B1 are scored at each task's `agent_k`, the number of validated RIPPLE
-source components. An empty agent report therefore gives every system exact-zero
-set metrics for that task; full rankings still determine R@5, R@10, and MRR.
-
-The saved Phase 4 `mvp-v1.1` development run is frozen. With
-`gemini-3.5-flash-lite`, its 20/20 valid task metrics were precision 0.2000,
-recall 0.08333, F1 0.11667, R@5 0.08333, R@10 0.08333, MRR 0.2000, and 0.05
-false positives per task. These are development measurements, not final held-out
-results.
-
-Phase 5 uses configuration `full-report-v1` and adds three comparison baselines:
-
-- B2 expands the top three B0 seeds using pre-base co-change frequency.
-- B3 makes one model call over the request, repository map, and bounded symbol
-  outline, then drops nonexistent paths.
-- B4 is plain ReAct with the same safe tools and 25-call ceiling, but no candidate
-  ledger, deterministic Expand, no-progress controller, or report validator.
-
-Run the separate six-system development comparison with:
-
-```shell
-ripple evaluate-phase5 --tasks evaluation/data/mvp_tasks.json
-```
-
-It writes `evaluation/results/phase5_dev_comparison.json` and is labeled
-`DEVELOPMENT / PHASE 5 — NOT FINAL HELD-OUT RESULTS`. Phase 5 still never executes
-or edits target code. No Phase 5 aggregate is currently claimed: the first full
-comparison attempt exhausted the configured provider's daily request quota before
-all 20 tasks completed, so no partial aggregate was published.
-
-## Stage B verification
-
-Stage A predicts the likely change surface before implementation. Phase 6 Stage B
-compares that saved prediction with an actual Git implementation range:
-
-```shell
-ripple verify /path/to/repository \
-  --report latest \
-  --range main..feature/soft-delete
-
-ripple verify /path/to/repository \
-  --report 20260930T120000-abcdef0-runid \
-  --range <base-sha>..<head-sha>
-```
-
-The report commit is the expected base. A differing supplied base produces a
-visible warning and RIPPLE uses a valid report/head merge base rather than silently
-comparing unrelated histories. Fixed Git commands parse added, modified, deleted,
-renamed, binary, and zero-context hunk records. Python ASTs map hunks to symbols and
-ignore formatting, comments, and docstrings when marking cosmetic-only changes.
-
-Stage B classifications are:
-
-- `expected`: changed and originally predicted.
-- `adjacent`: unpredicted, but one import hop or a top-three pre-base co-change
-  partner from an original prediction.
-- `unexpected`: changed without either deterministic relationship.
-- `missing_predicted`: unchanged original medium/high-confidence prediction.
-- `missing_test`: changed source symbols without a changed statically mapped test.
-- `stale_caller`: an unchanged base-index caller of an incompatibly changed
-  function signature.
-
-Only non-cosmetic unexpected files and useful high-confidence missing predictions
-may receive bounded model investigation, with at most eight safe tool calls per
-file. An `unexpected` finding with verdict `unexplained` is intentionally prominent
-for human review. Model verdicts cannot change deterministic categories and require
-path-related evidence.
-
-Canonical verification JSON, deterministic Markdown, and a separate JSONL trace
-are written under `.ripple/verifications/` using configuration `stage-b-v1`.
-Static analysis does not prove runtime coverage or implementation correctness, and
-RIPPLE never imports target modules or executes target tests. Phase 7 benchmarking,
-ablations, adjudication, integrations, and final performance claims remain
-intentionally unimplemented.
-
-Run the checks with:
+## Development
 
 ```shell
 pytest -q

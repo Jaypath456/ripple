@@ -1,0 +1,172 @@
+diff --git a/conans/client/loader.py b/conans/client/loader.py
+index 4fafe819775..d1d89130dd2 100644
+--- a/conans/client/loader.py
++++ b/conans/client/loader.py
+@@ -8,6 +8,8 @@
+ 
+ import yaml
+ 
++from pathlib import Path
++
+ from conan.tools.cmake import cmake_layout
+ from conan.tools.google import bazel_layout
+ from conan.tools.microsoft import vs_layout
+@@ -73,6 +75,7 @@ def load_basic_module(self, conanfile_path, lock_python_requires=None, user=None
+                 self._pyreq_loader.load_py_requires(conanfile, lock_python_requires, self)
+ 
+             conanfile.recipe_folder = os.path.dirname(conanfile_path)
++            conanfile.recipe_path = Path(conanfile.recipe_folder)
+ 
+             # If the scm is inherited, create my own instance
+             if hasattr(conanfile, "scm") and "scm" not in conanfile.__class__.__dict__:
+diff --git a/conans/model/conan_file.py b/conans/model/conan_file.py
+index ce9a2ba2a8e..69fe57e1a4d 100644
+--- a/conans/model/conan_file.py
++++ b/conans/model/conan_file.py
+@@ -1,6 +1,7 @@
+ import os
+ import platform
+ from contextlib import contextmanager
++from pathlib import Path
+ 
+ import six
+ from six import string_types
+@@ -258,6 +259,11 @@ def new_cpp_info(self):
+     def source_folder(self):
+         return self.folders.source_folder
+ 
++    @property
++    def source_path(self) -> Path:
++        assert self.source_folder is not None, "`source_folder` is `None`"
++        return Path(self.source_folder)
++
+     @property
+     def export_sources_folder(self):
+         """points to the base source folder when calling source() and to the cache export sources
+@@ -265,18 +271,38 @@ def export_sources_folder(self):
+         'no_copy_export_sources' and point to the right location always."""
+         return self.folders.base_export_sources
+ 
++    @property
++    def export_sources_path(self) -> Path:
++        assert self.export_sources_folder is not None, "`export_sources_folder` is `None`"
++        return Path(self.export_sources_folder)
++
+     @property
+     def export_folder(self):
+         return self.folders.base_export
+ 
++    @property
++    def export_path(self) -> Path:
++        assert self.export_folder is not None, "`export_folder` is `None`"
++        return Path(self.export_folder)
++
+     @property
+     def build_folder(self):
+         return self.folders.build_folder
+ 
++    @property
++    def build_path(self) -> Path:
++        assert self.build_folder is not None, "`build_folder` is `None`"
++        return Path(self.build_folder)
++
+     @property
+     def package_folder(self):
+         return self.folders.base_package
+ 
++    @property
++    def package_path(self) -> Path:
++        assert self.package_folder is not None, "`package_folder` is `None`"
++        return Path(self.package_folder)
++
+     @property
+     def install_folder(self):
+         # FIXME: Remove in 2.0, no self.install_folder
+@@ -287,6 +313,11 @@ def generators_folder(self):
+         # FIXME: Remove in 2.0, no self.install_folder
+         return self.folders.generators_folder if self.folders.generators else self.install_folder
+ 
++    @property
++    def generators_path(self) -> Path:
++        assert self.generators_folder is not None, "`generators_folder` is `None`"
++        return Path(self.generators_folder)
++
+     @property
+     def imports_folder(self):
+         return self.folders.imports_folder
+diff --git a/conans/model/conanfile_interface.py b/conans/model/conanfile_interface.py
+index 22617a72d28..fd9c8b5d127 100644
+--- a/conans/model/conanfile_interface.py
++++ b/conans/model/conanfile_interface.py
+@@ -1,3 +1,4 @@
++from pathlib import Path
+ from conans.client.graph.graph import CONTEXT_BUILD
+ 
+ 
+@@ -29,6 +30,11 @@ def __ne__(self, other):
+     def package_folder(self):
+         return self._conanfile.package_folder
+ 
++    @property
++    def package_path(self) -> Path:
++        assert self.package_folder is not None, "`package_folder` is `None`"
++        return Path(self.package_folder)
++
+     @property
+     def ref(self):
+         return self._conanfile.ref
+diff --git a/conans/test/integration/conanfile/folders_access_test.py b/conans/test/integration/conanfile/folders_access_test.py
+index 3a6a635f81c..741643aa6ab 100644
+--- a/conans/test/integration/conanfile/folders_access_test.py
++++ b/conans/test/integration/conanfile/folders_access_test.py
+@@ -22,6 +22,7 @@ def package_info(self):
+ 
+ conanfile = """
+ import os
++from pathlib import Path
+ from conans import ConanFile
+ 
+ class AConan(ConanFile):
+@@ -45,6 +46,8 @@ def assert_in_local_cache(self):
+ 
+     def source(self):
+         assert(self.source_folder == os.getcwd())
++        assert(isinstance(self.source_path, Path))
++        assert(str(self.source_path) == self.source_folder)
+         self.assert_in_local_cache()
+ 
+         # Prevented to use them, it's dangerous, because the source is run only for the first
+@@ -65,6 +68,8 @@ def assert_deps_infos(self):
+ 
+     def build(self):
+         assert(self.build_folder == os.getcwd())
++        assert(isinstance(self.build_path, Path))
++        assert(str(self.build_path) == self.build_folder)
+ 
+         self.assert_in_local_cache()
+         self.assert_deps_infos()
+@@ -77,11 +82,15 @@ def build(self):
+             self.install_folder
+ 
+         assert(self.package_folder is not None)
++        assert(isinstance(self.package_path, Path))
++        assert(str(self.package_path) == self.package_folder)
+         self.copy_build_folder = self.build_folder
+ 
+     def package(self):
+         assert(self.install_folder is not None)
+         assert(self.build_folder == os.getcwd())
++        assert(isinstance(self.build_path, Path))
++        assert(str(self.build_path) == self.build_folder)
+         self.assert_in_local_cache()
+         self.assert_deps_infos()
+ 
+@@ -97,6 +106,8 @@ def package(self):
+ 
+     def package_info(self):
+         assert(self.package_folder == os.getcwd())
++        assert(isinstance(self.package_path, Path))
++        assert(str(self.package_path) == self.package_folder)
+         assert(self.in_local_cache == True)
+ 
+         assert(self.source_folder is None)

@@ -1,0 +1,520 @@
+diff --git a/supervision/detection/core.py b/supervision/detection/core.py
+index 37dde15345..4d913e1bc6 100644
+--- a/supervision/detection/core.py
++++ b/supervision/detection/core.py
+@@ -7,7 +7,12 @@
+ import numpy as np
+ 
+ from supervision.config import CLASS_NAME_DATA_FIELD, ORIENTED_BOX_COORDINATES
+-from supervision.detection.lmm import LMM, from_paligemma, validate_lmm_and_kwargs
++from supervision.detection.lmm import (
++    LMM,
++    from_florence_2,
++    from_paligemma,
++    validate_lmm_parameters,
++)
+ from supervision.detection.overlap_filter import (
+     box_non_max_merge,
+     box_non_max_suppression,
+@@ -811,7 +816,9 @@ def from_paddledet(cls, paddledet_result) -> Detections:
+         )
+ 
+     @classmethod
+-    def from_lmm(cls, lmm: Union[LMM, str], result: str, **kwargs) -> Detections:
++    def from_lmm(
++        cls, lmm: Union[LMM, str], result: Union[str, dict], **kwargs
++    ) -> Detections:
+         """
+         Creates a Detections object from the given result string based on the specified
+         Large Multimodal Model (LMM).
+@@ -847,13 +854,28 @@ def from_lmm(cls, lmm: Union[LMM, str], result: str, **kwargs) -> Detections:
+             # array([0])
+             ```
+         """
+-        lmm = validate_lmm_and_kwargs(lmm, kwargs)
++        lmm = validate_lmm_parameters(lmm, result, kwargs)
+ 
+         if lmm == LMM.PALIGEMMA:
++            assert isinstance(result, str)
+             xyxy, class_id, class_name = from_paligemma(result, **kwargs)
+             data = {CLASS_NAME_DATA_FIELD: class_name}
+             return cls(xyxy=xyxy, class_id=class_id, data=data)
+ 
++        if lmm == LMM.FLORENCE_2:
++            assert isinstance(result, dict)
++            xyxy, labels, mask, xyxyxyxy = from_florence_2(result, **kwargs)
++            if len(xyxy) == 0:
++                return cls.empty()
++
++            data = {}
++            if labels is not None:
++                data[CLASS_NAME_DATA_FIELD] = labels
++            if xyxyxyxy is not None:
++                data[ORIENTED_BOX_COORDINATES] = xyxyxyxy
++
++            return cls(xyxy=xyxy, mask=mask, data=data)
++
+         raise ValueError(f"Unsupported LMM: {lmm}")
+ 
+     @classmethod
+diff --git a/supervision/detection/lmm.py b/supervision/detection/lmm.py
+index 5f61db0a53..e39e434f7d 100644
+--- a/supervision/detection/lmm.py
++++ b/supervision/detection/lmm.py
+@@ -4,17 +4,43 @@
+ 
+ import numpy as np
+ 
++from supervision.detection.utils import polygon_to_mask, polygon_to_xyxy
++
+ 
+ class LMM(Enum):
+     PALIGEMMA = "paligemma"
+-
+-
+-REQUIRED_ARGUMENTS: Dict[LMM, List[str]] = {LMM.PALIGEMMA: ["resolution_wh"]}
+-
+-ALLOWED_ARGUMENTS: Dict[LMM, List[str]] = {LMM.PALIGEMMA: ["resolution_wh", "classes"]}
+-
+-
+-def validate_lmm_and_kwargs(lmm: Union[LMM, str], kwargs: Dict[str, Any]) -> LMM:
++    FLORENCE_2 = "florence_2"
++
++
++RESULT_TYPES: Dict[LMM, type] = {LMM.PALIGEMMA: str, LMM.FLORENCE_2: dict}
++
++REQUIRED_ARGUMENTS: Dict[LMM, List[str]] = {
++    LMM.PALIGEMMA: ["resolution_wh"],
++    LMM.FLORENCE_2: ["resolution_wh"],
++}
++
++ALLOWED_ARGUMENTS: Dict[LMM, List[str]] = {
++    LMM.PALIGEMMA: ["resolution_wh", "classes"],
++    LMM.FLORENCE_2: ["resolution_wh"],
++}
++
++SUPPORTED_TASKS_FLORENCE_2 = [
++    "<OD>",
++    "<CAPTION_TO_PHRASE_GROUNDING>",
++    "<DENSE_REGION_CAPTION>",
++    "<REGION_PROPOSAL>",
++    "<OCR_WITH_REGION>",
++    "<REFERRING_EXPRESSION_SEGMENTATION>",
++    "<REGION_TO_SEGMENTATION>",
++    "<OPEN_VOCABULARY_DETECTION>",
++    "<REGION_TO_CATEGORY>",
++    "<REGION_TO_DESCRIPTION>",
++]
++
++
++def validate_lmm_parameters(
++    lmm: Union[LMM, str], result: Any, kwargs: Dict[str, Any]
++) -> LMM:
+     if isinstance(lmm, str):
+         try:
+             lmm = LMM(lmm.lower())
+@@ -23,6 +49,11 @@ def validate_lmm_and_kwargs(lmm: Union[LMM, str], kwargs: Dict[str, Any]) -> LMM
+                 f"Invalid lmm value: {lmm}. Must be one of {[e.value for e in LMM]}"
+             )
+ 
++    if not isinstance(result, RESULT_TYPES[lmm]):
++        raise ValueError(
++            f"Invalid LMM result type: {type(result)}. Must be {RESULT_TYPES[lmm]}"
++        )
++
+     required_args = REQUIRED_ARGUMENTS.get(lmm, [])
+     for arg in required_args:
+         if arg not in kwargs:
+@@ -57,3 +88,95 @@ def from_paligemma(
+         class_id = np.array([classes.index(name) for name in class_name])
+ 
+     return xyxy, class_id, class_name
++
++
++def from_florence_2(
++    result: dict, resolution_wh: Tuple[int, int]
++) -> Tuple[
++    np.ndarray, Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]
++]:
++    """
++    Parse results from the Florence 2 multi-model model.
++    https://huggingface.co/microsoft/Florence-2-large
++
++    Parameters:
++        result: dict containing the model output
++
++    Returns:
++        xyxy (np.ndarray): An array of shape `(n, 4)` containing
++            the bounding boxes coordinates in format `[x1, y1, x2, y2]`
++        labels: (Optional[np.ndarray]): An array of shape `(n,)` containing
++            the class labels for each bounding box
++        masks: (Optional[np.ndarray]): An array of shape `(n, h, w)` containing
++            the segmentation masks for each bounding box
++        obb_boxes: (Optional[np.ndarray]): An array of shape `(n, 4, 2)` containing
++            oriented bounding boxes.
++    """
++    assert len(result) == 1, f"Expected result with a single element. Got: {result}"
++    task = list(result.keys())[0]
++    if task not in SUPPORTED_TASKS_FLORENCE_2:
++        raise ValueError(
++            f"{task} not supported. Supported tasks are: {SUPPORTED_TASKS_FLORENCE_2}"
++        )
++    result = result[task]
++
++    if task in ["<OD>", "<CAPTION_TO_PHRASE_GROUNDING>", "<DENSE_REGION_CAPTION>"]:
++        xyxy = np.array(result["bboxes"], dtype=np.float32)
++        labels = np.array(result["labels"])
++        return xyxy, labels, None, None
++
++    if task == "<REGION_PROPOSAL>":
++        xyxy = np.array(result["bboxes"], dtype=np.float32)
++        # provides labels, but they are ["", "", "", ...]
++        return xyxy, None, None, None
++
++    if task == "<OCR_WITH_REGION>":
++        xyxyxyxy = np.array(result["quad_boxes"], dtype=np.float32)
++        xyxyxyxy = xyxyxyxy.reshape(-1, 4, 2)
++        xyxy = np.array([polygon_to_xyxy(polygon) for polygon in xyxyxyxy])
++        labels = np.array(result["labels"])
++        return xyxy, labels, None, xyxyxyxy
++
++    if task in ["<REFERRING_EXPRESSION_SEGMENTATION>", "<REGION_TO_SEGMENTATION>"]:
++        xyxy_list = []
++        masks_list = []
++        for polygons_of_same_class in result["polygons"]:
++            for polygon in polygons_of_same_class:
++                polygon = np.reshape(polygon, (-1, 2)).astype(np.int32)
++                mask = polygon_to_mask(polygon, resolution_wh).astype(bool)
++                masks_list.append(mask)
++                xyxy = polygon_to_xyxy(polygon)
++                xyxy_list.append(xyxy)
++            # per-class labels also provided, but they are ["", "", "", ...]
++            # when we figure out how to set class names, we can do
++            # zip(result["labels"], result["polygons"])
++        xyxy = np.array(xyxy_list, dtype=np.float32)
++        masks = np.array(masks_list)
++        return xyxy, None, masks, None
++
++    if task == "<OPEN_VOCABULARY_DETECTION>":
++        xyxy = np.array(result["bboxes"], dtype=np.float32)
++        labels = np.array(result["bboxes_labels"])
++        # Also has "polygons" and "polygons_labels", but they don't seem to be used
++        return xyxy, labels, None, None
++
++    if task in ["<REGION_TO_CATEGORY>", "<REGION_TO_DESCRIPTION>"]:
++        assert isinstance(
++            result, str
++        ), f"Expected string as <REGION_TO_CATEGORY> result, got {type(result)}"
++
++        if result == "No object detected.":
++            return np.empty((0, 4), dtype=np.float32), np.array([]), None, None
++
++        pattern = re.compile(r"<loc_(\d+)><loc_(\d+)><loc_(\d+)><loc_(\d+)>")
++        match = pattern.search(result)
++        assert (
++            match is not None
++        ), f"Expected string to end in location tags, but got {result}"
++
++        xyxy = np.array([match.groups()], dtype=np.float32)
++        result_string = result[: match.start()]
++        labels = np.array([result_string])
++        return xyxy, labels, None, None
++
++    assert False, f"Unimplemented task: {task}"
+diff --git a/test/detection/test_lmm_florence_2.py b/test/detection/test_lmm_florence_2.py
+new file mode 100644
+index 0000000000..9ffec2a1ee
+--- /dev/null
++++ b/test/detection/test_lmm_florence_2.py
+@@ -0,0 +1,291 @@
++from contextlib import ExitStack as DoesNotRaise
++from typing import Optional, Tuple
++
++import numpy as np
++import pytest
++
++from supervision.detection.lmm import from_florence_2
++
++
++@pytest.mark.parametrize(
++    "florence_result, resolution_wh, expected_results, exception",
++    [
++        (  # Object detection: empty
++            {"<OD>": {"bboxes": [], "labels": []}},
++            (10, 10),
++            (np.array([], dtype=np.float32), np.array([]), None, None),
++            DoesNotRaise(),
++        ),
++        (  # Object detection: two detections
++            {
++                "<OD>": {
++                    "bboxes": [[4, 4, 6, 6], [5, 5, 7, 7]],
++                    "labels": ["car", "door"],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[4, 4, 6, 6], [5, 5, 7, 7]], dtype=np.float32),
++                np.array(["car", "door"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Caption: unsupported
++            {"<CAPTION>": "A green car parked in front of a yellow building."},
++            (10, 10),
++            None,
++            pytest.raises(ValueError),
++        ),
++        (  # Detailed Caption: unsupported
++            {
++                "<DETAILED_CAPTION>": "The image shows a blue Volkswagen Beetle parked "
++                "in front of a yellow building with two brown doors, surrounded by "
++                "trees and a clear blue sky."
++            },
++            (10, 10),
++            None,
++            pytest.raises(ValueError),
++        ),
++        (  # More Detailed Caption: unsupported
++            {
++                "<MORE_DETAILED_CAPTION>": "The image shows a vintage Volkswagen "
++                "Beetle car parked on a "
++                "cobblestone street in front of a yellow building with two wooden "
++                "doors. The car is painted in a bright turquoise color and has a "
++                "white stripe running along the side. It has two doors on either side "
++                "of the car, one on top of the other, and a small window on the "
++                "front. The building appears to be old and dilapidated, with peeling "
++                "paint and crumbling walls. The sky is blue and there are trees in "
++                "the background."
++            },
++            (10, 10),
++            None,
++            pytest.raises(ValueError),
++        ),
++        (  # Caption to Phrase Grounding: empty
++            {"<CAPTION_TO_PHRASE_GROUNDING>": {"bboxes": [], "labels": []}},
++            (10, 10),
++            (np.array([], dtype=np.float32), np.array([]), None, None),
++            DoesNotRaise(),
++        ),
++        (  # Caption to Phrase Grounding: two detections
++            {
++                "<CAPTION_TO_PHRASE_GROUNDING>": {
++                    "bboxes": [[4, 4, 6, 6], [5, 5, 7, 7]],
++                    "labels": ["a green car", "a yellow building"],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[4, 4, 6, 6], [5, 5, 7, 7]], dtype=np.float32),
++                np.array(["a green car", "a yellow building"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Dense Region caption: empty
++            {"<DENSE_REGION_CAPTION>": {"bboxes": [], "labels": []}},
++            (10, 10),
++            (np.array([], dtype=np.float32), np.array([]), None, None),
++            DoesNotRaise(),
++        ),
++        (  # Caption to Phrase Grounding: two detections
++            {
++                "<DENSE_REGION_CAPTION>": {
++                    "bboxes": [[4, 4, 6, 6], [5, 5, 7, 7]],
++                    "labels": ["a green car", "a yellow building"],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[4, 4, 6, 6], [5, 5, 7, 7]], dtype=np.float32),
++                np.array(["a green car", "a yellow building"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Region proposal
++            {
++                "<REGION_PROPOSAL>": {
++                    "bboxes": [[4, 4, 6, 6], [5, 5, 7, 7]],
++                    "labels": ["", ""],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[4, 4, 6, 6], [5, 5, 7, 7]], dtype=np.float32),
++                None,
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Referring Expression Segmentation
++            {
++                "<REFERRING_EXPRESSION_SEGMENTATION>": {
++                    "polygons": [[[1, 1, 2, 1, 2, 2, 1, 2]]],
++                    "labels": [""],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[1.0, 1.0, 2.0, 2.0]], dtype=np.float32),
++                None,
++                np.array(
++                    [
++                        [
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                        ]
++                    ],
++                    dtype=bool,
++                ),
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Referring Expression Segmentation
++            {
++                "<REFERRING_EXPRESSION_SEGMENTATION>": {
++                    "polygons": [[[1, 1, 2, 1, 2, 2, 1, 2]]],
++                    "labels": [""],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[1.0, 1.0, 2.0, 2.0]], dtype=np.float32),
++                None,
++                np.array(
++                    [
++                        [
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
++                        ]
++                    ],
++                    dtype=bool,
++                ),
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # OCR: unsupported
++            {"<OCR>": "A"},
++            (10, 10),
++            None,
++            pytest.raises(ValueError),
++        ),
++        (  # OCR with Region: obb boxes
++            {
++                "<OCR_WITH_REGION>": {
++                    "quad_boxes": [[2, 2, 6, 4, 5, 6, 1, 5], [4, 4, 5, 5, 4, 6, 3, 5]],
++                    "labels": ["some text", "other text"],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[1, 2, 6, 6], [3, 4, 5, 6]], dtype=np.float32),
++                np.array(["some text", "other text"]),
++                None,
++                np.array(
++                    [[[2, 2], [6, 4], [5, 6], [1, 5]], [[4, 4], [5, 5], [4, 6], [3, 5]]]
++                ),
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Open Vocabulary Detection
++            {
++                "<OPEN_VOCABULARY_DETECTION>": {
++                    "bboxes": [[4, 4, 6, 6], [5, 5, 7, 7]],
++                    "bboxes_labels": ["cat", "cat"],
++                    "polygon": [],
++                    "polygons_labels": [],
++                }
++            },
++            (10, 10),
++            (
++                np.array([[4, 4, 6, 6], [5, 5, 7, 7]], dtype=np.float32),
++                np.array(["cat", "cat"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Region to Category: empty
++            {"<REGION_TO_CATEGORY>": "No object detected."},
++            (10, 10),
++            (np.empty((0, 4), dtype=np.float32), np.array([]), None, None),
++            DoesNotRaise(),
++        ),
++        (  # Region to Category: detected
++            {"<REGION_TO_CATEGORY>": "some object<loc_3><loc_4><loc_5><loc_6>"},
++            (10, 10),
++            (
++                np.array([[3, 4, 5, 6]], dtype=np.float32),
++                np.array(["some object"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++        (  # Region to Description: empty
++            {"<REGION_TO_DESCRIPTION>": "No object detected."},
++            (10, 10),
++            (np.empty((0, 4), dtype=np.float32), np.array([]), None, None),
++            DoesNotRaise(),
++        ),
++        (  # Region to Description: detected
++            {"<REGION_TO_DESCRIPTION>": "some description<loc_3><loc_4><loc_5><loc_6>"},
++            (10, 10),
++            (
++                np.array([[3, 4, 5, 6]], dtype=np.float32),
++                np.array(["some description"]),
++                None,
++                None,
++            ),
++            DoesNotRaise(),
++        ),
++    ],
++)
++def test_florence_2(
++    florence_result: dict,
++    resolution_wh: Tuple[int, int],
++    expected_results: Tuple[
++        np.ndarray, Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray]
++    ],
++    exception: Exception,
++) -> None:
++    with exception:
++        result = from_florence_2(florence_result, resolution_wh)
++        np.testing.assert_array_equal(result[0], expected_results[0])
++        if expected_results[1] is None:
++            assert result[1] is None
++        else:
++            np.testing.assert_array_equal(result[1], expected_results[1])
++        if expected_results[2] is None:
++            assert result[2] is None
++        else:
++            np.testing.assert_array_equal(result[2], expected_results[2])
++        if expected_results[3] is None:
++            assert result[3] is None
++        else:
++            np.testing.assert_array_equal(result[3], expected_results[3])

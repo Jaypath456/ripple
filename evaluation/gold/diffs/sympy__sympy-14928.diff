@@ -1,0 +1,165 @@
+diff --git a/sympy/discrete/__init__.py b/sympy/discrete/__init__.py
+index 0cd8b6753f2e..9870d8f5341e 100644
+--- a/sympy/discrete/__init__.py
++++ b/sympy/discrete/__init__.py
+@@ -3,9 +3,9 @@
+ Transforms - fft, ifft, ntt, intt, fwht, ifwht,
+     mobius_transform, inverse_mobius_transform
+ Convolution - convolution, convolution_fft, convolution_ntt, convolution_fwht,
+-    convolution_subset
++    convolution_subset, covering_product
+ """
+ 
+ from .transforms import (fft, ifft, ntt, intt, fwht, ifwht,
+     mobius_transform, inverse_mobius_transform)
+-from .convolution import convolution
++from .convolution import convolution, covering_product
+diff --git a/sympy/discrete/convolution.py b/sympy/discrete/convolution.py
+index 01459ee9423d..98a279863236 100644
+--- a/sympy/discrete/convolution.py
++++ b/sympy/discrete/convolution.py
+@@ -7,7 +7,8 @@
+ from sympy.core.compatibility import range, as_int, iterable
+ from sympy.core.function import expand_mul
+ from sympy.discrete.transforms import (
+-    fft, ifft, ntt, intt, fwht, ifwht)
++    fft, ifft, ntt, intt, fwht, ifwht,
++    mobius_transform, inverse_mobius_transform)
+ 
+ 
+ def convolution(a, b, cycle=0, dps=None, prime=None, dyadic=None, subset=None):
+@@ -344,3 +345,73 @@ def convolution_subset(a, b):
+         c[mask] += expand_mul(a[smask] * b[mask^smask])
+ 
+     return c
++
++
++#----------------------------------------------------------------------------#
++#                                                                            #
++#                              Covering Product                              #
++#                                                                            #
++#----------------------------------------------------------------------------#
++
++def covering_product(a, b):
++    """
++    Returns the covering product of given sequences.
++
++    The indices of each argument, considered as bit strings, correspond to
++    subsets of a finite set.
++
++    The covering product of given sequences is a sequence which contains
++    sum of products of the elements of the given sequences grouped by
++    bitwise OR of the corresponding indices.
++
++    The sequence is automatically padded to the right with zeros, as the
++    definition of subset based on bitmasks (indices) requires the size of
++    sequence to be a power of 2.
++
++    Parameters
++    ==========
++
++    a, b : iterables
++        The sequences for which covering product is to be obtained.
++
++    Examples
++    ========
++
++    >>> from sympy import symbols, S, I, covering_product
++    >>> u, v, x, y, z = symbols('u v x y z')
++
++    >>> covering_product([u, v], [x, y])
++    [u*x, u*y + v*x + v*y]
++    >>> covering_product([u, v, x], [y, z])
++    [u*y, u*z + v*y + v*z, x*y, x*z]
++
++    >>> covering_product([1, S(2)/3], [3, 4 + 5*I])
++    [3, 26/3 + 25*I/3]
++    >>> covering_product([1, 3, S(5)/7], [7, 8])
++    [7, 53, 5, 40/7]
++
++    References
++    ==========
++
++    .. [1] https://people.csail.mit.edu/rrw/presentations/subset-conv.pdf
++
++    """
++
++    if not a or not b:
++        return []
++
++    a, b = a[:], b[:]
++    n = max(len(a), len(b))
++
++    if n&(n - 1): # not a power of 2
++        n = 2**n.bit_length()
++
++    # padding with zeros
++    a += [S.Zero]*(n - len(a))
++    b += [S.Zero]*(n - len(b))
++
++    a, b = mobius_transform(a), mobius_transform(b)
++    a = [expand_mul(x*y) for x, y in zip(a, b)]
++    a = inverse_mobius_transform(a)
++
++    return a
+diff --git a/sympy/discrete/tests/test_convolution.py b/sympy/discrete/tests/test_convolution.py
+index 8036cbbb1ddf..746f85e98d61 100644
+--- a/sympy/discrete/tests/test_convolution.py
++++ b/sympy/discrete/tests/test_convolution.py
+@@ -5,7 +5,7 @@
+ from sympy.core.compatibility import range
+ from sympy.discrete.convolution import (
+     convolution, convolution_fft, convolution_ntt, convolution_fwht,
+-    convolution_subset)
++    convolution_subset, covering_product)
+ from sympy.utilities.pytest import raises
+ from sympy.abc import x, y
+ 
+@@ -280,3 +280,47 @@ def test_convolution_subset():
+ 
+     raises(TypeError, lambda: convolution_subset(x, z))
+     raises(TypeError, lambda: convolution_subset(S(7)/3, u))
++
++
++def test_covering_product():
++    assert covering_product([], []) == []
++    assert covering_product([], [S(1)/3]) == []
++    assert covering_product([6 + 3*I/7], [S(2)/3]) == [4 + 2*I/7]
++
++    a = [1, S(5)/8, sqrt(7), 4 + 9*I]
++    b = [66, 81, 95, 49, 37, 89, 17]
++    c = [3 + 2*I/3, 51 + 72*I, 7, S(7)/15, 91]
++
++    assert covering_product(a, b) == [66, 1383/8, 95 + 161*sqrt(7),
++                                        130*sqrt(7) + 1303 + 2619*I, 37,
++                                        671/4, 17 + 54*sqrt(7),
++                                        89*sqrt(7) + 4661/8 + 1287*I]
++
++    assert covering_product(b, c) == [198 + 44*I, 7740 + 10638*I,
++                                        1412 + 190*I/3, 42684/5 + 31202*I/3,
++                                        9484 + 74*I/3, 22163 + 27394*I/3,
++                                        10621 + 34*I/3, 90236/15 + 1224*I]
++
++    assert covering_product(a, c) == covering_product(c, a)
++    assert covering_product(b, c[:-1]) == [198 + 44*I, 7740 + 10638*I,
++                                         1412 + 190*I/3, 42684/5 + 31202*I/3,
++                                         111 + 74*I/3, 6693 + 27394*I/3,
++                                         429 + 34*I/3, 23351/15 + 1224*I]
++
++    assert covering_product(a, c[:-1]) == [3 + 2*I/3,
++                            339/4 + 1409*I/12, 7 + 10*sqrt(7) + 2*sqrt(7)*I/3,
++                            -403 + 772*sqrt(7)/15 + 72*sqrt(7)*I + 12658*I/15]
++
++    u, v, w, x, y, z = symbols('u v w x y z')
++
++    assert covering_product([u, v, w], [x, y]) == \
++                            [u*x, u*y + v*x + v*y, w*x, w*y]
++
++    assert covering_product([u, v, w, x], [y, z]) == \
++                            [u*y, u*z + v*y + v*z, w*y, w*z + x*y + x*z]
++
++    assert covering_product([u, v], [x, y, z]) == \
++                    covering_product([x, y, z], [u, v])
++
++    raises(TypeError, lambda: covering_product(x, z))
++    raises(TypeError, lambda: covering_product(S(7)/3, u))

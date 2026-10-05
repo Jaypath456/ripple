@@ -1,0 +1,45 @@
+{
+  "completed_at": "2026-10-02T20:41:28.588828Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 29108,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 13,
+  "output_tokens": 12309,
+  "predicted_symbols": [
+    "supervision/detection/utils.py::non_max_suppression"
+  ],
+  "prepared_request_sha256": "26ece3008d479a30413bdf5ded8e9ee1364eb4861d89145e0e82ab6869048959",
+  "provider_seed_control": false,
+  "report_path": ".ripple/evaluation/final-v1/_artifacts/roboflow__supervision-847__A3__1729/reports/20261002T204128-d423ff3-25202466.json",
+  "repository": "roboflow/supervision",
+  "request_original_length": 1501,
+  "request_truncated": false,
+  "request_used_length": 1501,
+  "requested_seed": 1729,
+  "run_id": "roboflow__supervision-847__A3__1729",
+  "runtime_seconds": 40.35926768200079,
+  "schema_version": 1,
+  "source_ranking": [
+    "supervision/detection/utils.py"
+  ],
+  "status": "completed",
+  "system": "A3",
+  "task_id": "roboflow__supervision-847",
+  "test_ranking": [
+    "test/detection/test_utils.py"
+  ],
+  "tool_calls": 9,
+  "total_tokens": 41417,
+  "trace_path": ".ripple/evaluation/final-v1/_artifacts/roboflow__supervision-847__A3__1729/runs/20261002T204128-d423ff3-25202466.jsonl"
+}

@@ -1,0 +1,135 @@
+diff --git a/SoftLayer/CLI/core.py b/SoftLayer/CLI/core.py
+index 5425882da..b3a1fead0 100644
+--- a/SoftLayer/CLI/core.py
++++ b/SoftLayer/CLI/core.py
+@@ -34,7 +34,7 @@
+ }
+ 
+ PROG_NAME = "slcli (SoftLayer Command-line)"
+-VALID_FORMATS = ['table', 'raw', 'json', 'jsonraw']
++VALID_FORMATS = ['table', 'raw', 'json', 'jsonraw', 'csv']
+ DEFAULT_FORMAT = 'raw'
+ 
+ if sys.stdout.isatty():
+diff --git a/SoftLayer/CLI/formatting.py b/SoftLayer/CLI/formatting.py
+index 02781fcf5..b4df8417d 100644
+--- a/SoftLayer/CLI/formatting.py
++++ b/SoftLayer/CLI/formatting.py
+@@ -6,8 +6,11 @@
+ """
+ # pylint: disable=E0202, consider-merging-isinstance, arguments-differ, keyword-arg-before-vararg
+ import collections
++import csv
++import io
+ import json
+ import os
++import sys
+ 
+ import click
+ from rich import box
+@@ -29,6 +32,8 @@ def format_output(data, fmt='table'):  # pylint: disable=R0911,R0912
+         return json.dumps(data, indent=4, cls=CLIJSONEncoder)
+     elif fmt == 'jsonraw':
+         return json.dumps(data, cls=CLIJSONEncoder)
++    if fmt == 'csv':
++        return csv_output_format(data)
+ 
+     if isinstance(data, str) or isinstance(data, rTable):
+         return data
+@@ -440,3 +445,49 @@ def _format_list_objects(result):
+         table.add_row(values)
+ 
+     return table
++
++
++def csv_output_format(data, delimiter=','):
++    """Formating a table to csv format and show it."""
++    data = clean_table(data, delimiter)
++    write_csv_format(sys.stdout, data, delimiter)
++    return ''
++
++
++def clean_table(data, delimiter):
++    """Delete Null fields by '-' and fix nested table in table"""
++    new_data_row = []
++    for row in data.rows:
++        new_value = []
++        for value in row:
++            if str(value) == 'NULL':
++                value = '-'
++
++            if str(type(value)) == "<class 'SoftLayer.CLI.formatting.Table'>":
++                string_io = io.StringIO()
++                write_csv_format(string_io, value, delimiter)
++
++                nested_table_converted = string_io.getvalue()
++                nested_table_converted = nested_table_converted.replace('\r', '').split('\n')
++                nested_table_converted.pop()
++
++                title_nested_table = new_value.pop()
++                for item in nested_table_converted:
++                    new_value.append(title_nested_table)
++                    new_value.append(item)
++                    new_data_row.append(new_value)
++                    new_value = []
++            else:
++                new_value.append(value)
++
++        if len(new_value) != 0:
++            new_data_row.append(new_value)
++    data.rows = new_data_row
++    return data
++
++
++def write_csv_format(support_output, data, delimiter):
++    """Write csv format to supported output"""
++    writer = csv.writer(support_output, delimiter=delimiter)
++    writer.writerow(data.columns)
++    writer.writerows(data.rows)
+diff --git a/tests/CLI/modules/account_tests.py b/tests/CLI/modules/account_tests.py
+index 7e0792c07..b02b73032 100644
+--- a/tests/CLI/modules/account_tests.py
++++ b/tests/CLI/modules/account_tests.py
+@@ -66,6 +66,14 @@ def test_invoice_detail_details(self):
+         self.assert_no_fail(result)
+         self.assert_called_with('SoftLayer_Billing_Invoice', 'getInvoiceTopLevelItems', identifier='1234')
+ 
++    def test_invoice_detail_csv_output_format(self):
++        result = self.run_command(["--format", "csv", 'account', 'invoice-detail', '1234'])
++        result_output = result.output.replace('\r', '').split('\n')
++        self.assert_no_fail(result)
++        self.assertEqual(result_output[0], 'Item Id,Category,Description,Single,Monthly,Create Date,Location')
++        self.assertEqual(result_output[1], '724951323,Private (only) Secondary VLAN IP Addresses,64 Portable Private'
++                                           ' IP Addresses (bleg.beh.com),$0.00,$0.00,2018-04-04,fra02')
++
+     # slcli account invoices
+     def test_invoices(self):
+         result = self.run_command(['account', 'invoices'])
+diff --git a/tests/CLI/modules/vs/vs_tests.py b/tests/CLI/modules/vs/vs_tests.py
+index 46a0b994c..cb3b074be 100644
+--- a/tests/CLI/modules/vs/vs_tests.py
++++ b/tests/CLI/modules/vs/vs_tests.py
+@@ -313,6 +313,23 @@ def test_detail_vs_ptr_error(self):
+         output = json.loads(result.output)
+         self.assertEqual(output.get('ptr', None), None)
+ 
++    def test_vs_detail_csv_output_format_with_nested_tables(self):
++        result = self.run_command(["--format", "csv", 'vs', 'detail', '100'])
++        result_output = result.output.replace('\r', '').split('\n')
++        self.assert_no_fail(result)
++        self.assertEqual(result_output[0], 'name,value')
++        self.assertEqual(result_output[1], 'id,100')
++        self.assertEqual(result_output[16], 'drives,"Type,Name,Drive,Capacity"')
++        self.assertEqual(result_output[17], 'drives,"System,Disk,0,100 GB"')
++        self.assertEqual(result_output[18], 'drives,"Swap,Disk,1,2 GB"')
++        self.assertEqual(result_output[30], 'vlans,"type,number,id"')
++        self.assertEqual(result_output[31], 'vlans,"PUBLIC,23,1"')
++        self.assertEqual(result_output[32], 'Bandwidth,"Type,In GB,Out GB,Allotment"')
++        self.assertEqual(result_output[33], 'Bandwidth,"Public,.448,.52157,250"')
++        self.assertEqual(result_output[34], 'Bandwidth,"Private,.03842,.01822,N/A"')
++        self.assertEqual(result_output[35], 'security_groups,"interface,id,name"')
++        self.assertEqual(result_output[36], 'security_groups,"PRIVATE,128321,allow_all"')
++
+     def test_create_options(self):
+         result = self.run_command(['vs', 'create-options', '--vsi-type', 'TRANSIENT_CLOUD_SERVER'])
+         self.assert_no_fail(result)

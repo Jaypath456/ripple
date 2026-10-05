@@ -1,0 +1,45 @@
+{
+  "completed_at": "2026-10-02T19:45:10.720463Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: tests/test_checkpointing.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 731,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 758,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "0f34bc6a6a97fd983856ee5b6ec864eca7d32c1f90cc4555d4e9265873b843bd",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "huggingface/accelerate",
+  "request_original_length": 488,
+  "request_truncated": false,
+  "request_used_length": 488,
+  "requested_seed": 42,
+  "run_id": "huggingface__accelerate-255__B4__42",
+  "runtime_seconds": 1.637079984000593,
+  "schema_version": 1,
+  "source_ranking": [
+    "src/accelerate/__init__.py",
+    "src/accelerate/state.py",
+    "src/accelerate/utils.py"
+  ],
+  "status": "completed",
+  "system": "B4",
+  "task_id": "huggingface__accelerate-255",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 1489,
+  "trace_path": null
+}

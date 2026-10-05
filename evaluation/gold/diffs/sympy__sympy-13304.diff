@@ -1,0 +1,111 @@
+diff --git a/sympy/polys/polyclasses.py b/sympy/polys/polyclasses.py
+index bbf078f34249..c194d4eb7d19 100644
+--- a/sympy/polys/polyclasses.py
++++ b/sympy/polys/polyclasses.py
+@@ -114,6 +114,7 @@ def _perify_factors(per, result, include):
+ 
+ from sympy.polys.sqfreetools import (
+     dup_gff_list,
++    dmp_norm,
+     dmp_sqf_p,
+     dmp_sqf_norm,
+     dmp_sqf_part,
+@@ -750,6 +751,11 @@ def gff_list(f):
+         else:
+             raise ValueError('univariate polynomial expected')
+ 
++    def norm(f):
++        """Computes ``Norm(f)``."""
++        r = dmp_norm(f.rep, f.lev, f.dom)
++        return f.per(r, dom=f.dom.dom)
++
+     def sqf_norm(f):
+         """Computes square-free norm of ``f``. """
+         s, g, r = dmp_sqf_norm(f.rep, f.lev, f.dom)
+diff --git a/sympy/polys/polytools.py b/sympy/polys/polytools.py
+index ff6fedc17b71..90838dab01ac 100644
+--- a/sympy/polys/polytools.py
++++ b/sympy/polys/polytools.py
+@@ -3073,6 +3073,41 @@ def gff_list(f):
+ 
+         return [(f.per(g), k) for g, k in result]
+ 
++    def norm(f):
++        """
++        Computes the product, ``Norm(f)``, of the conjugates of
++        a polynomial ``f`` defined over a number field ``K``.
++
++        Examples
++        ========
++
++        >>> from sympy import Poly, sqrt
++        >>> from sympy.abc import x
++
++        >>> a, b = sqrt(2), sqrt(3)
++
++        A polynomial over a quadratic extension.
++        Two conjugates x - a and x + a.
++
++        >>> f = Poly(x - a, x, extension=a)
++        >>> f.norm()
++        Poly(x**2 - 2, x, domain='QQ')
++
++        A polynomial over a quartic extension.
++        Four conjugates x - a, x - a, x + a and x + a.
++
++        >>> f = Poly(x - a, x, extension=(a, b))
++        >>> f.norm()
++        Poly(x**4 - 4*x**2 + 4, x, domain='QQ')
++
++        """
++        if hasattr(f.rep, 'norm'):
++            r = f.rep.norm()
++        else:  # pragma: no cover
++            raise OperationNotSupported(f, 'norm')
++
++        return f.per(r)
++
+     def sqf_norm(f):
+         """
+         Computes square-free norm of ``f``.
+diff --git a/sympy/polys/sqfreetools.py b/sympy/polys/sqfreetools.py
+index adef947a7db2..b3446ee1cee8 100644
+--- a/sympy/polys/sqfreetools.py
++++ b/sympy/polys/sqfreetools.py
+@@ -174,6 +174,19 @@ def dmp_sqf_norm(f, u, K):
+     return s, f, r
+ 
+ 
++def dmp_norm(f, u, K):
++    """
++    Norm of ``f`` in ``K[X1, ..., Xn]``, often not square-free.
++    """
++    if not K.is_Algebraic:
++        raise DomainError("ground domain must be algebraic")
++
++    g = dmp_raise(K.mod.rep, u + 1, 0, K.dom)
++    h, _ = dmp_inject(f, u, K, front=True)
++
++    return dmp_resultant(g, h, u + 1, K.dom)
++
++
+ def dup_gf_sqf_part(f, K):
+     """Compute square-free part of ``f`` in ``GF(p)[x]``. """
+     f = dup_convert(f, K, K.dom)
+diff --git a/sympy/polys/tests/test_polytools.py b/sympy/polys/tests/test_polytools.py
+index 0af574396244..0b5a94267893 100644
+--- a/sympy/polys/tests/test_polytools.py
++++ b/sympy/polys/tests/test_polytools.py
+@@ -2211,6 +2211,12 @@ def test_gff():
+     raises(NotImplementedError, lambda: gff(f))
+ 
+ 
++def test_norm():
++    a, b = sqrt(2), sqrt(3)
++    f = Poly(a*x + b*y, x, y, extension=(a, b))
++    assert f.norm() == Poly(4*x**4 - 12*x**2*y**2 + 9*y**4, x, y, domain='QQ')
++
++
+ def test_sqf_norm():
+     assert sqf_norm(x**2 - 2, extension=sqrt(3)) == \
+         (1, x**2 - 2*sqrt(3)*x + 1, x**4 - 10*x**2 + 1)

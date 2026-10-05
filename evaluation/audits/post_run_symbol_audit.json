@@ -1,0 +1,720 @@
+{
+  "astropy__astropy-13676": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "astropy__astropy-16677": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "astropy__astropy-7970": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "conan-io__conan-10154": {
+    "checked_gold_only_symbols": 9,
+    "name_matches": [
+      {
+        "location": "conan/tools/files/packager.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conan/tools/files/patches.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conan/tools/gnu/pkgconfigdeps/pc_files_templates.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conan/tools/layout/__init__.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/cache/cache.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/cmd/build.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/cmd/export.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/cmd/export_pkg.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/cmd/uploader.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/command.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/conan_api.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/conanfile/package.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/conf/config_installer.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/file_copier.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/importer.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/installer.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/manager.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/migrations.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/remover.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/source.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/client/tools/files.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/model/conan_file.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/model/editable_layout.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/assets/cpp_test_files.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/editable/consume_header_only_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/environment/run_environment_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_build_system_layout_helpers.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_editables_layout.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_in_cache.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_layout_autopackage.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_local_commands.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/layout/test_source_folder.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/scm/source/test_run_scm.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/toolchains/cmake/cmakedeps/test_apple_frameworks.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/toolchains/cmake/cmakedeps/test_cmakedeps_build_modules.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/toolchains/microsoft/test_msbuild.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/functional/tools/test_files.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/create_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/export/export_dirty_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/export/export_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/export_pkg_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/info/info_folders_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/remove_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/command/test_package_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/conanfile/folders_access_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/editable/commands/info_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/environment/test_env.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/hooks/test_post_export.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/python_requires/test_export_sources.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/remote/rest_api_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/integration/symlinks/symlinks_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/client/packager_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/client/toolchain/autotools/autotools_deps_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/client/toolchain/autotools/autotools_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/client/toolchain/autotools/autotools_toolchain_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/model/editable_layout/parse_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/tools/cmake/test_cmaketoolchain.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/tools/env/test_env.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/tools/files/test_patches.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/tools/gnu/autotools_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/tools/microsoft/test_msbuild.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/unittests/util/tools_test.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/utils/mocks.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/test/utils/test_files.py",
+        "symbol": "folders"
+      },
+      {
+        "location": "conans/util/files.py",
+        "symbol": "folders"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "conan-io__conan-10437": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "conan-io__conan-10874": {
+    "checked_gold_only_symbols": 1,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "conan-io__conan-11284": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "conan-io__conan-11585": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "deepset-ai__haystack-8042": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "google-deepmind__optax-1063": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "google-deepmind__optax-897": {
+    "checked_gold_only_symbols": 4,
+    "name_matches": [
+      {
+        "location": "prepared_request",
+        "symbol": "ntxent"
+      },
+      {
+        "location": "optax/_src/clipping_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/_src/combine_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/_src/factorized_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/_src/lookahead_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/_src/transform_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/contrib/_mechanic_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/contrib/_privacy_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/contrib/_reduce_on_plateau_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/losses/_classification_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/losses/_regression_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/losses/_smoothing_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/second_order/_hessian_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/tree_utils/_random_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/tree_utils/_tree_math_test.py",
+        "symbol": "setUp"
+      },
+      {
+        "location": "optax/losses/_classification_test.py",
+        "symbol": "test_batched"
+      },
+      {
+        "location": "optax/losses/_regression_test.py",
+        "symbol": "test_batched"
+      },
+      {
+        "location": "optax/losses/_smoothing_test.py",
+        "symbol": "test_batched"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "huggingface__accelerate-255": {
+    "checked_gold_only_symbols": 10,
+    "name_matches": [
+      {
+        "location": "examples/cv_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "setup.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/accelerator.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/data_loader.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/deepspeed_utils.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/optimizer.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/state.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/test_utils/testing.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/test_utils/training.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/utils.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "tests/test_data_loader.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "src/accelerate/accelerator.py",
+        "symbol": "forward"
+      },
+      {
+        "location": "src/accelerate/test_utils/training.py",
+        "symbol": "forward"
+      },
+      {
+        "location": "src/accelerate/utils.py",
+        "symbol": "forward"
+      },
+      {
+        "location": "examples/cv_example.py",
+        "symbol": "train"
+      },
+      {
+        "location": "examples/nlp_example.py",
+        "symbol": "train"
+      },
+      {
+        "location": "src/accelerate/accelerator.py",
+        "symbol": "train"
+      },
+      {
+        "location": "src/accelerate/notebook_launcher.py",
+        "symbol": "train"
+      },
+      {
+        "location": "src/accelerate/utils.py",
+        "symbol": "train"
+      },
+      {
+        "location": "tests/test_sagemaker.py",
+        "symbol": "train"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "huggingface__datasets-214": {
+    "checked_gold_only_symbols": 10,
+    "name_matches": [
+      {
+        "location": "src/nlp/arrow_reader.py",
+        "symbol": "_get_dataset_from_filename"
+      },
+      {
+        "location": "tests/test_arrow_reader.py",
+        "symbol": "_get_dataset_from_filename"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "matplotlib__matplotlib-23692": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "matplotlib__matplotlib-26293": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "pgmpy__pgmpy-1797": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "roboflow__supervision-1237": {
+    "checked_gold_only_symbols": 10,
+    "name_matches": [
+      {
+        "location": "examples/speed_estimation/inference_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/speed_estimation/ultralytics_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/speed_estimation/yolo_nas_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/time_in_zone/inference_stream_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/time_in_zone/ultralytics_stream_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/time_in_zone/utils/timers.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/traffic_analysis/inference_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "examples/traffic_analysis/ultralytics_example.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/annotators/core.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/annotators/utils.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/annotate.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/line_zone.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/tools/csv_sink.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/tools/inference_slicer.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/tools/json_sink.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/tools/polygon_zone.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/detection/tools/smoother.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/keypoint/annotators.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/tracker/byte_tracker/basetrack.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/tracker/byte_tracker/core.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/tracker/byte_tracker/kalman_filter.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/utils/image.py",
+        "symbol": "__init__"
+      },
+      {
+        "location": "supervision/utils/video.py",
+        "symbol": "__init__"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "roboflow__supervision-1296": {
+    "checked_gold_only_symbols": 1,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "roboflow__supervision-1340": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "roboflow__supervision-847": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "roboflow__supervision-910": {
+    "checked_gold_only_symbols": 1,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "scikit-learn__scikit-learn-11196": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "scikit-learn__scikit-learn-17225": {
+    "checked_gold_only_symbols": 6,
+    "name_matches": [
+      {
+        "location": "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+        "symbol": "test_weighted_percentile"
+      },
+      {
+        "location": "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+        "symbol": "test_weighted_percentile_equal"
+      },
+      {
+        "location": "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+        "symbol": "test_weighted_percentile_zero_weight"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "softlayer__softlayer-python-1766": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "sphinx-doc__sphinx-9154": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "sympy__sympy-12417": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "sympy__sympy-13304": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "sympy__sympy-14745": {
+    "checked_gold_only_symbols": 7,
+    "name_matches": [
+      {
+        "location": "prepared_request",
+        "symbol": "convolution"
+      },
+      {
+        "location": "prepared_request",
+        "symbol": "convolution_fft"
+      },
+      {
+        "location": "prepared_request",
+        "symbol": "convolution_ntt"
+      }
+    ],
+    "strict_rule_failure": true
+  },
+  "sympy__sympy-14853": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "sympy__sympy-14928": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "tobymao__sqlglot-3145": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "tobymao__sqlglot-3991": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "tobymao__sqlglot-4084": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "tobymao__sqlglot-415": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  },
+  "tobymao__sqlglot-858": {
+    "checked_gold_only_symbols": 0,
+    "name_matches": [],
+    "strict_rule_failure": false
+  }
+}

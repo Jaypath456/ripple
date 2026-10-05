@@ -1,0 +1,1116 @@
+{
+  "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+  "schema_version": 1,
+  "selection_method": "final-v1: official Lite tasks; Phase 3/4/5 development tasks excluded; merged PR with usable title/body; 2-20 primary Python source files; deterministic round-robin over 2-4/5-9/10-20 strata sorted by (repository, id); at most five per repository; selection never inspected request quality or any model output",
+  "tasks": [
+    {
+      "base_commit": "a30301e5535be2f558cb948da6b3475df4e36a98",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "astropy/units/quantity.py",
+        "astropy/units/structured.py",
+        "astropy/units/tests/test_structured.py",
+        "docs/changes/units/13676.api.rst"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/changes/units/13676.api.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "astropy/units/quantity.py",
+          "astropy/units/structured.py"
+        ],
+        "test_python": [
+          "astropy/units/tests/test_structured.py"
+        ]
+      },
+      "head_commit": "3cebd7dbea2f07ee3aae5ecc66bfbdd5dcbbd990",
+      "id": "astropy__astropy-13676",
+      "masked_request": "structured unit / quantity stuff\n\nSigned-off-by: Nathaniel Starkman (@nstarman) <nstarkman@protonmail.com>\r\n\r\nNecessary for https://github.com/astropy/astropy/pull/13669\r\n\r\n- Quantity now builds a structured unit if ``unit=None`` in the constructor and the value is structured.\r\n\r\nTODO:\r\n- [x] changelog\r\n- [x] tests\r\n\r\n### Checklist for package maintainer(s)\r\n<!-- This section is to be filled by package maintainer(s) who will\r\nreview this pull request. -->\r\n\r\nThis checklist is meant to remind the package maintainer(s) who will review this pull request of some common things to look for. This list is not exhaustive.\r\n\r\n- [x] Do the proposed changes actually accomplish desired goals?\r\n- [ ] Do the proposed changes follow the [Astropy coding guidelines](https://docs.astropy.org/en/latest/development/codeguide.html)?\r\n- [x] Are tests [PATH] as required? If so, do they follow the [Astropy testing guidelines](https://docs.astropy.org/en/latest/development/testguide.html)?\r\n- [x] Are docs [PATH] as required? If so, do they follow the [Astropy documentation guidelines](https://docs.astropy.org/en/latest/development/docguide.html#astropy-documentation-rules-and-guidelines)?\r\n- [x] Is rebase [PATH] squash necessary? If so, please provide the author with appropriate instructions. Also see [\"When to rebase and squash commits\"](https://docs.astropy.org/en/latest/development/when_to_rebase.html).\r\n- [x] Did the CI pass? If no, are the failures related? If you need to run daily and weekly cron jobs as part of the PR, please apply the `Extra CI` label. Codestyle issues can be fixed by the [bot](https://docs.astropy.org/en/latest/development/workflow/development_workflow.html#pre-commit).\r\n- [x] Is a change log needed? If yes, did the change log check pass? If no, add the `no-changelog-entry-needed` label. If this is a manual backport, use the `skip-changelog-checks` label unless special changelog handling is necessary.\r\n- [x] Is this a big PR that makes a \"What's new?\" entry worthwhile and if so, is (1) a \"what's new\" entry included in this PR and (2) the \"whatsnew-needed\" label applied?\r\n- [x] Is a milestone set? Milestone must be set but `astropy-bot` check might be missing; do not let the green checkmark fool you.\r\n- [x] At the time of adding the milestone, if the milestone set requires a backport to release branch(es), apply the appropriate `backport-[PATH]` label(s) *before* merge.",
+      "original_request": "structured unit / quantity stuff\n\nSigned-off-by: Nathaniel Starkman (@nstarman) <nstarkman@protonmail.com>\r\n\r\nNecessary for https://github.com/astropy/astropy/pull/13669\r\n\r\n- Quantity now builds a structured unit if ``unit=None`` in the constructor and the value is structured.\r\n\r\nTODO:\r\n- [x] changelog\r\n- [x] tests\r\n\r\n### Checklist for package maintainer(s)\r\n<!-- This section is to be filled by package maintainer(s) who will\r\nreview this pull request. -->\r\n\r\nThis checklist is meant to remind the package maintainer(s) who will review this pull request of some common things to look for. This list is not exhaustive.\r\n\r\n- [x] Do the proposed changes actually accomplish desired goals?\r\n- [ ] Do the proposed changes follow the [Astropy coding guidelines](https://docs.astropy.org/en/latest/development/codeguide.html)?\r\n- [x] Are tests added/updated as required? If so, do they follow the [Astropy testing guidelines](https://docs.astropy.org/en/latest/development/testguide.html)?\r\n- [x] Are docs added/updated as required? If so, do they follow the [Astropy documentation guidelines](https://docs.astropy.org/en/latest/development/docguide.html#astropy-documentation-rules-and-guidelines)?\r\n- [x] Is rebase and/or squash necessary? If so, please provide the author with appropriate instructions. Also see [\"When to rebase and squash commits\"](https://docs.astropy.org/en/latest/development/when_to_rebase.html).\r\n- [x] Did the CI pass? If no, are the failures related? If you need to run daily and weekly cron jobs as part of the PR, please apply the `Extra CI` label. Codestyle issues can be fixed by the [bot](https://docs.astropy.org/en/latest/development/workflow/development_workflow.html#pre-commit).\r\n- [x] Is a change log needed? If yes, did the change log check pass? If no, add the `no-changelog-entry-needed` label. If this is a manual backport, use the `skip-changelog-checks` label unless special changelog handling is necessary.\r\n- [x] Is this a big PR that makes a \"What's new?\" entry worthwhile and if so, is (1) a \"what's new\" entry included in this PR and (2) the \"whatsnew-needed\" label applied?\r\n- [x] Is a milestone set? Milestone must be set but `astropy-bot` check might be missing; do not let the green checkmark fool you.\r\n- [x] At the time of adding the milestone, if the milestone set requires a backport to release branch(es), apply the appropriate `backport-X.Y.x` label(s) *before* merge.",
+      "pull_number": 13676,
+      "repository": "astropy/astropy",
+      "repository_url": "https://github.com/astropy/astropy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "f5126c765a6a8db8abc7504275d9c2e90ffbd526",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "astropy/modeling/core.py",
+        "astropy/modeling/fitting.py",
+        "astropy/modeling/tests/test_core.py",
+        "docs/changes/modeling/16677.feature.rst"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/changes/modeling/16677.feature.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "astropy/modeling/core.py",
+          "astropy/modeling/fitting.py"
+        ],
+        "test_python": [
+          "astropy/modeling/tests/test_core.py"
+        ]
+      },
+      "head_commit": "2f33978522de5ca5de7123ce7caf1c37f6dee5d5",
+      "id": "astropy__astropy-16677",
+      "masked_request": "Add ``has_tied``, ``has_fixed`` and ``has_bounds`` properties to ``Model``\n\n*This has been split out from #16673 for ease of review*\r\n\r\nModels include ``tied``, ``fixed``, and ``bounds`` properties that return dictionaries with a summary of which parameters have constraints. However, sometimes one wants to quickly know whether there are any specified ``tied``, ``fixed``, or ``bounds`` constraints, and the main way to do that is:\r\n\r\n```python\r\n any([PATH]())\r\n any([PATH]())\r\n any(b != (None, None) for b in [PATH]())\r\n```\r\n\r\nThese appear notably in the fitting code - this turns out to be reasonably expensive operations especially in the fitting code, where they might be called every time the objective function is called, and it is also clunky to repeat this logic several times in different places.\r\n\r\nThis PR adds:\r\n\r\n```python\r\nModel.has_fixed\r\nModel.has_tied\r\nModel.has_bounds\r\n```\r\n\r\nwhich simplifies this. In addition, these properties, like ``fixed``, ``tied``, and ``bounds`` are cached and the cached version is used when ``sync_constraints`` is ``False`` (typically during fitting), removing any performance impact. But beyond this, these properties could be generically useful to users, similarly to how we have e.g. ``has_units``, hence why I made these public.\r\n\r\n- [ ] By checking this box, the PR author has requested that maintainers do **NOT** use the \"Squash and Merge\" button. Maintainers should respect this when possible; however, the final decision is at the discretion of the maintainer that merges the PR.",
+      "original_request": "Add ``has_tied``, ``has_fixed`` and ``has_bounds`` properties to ``Model``\n\n*This has been split out from #16673 for ease of review*\r\n\r\nModels include ``tied``, ``fixed``, and ``bounds`` properties that return dictionaries with a summary of which parameters have constraints. However, sometimes one wants to quickly know whether there are any specified ``tied``, ``fixed``, or ``bounds`` constraints, and the main way to do that is:\r\n\r\n```python\r\n any(model.fixed.values())\r\n any(model.tied.values())\r\n any(b != (None, None) for b in model.bounds.values())\r\n```\r\n\r\nThese appear notably in the fitting code - this turns out to be reasonably expensive operations especially in the fitting code, where they might be called every time the objective function is called, and it is also clunky to repeat this logic several times in different places.\r\n\r\nThis PR adds:\r\n\r\n```python\r\nModel.has_fixed\r\nModel.has_tied\r\nModel.has_bounds\r\n```\r\n\r\nwhich simplifies this. In addition, these properties, like ``fixed``, ``tied``, and ``bounds`` are cached and the cached version is used when ``sync_constraints`` is ``False`` (typically during fitting), removing any performance impact. But beyond this, these properties could be generically useful to users, similarly to how we have e.g. ``has_units``, hence why I made these public.\r\n\r\n- [ ] By checking this box, the PR author has requested that maintainers do **NOT** use the \"Squash and Merge\" button. Maintainers should respect this when possible; however, the final decision is at the discretion of the maintainer that merges the PR.",
+      "pull_number": 16677,
+      "repository": "astropy/astropy",
+      "repository_url": "https://github.com/astropy/astropy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "e222ffffbab7e38aec2134a31552c99aa90b0047",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "CHANGES.rst",
+        "astropy/units/astrophys.py",
+        "astropy/units/equivalencies.py",
+        "astropy/units/tests/test_equivalencies.py",
+        "docs/units/equivalencies.rst"
+      ],
+      "gold_files": {
+        "ignored": [
+          "CHANGES.rst",
+          "docs/units/equivalencies.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "astropy/units/astrophys.py",
+          "astropy/units/equivalencies.py"
+        ],
+        "test_python": [
+          "astropy/units/tests/test_equivalencies.py"
+        ]
+      },
+      "head_commit": "fb0a47de2a9a47653794a86f1f8e4bde49b134b6",
+      "id": "astropy__astropy-7970",
+      "masked_request": "Little h equivalency\n\nThis adds a new `littleh` equivalency. Based on my experience as a grad student, this PR will serve to rescue many students from confusion who are starting with extragalactic or cosmology work!\r\n\r\nThis has been on my to-do list for years, but it turns out it was a nearly-trivial implementation  due to what I learned from @mhvk in #7891, so hopefully it can squeak in for 3.1!",
+      "original_request": "Little h equivalency\n\nThis adds a new `littleh` equivalency. Based on my experience as a grad student, this PR will serve to rescue many students from confusion who are starting with extragalactic or cosmology work!\r\n\r\nThis has been on my to-do list for years, but it turns out it was a nearly-trivial implementation  due to what I learned from @mhvk in #7891, so hopefully it can squeak in for 3.1!",
+      "pull_number": 7970,
+      "repository": "astropy/astropy",
+      "repository_url": "https://github.com/astropy/astropy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "51a077458b697dcd39e5eb64f1d33a6c52584081",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/symlinks/__init__.py",
+        "conan/tools/files/symlinks/symlinks.py",
+        "conans/test/unittests/tools/files/test_symlinks.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/tools/files/__init__.py",
+          "conan/tools/files/symlinks/__init__.py",
+          "conan/tools/files/symlinks/symlinks.py"
+        ],
+        "test_python": [
+          "conans/test/unittests/tools/files/test_symlinks.py"
+        ]
+      },
+      "head_commit": "d04b24ee9bf89783c350bbc23938040935ef4b4a",
+      "id": "conan-io__conan-10154",
+      "masked_request": "Ported symlinks tools from #10125\n\nChangelog: Feature: Provided several `[PATH]` functions to manage symlinks: Transform absolute to relative symlinks, remove broken symlinks, remove external symlinks and get the symlinks in a folder. These tools will help migrate to Conan 2.0 where the package files won't be automatically cleaned from broken absolute symlinks or external symlinks.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nPending merge of https://github.com/conan-[PATH]\r\n\r\nPENDING DOCUMENTATION:\r\n\r\n- Document tools\r\n- Document the migration guide",
+      "original_request": "Ported symlinks tools from #10125\n\nChangelog: Feature: Provided several `conan.tools.files` functions to manage symlinks: Transform absolute to relative symlinks, remove broken symlinks, remove external symlinks and get the symlinks in a folder. These tools will help migrate to Conan 2.0 where the package files won't be automatically cleaned from broken absolute symlinks or external symlinks.\r\nDocs: https://github.com/conan-io/docs/pull/2343\r\n\r\nPending merge of https://github.com/conan-io/conan/pull/10125\r\n\r\nPENDING DOCUMENTATION:\r\n\r\n- Document tools\r\n- Document the migration guide",
+      "pull_number": 10154,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "9c34ea7568ec8b7eb36a3fbc0fd2ec8a30716830",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/tools/microsoft/__init__.py",
+        "conan/tools/microsoft/visual.py",
+        "conans/test/unittests/tools/microsoft/test_msbuild.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/tools/microsoft/__init__.py",
+          "conan/tools/microsoft/visual.py"
+        ],
+        "test_python": [
+          "conans/test/unittests/tools/microsoft/test_msbuild.py"
+        ]
+      },
+      "head_commit": "367753a95d4ea73392dbc0afc86a75b6e01546fa",
+      "id": "conan-io__conan-10437",
+      "masked_request": "Identify when using static runtime\n\nChangelog: Feature: Add `is_msvc_static_runtime` method to `[PATH]` to identify when using `msvc` with static runtime.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nRelated to discussion https://github.com/conan-[PATH]#issuecomment-1021567713\r\n\r\nThe idea here helping static runtime identification and simplifying conditions in recipes, where can result in a prone error. Example:\r\n\r\n```python\r\ndef validate(self):\r\n    if is_msvc_static_runtime(self) and [PATH]:\r\n        raise ConanInvalidConfiguration(\"Shared option is not well supported with static runtime on Windows\")\r\n```\r\n\r\n\r\n\r\n- [ ] Refer to the issue that supports this Pull Request.\r\n- [x] If the issue has missing info, explain the [PATH] [PATH] that covers this Pull Request.\r\n- [x] I've read the [Contributing guide](https://github.com/conan-[PATH]).\r\n- [x] I've followed the PEP8 style guides for Python code.\r\n- [x] I've opened another PR in the Conan docs repo to the ``develop`` branch, documenting this one. \r\n\r\n<sup>**Note:** By default this PR will skip the slower tests and will use a limited set of python versions. Check [here](https://github.com/conan-[PATH]) how to increase the testing level by writing some tags in the current PR body text.</sup>",
+      "original_request": "Identify when using static runtime\n\nChangelog: Feature: Add `is_msvc_static_runtime` method to `conan.tools.microsoft.visual` to identify when using `msvc` with static runtime.\r\nDocs: https://github.com/conan-io/docs/pull/2372\r\n\r\nRelated to discussion https://github.com/conan-io/conan/pull/10424#issuecomment-1021567713\r\n\r\nThe idea here helping static runtime identification and simplifying conditions in recipes, where can result in a prone error. Example:\r\n\r\n```python\r\ndef validate(self):\r\n    if is_msvc_static_runtime(self) and self.options.shared:\r\n        raise ConanInvalidConfiguration(\"Shared option is not well supported with static runtime on Windows\")\r\n```\r\n\r\n\r\n\r\n- [ ] Refer to the issue that supports this Pull Request.\r\n- [x] If the issue has missing info, explain the purpose/use case/pain/need that covers this Pull Request.\r\n- [x] I've read the [Contributing guide](https://github.com/conan-io/conan/blob/develop/.github/CONTRIBUTING.md).\r\n- [x] I've followed the PEP8 style guides for Python code.\r\n- [x] I've opened another PR in the Conan docs repo to the ``develop`` branch, documenting this one. \r\n\r\n<sup>**Note:** By default this PR will skip the slower tests and will use a limited set of python versions. Check [here](https://github.com/conan-io/conan/blob/develop/.github/PR_INCREASE_TESTING.md) how to increase the testing level by writing some tags in the current PR body text.</sup>",
+      "pull_number": 10437,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "acf5d9a460adfa16bf95b6aadfc248f7d9ace643",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/files.py",
+        "conans/test/integration/tools/file_tools_test.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/tools/files/__init__.py",
+          "conan/tools/files/files.py"
+        ],
+        "test_python": [
+          "conans/test/integration/tools/file_tools_test.py"
+        ]
+      },
+      "head_commit": "985cf2fb3f933aca65264e7cdc811f329b58d9a2",
+      "id": "conan-io__conan-10874",
+      "masked_request": "basic [PATH]\n\nChangelog: Feature: Added basic `rmdir` tool at `[PATH]`.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nClose #10711",
+      "original_request": "basic conan.tools.files.rmdir\n\nChangelog: Feature: Added basic `rmdir` tool at `conan.tools.files`.\r\nDocs: https://github.com/conan-io/docs/pull/2470\r\n\r\nClose #10711",
+      "pull_number": 10874,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "db343feac208a000bc6546556104a8511a584f1e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/tools/gnu/autotools.py",
+        "conan/tools/gnu/autotoolstoolchain.py",
+        "conans/assets/templates/new_v2_autotools.py",
+        "conans/test/functional/toolchains/gnu/autotools/test_basic.py",
+        "conans/test/functional/toolchains/gnu/autotools/test_ios.py",
+        "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py",
+        "conans/test/unittests/tools/gnu/autotools_test.py",
+        "conans/test/utils/mocks.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/tools/gnu/autotools.py",
+          "conan/tools/gnu/autotoolstoolchain.py",
+          "conans/assets/templates/new_v2_autotools.py",
+          "conans/test/utils/mocks.py"
+        ],
+        "test_python": [
+          "conans/test/functional/toolchains/gnu/autotools/test_basic.py",
+          "conans/test/functional/toolchains/gnu/autotools/test_ios.py",
+          "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py",
+          "conans/test/unittests/tools/gnu/autotools_test.py"
+        ]
+      },
+      "head_commit": "502fac7bda4932b994780e3c3cc7a823b45df136",
+      "id": "conan-io__conan-11284",
+      "masked_request": "More flexibility in Autotools tools to override arguments and avoid all default arguments\n\nChangelog: Fix: Use `DESTDIR` argument in `make install` step instead of using the `--prefix` in configure.\r\nChangelog: Feature: More flexibility in Autotools tools to override arguments and avoid all default arguments for `make`, `autoreconf` and `configure`.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nSome notes:\r\n- As suggested in [this issue](https://github.com/conan-[PATH]), we are using now DESTDIR argument for make install.\r\n- As a side effect, we can remove the second configure in install and put the `build_script_folder` argument back in the configure method instead of having it in the constructor.\r\n- Also, now that we don't have to use the package_folder for the --prefix argument, I have removed the `default_configure_install_args` attribute and moved the default install arguments to the toolchain.\r\n\r\n\r\nCloses: https://github.com/conan-[PATH]\r\nCloses: https://github.com/conan-[PATH]",
+      "original_request": "More flexibility in Autotools tools to override arguments and avoid all default arguments\n\nChangelog: Fix: Use `DESTDIR` argument in `make install` step instead of using the `--prefix` in configure.\r\nChangelog: Feature: More flexibility in Autotools tools to override arguments and avoid all default arguments for `make`, `autoreconf` and `configure`.\r\nDocs: https://github.com/conan-io/docs/pull/2562\r\n\r\nSome notes:\r\n- As suggested in [this issue](https://github.com/conan-io/conan/issues/11264), we are using now DESTDIR argument for make install.\r\n- As a side effect, we can remove the second configure in install and put the `build_script_folder` argument back in the configure method instead of having it in the constructor.\r\n- Also, now that we don't have to use the package_folder for the --prefix argument, I have removed the `default_configure_install_args` attribute and moved the default install arguments to the toolchain.\r\n\r\n\r\nCloses: https://github.com/conan-io/conan/issues/11265\r\nCloses: https://github.com/conan-io/conan/issues/11264",
+      "pull_number": 11284,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "b20b72beb77c063d8c27c55db37425349e232a26",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conans/client/loader.py",
+        "conans/model/conan_file.py",
+        "conans/model/conanfile_interface.py",
+        "conans/test/integration/conanfile/folders_access_test.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conans/client/loader.py",
+          "conans/model/conan_file.py",
+          "conans/model/conanfile_interface.py"
+        ],
+        "test_python": [
+          "conans/test/integration/conanfile/folders_access_test.py"
+        ]
+      },
+      "head_commit": "0811dd1e8fae0880ad31613899a411496cec1332",
+      "id": "conan-io__conan-11585",
+      "masked_request": "Feature : provide Path accesssors\n\ncloses: #11304 \r\n\r\nChangelog: Feature: Provide Path accessors in Conanfile.\r\nDocs: omit\r\n\r\n- [x] Refer to the issue that supports this Pull Request.\r\n- [x] If the issue has missing info, explain the [PATH] [PATH] that covers this Pull Request.\r\n- [x] I've read the [Contributing guide](https://github.com/conan-[PATH]).\r\n- [x] I've followed the PEP8 style guides for Python code.\r\n- [ ] I've opened another PR in the Conan docs repo to the ``develop`` branch, documenting this one. \r\n\r\n<sup>**Note:** By default this PR will skip the slower tests and will use a limited set of python versions. Check [here](https://github.com/conan-[PATH]) how to increase the testing level by writing some tags in the current PR body text.</sup>",
+      "original_request": "Feature : provide Path accesssors\n\ncloses: #11304 \r\n\r\nChangelog: Feature: Provide Path accessors in Conanfile.\r\nDocs: omit\r\n\r\n- [x] Refer to the issue that supports this Pull Request.\r\n- [x] If the issue has missing info, explain the purpose/use case/pain/need that covers this Pull Request.\r\n- [x] I've read the [Contributing guide](https://github.com/conan-io/conan/blob/develop/.github/CONTRIBUTING.md).\r\n- [x] I've followed the PEP8 style guides for Python code.\r\n- [ ] I've opened another PR in the Conan docs repo to the ``develop`` branch, documenting this one. \r\n\r\n<sup>**Note:** By default this PR will skip the slower tests and will use a limited set of python versions. Check [here](https://github.com/conan-io/conan/blob/develop/.github/PR_INCREASE_TESTING.md) how to increase the testing level by writing some tags in the current PR body text.</sup>",
+      "pull_number": 11585,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "031b0bfbd836f128736220589917a62c43c9c512",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "haystack/document_stores/types/__init__.py",
+        "haystack/document_stores/types/filter_policy.py",
+        "releasenotes/notes/implement-merge-filter-logic-99e6785a78f80ae9.yaml",
+        "test/document_stores/test_filter_policy.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [
+          "releasenotes/notes/implement-merge-filter-logic-99e6785a78f80ae9.yaml"
+        ],
+        "source_python": [
+          "haystack/document_stores/types/__init__.py",
+          "haystack/document_stores/types/filter_policy.py"
+        ],
+        "test_python": [
+          "test/document_stores/test_filter_policy.py"
+        ]
+      },
+      "head_commit": "a1cc6f942270682104fa850980a9204fefacea98",
+      "id": "deepset-ai__haystack-8042",
+      "masked_request": "feat: Implement apply_filter_policy and FilterPolicy.MERGE for the new filters\n\n### Why:\r\nImplements proper merging of new filters.\r\n\r\n- fixes: https://github.com/deepset-[PATH]\r\n\r\n### What:\r\n- Implemented new utility functions to determine filter types (`is_legacy`, `is_comparison_filter`, `is_logical_filter`).\r\n- Extended the `apply_filter: policy` function to support merging of `init_filters` with `runtime_filters` using a logical operator, facilitating complex filter scenarios.\r\n- Added a comprehensive suite of tests to validate the functionality of applying filter policies including scenarios with no filters, comparison filters, logical operators, and user-defined logical operators.\r\n\r\n### How can it be used:\r\nThe enhancements enable complex filter logic to be applied seamlessly in document query operations, such as:\r\n- Merging initial and runtime filters with support for legacy filter formats.\r\n- Applying logical operators (`AND`, `OR`) when merging comparison or logical filters, allowing for a more nuanced filter logic that can accurately reflect user needs or query specifics.\r\n\r\nExample usage of merging comparison and logical filters:\r\n```python\r\ninit_filter = {\"field\": \"meta.type\", \"operator\": \"==\", \"value\": \"pdf\"}\r\nruntime_filter = {\r\n    \"operator\": \"AND\",\r\n    \"conditions\": [\r\n        {\"field\": \"meta.name\", \"operator\": \"==\", \"value\": \"John\"},\r\n        {\"field\": \"meta.year\", \"operator\": \"==\", \"value\": \"2022\"},\r\n    ],\r\n}\r\n# Merging the above would result in runtime_filter including the init_filter as another condition under the same logical operator \"AND\".\r\n```\r\n\r\n### How did you test it:\r\nA series of unit tests were added covering various scenarios including:\r\n- Merging filters under both `MERGE` and `REPLACE` policies with different combinations of comparison and logical filters.\r\n- Ensuring that the correct logical operator is applied during the merge process.\r\n- Testing the behavior with no filters provided, ensuring backward compatibility and robust error handling.\r\n\r\n### Notes for the reviewer:\r\n- Special attention should be given to the logic involving merging different types of filters (comparison vs. logical) and ensuring the intended behavior aligns with real-world use cases.\r\n- Review the test cases for `apply_filter_policy` to ensure all potential scenarios are covered and the expected behavior is clearly documented and verified.",
+      "original_request": "feat: Implement apply_filter_policy and FilterPolicy.MERGE for the new filters\n\n### Why:\r\nImplements proper merging of new filters.\r\n\r\n- fixes: https://github.com/deepset-ai/haystack/issues/7995\r\n\r\n### What:\r\n- Implemented new utility functions to determine filter types (`is_legacy`, `is_comparison_filter`, `is_logical_filter`).\r\n- Extended the `apply_filter: policy` function to support merging of `init_filters` with `runtime_filters` using a logical operator, facilitating complex filter scenarios.\r\n- Added a comprehensive suite of tests to validate the functionality of applying filter policies including scenarios with no filters, comparison filters, logical operators, and user-defined logical operators.\r\n\r\n### How can it be used:\r\nThe enhancements enable complex filter logic to be applied seamlessly in document query operations, such as:\r\n- Merging initial and runtime filters with support for legacy filter formats.\r\n- Applying logical operators (`AND`, `OR`) when merging comparison or logical filters, allowing for a more nuanced filter logic that can accurately reflect user needs or query specifics.\r\n\r\nExample usage of merging comparison and logical filters:\r\n```python\r\ninit_filter = {\"field\": \"meta.type\", \"operator\": \"==\", \"value\": \"pdf\"}\r\nruntime_filter = {\r\n    \"operator\": \"AND\",\r\n    \"conditions\": [\r\n        {\"field\": \"meta.name\", \"operator\": \"==\", \"value\": \"John\"},\r\n        {\"field\": \"meta.year\", \"operator\": \"==\", \"value\": \"2022\"},\r\n    ],\r\n}\r\n# Merging the above would result in runtime_filter including the init_filter as another condition under the same logical operator \"AND\".\r\n```\r\n\r\n### How did you test it:\r\nA series of unit tests were added covering various scenarios including:\r\n- Merging filters under both `MERGE` and `REPLACE` policies with different combinations of comparison and logical filters.\r\n- Ensuring that the correct logical operator is applied during the merge process.\r\n- Testing the behavior with no filters provided, ensuring backward compatibility and robust error handling.\r\n\r\n### Notes for the reviewer:\r\n- Special attention should be given to the logic involving merging different types of filters (comparison vs. logical) and ensuring the intended behavior aligns with real-world use cases.\r\n- Review the test cases for `apply_filter_policy` to ensure all potential scenarios are covered and the expected behavior is clearly documented and verified.",
+      "pull_number": 8042,
+      "repository": "deepset-ai/haystack",
+      "repository_url": "https://github.com/deepset-ai/haystack.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "ee63e4500fbd412d778a1ea143237007e45a5628",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/api/utilities.rst",
+        "optax/tree_utils/__init__.py",
+        "optax/tree_utils/_random.py",
+        "optax/tree_utils/_random_test.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/api/utilities.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "optax/tree_utils/__init__.py",
+          "optax/tree_utils/_random.py"
+        ],
+        "test_python": [
+          "optax/tree_utils/_random_test.py"
+        ]
+      },
+      "head_commit": "a9603c9e94b1434b194836c992f107d27659c022",
+      "id": "google-deepmind__optax-1063",
+      "masked_request": "Add [PATH].\n\nThis exposes the formerly private function `_tree_rng_keys_split` in [`[PATH]`](https://github.com/google-[PATH]) to the public API.\r\n\r\nI've found this to be a useful helper function for manipulation of random trees, and intend to use it for future PRs.",
+      "original_request": "Add optax.tree_utils.tree_random_split.\n\nThis exposes the formerly private function `_tree_rng_keys_split` in [`optax/tree_utils/_random.py`](https://github.com/google-deepmind/optax/blob/main/optax/tree_utils/_random.py) to the public API.\r\n\r\nI've found this to be a useful helper function for manipulation of random trees, and intend to use it for future PRs.",
+      "pull_number": 1063,
+      "repository": "google-deepmind/optax",
+      "repository_url": "https://github.com/google-deepmind/optax.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "246f002a64e21bcc8f0b1a3390eb4ee13da83ed5",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/api/losses.rst",
+        "optax/__init__.py",
+        "optax/losses/__init__.py",
+        "optax/losses/_classification_test.py",
+        "optax/losses/_self_supervised.py",
+        "optax/losses/_self_supervised_test.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/api/losses.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "optax/__init__.py",
+          "optax/losses/__init__.py",
+          "optax/losses/_self_supervised.py"
+        ],
+        "test_python": [
+          "optax/losses/_classification_test.py",
+          "optax/losses/_self_supervised_test.py"
+        ]
+      },
+      "head_commit": "1cef8b5d3279a9a7bc5297e31de3178ab0dab183",
+      "id": "google-deepmind__optax-897",
+      "masked_request": "Added a NTXent loss\n\nAn normalized temperature scaled cross entropy (NTXent) loss for a contrastive learning objective. I am fairly new to submitting pull requests to public repos, so I didn't add a ton of tests for this outside a batched test. Let me know if there is anything else I should add!",
+      "original_request": "Added a NTXent loss\n\nAn normalized temperature scaled cross entropy (NTXent) loss for a contrastive learning objective. I am fairly new to submitting pull requests to public repos, so I didn't add a ton of tests for this outside a batched test. Let me know if there is anything else I should add!",
+      "pull_number": 897,
+      "repository": "google-deepmind/optax",
+      "repository_url": "https://github.com/google-deepmind/optax.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "4fc586f5af650a5711dc907fb613367d2f009c9a",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "src/accelerate/accelerator.py",
+        "src/accelerate/checkpointing.py",
+        "src/accelerate/utils.py",
+        "tests/test_state_checkpointing.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "src/accelerate/accelerator.py",
+          "src/accelerate/checkpointing.py",
+          "src/accelerate/utils.py"
+        ],
+        "test_python": [
+          "tests/test_state_checkpointing.py"
+        ]
+      },
+      "head_commit": "f90b5779735fd0f4b112bf4895e7e632b487f757",
+      "id": "huggingface__accelerate-255",
+      "masked_request": "Add in checkpointing capability\n\nCloses https://github.com/huggingface/accelerate/issues/171\r\n\r\nThis PR adds in two functions, `Accelerator.save_state` and `Accelerator.load_state`, which will go through and checkpoint the current state of everything accelerator touches.\r\n\r\nI've included a testing script, but this needs to be properly turned into a test, as currently it is just a script with a bunch of asserts. I have tested successfully on:\r\n\r\n- Single GPU\r\n- Single CPU\r\n- Multi-GPU",
+      "original_request": "Add in checkpointing capability\n\nCloses https://github.com/huggingface/accelerate/issues/171\r\n\r\nThis PR adds in two functions, `Accelerator.save_state` and `Accelerator.load_state`, which will go through and checkpoint the current state of everything accelerator touches.\r\n\r\nI've included a testing script, but this needs to be properly turned into a test, as currently it is just a script with a bunch of asserts. I have tested successfully on:\r\n\r\n- Single GPU\r\n- Single CPU\r\n- Multi-GPU",
+      "pull_number": 255,
+      "repository": "huggingface/accelerate",
+      "repository_url": "https://github.com/huggingface/accelerate.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "f9ef1ee270848e322f06e546751aeffde67349c5",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "datasets/wikipedia/wikipedia.py",
+        "src/nlp/arrow_dataset.py",
+        "tests/test_arrow_dataset.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "datasets/wikipedia/wikipedia.py",
+          "src/nlp/arrow_dataset.py"
+        ],
+        "test_python": [
+          "tests/test_arrow_dataset.py"
+        ]
+      },
+      "head_commit": "cc758d5dc41065c6063420c0a81bbe33c7738538",
+      "id": "huggingface__datasets-214",
+      "masked_request": "[[PATH]] add new filter function\n\nThe `.map()` function is super useful, but can IMO a bit tedious when filtering certain examples.\r\nI think, filtering out examples is also a very common operation people would like to perform on datasets.\r\n\r\nThis PR is a proposal to add a `.filter()` function in the same spirit than the `.map()` function.\r\n\r\nHere is a sample code you can play around with:\r\n\r\n```python\r\nds = nlp.load_dataset(\"squad\", split=\"validation[:10%]\")\r\n\r\n\r\ndef remove_under_idx_5(example, idx):\r\n    return idx < 5\r\n\r\n\r\ndef only_keep_examples_with_is_in_context(example):\r\n    return \"is\" in example[\"context\"]\r\n\r\n\r\nresult_keep_only_first_5 = ds.filter(remove_under_idx_5, with_indices=True, load_from_cache_file=False)\r\nresult_keep_examples_with_is_in_context = ds.filter(only_keep_examples_with_is_in_context, load_from_cache_file=False)\r\n\r\nprint(\"Original number of examples: {}\".format(len(ds)))\r\nprint(\"First five examples number of examples: {}\".format(len(result_keep_only_first_5)))\r\nprint(\"Is in context examples number of examples: {}\".format(len(result_keep_examples_with_is_in_context)))\r\n```",
+      "original_request": "[arrow_dataset.py] add new filter function\n\nThe `.map()` function is super useful, but can IMO a bit tedious when filtering certain examples.\r\nI think, filtering out examples is also a very common operation people would like to perform on datasets.\r\n\r\nThis PR is a proposal to add a `.filter()` function in the same spirit than the `.map()` function.\r\n\r\nHere is a sample code you can play around with:\r\n\r\n```python\r\nds = nlp.load_dataset(\"squad\", split=\"validation[:10%]\")\r\n\r\n\r\ndef remove_under_idx_5(example, idx):\r\n    return idx < 5\r\n\r\n\r\ndef only_keep_examples_with_is_in_context(example):\r\n    return \"is\" in example[\"context\"]\r\n\r\n\r\nresult_keep_only_first_5 = ds.filter(remove_under_idx_5, with_indices=True, load_from_cache_file=False)\r\nresult_keep_examples_with_is_in_context = ds.filter(only_keep_examples_with_is_in_context, load_from_cache_file=False)\r\n\r\nprint(\"Original number of examples: {}\".format(len(ds)))\r\nprint(\"First five examples number of examples: {}\".format(len(result_keep_only_first_5)))\r\nprint(\"Is in context examples number of examples: {}\".format(len(result_keep_examples_with_is_in_context)))\r\n```",
+      "pull_number": 214,
+      "repository": "huggingface/datasets",
+      "repository_url": "https://github.com/huggingface/datasets.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "3d6c3da884fafae4654df68144391cfe9be6f134",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/api/axis_api.rst",
+        "doc/users/next_whats_new/view_current_axis_format.rst",
+        "lib/matplotlib/axes/_base.py",
+        "lib/matplotlib/axis.py",
+        "lib/matplotlib/tests/test_axes.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/api/axis_api.rst",
+          "doc/users/next_whats_new/view_current_axis_format.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "lib/matplotlib/axes/_base.py",
+          "lib/matplotlib/axis.py"
+        ],
+        "test_python": [
+          "lib/matplotlib/tests/test_axes.py"
+        ]
+      },
+      "head_commit": "6920dc81a5cd6bf72a3f7b9eb3227856427eaad7",
+      "id": "matplotlib__matplotlib-23692",
+      "masked_request": "Add `Axes.get_tick_params()` method.\n\n## PR Summary\r\nAddresses https://github.com/matplotlib/matplotlib/issues/23603\r\n\r\n- Added `Axis.get_tick_params()` method, which will return `Axis._major_tick_kw` or `Axis._minor_tick_kw` depending on the value of `which`\r\n- Added `Axes.get_tick_params()` method, which will return the result of `Axis.get_tick_params()` on the `axis` specified and error out if `both` is passed in\r\n\r\n## PR Checklist\r\n\r\n<!-- Please mark any checkboxes that do not apply to this PR as [[PATH]]. -->\r\n**Tests and Styling**\r\n- [x] Has pytest style unit tests (and `pytest` passes).\r\n- [X] Is [Flake 8](https://flake8.pycqa.org/en/latest/) compliant (install `flake8-docstrings` and run `flake8 --docstring-convention=all`).\r\n\r\n**Documentation**\r\n- [x] New features are documented, with examples if plot related.\r\n- [x] New features have an entry in `[PATH]/` (follow instructions in [PATH] there).\r\n- [[PATH]] API changes documented in `[PATH]/` (follow instructions in [PATH] there).\r\n- [x] Documentation is sphinx and numpydoc compliant (the docs should [build](https://matplotlib.org/devel/documenting_mpl.html#building-the-docs) without error).\r\n\r\n<!--\r\nThank you so much for your PR!  To help us review your contribution, please\r\nconsider the following points:\r\n\r\n- A development guide is available at https://matplotlib.org/devdocs/devel/index.html.\r\n\r\n- Help with git and github is available at\r\n  https://matplotlib.org/devel/gitwash/development_workflow.html.\r\n\r\n- Do not create the PR out of main, but out of a separate branch.\r\n\r\n- The PR title should summarize the changes, for example \"Raise ValueError on\r\n  non-numeric input to set_xlim\".  Avoid non-descriptive titles such as\r\n  \"Addresses issue #8576\".\r\n\r\n- The summary should provide at least 1-2 sentences describing the pull request\r\n  in detail (Why is this change required?  What problem does it solve?) and\r\n  link to any relevant issues.\r\n\r\n- If you are contributing fixes to docstrings, please pay attention to\r\n  http://matplotlib.org/devel/documenting_mpl.html#formatting.  In particular,\r\n  note the difference between using single backquotes, double backquotes, and\r\n  asterisks in the markup.\r\n\r\nWe understand that PRs can sometimes be overwhelming, especially as the\r\nreviews start coming in.  Please let us know if the reviews are unclear or\r\nthe recommended next step seems overly demanding, if you would like help in\r\naddressing a reviewer's comments, or if you have been waiting too long to hear\r\nback on your PR.\r\n-->",
+      "original_request": "Add `Axes.get_tick_params()` method.\n\n## PR Summary\r\nAddresses https://github.com/matplotlib/matplotlib/issues/23603\r\n\r\n- Added `Axis.get_tick_params()` method, which will return `Axis._major_tick_kw` or `Axis._minor_tick_kw` depending on the value of `which`\r\n- Added `Axes.get_tick_params()` method, which will return the result of `Axis.get_tick_params()` on the `axis` specified and error out if `both` is passed in\r\n\r\n## PR Checklist\r\n\r\n<!-- Please mark any checkboxes that do not apply to this PR as [N/A]. -->\r\n**Tests and Styling**\r\n- [x] Has pytest style unit tests (and `pytest` passes).\r\n- [X] Is [Flake 8](https://flake8.pycqa.org/en/latest/) compliant (install `flake8-docstrings` and run `flake8 --docstring-convention=all`).\r\n\r\n**Documentation**\r\n- [x] New features are documented, with examples if plot related.\r\n- [x] New features have an entry in `doc/users/next_whats_new/` (follow instructions in README.rst there).\r\n- [N/A] API changes documented in `doc/api/next_api_changes/` (follow instructions in README.rst there).\r\n- [x] Documentation is sphinx and numpydoc compliant (the docs should [build](https://matplotlib.org/devel/documenting_mpl.html#building-the-docs) without error).\r\n\r\n<!--\r\nThank you so much for your PR!  To help us review your contribution, please\r\nconsider the following points:\r\n\r\n- A development guide is available at https://matplotlib.org/devdocs/devel/index.html.\r\n\r\n- Help with git and github is available at\r\n  https://matplotlib.org/devel/gitwash/development_workflow.html.\r\n\r\n- Do not create the PR out of main, but out of a separate branch.\r\n\r\n- The PR title should summarize the changes, for example \"Raise ValueError on\r\n  non-numeric input to set_xlim\".  Avoid non-descriptive titles such as\r\n  \"Addresses issue #8576\".\r\n\r\n- The summary should provide at least 1-2 sentences describing the pull request\r\n  in detail (Why is this change required?  What problem does it solve?) and\r\n  link to any relevant issues.\r\n\r\n- If you are contributing fixes to docstrings, please pay attention to\r\n  http://matplotlib.org/devel/documenting_mpl.html#formatting.  In particular,\r\n  note the difference between using single backquotes, double backquotes, and\r\n  asterisks in the markup.\r\n\r\nWe understand that PRs can sometimes be overwhelming, especially as the\r\nreviews start coming in.  Please let us know if the reviews are unclear or\r\nthe recommended next step seems overly demanding, if you would like help in\r\naddressing a reviewer's comments, or if you have been waiting too long to hear\r\nback on your PR.\r\n-->",
+      "pull_number": 23692,
+      "repository": "matplotlib/matplotlib",
+      "repository_url": "https://github.com/matplotlib/matplotlib.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "a4dca24d04f928a9e614db403c716237446140b2",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/api/axes_api.rst",
+        "doc/api/toolkits/mplot3d/axes3d.rst",
+        "doc/users/next_whats_new/margin_getters.rst",
+        "lib/matplotlib/axes/_base.py",
+        "lib/matplotlib/axes/_base.pyi",
+        "lib/matplotlib/tests/test_axes.py",
+        "lib/mpl_toolkits/mplot3d/axes3d.py",
+        "lib/mpl_toolkits/mplot3d/tests/test_axes3d.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/api/axes_api.rst",
+          "doc/api/toolkits/mplot3d/axes3d.rst",
+          "doc/users/next_whats_new/margin_getters.rst"
+        ],
+        "other_implementation": [
+          "lib/matplotlib/axes/_base.pyi"
+        ],
+        "source_python": [
+          "lib/matplotlib/axes/_base.py",
+          "lib/mpl_toolkits/mplot3d/axes3d.py"
+        ],
+        "test_python": [
+          "lib/matplotlib/tests/test_axes.py",
+          "lib/mpl_toolkits/mplot3d/tests/test_axes3d.py"
+        ]
+      },
+      "head_commit": "3ae6b8f0b977c468232252dfb6b5501a52bfcc4e",
+      "id": "matplotlib__matplotlib-26293",
+      "masked_request": "Added get_xmargin(), get_ymargin() and get_zmargin() and tests.\n\n## PR summary\r\nCloses #26281 by adding `get_xmargin()`, `get_ymargin()` for` _AxesBase`  and `get_zmargin()` for `Axes3D`, as well as tests for them. \r\n## PR checklist\r\n<!-- Please mark any checkboxes that do not apply to this PR as [[PATH]].-->\r\n\r\n- [x] \"closes #0000\" is in the body of the PR description to [link the related issue](https://docs.github.com/en/issues/tracking-[PATH])\r\n- [x] new and changed code is [tested](https://matplotlib.org/devdocs/devel/testing.html)\r\n- [[PATH]] *Plotting related* features are demonstrated in an [example](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-examples-and-tutorials)\r\n- [ ] *New Features* and *API Changes* are noted with a [directive and release note](https://matplotlib.org/devdocs/devel/coding_guide.html#new-features-and-api-changes)\r\n- [ ] Documentation complies with [general](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-rest-pages) and [docstring](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-docstrings) guidelines\r\n\r\n<!--\r\nThank you so much for your PR!  To help us review your contribution, please\r\nconsider the following points:\r\n\r\n- A development guide is available at https://matplotlib.org/devdocs/devel/index.html.\r\n\r\n- Help with git and github is available at https://matplotlib.org/devdocs/devel/development_workflow.html\r\n\r\n- Create a separate branch for your changes and open the PR from this branch. Please avoid working on `main`.\r\n\r\n- The PR title should summarize the changes, for example \"Raise ValueError on\r\n  non-numeric input to set_xlim\".  Avoid non-descriptive titles such as\r\n  \"Addresses issue #8576\".\r\n\r\n- The summary should provide at least 1-2 sentences describing the pull request\r\n  in detail (Why is this change required?  What problem does it solve?) and\r\n  link to any relevant issues.\r\n\r\n- If you are contributing fixes to docstrings, please pay attention to\r\n  https://matplotlib.org/stable/devel/documenting_mpl.html#formatting-conventions.  In particular,\r\n  note the difference between using single backquotes, double backquotes, and\r\n  asterisks in the markup.\r\n\r\nWe understand that PRs can sometimes be overwhelming, especially as the\r\nreviews start coming in.  Please let us know if the reviews are unclear or\r\nthe recommended next step seems overly demanding, if you would like help in\r\naddressing a reviewer's comments, or if you have been waiting too long to hear\r\nback on your PR.\r\n-->",
+      "original_request": "Added get_xmargin(), get_ymargin() and get_zmargin() and tests.\n\n## PR summary\r\nCloses #26281 by adding `get_xmargin()`, `get_ymargin()` for` _AxesBase`  and `get_zmargin()` for `Axes3D`, as well as tests for them. \r\n## PR checklist\r\n<!-- Please mark any checkboxes that do not apply to this PR as [N/A].-->\r\n\r\n- [x] \"closes #0000\" is in the body of the PR description to [link the related issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)\r\n- [x] new and changed code is [tested](https://matplotlib.org/devdocs/devel/testing.html)\r\n- [N/A] *Plotting related* features are demonstrated in an [example](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-examples-and-tutorials)\r\n- [ ] *New Features* and *API Changes* are noted with a [directive and release note](https://matplotlib.org/devdocs/devel/coding_guide.html#new-features-and-api-changes)\r\n- [ ] Documentation complies with [general](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-rest-pages) and [docstring](https://matplotlib.org/devdocs/devel/documenting_mpl.html#writing-docstrings) guidelines\r\n\r\n<!--\r\nThank you so much for your PR!  To help us review your contribution, please\r\nconsider the following points:\r\n\r\n- A development guide is available at https://matplotlib.org/devdocs/devel/index.html.\r\n\r\n- Help with git and github is available at https://matplotlib.org/devdocs/devel/development_workflow.html\r\n\r\n- Create a separate branch for your changes and open the PR from this branch. Please avoid working on `main`.\r\n\r\n- The PR title should summarize the changes, for example \"Raise ValueError on\r\n  non-numeric input to set_xlim\".  Avoid non-descriptive titles such as\r\n  \"Addresses issue #8576\".\r\n\r\n- The summary should provide at least 1-2 sentences describing the pull request\r\n  in detail (Why is this change required?  What problem does it solve?) and\r\n  link to any relevant issues.\r\n\r\n- If you are contributing fixes to docstrings, please pay attention to\r\n  https://matplotlib.org/stable/devel/documenting_mpl.html#formatting-conventions.  In particular,\r\n  note the difference between using single backquotes, double backquotes, and\r\n  asterisks in the markup.\r\n\r\nWe understand that PRs can sometimes be overwhelming, especially as the\r\nreviews start coming in.  Please let us know if the reviews are unclear or\r\nthe recommended next step seems overly demanding, if you would like help in\r\naddressing a reviewer's comments, or if you have been waiting too long to hear\r\nback on your PR.\r\n-->",
+      "pull_number": 26293,
+      "repository": "matplotlib/matplotlib",
+      "repository_url": "https://github.com/matplotlib/matplotlib.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "336c144b95aa21718e1898930934eb63474d1caf",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "pgmpy/tests/test_utils/test_utils.py",
+        "pgmpy/utils/__init__.py",
+        "pgmpy/utils/utils.py",
+        "requirements/runtime.txt"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [
+          "requirements/runtime.txt"
+        ],
+        "source_python": [
+          "pgmpy/utils/__init__.py",
+          "pgmpy/utils/utils.py"
+        ],
+        "test_python": [
+          "pgmpy/tests/test_utils/test_utils.py"
+        ]
+      },
+      "head_commit": "6c062f4bc2fff305c7467b714e4e4e8fef8f5f85",
+      "id": "pgmpy__pgmpy-1797",
+      "masked_request": "Adds an LLM based pairwise orientation method\n\n### Your checklist for this pull request\r\nPlease review the [guidelines for contributing]([PATH]) to this repository.\r\n\r\n- [ ] Make sure you are requesting to **pull a [PATH] branch** (right side). Don't request your master!\r\n- [ ] Make sure you are making a pull request against the **dev branch** (left side). Also you should start *your branch* off *our dev*.\r\n- [ ] Check the commit's or even all commits' message styles matches our requested structure.\r\n\r\n### Issue number(s) that this pull request fixes\r\n- Fixes #\r\n\r\n### List of changes to the codebase in this pull request\r\n- \r\n-\r\n-",
+      "original_request": "Adds an LLM based pairwise orientation method\n\n### Your checklist for this pull request\r\nPlease review the [guidelines for contributing](CONTRIBUTING.md) to this repository.\r\n\r\n- [ ] Make sure you are requesting to **pull a topic/feature/bugfix branch** (right side). Don't request your master!\r\n- [ ] Make sure you are making a pull request against the **dev branch** (left side). Also you should start *your branch* off *our dev*.\r\n- [ ] Check the commit's or even all commits' message styles matches our requested structure.\r\n\r\n### Issue number(s) that this pull request fixes\r\n- Fixes #\r\n\r\n### List of changes to the codebase in this pull request\r\n- \r\n-\r\n-",
+      "pull_number": 1797,
+      "repository": "pgmpy/pgmpy",
+      "repository_url": "https://github.com/pgmpy/pgmpy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "9bc2907c4907714da5b469fdfee7800f4cf9f09e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "supervision/detection/core.py",
+        "supervision/utils/internal.py",
+        "test/utils/test_internal.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "supervision/detection/core.py",
+          "supervision/utils/internal.py"
+        ],
+        "test_python": [
+          "test/utils/test_internal.py"
+        ]
+      },
+      "head_commit": "c98698d44242d5dfe08f622be7da3cee09d42674",
+      "id": "roboflow__supervision-1237",
+      "masked_request": "Dynamically select Detections member variables\n\n# Description\r\n\r\nWhen checking if both fields are `None` or defined in two detection to be merged, we'd hardcode the fields.\r\n\r\nThis change allows getting the programmatically.\r\nNote that it requires an instance of the class.\r\n\r\n## Type of change\r\n\r\nPlease delete options that are not relevant.\r\n\r\n-   [ ] Bug fix (non-breaking change which fixes an issue)\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n-   [ ] This change requires a documentation update\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\n\r\nRan locally, added and ran very basic tests.\r\nColab: https://colab.research.google.com/drive/193L8OHsEsdhQEenDNwKbGdtPyE68cUbW?usp=sharing\r\n\r\n## Any specific deployment considerations\r\n\r\nNone\r\n\r\n## Docs\r\n\r\n-   [ ] Docs updated? What were the changes:",
+      "original_request": "Dynamically select Detections member variables\n\n# Description\r\n\r\nWhen checking if both fields are `None` or defined in two detection to be merged, we'd hardcode the fields.\r\n\r\nThis change allows getting the programmatically.\r\nNote that it requires an instance of the class.\r\n\r\n## Type of change\r\n\r\nPlease delete options that are not relevant.\r\n\r\n-   [ ] Bug fix (non-breaking change which fixes an issue)\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n-   [ ] This change requires a documentation update\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\n\r\nRan locally, added and ran very basic tests.\r\nColab: https://colab.research.google.com/drive/193L8OHsEsdhQEenDNwKbGdtPyE68cUbW?usp=sharing\r\n\r\n## Any specific deployment considerations\r\n\r\nNone\r\n\r\n## Docs\r\n\r\n-   [ ] Docs updated? What were the changes:",
+      "pull_number": 1237,
+      "repository": "roboflow/supervision",
+      "repository_url": "https://github.com/roboflow/supervision.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "fbce6e45d427fbbc2f610dfe1adf24bdf608d914",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "supervision/detection/core.py",
+        "supervision/detection/lmm.py",
+        "test/detection/test_lmm_florence_2.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "supervision/detection/core.py",
+          "supervision/detection/lmm.py"
+        ],
+        "test_python": [
+          "test/detection/test_lmm_florence_2.py"
+        ]
+      },
+      "head_commit": "61579af25a20dd31f758c7b489f0bd21290f8c97",
+      "id": "roboflow__supervision-1296",
+      "masked_request": "Add Florence 2 support\n\n# Description\r\n\r\nThis PR adds [Florence 2](https://huggingface.co/microsoft/Florence-2-large) support for supervision.\r\n\r\nRun it with `transfomers` and parse with `from_lmm([PATH], result)`.\r\n\r\nNo extra documentation was added to `from_lmm` at this point.\r\n\r\n## Type of change\r\n\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\n\r\nUsage and testing in Colab: https://colab.research.google.com/drive/19XoQZ6LRdTUysAHUp-3JsfT_67T0rffE#scrollTo=CwPzmI9wOSQ6\r\n\r\n## Any specific deployment considerations\r\n\r\nRun the Colab in High-RAM mode.\r\n\r\n## Docs\r\n\r\n-   [ ] Docs updated? What were the changes:",
+      "original_request": "Add Florence 2 support\n\n# Description\r\n\r\nThis PR adds [Florence 2](https://huggingface.co/microsoft/Florence-2-large) support for supervision.\r\n\r\nRun it with `transfomers` and parse with `from_lmm(sv.LMM.FLORENCE_2, result)`.\r\n\r\nNo extra documentation was added to `from_lmm` at this point.\r\n\r\n## Type of change\r\n\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\n\r\nUsage and testing in Colab: https://colab.research.google.com/drive/19XoQZ6LRdTUysAHUp-3JsfT_67T0rffE#scrollTo=CwPzmI9wOSQ6\r\n\r\n## Any specific deployment considerations\r\n\r\nRun the Colab in High-RAM mode.\r\n\r\n## Docs\r\n\r\n-   [ ] Docs updated? What were the changes:",
+      "pull_number": 1296,
+      "repository": "roboflow/supervision",
+      "repository_url": "https://github.com/roboflow/supervision.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "de896189b83a1f9434c0a37dd9192ee00d2a1283",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/detection/utils.md",
+        "supervision/__init__.py",
+        "supervision/detection/core.py",
+        "supervision/detection/utils.py",
+        "test/detection/test_utils.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/detection/utils.md"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "supervision/__init__.py",
+          "supervision/detection/core.py",
+          "supervision/detection/utils.py"
+        ],
+        "test_python": [
+          "test/detection/test_utils.py"
+        ]
+      },
+      "head_commit": "2ed2a793cdb93a9fa2ff1aaf91492431b3cec50d",
+      "id": "roboflow__supervision-1340",
+      "masked_request": "`xywh_to_xyxy` and `xcycwh_to_xyxy` box utils\n\n# Description\r\n\r\nUpdated `xywh_to_xyxy` and added `xcycwh_to_xyxy` box utils.\r\n\r\n## Type of change\r\n\r\nPlease delete options that are not relevant.\r\n\r\n-   [ ] Bug fix (non-breaking change which fixes an issue)\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n-   [x] This change requires a documentation update\r\n\r\n## Docs\r\n\r\n-   [x] Docs updated? What were the changes:",
+      "original_request": "`xywh_to_xyxy` and `xcycwh_to_xyxy` box utils\n\n# Description\r\n\r\nUpdated `xywh_to_xyxy` and added `xcycwh_to_xyxy` box utils.\r\n\r\n## Type of change\r\n\r\nPlease delete options that are not relevant.\r\n\r\n-   [ ] Bug fix (non-breaking change which fixes an issue)\r\n-   [x] New feature (non-breaking change which adds functionality)\r\n-   [x] This change requires a documentation update\r\n\r\n## Docs\r\n\r\n-   [x] Docs updated? What were the changes:",
+      "pull_number": 1340,
+      "repository": "roboflow/supervision",
+      "repository_url": "https://github.com/roboflow/supervision.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "d423ff3b6c74f38713255f18e363ea2e1986f5dd",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/detection/utils.md",
+        "supervision/__init__.py",
+        "supervision/detection/core.py",
+        "supervision/detection/utils.py",
+        "test/detection/test_utils.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/detection/utils.md"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "supervision/__init__.py",
+          "supervision/detection/core.py",
+          "supervision/detection/utils.py"
+        ],
+        "test_python": [
+          "test/detection/test_utils.py"
+        ]
+      },
+      "head_commit": "824a9140b68927f4ec0d25543fc0a585b6acd60f",
+      "id": "roboflow__supervision-847",
+      "masked_request": "[NMS] - add segmentation models support\n\n# Description\r\n\r\nThis PR introduces Non-Maximum Suppression (NMS) algorithm focused on segmentation, enhancing our object detection capabilities, particularly in segmentation tasks. We have renamed the traditional `non_max_suppression` function to `box_non_max_suppression` for better clarity regarding its application to bounding boxes. Furthermore, we've integrated a conditional mechanism within the `with_nms` function that utilizes segmentation masks for NMS when such masks are present in the predictions. This optimization leverages the spatial context provided by segmentation masks to improve the suppression process.\r\n\r\nThis enhancement is part of a task segmented into two parts for more focused development and review. This PR addresses the first part, as discussed in the related issue [here](https://github.com/roboflow/supervision/issues/678). Splitting the task ensures thorough implementation and testing of each component.\r\n\r\nIn addition, this PR encompasses comprehensive unit tests for the new NMS functionality and a demo that demonstrates the algorithm's application and effectiveness in real-world scenarios.\r\n\r\n## Type of change\r\n\r\n- [x] New feature (non-breaking change which adds functionality)\r\n\r\n## How has this change been tested\r\n\r\nI created a demo to showcase this functionality [here](https://colab.research.google.com/drive/1lpJKXryY59FTrgZU85a3r0KK7gm1OTNh?usp=sharing)\r\n\r\n## Docs\r\n\r\n- [x] Docs updated? What were the changes:",
+      "original_request": "[NMS] - add segmentation models support\n\n# Description\r\n\r\nThis PR introduces Non-Maximum Suppression (NMS) algorithm focused on segmentation, enhancing our object detection capabilities, particularly in segmentation tasks. We have renamed the traditional `non_max_suppression` function to `box_non_max_suppression` for better clarity regarding its application to bounding boxes. Furthermore, we've integrated a conditional mechanism within the `with_nms` function that utilizes segmentation masks for NMS when such masks are present in the predictions. This optimization leverages the spatial context provided by segmentation masks to improve the suppression process.\r\n\r\nThis enhancement is part of a task segmented into two parts for more focused development and review. This PR addresses the first part, as discussed in the related issue [here](https://github.com/roboflow/supervision/issues/678). Splitting the task ensures thorough implementation and testing of each component.\r\n\r\nIn addition, this PR encompasses comprehensive unit tests for the new NMS functionality and a demo that demonstrates the algorithm's application and effectiveness in real-world scenarios.\r\n\r\n## Type of change\r\n\r\n- [x] New feature (non-breaking change which adds functionality)\r\n\r\n## How has this change been tested\r\n\r\nI created a demo to showcase this functionality [here](https://colab.research.google.com/drive/1lpJKXryY59FTrgZU85a3r0KK7gm1OTNh?usp=sharing)\r\n\r\n## Docs\r\n\r\n- [x] Docs updated? What were the changes:",
+      "pull_number": 847,
+      "repository": "roboflow/supervision",
+      "repository_url": "https://github.com/roboflow/supervision.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "0c0685987a57ffbcff8eea89bb16aff70846403e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "supervision/detection/tools/polygon_zone.py",
+        "supervision/utils/internal.py",
+        "test/detection/test_polygonzone.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "supervision/detection/tools/polygon_zone.py",
+          "supervision/utils/internal.py"
+        ],
+        "test_python": [
+          "test/detection/test_polygonzone.py"
+        ]
+      },
+      "head_commit": "d0ad5fe1d41763a0a3468d3050741ef61940eeab",
+      "id": "roboflow__supervision-910",
+      "masked_request": "Polygonzone add multiple anchors support\n\n# Description\r\n\r\nThis PR addresses [Issue #844](https://github.com/roboflow/supervision/issues/844).\r\n\r\n- Rename `triggering_position` to `triggering_anchors` to be consistent with the `LineZone` naming convention.\r\n- Update type of argument from `Position` to `Iterable[Position]`.\r\n- Maintain the default behavior. The zone should, by default, be triggered by `Position.BOTTOM_CENTER`.\r\n- Adds unit tests for `PolygonZone`.\r\n- Updates documentation.\r\n\r\n\r\n## Type of change\r\n\r\n-   [ x ] New feature (non-breaking change which adds functionality)\r\n-   [ x ] This change requires a documentation update\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\nFor a minimalist setup, I'm doing the following:\r\n\r\n1- Create mock detections simulating an object moving in a straight line.\r\n2- Instantiate a `PolygonZone` object with polygon partially intersecting the line.\r\n3- Compute the `PolygonZone.trigger(mock_detections)` and annotate the detections triggering the `PolygonZone` object as green, and red otherwise.\r\n\r\nThe setup used here was also used as base for the unit tests.\r\n\r\nGoogle colab: [https://colab.research.google.com/drive/1fcsVrprMuf7hm_bxitSqmeL5L7KBVGHh?usp=sharing](https://colab.research.google.com/drive/1fcsVrprMuf7hm_bxitSqmeL5L7KBVGHh?usp=sharing)\r\n\r\n## Deployment Concerns\r\n\r\n### API Backward Compatibility\r\n\r\n#### Option 1: Maintaining Deprecation Logic Within the Function\r\n\r\nTo ensure backward compatibility after renaming a parameter in this PR, one approach is to maintain deprecation logic within the function itself. The implementation could look something like this:\r\n\r\n```python\r\nclass PolygonZone:\r\n    def __init__(self, polygon, frame_resolution_wh, triggering_anchors, **kwargs):\r\n        if 'triggering_position' in kwargs:\r\n            warning.warn('deprecated argument...')\r\n            ''' logic to handle deprecated parameter'''\r\n```\r\n\r\nWhile effective for specific cases, this approach has some drawbacks:\r\n\r\n1. **Documentation Readability**: Inserting `**kwargs` might make the documentation less clear.\r\n2. **Code Visibility**: Deprecated code may become challenging to locate, especially with scale.\r\n3. **Lack of Precedence**: I couldn't find any examples of this pattern in the codebase.\r\n\r\n#### Option 2: Adding a `@deprecated_parameter` Annotator (Adopted Solution)\r\n\r\nThe chosen solution involves creating a `@deprecated_parameter` annotator using pseudocode like this:\r\n\r\n```python\r\ndef deprecated_parameter(old_param: str, new_param: str, map_func: Callable = lambda x: x):\r\n    def decorator(func):\r\n        @functools.wraps(func)\r\n        def wrapper(*args, **kwargs):\r\n            if old_param in kwargs:\r\n                print('warning message...')\r\n                kwargs[new_param] = map_func(kwargs.pop(old_param))\r\n            return func(*args, **kwargs)\r\n        return wrapper\r\n    return decorator\r\n```\r\n\r\nWhile this solution may not be suitable for highly complex parameter changes, it aligns with existing practices, such as the use of the `@deprecated` annotator, making it easier to track deprecated code references.\r\n\r\nPlease share your thoughts on this proposed solution.\r\n\r\n### Deprecated Examples\r\n\r\nSome examples, like `[PATH]`, explicitly set `triggering_position` for the `PolygonZone` class. This PR renders it deprecated.\r\n\r\nShould we address these changes within this PR, or would it be more appropriate to handle them in a separate one? I am open to incorporating the necessary modifications here if that is the preferred approach.\r\n\r\nLet me know your preferences regarding these considerations. \r\n## Docs\r\n\r\n-   [ x ] Docs updated? What were the changes:\r\n\r\n[Changed the documentation for class `PolygonZone`](https://github.com/roboflow/supervision/pull/910/files#diff-738bb6b6510e46b8633ab062a4c980fa338f7f3ccf7c9792b91a1bd589e8bf01L23-R27).\r\n\r\nFix : #844",
+      "original_request": "Polygonzone add multiple anchors support\n\n# Description\r\n\r\nThis PR addresses [Issue #844](https://github.com/roboflow/supervision/issues/844).\r\n\r\n- Rename `triggering_position` to `triggering_anchors` to be consistent with the `LineZone` naming convention.\r\n- Update type of argument from `Position` to `Iterable[Position]`.\r\n- Maintain the default behavior. The zone should, by default, be triggered by `Position.BOTTOM_CENTER`.\r\n- Adds unit tests for `PolygonZone`.\r\n- Updates documentation.\r\n\r\n\r\n## Type of change\r\n\r\n-   [ x ] New feature (non-breaking change which adds functionality)\r\n-   [ x ] This change requires a documentation update\r\n\r\n## How has this change been tested, please provide a testcase or example of how you tested the change?\r\nFor a minimalist setup, I'm doing the following:\r\n\r\n1- Create mock detections simulating an object moving in a straight line.\r\n2- Instantiate a `PolygonZone` object with polygon partially intersecting the line.\r\n3- Compute the `PolygonZone.trigger(mock_detections)` and annotate the detections triggering the `PolygonZone` object as green, and red otherwise.\r\n\r\nThe setup used here was also used as base for the unit tests.\r\n\r\nGoogle colab: [https://colab.research.google.com/drive/1fcsVrprMuf7hm_bxitSqmeL5L7KBVGHh?usp=sharing](https://colab.research.google.com/drive/1fcsVrprMuf7hm_bxitSqmeL5L7KBVGHh?usp=sharing)\r\n\r\n## Deployment Concerns\r\n\r\n### API Backward Compatibility\r\n\r\n#### Option 1: Maintaining Deprecation Logic Within the Function\r\n\r\nTo ensure backward compatibility after renaming a parameter in this PR, one approach is to maintain deprecation logic within the function itself. The implementation could look something like this:\r\n\r\n```python\r\nclass PolygonZone:\r\n    def __init__(self, polygon, frame_resolution_wh, triggering_anchors, **kwargs):\r\n        if 'triggering_position' in kwargs:\r\n            warning.warn('deprecated argument...')\r\n            ''' logic to handle deprecated parameter'''\r\n```\r\n\r\nWhile effective for specific cases, this approach has some drawbacks:\r\n\r\n1. **Documentation Readability**: Inserting `**kwargs` might make the documentation less clear.\r\n2. **Code Visibility**: Deprecated code may become challenging to locate, especially with scale.\r\n3. **Lack of Precedence**: I couldn't find any examples of this pattern in the codebase.\r\n\r\n#### Option 2: Adding a `@deprecated_parameter` Annotator (Adopted Solution)\r\n\r\nThe chosen solution involves creating a `@deprecated_parameter` annotator using pseudocode like this:\r\n\r\n```python\r\ndef deprecated_parameter(old_param: str, new_param: str, map_func: Callable = lambda x: x):\r\n    def decorator(func):\r\n        @functools.wraps(func)\r\n        def wrapper(*args, **kwargs):\r\n            if old_param in kwargs:\r\n                print('warning message...')\r\n                kwargs[new_param] = map_func(kwargs.pop(old_param))\r\n            return func(*args, **kwargs)\r\n        return wrapper\r\n    return decorator\r\n```\r\n\r\nWhile this solution may not be suitable for highly complex parameter changes, it aligns with existing practices, such as the use of the `@deprecated` annotator, making it easier to track deprecated code references.\r\n\r\nPlease share your thoughts on this proposed solution.\r\n\r\n### Deprecated Examples\r\n\r\nSome examples, like `examples/traffic_analysis`, explicitly set `triggering_position` for the `PolygonZone` class. This PR renders it deprecated.\r\n\r\nShould we address these changes within this PR, or would it be more appropriate to handle them in a separate one? I am open to incorporating the necessary modifications here if that is the preferred approach.\r\n\r\nLet me know your preferences regarding these considerations. \r\n## Docs\r\n\r\n-   [ x ] Docs updated? What were the changes:\r\n\r\n[Changed the documentation for class `PolygonZone`](https://github.com/roboflow/supervision/pull/910/files#diff-738bb6b6510e46b8633ab062a4c980fa338f7f3ccf7c9792b91a1bd589e8bf01L23-R27).\r\n\r\nFix : #844",
+      "pull_number": 910,
+      "repository": "roboflow/supervision",
+      "repository_url": "https://github.com/roboflow/supervision.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "989f9c764734efc21bbff21b0202b52a1112bfc3",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sklearn/preprocessing/label.py",
+        "sklearn/utils/fixes.py",
+        "sklearn/utils/sparsefuncs.py",
+        "sklearn/utils/tests/test_sparsefuncs.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sklearn/preprocessing/label.py",
+          "sklearn/utils/fixes.py",
+          "sklearn/utils/sparsefuncs.py"
+        ],
+        "test_python": [
+          "sklearn/utils/tests/test_sparsefuncs.py"
+        ]
+      },
+      "head_commit": "daa762f4b5e7d7ff0748cf40cb6e15e9d121ebef",
+      "id": "scikit-learn__scikit-learn-11196",
+      "masked_request": "[MRG] EHN: add function to ignore nan in [PATH] sparse functions\n\n<!--\r\nThanks for contributing a pull request! Please ensure you have taken a look at\r\nthe contribution guidelines: https://github.com/scikit-[PATH]#pull-request-checklist\r\n-->\r\n\r\n#### Reference [PATH]\r\n<!--\r\nExample: Fixes #1234. See also #3456.\r\nPlease use keywords (e.g., Fixes) to create link to the issues or pull requests\r\nyou resolved, so that they will automatically be closed when your pull request\r\nis merged. See https://github.com/blog/1506-closing-issues-via-pull-requests\r\n-->\r\n\r\nrelated to #11011 \r\n\r\n#### What does this [PATH]? Explain your changes.\r\n\r\nThis implement a [PATH] computation which ignore NaN values in sparse matrices (equivalent of `np.nanmin` and `np.nanmax`.\r\n\r\n\r\n#### Any other comments?\r\n\r\n\r\n<!--\r\nPlease be aware that we are a loose team of volunteers so patience is\r\nnecessary; assistance handling other issues is very welcome. We value\r\nall user contributions, no matter how minor they are. If we are slow to\r\nreview, either the pull request needs some benchmarking, tinkering,\r\nconvincing, etc. or more likely the reviewers are simply busy. In either\r\ncase, we ask for your understanding during the review process.\r\nFor more information, see our FAQ on this topic:\r\nhttp://scikit-[PATH]#why-is-my-pull-request-not-getting-any-attention.\r\n\r\nThanks for contributing!\r\n-->",
+      "original_request": "[MRG] EHN: add function to ignore nan in min/max sparse functions\n\n<!--\r\nThanks for contributing a pull request! Please ensure you have taken a look at\r\nthe contribution guidelines: https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md#pull-request-checklist\r\n-->\r\n\r\n#### Reference Issues/PRs\r\n<!--\r\nExample: Fixes #1234. See also #3456.\r\nPlease use keywords (e.g., Fixes) to create link to the issues or pull requests\r\nyou resolved, so that they will automatically be closed when your pull request\r\nis merged. See https://github.com/blog/1506-closing-issues-via-pull-requests\r\n-->\r\n\r\nrelated to #11011 \r\n\r\n#### What does this implement/fix? Explain your changes.\r\n\r\nThis implement a min/max computation which ignore NaN values in sparse matrices (equivalent of `np.nanmin` and `np.nanmax`.\r\n\r\n\r\n#### Any other comments?\r\n\r\n\r\n<!--\r\nPlease be aware that we are a loose team of volunteers so patience is\r\nnecessary; assistance handling other issues is very welcome. We value\r\nall user contributions, no matter how minor they are. If we are slow to\r\nreview, either the pull request needs some benchmarking, tinkering,\r\nconvincing, etc. or more likely the reviewers are simply busy. In either\r\ncase, we ask for your understanding during the review process.\r\nFor more information, see our FAQ on this topic:\r\nhttp://scikit-learn.org/dev/faq.html#why-is-my-pull-request-not-getting-any-attention.\r\n\r\nThanks for contributing!\r\n-->",
+      "pull_number": 11196,
+      "repository": "scikit-learn/scikit-learn",
+      "repository_url": "https://github.com/scikit-learn/scikit-learn.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "2f26540ee99cb4519d7471933359913c7be36ac9",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/whats_new/v0.24.rst",
+        "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+        "sklearn/metrics/_regression.py",
+        "sklearn/metrics/tests/test_score_objects.py",
+        "sklearn/utils/fixes.py",
+        "sklearn/utils/stats.py",
+        "sklearn/utils/tests/test_stats.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/whats_new/v0.24.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "sklearn/metrics/_regression.py",
+          "sklearn/utils/fixes.py",
+          "sklearn/utils/stats.py"
+        ],
+        "test_python": [
+          "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+          "sklearn/metrics/tests/test_score_objects.py",
+          "sklearn/utils/tests/test_stats.py"
+        ]
+      },
+      "head_commit": "cedc674eea3a174563c50f1a93baa04d88c1d2fa",
+      "id": "scikit-learn__scikit-learn-17225",
+      "masked_request": "ENH Sample weights for median_absolute_error\n\n<!--\r\nThanks for contributing a pull request! Please ensure you have taken a look at\r\nthe contribution guidelines: https://github.com/scikit-[PATH]#pull-request-checklist\r\n-->\r\n\r\n#### Reference [PATH]\r\nFollows from #6217\r\nAddresses last item in #3450\r\n\r\n#### What does this [PATH]? Explain your changes.\r\nAdd sample_weight to `median_absolute_error`.\r\nUse `[PATH]` to calculated weighted median as suggested here: https://github.com/scikit-[PATH]#issuecomment-611930725\r\nAmended `_weighted_percentile` to calculate weighted percentile along axis=0 (for each column) if 2D array input. This is to allow multioutput. Does not change behaviour of `_weighted_percentile` when array 1D. Not sure if this is best way to implement thus will wait for comment before fixing tests.\r\n\r\n#### Any other comments?\r\n\r\n\r\n<!--\r\nPlease be aware that we are a loose team of volunteers so patience is\r\nnecessary; assistance handling other issues is very welcome. We value\r\nall user contributions, no matter how minor they are. If we are slow to\r\nreview, either the pull request needs some benchmarking, tinkering,\r\nconvincing, etc. or more likely the reviewers are simply busy. In either\r\ncase, we ask for your understanding during the review process.\r\nFor more information, see our FAQ on this topic:\r\nhttp://scikit-[PATH]#why-is-my-pull-request-not-getting-any-attention.\r\n\r\nThanks for contributing!\r\n-->",
+      "original_request": "ENH Sample weights for median_absolute_error\n\n<!--\r\nThanks for contributing a pull request! Please ensure you have taken a look at\r\nthe contribution guidelines: https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md#pull-request-checklist\r\n-->\r\n\r\n#### Reference Issues/PRs\r\nFollows from #6217\r\nAddresses last item in #3450\r\n\r\n#### What does this implement/fix? Explain your changes.\r\nAdd sample_weight to `median_absolute_error`.\r\nUse `sklearn.utils.stats._weighted_percentile` to calculated weighted median as suggested here: https://github.com/scikit-learn/scikit-learn/pull/6217#issuecomment-611930725\r\nAmended `_weighted_percentile` to calculate weighted percentile along axis=0 (for each column) if 2D array input. This is to allow multioutput. Does not change behaviour of `_weighted_percentile` when array 1D. Not sure if this is best way to implement thus will wait for comment before fixing tests.\r\n\r\n#### Any other comments?\r\n\r\n\r\n<!--\r\nPlease be aware that we are a loose team of volunteers so patience is\r\nnecessary; assistance handling other issues is very welcome. We value\r\nall user contributions, no matter how minor they are. If we are slow to\r\nreview, either the pull request needs some benchmarking, tinkering,\r\nconvincing, etc. or more likely the reviewers are simply busy. In either\r\ncase, we ask for your understanding during the review process.\r\nFor more information, see our FAQ on this topic:\r\nhttp://scikit-learn.org/dev/faq.html#why-is-my-pull-request-not-getting-any-attention.\r\n\r\nThanks for contributing!\r\n-->",
+      "pull_number": 17225,
+      "repository": "scikit-learn/scikit-learn",
+      "repository_url": "https://github.com/scikit-learn/scikit-learn.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "00e6a0677efb00ce3cd0562939fb7e98e00b2f99",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "SoftLayer/CLI/core.py",
+        "SoftLayer/CLI/formatting.py",
+        "tests/CLI/modules/account_tests.py",
+        "tests/CLI/modules/vs/vs_tests.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "SoftLayer/CLI/core.py",
+          "SoftLayer/CLI/formatting.py"
+        ],
+        "test_python": [
+          "tests/CLI/modules/account_tests.py",
+          "tests/CLI/modules/vs/vs_tests.py"
+        ]
+      },
+      "head_commit": "0a296698a2bd37fed676d1a590e5fbdd44d25014",
+      "id": "softlayer__softlayer-python-1766",
+      "masked_request": "Added csv output format\n\nIssue: #1320\r\n```\r\nsoftlayer-python/ () $ slcli --format csv vs list\r\nid,hostname,domain,deviceStatus.name,datacenter,primary_ip,backend_ip,createDate,action\r\n1002,adns,[PATH],Running,dal10,48.110,122.174,2020-04-06T05:28:15-06:00,-\r\n1323,easerverh,easerverd.cloud,Running,dal13,227.82,211.196,2022-08-11T10:52:46-06:00,-\r\n1204,fotest,test.local,Running,dal05,148.28,12.198,2021-05-19T12:29:55-06:00,-\r\n1278,lab-web,test.com,Running,dal05,148.27,12.203,2022-02-08T08:31:46-06:00,-\r\n1278,lab-web,test.com,Running,dal05,148.26,12.220,2022-02-08T08:33:12-06:00,-\r\n1023,reserved,example.com,Stopped,dal13,-,-,2020-05-12T14:10:22-06:00,-\r\n1096,techsupport,SoftLayer-Internal-Development-Community.cloud,Running,sao01,169.57.227.67,10.151.109.245,2020-09-25T09:34:12-06:00,-\r\n```\r\nNote: Possible upgrade options\r\nAdd option to download the output as a file .csv\r\nAdd option to change the deliminator, now by default ','",
+      "original_request": "Added csv output format\n\nIssue: #1320\r\n```\r\nsoftlayer-python/ () $ slcli --format csv vs list\r\nid,hostname,domain,deviceStatus.name,datacenter,primary_ip,backend_ip,createDate,action\r\n1002,adns,vmware.chechu.com,Running,dal10,48.110,122.174,2020-04-06T05:28:15-06:00,-\r\n1323,easerverh,easerverd.cloud,Running,dal13,227.82,211.196,2022-08-11T10:52:46-06:00,-\r\n1204,fotest,test.local,Running,dal05,148.28,12.198,2021-05-19T12:29:55-06:00,-\r\n1278,lab-web,test.com,Running,dal05,148.27,12.203,2022-02-08T08:31:46-06:00,-\r\n1278,lab-web,test.com,Running,dal05,148.26,12.220,2022-02-08T08:33:12-06:00,-\r\n1023,reserved,example.com,Stopped,dal13,-,-,2020-05-12T14:10:22-06:00,-\r\n1096,techsupport,SoftLayer-Internal-Development-Community.cloud,Running,sao01,169.57.227.67,10.151.109.245,2020-09-25T09:34:12-06:00,-\r\n```\r\nNote: Possible upgrade options\r\nAdd option to download the output as a file .csv\r\nAdd option to change the deliminator, now by default ','",
+      "pull_number": 1766,
+      "repository": "softlayer/softlayer-python",
+      "repository_url": "https://github.com/softlayer/softlayer-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "d656acaba3258fa6e9beb75e8409412315efb107",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "CHANGES",
+        "doc/usage/extensions/autodoc.rst",
+        "sphinx/ext/autodoc/__init__.py",
+        "sphinx/ext/autodoc/directive.py",
+        "tests/test_ext_autodoc_autoclass.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "CHANGES",
+          "doc/usage/extensions/autodoc.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "sphinx/ext/autodoc/__init__.py",
+          "sphinx/ext/autodoc/directive.py"
+        ],
+        "test_python": [
+          "tests/test_ext_autodoc_autoclass.py"
+        ]
+      },
+      "head_commit": "d8a9f243e29ebb818d739a054c8b3afc6c81cd88",
+      "id": "sphinx-doc__sphinx-9154",
+      "masked_request": "Close #8107: autodoc: Add class-doc-from option to autoclass directive\n\n### Feature or Bugfix\r\n- Feature\r\n\r\n### Purpose\r\n- Add `class-doc-from` option to the `autoclass` directive to control\r\nthe content of the specific class.  It takes `class`, `init`, and `both`\r\nlike `autoclass_content`.\r\n- refs: #8107",
+      "original_request": "Close #8107: autodoc: Add class-doc-from option to autoclass directive\n\n### Feature or Bugfix\r\n- Feature\r\n\r\n### Purpose\r\n- Add `class-doc-from` option to the `autoclass` directive to control\r\nthe content of the specific class.  It takes `class`, `init`, and `both`\r\nlike `autoclass_content`.\r\n- refs: #8107",
+      "pull_number": 9154,
+      "repository": "sphinx-doc/sphinx",
+      "repository_url": "https://github.com/sphinx-doc/sphinx.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "6dd369352b0bda17c2dfef5a8faf0bfb794982ec",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/vector/__init__.py",
+        "sympy/vector/functions.py",
+        "sympy/vector/tests/test_field_functions.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/vector/__init__.py",
+          "sympy/vector/functions.py"
+        ],
+        "test_python": [
+          "sympy/vector/tests/test_field_functions.py"
+        ]
+      },
+      "head_commit": "455306ba54f99a401802ad00a58b01d3d53e1a54",
+      "id": "sympy__sympy-12417",
+      "masked_request": "Addition of Directional derivatives\n\nFixes #12416",
+      "original_request": "Addition of Directional derivatives\n\nFixes #12416",
+      "pull_number": 12417,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "7e2f1b243e36ad0b5277b9b6f15cb79450c1f579",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/polys/polyclasses.py",
+        "sympy/polys/polytools.py",
+        "sympy/polys/sqfreetools.py",
+        "sympy/polys/tests/test_polytools.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/polys/polyclasses.py",
+          "sympy/polys/polytools.py",
+          "sympy/polys/sqfreetools.py"
+        ],
+        "test_python": [
+          "sympy/polys/tests/test_polytools.py"
+        ]
+      },
+      "head_commit": "29d9f8ad231c0a5229e4c367c93695b1c4cc5ea6",
+      "id": "sympy__sympy-13304",
+      "masked_request": "polys: Norm of polynomial over a number field\n\nSymPy implements `sqf_norm`, the norm of a modified polynomial,\r\nfor the construction of primitive elements of number fields.\r\nIt is the same as `norm` if that is square-free but different\r\nin general. This PR implements the standard norm in all cases.\r\nThe low-level function, `dmp_norm`, is in [PATH] because\r\nit is essentially a single step of `dmp_sqf_norm`.\r\n\r\n<!-- Please give this pull request a descriptive title. Pull requests with descriptive titles are more likely to receive reviews. Describe what you changed! A title that only references an issue number is not descriptive. -->\r\n\r\n<!-- If this pull request fixes an issue please indicate which issue by typing \"Fixes #NNNN\" below. -->",
+      "original_request": "polys: Norm of polynomial over a number field\n\nSymPy implements `sqf_norm`, the norm of a modified polynomial,\r\nfor the construction of primitive elements of number fields.\r\nIt is the same as `norm` if that is square-free but different\r\nin general. This PR implements the standard norm in all cases.\r\nThe low-level function, `dmp_norm`, is in sqfreetools.py because\r\nit is essentially a single step of `dmp_sqf_norm`.\r\n\r\n<!-- Please give this pull request a descriptive title. Pull requests with descriptive titles are more likely to receive reviews. Describe what you changed! A title that only references an issue number is not descriptive. -->\r\n\r\n<!-- If this pull request fixes an issue please indicate which issue by typing \"Fixes #NNNN\" below. -->",
+      "pull_number": 13304,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "4526f0e02f7288d0e1214add48d21be346f3d28c",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/convolution.py",
+        "sympy/discrete/tests/test_convolution.py",
+        "sympy/discrete/transforms.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/discrete/__init__.py",
+          "sympy/discrete/convolution.py",
+          "sympy/discrete/transforms.py"
+        ],
+        "test_python": [
+          "sympy/discrete/tests/test_convolution.py"
+        ]
+      },
+      "head_commit": "148513eaa5ea593a618d7acf993712d26dd5d80a",
+      "id": "sympy__sympy-14745",
+      "masked_request": "Added convolution module\n\n#### Brief description of what is fixed or changed\r\nThe following changes will be covered in this PR:\r\n- [x] Add convolution module\r\n- [x] convolution_fft method\r\n- [x] convolution_ntt method\r\n- [x] convolution method (general)\r\n- [x] Support cyclic convolution\r\n\r\n#### Other comments",
+      "original_request": "Added convolution module\n\n#### Brief description of what is fixed or changed\r\nThe following changes will be covered in this PR:\r\n- [x] Add convolution module\r\n- [x] convolution_fft method\r\n- [x] convolution_ntt method\r\n- [x] convolution method (general)\r\n- [x] Support cyclic convolution\r\n\r\n#### Other comments",
+      "pull_number": 14745,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "267634a6e1de6835e5a5da047cadfdf2c2e97e1e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/tests/test_transforms.py",
+        "sympy/discrete/transforms.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/discrete/__init__.py",
+          "sympy/discrete/transforms.py"
+        ],
+        "test_python": [
+          "sympy/discrete/tests/test_transforms.py"
+        ]
+      },
+      "head_commit": "ad7db95366a2ad0b6c9776a13ca5d2922e737d14",
+      "id": "sympy__sympy-14853",
+      "masked_request": "Added M\u00f6bius transform to discrete module\n\n#### Brief description of what is fixed or changed\r\nM\u00f6bius transform is implemented using Yate's Dynamic Programming (DP) method.\r\nThe method `mobius_transform` takes `subset` as the argument, which specifies if the enumeration is over subsets or supersets for the transform.\r\nhaving the usage as:\r\n```\r\nIn []: seq = list(symbols('w x y z'))\r\n\r\nIn []: mobius_transform(seq)\r\nOut[]: [w, w + x, w + y, w + x + y + z]\r\n\r\nIn []: inverse_mobius_transform(_)\r\nOut[]: [w, x, y, z]\r\n\r\nIn []: inverse_mobius_transform(seq, subset=False)\r\nOut[]: [w - x - y + z, x - z, y - z, z]\r\n\r\nIn []: mobius_transform(_, subset=False)\r\nOut[]: [w, x, y, z]\r\n```\r\n#### Other comments",
+      "original_request": "Added M\u00f6bius transform to discrete module\n\n#### Brief description of what is fixed or changed\r\nM\u00f6bius transform is implemented using Yate's Dynamic Programming (DP) method.\r\nThe method `mobius_transform` takes `subset` as the argument, which specifies if the enumeration is over subsets or supersets for the transform.\r\nhaving the usage as:\r\n```\r\nIn []: seq = list(symbols('w x y z'))\r\n\r\nIn []: mobius_transform(seq)\r\nOut[]: [w, w + x, w + y, w + x + y + z]\r\n\r\nIn []: inverse_mobius_transform(_)\r\nOut[]: [w, x, y, z]\r\n\r\nIn []: inverse_mobius_transform(seq, subset=False)\r\nOut[]: [w - x - y + z, x - z, y - z, z]\r\n\r\nIn []: mobius_transform(_, subset=False)\r\nOut[]: [w, x, y, z]\r\n```\r\n#### Other comments",
+      "pull_number": 14853,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "e53b24ad345e11769dd1989e4873380c0f94b4e2",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/convolution.py",
+        "sympy/discrete/tests/test_convolution.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/discrete/__init__.py",
+          "sympy/discrete/convolution.py"
+        ],
+        "test_python": [
+          "sympy/discrete/tests/test_convolution.py"
+        ]
+      },
+      "head_commit": "9f0305f4170442c390eef309742d76dbebda336b",
+      "id": "sympy__sympy-14928",
+      "masked_request": "Implement covering product in convolution module\n\n#### Brief description of what is fixed or changed\r\nUse M\u00f6bius Transform for calculating `covering_product` (returns list of sum of products of elements grouped by bitwise OR of the corresponding sequence indices).\r\nUsage for the same is:\r\n```\r\n>>> from sympy import symbols, covering_product\r\n>>> u, v, x, y, z = symbols('u v x y z')\r\n\r\n>>> covering_product([u, v], [x, y])\r\n[u*x, u*y + v*x + v*y]\r\n\r\n>>> covering_product([u, v, x], [y, z])\r\n[u*y, u*z + v*y + v*z, x*y, x*z]\r\n```\r\n\r\n#### Other comments",
+      "original_request": "Implement covering product in convolution module\n\n#### Brief description of what is fixed or changed\r\nUse M\u00f6bius Transform for calculating `covering_product` (returns list of sum of products of elements grouped by bitwise OR of the corresponding sequence indices).\r\nUsage for the same is:\r\n```\r\n>>> from sympy import symbols, covering_product\r\n>>> u, v, x, y, z = symbols('u v x y z')\r\n\r\n>>> covering_product([u, v], [x, y])\r\n[u*x, u*y + v*x + v*y]\r\n\r\n>>> covering_product([u, v, x], [y, z])\r\n[u*y, u*z + v*y + v*z, x*y, x*z]\r\n```\r\n\r\n#### Other comments",
+      "pull_number": 14928,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "d6bac3e54c6445c52daa04015b1b2e4a6933e682",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/dialects/tsql.py",
+        "sqlglot/generator.py",
+        "tests/dialects/test_tsql.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/dialects/tsql.py",
+          "sqlglot/generator.py"
+        ],
+        "test_python": [
+          "tests/dialects/test_tsql.py"
+        ]
+      },
+      "head_commit": "14c89176e548848253b7682b4e37367bf03a9efb",
+      "id": "tobymao__sqlglot-3145",
+      "masked_request": "Feat(tsql): transpile LIMIT with OFFSET properly\n\nFixes #3144\r\n\r\nReference:\r\n- https://www.microsoftpressstore.com/articles/article.aspx?p=2314819\r\n- https://learn.microsoft.com/en-[PATH]?view=sql-server-ver16",
+      "original_request": "Feat(tsql): transpile LIMIT with OFFSET properly\n\nFixes #3144\r\n\r\nReference:\r\n- https://www.microsoftpressstore.com/articles/article.aspx?p=2314819\r\n- https://learn.microsoft.com/en-us/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver16",
+      "pull_number": 3145,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "f5bfd67341518d0ecb1c3693e0b41ed5c1cf0596",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/dialects/hive.py",
+        "sqlglot/parser.py",
+        "tests/dialects/test_presto.py",
+        "tests/dialects/test_spark.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/dialects/hive.py",
+          "sqlglot/parser.py"
+        ],
+        "test_python": [
+          "tests/dialects/test_presto.py",
+          "tests/dialects/test_spark.py"
+        ]
+      },
+      "head_commit": "76afacb281fc332a55f30e78223835a3728ba21b",
+      "id": "tobymao__sqlglot-3991",
+      "masked_request": "feat(spark): Default naming of STRUCT fields\n\nFixes #3988\r\n\r\nIn Spark, STRUCT [PATH] that are not explicitly named by the user are default initialized to:\r\n- The column name itself, if the expression is a column\r\n- The name `col_i` for other [PATH] structs, where `i` is the 1-based index position of the field in the struct:\r\n\r\n```\r\nspark-sql (default)> WITH t AS (SELECT 1 AS x, 2 AS y) SELECT STRUCT(x, 1, y AS col3, struct(5)) FROM t;\r\n{\"x\":1,\"col2\":1,\"col3\":2,\"col4\":{\"col1\":5}}\r\n```\r\n\r\nThis PR extends `kv_to_prop_eq` by also standardizing non-aliased expressions (`exp.Column`, `exp.Literal` etc) to key-value `exp.PropertyEQ` pairs with their respective name.",
+      "original_request": "feat(spark): Default naming of STRUCT fields\n\nFixes #3988\r\n\r\nIn Spark, STRUCT values/fields that are not explicitly named by the user are default initialized to:\r\n- The column name itself, if the expression is a column\r\n- The name `col_i` for other literals/nested structs, where `i` is the 1-based index position of the field in the struct:\r\n\r\n```\r\nspark-sql (default)> WITH t AS (SELECT 1 AS x, 2 AS y) SELECT STRUCT(x, 1, y AS col3, struct(5)) FROM t;\r\n{\"x\":1,\"col2\":1,\"col3\":2,\"col4\":{\"col1\":5}}\r\n```\r\n\r\nThis PR extends `kv_to_prop_eq` by also standardizing non-aliased expressions (`exp.Column`, `exp.Literal` etc) to key-value `exp.PropertyEQ` pairs with their respective name.",
+      "pull_number": 3991,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "dbb1ddef53e76ee51a1cf6a24a1de854a69c6093",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/__init__.py",
+        "sqlglot/expressions.py",
+        "tests/test_build.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/__init__.py",
+          "sqlglot/expressions.py"
+        ],
+        "test_python": [
+          "tests/test_build.py"
+        ]
+      },
+      "head_commit": "0a14037f1f53dc4ded4c2a7af8acd2c2adc88856",
+      "id": "tobymao__sqlglot-4084",
+      "masked_request": "Feat: add merge expression builder\n\nI have a use-case around building merge statements similar to variety of other types of expressions that sqlglot can programmatically build. This PR adds a simple `merge` function allowing for dynamic construction of merge statements.",
+      "original_request": "Feat: add merge expression builder\n\nI have a use-case around building merge statements similar to variety of other types of expressions that sqlglot can programmatically build. This PR adds a simple `merge` function allowing for dynamic construction of merge statements.",
+      "pull_number": 4084,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "7f40ddd9b41f3dabdcbc3105cf5f06faacd82d75",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/expressions.py",
+        "sqlglot/parser.py",
+        "tests/test_build.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/expressions.py",
+          "sqlglot/parser.py"
+        ],
+        "test_python": [
+          "tests/test_build.py"
+        ]
+      },
+      "head_commit": "bbdbb4deb783911f37d89093900ab7310b7581cf",
+      "id": "tobymao__sqlglot-415",
+      "masked_request": "feat: Add sort_by and cluster_by to expression builder\n\nWe already have SORT & CLUSTER expression and SORT_BY & CLUSTER_BY tokens, they are currently used in DDLs but they can also be used in expression builder. This PR adds that support.",
+      "original_request": "feat: Add sort_by and cluster_by to expression builder\n\nWe already have SORT & CLUSTER expression and SORT_BY & CLUSTER_BY tokens, they are currently used in DDLs but they can also be used in expression builder. This PR adds that support.",
+      "pull_number": 415,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "6e4c0ef48ab0db1a336d634273dab35de17c80bc",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/expressions.py",
+        "sqlglot/parser.py",
+        "tests/test_build.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/expressions.py",
+          "sqlglot/parser.py"
+        ],
+        "test_python": [
+          "tests/test_build.py"
+        ]
+      },
+      "head_commit": "9d6e165ba53fdab8601d2c196e0d3e3b622b0ed9",
+      "id": "tobymao__sqlglot-858",
+      "masked_request": "Add a window clause builder to Select.\n\nA few comments about this PR:\r\n\r\n* The argument to Select used everywhere else in the code was `windows`, so I updated `QUERY_MODIFIERS` to reflect that.\r\n* I had `window(...)` follow the same pattern as other builders of lists of expressions.\r\n* I needed a parse function that would return one named `Window` expression.\r\n* So I split out `_parse_named_window(...)` for that purpose -- and it's the registered parser for Window expressions. Which might be confusing -- given that window expressions can take a lot of forms.\r\n\r\n\r\nIn the future it might make sense to have `NamedWindow` as a separate expression, or `WindowClause` or something of the sort. Not sure if you want to do that now, or if this is sufficient.",
+      "original_request": "Add a window clause builder to Select.\n\nA few comments about this PR:\r\n\r\n* The argument to Select used everywhere else in the code was `windows`, so I updated `QUERY_MODIFIERS` to reflect that.\r\n* I had `window(...)` follow the same pattern as other builders of lists of expressions.\r\n* I needed a parse function that would return one named `Window` expression.\r\n* So I split out `_parse_named_window(...)` for that purpose -- and it's the registered parser for Window expressions. Which might be confusing -- given that window expressions can take a lot of forms.\r\n\r\n\r\nIn the future it might make sense to have `NamedWindow` as a separate expression, or `WindowClause` or something of the sort. Not sure if you want to do that now, or if this is sufficient.",
+      "pull_number": 858,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    }
+  ]
+}

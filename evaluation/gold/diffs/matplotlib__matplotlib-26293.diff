@@ -1,0 +1,157 @@
+diff --git a/doc/api/axes_api.rst b/doc/api/axes_api.rst
+index 3457368fa51c..8b01a120da5b 100644
+--- a/doc/api/axes_api.rst
++++ b/doc/api/axes_api.rst
+@@ -335,6 +335,8 @@ Autoscaling and margins
+    Axes.use_sticky_edges
+ 
+    Axes.margins
++   Axes.get_xmargin
++   Axes.get_ymargin
+    Axes.set_xmargin
+    Axes.set_ymargin
+ 
+diff --git a/doc/api/toolkits/mplot3d/axes3d.rst b/doc/api/toolkits/mplot3d/axes3d.rst
+index f6d8e2529896..b581494e4883 100644
+--- a/doc/api/toolkits/mplot3d/axes3d.rst
++++ b/doc/api/toolkits/mplot3d/axes3d.rst
+@@ -137,6 +137,7 @@ Autoscaling and margins
+    :template: autosummary.rst
+    :nosignatures:
+ 
++   get_zmargin
+    set_zmargin
+    margins
+    autoscale
+diff --git a/doc/users/next_whats_new/margin_getters.rst b/doc/users/next_whats_new/margin_getters.rst
+new file mode 100644
+index 000000000000..c43709a17d52
+--- /dev/null
++++ b/doc/users/next_whats_new/margin_getters.rst
+@@ -0,0 +1,4 @@
++Getters for xmargin, ymargin and zmargin
++----------------------------------------
++``.Axes.get_xmargin()``, ``.Axes.get_ymargin()`` and ``.Axes3D.get_zmargin()`` methods have been added to return
++the margin values set by ``.Axes.set_xmargin()``, ``.Axes.set_ymargin()`` and ``.Axes3D.set_zmargin()``, respectively.
+diff --git a/lib/matplotlib/axes/_base.py b/lib/matplotlib/axes/_base.py
+index 3796d9bbe508..ad06e6d552bc 100644
+--- a/lib/matplotlib/axes/_base.py
++++ b/lib/matplotlib/axes/_base.py
+@@ -2617,6 +2617,38 @@ def use_sticky_edges(self, b):
+         self._use_sticky_edges = bool(b)
+         # No effect until next autoscaling, which will mark the Axes as stale.
+ 
++    def get_xmargin(self):
++        """
++        Retrieve autoscaling margin of the x-axis.
++
++        .. versionadded:: 3.9
++
++        Returns
++        -------
++        xmargin : float
++
++        See Also
++        --------
++        matplotlib.axes.Axes.set_xmargin
++        """
++        return self._xmargin
++
++    def get_ymargin(self):
++        """
++        Retrieve autoscaling margin of the y-axis.
++
++        .. versionadded:: 3.9
++
++        Returns
++        -------
++        ymargin : float
++
++        See Also
++        --------
++        matplotlib.axes.Axes.set_ymargin
++        """
++        return self._ymargin
++
+     def set_xmargin(self, m):
+         """
+         Set padding of X data limits prior to autoscaling.
+diff --git a/lib/matplotlib/axes/_base.pyi b/lib/matplotlib/axes/_base.pyi
+index d41ecae1803c..e3644585296d 100644
+--- a/lib/matplotlib/axes/_base.pyi
++++ b/lib/matplotlib/axes/_base.pyi
+@@ -242,6 +242,8 @@ class _AxesBase(martist.Artist):
+     def use_sticky_edges(self) -> bool: ...
+     @use_sticky_edges.setter
+     def use_sticky_edges(self, b: bool) -> None: ...
++    def get_xmargin(self) -> float: ...
++    def get_ymargin(self) -> float: ...
+     def set_xmargin(self, m: float) -> None: ...
+     def set_ymargin(self, m: float) -> None: ...
+ 
+diff --git a/lib/matplotlib/tests/test_axes.py b/lib/matplotlib/tests/test_axes.py
+index 0fcb2eb26cbb..6dea39a702fc 100644
+--- a/lib/matplotlib/tests/test_axes.py
++++ b/lib/matplotlib/tests/test_axes.py
+@@ -6153,6 +6153,14 @@ def test_margins():
+                               ymax + (ymax - ymin) * 0.5)
+ 
+ 
++def test_margin_getters():
++    fig = plt.figure()
++    ax = fig.add_subplot()
++    ax.margins(0.2, 0.3)
++    assert ax.get_xmargin() == 0.2
++    assert ax.get_ymargin() == 0.3
++
++
+ def test_set_margin_updates_limits():
+     mpl.style.use("default")
+     fig, ax = plt.subplots()
+diff --git a/lib/mpl_toolkits/mplot3d/axes3d.py b/lib/mpl_toolkits/mplot3d/axes3d.py
+index aeb6a66d2c98..e7abdc0767b5 100644
+--- a/lib/mpl_toolkits/mplot3d/axes3d.py
++++ b/lib/mpl_toolkits/mplot3d/axes3d.py
+@@ -513,6 +513,22 @@ def update_datalim(self, xys, **kwargs):
+     get_autoscalez_on = _axis_method_wrapper("zaxis", "_get_autoscale_on")
+     set_autoscalez_on = _axis_method_wrapper("zaxis", "_set_autoscale_on")
+ 
++    def get_zmargin(self):
++        """
++        Retrieve autoscaling margin of the z-axis.
++
++        .. versionadded:: 3.9
++
++        Returns
++        -------
++        zmargin : float
++
++        See Also
++        --------
++        mpl_toolkits.mplot3d.axes3d.Axes3D.set_zmargin
++        """
++        return self._zmargin
++
+     def set_zmargin(self, m):
+         """
+         Set padding of Z data limits prior to autoscaling.
+diff --git a/lib/mpl_toolkits/mplot3d/tests/test_axes3d.py b/lib/mpl_toolkits/mplot3d/tests/test_axes3d.py
+index 1f8764cbab9d..df9f2ae52fd7 100644
+--- a/lib/mpl_toolkits/mplot3d/tests/test_axes3d.py
++++ b/lib/mpl_toolkits/mplot3d/tests/test_axes3d.py
+@@ -1994,6 +1994,15 @@ def test_margins():
+     assert ax.margins() == (0, 0.1, 0)
+ 
+ 
++def test_margin_getters():
++    fig = plt.figure()
++    ax = fig.add_subplot(projection='3d')
++    ax.margins(0.1, 0.2, 0.3)
++    assert ax.get_xmargin() == 0.1
++    assert ax.get_ymargin() == 0.2
++    assert ax.get_zmargin() == 0.3
++
++
+ @pytest.mark.parametrize('err, args, kwargs, match', (
+         (ValueError, (-1,), {}, r'margin must be greater than -0\.5'),
+         (ValueError, (1, -1, 1), {}, r'margin must be greater than -0\.5'),

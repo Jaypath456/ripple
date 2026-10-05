@@ -1,0 +1,91 @@
+diff --git a/sqlglot/expressions.py b/sqlglot/expressions.py
+index 701abb0ff4..888c4fc48d 100644
+--- a/sqlglot/expressions.py
++++ b/sqlglot/expressions.py
+@@ -1337,7 +1337,7 @@ def with_(
+     "group": False,
+     "having": False,
+     "qualify": False,
+-    "window": False,
++    "windows": False,
+     "distribute": False,
+     "sort": False,
+     "cluster": False,
+@@ -1910,6 +1910,18 @@ def having(self, *expressions, append=True, dialect=None, copy=True, **opts) ->
+             **opts,
+         )
+ 
++    def window(self, *expressions, append=True, dialect=None, copy=True, **opts) -> Select:
++        return _apply_list_builder(
++            *expressions,
++            instance=self,
++            arg="windows",
++            append=append,
++            into=Window,
++            dialect=dialect,
++            copy=copy,
++            **opts,
++        )
++
+     def distinct(self, distinct=True, copy=True) -> Select:
+         """
+         Set the OFFSET expression.
+diff --git a/sqlglot/parser.py b/sqlglot/parser.py
+index f2251b4296..a985d84beb 100644
+--- a/sqlglot/parser.py
++++ b/sqlglot/parser.py
+@@ -402,6 +402,7 @@ class Parser(metaclass=_Parser):
+         exp.Ordered: lambda self: self._parse_ordered(),
+         exp.Having: lambda self: self._parse_having(),
+         exp.With: lambda self: self._parse_with(),
++        exp.Window: lambda self: self._parse_named_window(),
+         "JOIN_TYPE": lambda self: self._parse_join_side_and_kind(),
+     }
+ 
+@@ -550,8 +551,7 @@ class Parser(metaclass=_Parser):
+         "group": lambda self: self._parse_group(),
+         "having": lambda self: self._parse_having(),
+         "qualify": lambda self: self._parse_qualify(),
+-        "windows": lambda self: self._match(TokenType.WINDOW)
+-        and self._parse_csv(lambda: self._parse_window(self._parse_id_var(), alias=True)),
++        "windows": lambda self: self._parse_window_clause(),
+         "distribute": lambda self: self._parse_sort(TokenType.DISTRIBUTE_BY, exp.Distribute),
+         "sort": lambda self: self._parse_sort(TokenType.SORT_BY, exp.Sort),
+         "cluster": lambda self: self._parse_sort(TokenType.CLUSTER_BY, exp.Cluster),
+@@ -2440,6 +2440,12 @@ def _parse_trim(self):
+             collation=collation,
+         )
+ 
++    def _parse_window_clause(self):
++        return self._match(TokenType.WINDOW) and self._parse_csv(lambda: self._parse_named_window())
++
++    def _parse_named_window(self):
++        return self._parse_window(self._parse_id_var(), alias=True)
++
+     def _parse_window(self, this, alias=False):
+         if self._match(TokenType.FILTER):
+             where = self._parse_wrapped(self._parse_where)
+diff --git a/tests/test_build.py b/tests/test_build.py
+index b014a3ab0c..a1a268ded6 100644
+--- a/tests/test_build.py
++++ b/tests/test_build.py
+@@ -481,6 +481,19 @@ def test_build(self):
+             ),
+             (lambda: exp.delete("y", where="x > 1"), "DELETE FROM y WHERE x > 1"),
+             (lambda: exp.delete("y", where=exp.and_("x > 1")), "DELETE FROM y WHERE x > 1"),
++            (
++                lambda: select("AVG(a) OVER b")
++                .from_("table")
++                .window("b AS (PARTITION BY c ORDER BY d)"),
++                "SELECT AVG(a) OVER b FROM table WINDOW b AS (PARTITION BY c ORDER BY d)",
++            ),
++            (
++                lambda: select("AVG(a) OVER b", "MIN(c) OVER d")
++                .from_("table")
++                .window("b AS (PARTITION BY e ORDER BY f)")
++                .window("d AS (PARTITION BY g ORDER BY h)"),
++                "SELECT AVG(a) OVER b, MIN(c) OVER d FROM table WINDOW b AS (PARTITION BY e ORDER BY f), d AS (PARTITION BY g ORDER BY h)",
++            ),
+         ]:
+             with self.subTest(sql):
+                 self.assertEqual(expression().sql(dialect[0] if dialect else None), sql)

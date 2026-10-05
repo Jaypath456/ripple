@@ -1,0 +1,45 @@
+{
+  "completed_at": "2026-10-03T00:33:00.064343Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: tests/test_expressions.py",
+    "missing or non-source path: tests/test_build.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 1799,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 2,
+  "output_tokens": 916,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "0bf269d1eb0c28908094ffd1d7f0ed3dc495a373681166e1899d3ae79475c348",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "tobymao/sqlglot",
+  "request_original_length": 238,
+  "request_truncated": false,
+  "request_used_length": 238,
+  "requested_seed": 1729,
+  "run_id": "tobymao__sqlglot-415__B4__1729",
+  "runtime_seconds": 5.121085398001014,
+  "schema_version": 1,
+  "source_ranking": [
+    "sqlglot/expressions.py",
+    "sqlglot/tokens.py"
+  ],
+  "status": "completed",
+  "system": "B4",
+  "task_id": "tobymao__sqlglot-415",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 2715,
+  "trace_path": null
+}

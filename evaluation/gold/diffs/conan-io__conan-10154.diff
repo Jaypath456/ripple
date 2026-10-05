@@ -1,0 +1,203 @@
+diff --git a/conan/tools/files/__init__.py b/conan/tools/files/__init__.py
+index d6c2bf10208..7a84ecda977 100644
+--- a/conan/tools/files/__init__.py
++++ b/conan/tools/files/__init__.py
+@@ -3,3 +3,4 @@
+ from conan.tools.files.patches import patch, apply_conandata_patches
+ from conan.tools.files.cpp_package import CppPackage
+ from conan.tools.files.packager import AutoPackager
++from conan.tools.files.symlinks import symlinks
+diff --git a/conan/tools/files/symlinks/__init__.py b/conan/tools/files/symlinks/__init__.py
+new file mode 100644
+index 00000000000..d826e74d6f8
+--- /dev/null
++++ b/conan/tools/files/symlinks/__init__.py
+@@ -0,0 +1,2 @@
++from conan.tools.files.symlinks.symlinks import absolute_to_relative_symlinks, \
++    remove_external_symlinks, remove_broken_symlinks, get_symlinks
+diff --git a/conan/tools/files/symlinks/symlinks.py b/conan/tools/files/symlinks/symlinks.py
+new file mode 100644
+index 00000000000..98c4b2040a1
+--- /dev/null
++++ b/conan/tools/files/symlinks/symlinks.py
+@@ -0,0 +1,52 @@
++import os
++
++
++def get_symlinks(base_folder):
++    """Return the absolute path to the symlink files in base_folder"""
++    for (root, dirnames, filenames) in os.walk(base_folder):
++        for el in filenames + dirnames:
++            fullpath = os.path.join(root, el)
++            if os.path.islink(fullpath):
++                yield fullpath
++
++
++def _path_inside(base, folder):
++    base = os.path.abspath(base)
++    folder = os.path.abspath(folder)
++    return os.path.commonprefix([base, folder]) == base
++
++
++def absolute_to_relative_symlinks(conanfile, base_folder):
++    """Convert the symlinks with absolute paths to relative if they are pointing to a file or
++    directory inside the 'base_folder'. Any absolute symlink pointing outside the 'base_folder'
++    will be ignored"""
++    for fullpath in get_symlinks(base_folder):
++        link_target = os.readlink(fullpath)
++        if not os.path.isabs(link_target):
++            continue
++        folder_of_symlink = os.path.dirname(fullpath)
++        if _path_inside(base_folder, link_target):
++            os.unlink(fullpath)
++            new_link = os.path.relpath(link_target, folder_of_symlink)
++            os.symlink(new_link, fullpath)
++
++
++def remove_external_symlinks(conanfile, base_folder=None):
++    """Remove the symlinks to files that point outside the 'base_folder', no matter if relative or
++    absolute"""
++    for fullpath in get_symlinks(base_folder):
++        link_target = os.readlink(fullpath)
++        if not os.path.isabs(link_target):
++            link_target = os.path.join(base_folder, link_target)
++        if not _path_inside(base_folder, link_target):
++            os.unlink(fullpath)
++
++
++def remove_broken_symlinks(conanfile, base_folder=None):
++    """Remove the broken symlinks, no matter if relative or absolute"""
++    for fullpath in get_symlinks(base_folder):
++        link_target = os.readlink(fullpath)
++        if not os.path.isabs(link_target):
++            link_target = os.path.join(base_folder, link_target)
++        if not os.path.exists(link_target):
++            os.unlink(fullpath)
+diff --git a/conans/test/unittests/tools/files/test_symlinks.py b/conans/test/unittests/tools/files/test_symlinks.py
+new file mode 100644
+index 00000000000..7b7398a85b3
+--- /dev/null
++++ b/conans/test/unittests/tools/files/test_symlinks.py
+@@ -0,0 +1,122 @@
++import os
++
++import pytest
++
++from conan import tools
++from conan.tools.files import mkdir
++from conans.test.utils.test_files import temp_folder
++
++
++@pytest.fixture
++def folders():
++    tmp = temp_folder()
++    files = ["foo/var/file.txt"]
++    outside_folder = temp_folder()
++    symlinks = [
++        (os.path.join(tmp, "foo/var/file.txt"), "foo/var/other/absolute.txt"),  # Absolute link
++        (os.path.join(tmp, "foo/var"), "foo/var/other/other/myfolder"),  # Absolute link folder
++        (os.path.join(tmp, "foo/var/file.txt"), "foo/absolute.txt"),  # Absolute link
++        ("foo/var/file.txt", "foo/var/other/relative.txt"),  # Relative link
++        ("missing.txt", "foo/var/other/broken.txt"),  # Broken link
++        (outside_folder, "foo/var/other/absolute_outside"),  # Absolute folder outside the folder
++        ("../../../../../outside", "foo/absolute_outside"),  # Relative folder outside the folder
++    ]
++    # Create the files and symlinks
++    for path in files:
++        mkdir(None, os.path.dirname(os.path.join(tmp, path)))
++        with open(os.path.join(tmp, path), "w") as fl:
++            fl.write("foo")
++
++    for link_dst, linked_file in symlinks:
++        mkdir(None, os.path.dirname(os.path.join(tmp, linked_file)))
++        os.symlink(link_dst, os.path.join(tmp, linked_file))
++    return tmp, outside_folder
++
++
++def test_absolute_to_relative_symlinks(folders):
++    """If a symlink is absolute but relative to a file or folder that is contained in
++    the base folder, we can make it relative"""
++
++    folder, outside_folder = folders
++    # Transform the absolute symlinks to relative
++    tools.files.symlinks.absolute_to_relative_symlinks(None, folder)
++
++    # Check the results
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/absolute.txt")).replace("\\", "/")
++    assert linked_to == "../file.txt"
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/other/myfolder")).replace("\\", "/")
++    assert linked_to == "../.."
++
++    linked_to = os.readlink(os.path.join(folder, "foo/absolute.txt")).replace("\\", "/")
++    assert linked_to == "var/file.txt"
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/relative.txt")).replace("\\", "/")
++    assert linked_to == "foo/var/file.txt"
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/broken.txt"))
++    assert linked_to == "missing.txt"
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/absolute_outside"))
++    assert linked_to == outside_folder
++
++
++def test_remove_external_symlinks(folders):
++
++    folder, outside_folder = folders
++    # Remove the external symlinks
++    tools.files.symlinks.remove_external_symlinks(None, folder)
++
++    # Check the results, these are kept the same
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/absolute.txt"))
++    assert linked_to == os.path.join(folder, "foo/var/file.txt")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/other/myfolder"))
++    assert linked_to == os.path.join(folder, "foo/var")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/absolute.txt"))
++    assert linked_to == os.path.join(folder, "foo/var/file.txt")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/relative.txt"))
++    assert linked_to == "foo/var/file.txt"
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/broken.txt"))
++    assert linked_to == "missing.txt"
++
++    # This one is removed
++    assert not os.path.islink(os.path.join(folder, "foo/var/other/absolute_outside"))
++    assert not os.path.exists(os.path.join(folder, "foo/var/other/absolute_outside"))
++
++    # This one is removed
++    assert not os.path.islink(os.path.join(folder, "foo/absolute_outside"))
++    assert not os.path.exists(os.path.join(folder, "foo/absolute_outside"))
++
++
++def test_remove_broken_symlinks(folders):
++    folder, outside_folder = folders
++    # Remove the external symlinks
++    tools.files.symlinks.remove_broken_symlinks(None, folder)
++
++    # Check the results, these are kept the same
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/absolute.txt"))
++    assert linked_to == os.path.join(folder, "foo/var/file.txt")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/other/myfolder"))
++    assert linked_to == os.path.join(folder, "foo/var")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/absolute.txt"))
++    assert linked_to == os.path.join(folder, "foo/var/file.txt")
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/relative.txt"))
++    assert linked_to == "foo/var/file.txt"
++
++    # This one is removed
++    assert not os.path.islink(os.path.join(folder, "foo/var/other/broken.txt"))
++    assert not os.path.exists(os.path.join(folder, "foo/var/other/broken.txt"))
++
++    linked_to = os.readlink(os.path.join(folder, "foo/var/other/absolute_outside"))
++    assert linked_to == outside_folder
++
++    # This is broken also so it is also removed
++    assert not os.path.islink(os.path.join(folder, "foo/absolute_outside"))
++    assert not os.path.exists(os.path.join(folder, "foo/absolute_outside"))

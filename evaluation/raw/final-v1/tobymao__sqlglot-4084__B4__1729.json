@@ -1,0 +1,43 @@
+{
+  "completed_at": "2026-10-03T00:20:19.738092Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: sqlglot/expressions/merge.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 1082,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 291,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "4230113e2eda345ce9ce1c1cbab8e11568f875a48eb0edb7f87bcdc04306e8b5",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "tobymao/sqlglot",
+  "request_original_length": 270,
+  "request_truncated": false,
+  "request_used_length": 270,
+  "requested_seed": 1729,
+  "run_id": "tobymao__sqlglot-4084__B4__1729",
+  "runtime_seconds": 5.86108223899646,
+  "schema_version": 1,
+  "source_ranking": [
+    "sqlglot/expressions.py"
+  ],
+  "status": "completed",
+  "system": "B4",
+  "task_id": "tobymao__sqlglot-4084",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 1373,
+  "trace_path": null
+}

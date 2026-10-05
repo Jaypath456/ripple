@@ -1,0 +1,1018 @@
+{
+  "astropy__astropy-13676": {
+    "files": {
+      "ignored": [
+        "docs/changes/units/13676.api.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "astropy/units/quantity.py",
+        "astropy/units/structured.py"
+      ],
+      "test_python": [
+        "astropy/units/tests/test_structured.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "astropy/units/quantity.py::Quantity",
+      "astropy/units/quantity.py::Quantity.__new__",
+      "astropy/units/structured.py::_structured_unit_like_dtype",
+      "astropy/units/tests/test_structured.py::TestStructuredQuantity",
+      "astropy/units/tests/test_structured.py::TestStructuredQuantity.test_initialization_without_unit"
+    ],
+    "unmappable_hunks": 0
+  },
+  "astropy__astropy-16677": {
+    "files": {
+      "ignored": [
+        "docs/changes/modeling/16677.feature.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "astropy/modeling/core.py",
+        "astropy/modeling/fitting.py"
+      ],
+      "test_python": [
+        "astropy/modeling/tests/test_core.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "astropy/modeling/core.py::CompoundModel",
+      "astropy/modeling/core.py::CompoundModel.__init__",
+      "astropy/modeling/core.py::Model",
+      "astropy/modeling/core.py::Model.__init__",
+      "astropy/modeling/core.py::Model.bounds",
+      "astropy/modeling/core.py::Model.fixed",
+      "astropy/modeling/core.py::Model.has_bounds",
+      "astropy/modeling/core.py::Model.has_fixed",
+      "astropy/modeling/core.py::Model.has_tied",
+      "astropy/modeling/core.py::Model.sync_constraints",
+      "astropy/modeling/core.py::Model.tied",
+      "astropy/modeling/fitting.py::_NonLinearLSQFitter",
+      "astropy/modeling/fitting.py::_NonLinearLSQFitter._wrap_deriv",
+      "astropy/modeling/fitting.py::_validate_constraints",
+      "astropy/modeling/fitting.py::fitter_to_model_params",
+      "astropy/modeling/fitting.py::model_to_fit_params",
+      "astropy/modeling/tests/test_core.py::test_has_constraints",
+      "astropy/modeling/tests/test_core.py::test_has_constraints_with_sync_constraints"
+    ],
+    "unmappable_hunks": 0
+  },
+  "astropy__astropy-7970": {
+    "files": {
+      "ignored": [
+        "CHANGES.rst",
+        "docs/units/equivalencies.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "astropy/units/astrophys.py",
+        "astropy/units/equivalencies.py"
+      ],
+      "test_python": [
+        "astropy/units/tests/test_equivalencies.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "astropy/units/equivalencies.py::with_H0",
+      "astropy/units/tests/test_equivalencies.py::test_littleh"
+    ],
+    "unmappable_hunks": 0
+  },
+  "conan-io__conan-10154": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/symlinks/__init__.py",
+        "conan/tools/files/symlinks/symlinks.py"
+      ],
+      "test_python": [
+        "conans/test/unittests/tools/files/test_symlinks.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "_path_inside",
+      "absolute_to_relative_symlinks",
+      "folders",
+      "get_symlinks",
+      "remove_broken_symlinks",
+      "remove_external_symlinks",
+      "test_absolute_to_relative_symlinks",
+      "test_remove_broken_symlinks",
+      "test_remove_external_symlinks"
+    ],
+    "symbols": [
+      "conan/tools/files/symlinks/symlinks.py::_path_inside",
+      "conan/tools/files/symlinks/symlinks.py::absolute_to_relative_symlinks",
+      "conan/tools/files/symlinks/symlinks.py::get_symlinks",
+      "conan/tools/files/symlinks/symlinks.py::remove_broken_symlinks",
+      "conan/tools/files/symlinks/symlinks.py::remove_external_symlinks",
+      "conans/test/unittests/tools/files/test_symlinks.py::folders",
+      "conans/test/unittests/tools/files/test_symlinks.py::test_absolute_to_relative_symlinks",
+      "conans/test/unittests/tools/files/test_symlinks.py::test_remove_broken_symlinks",
+      "conans/test/unittests/tools/files/test_symlinks.py::test_remove_external_symlinks"
+    ],
+    "unmappable_hunks": 0
+  },
+  "conan-io__conan-10437": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "conan/tools/microsoft/__init__.py",
+        "conan/tools/microsoft/visual.py"
+      ],
+      "test_python": [
+        "conans/test/unittests/tools/microsoft/test_msbuild.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "conan/tools/microsoft/visual.py::is_msvc_static_runtime",
+      "conans/test/unittests/tools/microsoft/test_msbuild.py::test_is_msvc_static_runtime"
+    ],
+    "unmappable_hunks": 0
+  },
+  "conan-io__conan-10874": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/files.py"
+      ],
+      "test_python": [
+        "conans/test/integration/tools/file_tools_test.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "test_file_tools"
+    ],
+    "symbols": [
+      "conan/tools/files/files.py::rmdir",
+      "conan/tools/files/files.py::swap_child_folder",
+      "conans/test/integration/tools/file_tools_test.py::test_file_tools"
+    ],
+    "unmappable_hunks": 0
+  },
+  "conan-io__conan-11284": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "conan/tools/gnu/autotools.py",
+        "conan/tools/gnu/autotoolstoolchain.py",
+        "conans/assets/templates/new_v2_autotools.py",
+        "conans/test/utils/mocks.py"
+      ],
+      "test_python": [
+        "conans/test/functional/toolchains/gnu/autotools/test_basic.py",
+        "conans/test/functional/toolchains/gnu/autotools/test_ios.py",
+        "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py",
+        "conans/test/unittests/tools/gnu/autotools_test.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "conan/tools/gnu/autotools.py::Autotools",
+      "conan/tools/gnu/autotools.py::Autotools.__init__",
+      "conan/tools/gnu/autotools.py::Autotools._fix_osx_shared_install_name",
+      "conan/tools/gnu/autotools.py::Autotools._fix_osx_shared_install_name._is_modified_install_name",
+      "conan/tools/gnu/autotools.py::Autotools.autoreconf",
+      "conan/tools/gnu/autotools.py::Autotools.configure",
+      "conan/tools/gnu/autotools.py::Autotools.install",
+      "conan/tools/gnu/autotools.py::Autotools.make",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain.__init__",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain._default_autoreconf_flags",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain._default_configure_install_flags",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain._default_configure_install_flags._get_argument",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain._default_configure_shared_flags",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain._shared_static_args",
+      "conan/tools/gnu/autotoolstoolchain.py::AutotoolsToolchain.generate_args",
+      "conans/test/functional/toolchains/gnu/autotools/test_basic.py::test_autotools_arguments_override",
+      "conans/test/functional/toolchains/gnu/autotools/test_basic.py::test_autotools_option_checking",
+      "conans/test/functional/toolchains/gnu/autotools/test_ios.py::test_ios",
+      "conans/test/functional/toolchains/gnu/test_v2_autotools_template.py::test_autotools_exe_template",
+      "conans/test/unittests/tools/gnu/autotools_test.py::test_source_folder_works",
+      "conans/test/utils/mocks.py::ConanFileMock",
+      "conans/test/utils/mocks.py::ConanFileMock.__init__",
+      "conans/test/utils/mocks.py::MockSettings",
+      "conans/test/utils/mocks.py::MockSettings.__getattr__",
+      "conans/test/utils/mocks.py::MockSettings.get_safe"
+    ],
+    "unmappable_hunks": 0
+  },
+  "conan-io__conan-11585": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "conans/client/loader.py",
+        "conans/model/conan_file.py",
+        "conans/model/conanfile_interface.py"
+      ],
+      "test_python": [
+        "conans/test/integration/conanfile/folders_access_test.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "conans/client/loader.py::ConanFileLoader",
+      "conans/client/loader.py::ConanFileLoader.load_basic_module",
+      "conans/model/conan_file.py::ConanFile",
+      "conans/model/conan_file.py::ConanFile.build_path",
+      "conans/model/conan_file.py::ConanFile.export_path",
+      "conans/model/conan_file.py::ConanFile.export_sources_path",
+      "conans/model/conan_file.py::ConanFile.generators_path",
+      "conans/model/conan_file.py::ConanFile.package_path",
+      "conans/model/conan_file.py::ConanFile.source_path",
+      "conans/model/conanfile_interface.py::ConanFileInterface",
+      "conans/model/conanfile_interface.py::ConanFileInterface.package_path"
+    ],
+    "unmappable_hunks": 0
+  },
+  "deepset-ai__haystack-8042": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [
+        "releasenotes/notes/implement-merge-filter-logic-99e6785a78f80ae9.yaml"
+      ],
+      "source_python": [
+        "haystack/document_stores/types/__init__.py",
+        "haystack/document_stores/types/filter_policy.py"
+      ],
+      "test_python": [
+        "test/document_stores/test_filter_policy.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "haystack/document_stores/types/filter_policy.py::FilterPolicy",
+      "haystack/document_stores/types/filter_policy.py::FilterPolicy.from_str",
+      "haystack/document_stores/types/filter_policy.py::apply_filter_policy",
+      "haystack/document_stores/types/filter_policy.py::combine_init_comparison_and_runtime_logical_filters",
+      "haystack/document_stores/types/filter_policy.py::combine_runtime_comparison_and_init_logical_filters",
+      "haystack/document_stores/types/filter_policy.py::combine_two_comparison_filters",
+      "haystack/document_stores/types/filter_policy.py::combine_two_logical_filters",
+      "haystack/document_stores/types/filter_policy.py::is_comparison_filter",
+      "haystack/document_stores/types/filter_policy.py::is_logical_filter",
+      "test/document_stores/test_filter_policy.py::test_merge_comparison_filters_with_same_field",
+      "test/document_stores/test_filter_policy.py::test_merge_init_comparison_and_runtime_logical_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_policy_with_both_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_policy_with_only_init_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_policy_with_overlapping_keys",
+      "test/document_stores/test_filter_policy.py::test_merge_runtime_comparison_and_init_logical_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_runtime_comparison_and_init_logical_filters_with_string_operators",
+      "test/document_stores/test_filter_policy.py::test_merge_two_comparison_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_two_logical_filters",
+      "test/document_stores/test_filter_policy.py::test_merge_with_custom_logical_operator",
+      "test/document_stores/test_filter_policy.py::test_merge_with_different_logical_operators",
+      "test/document_stores/test_filter_policy.py::test_replace_policy_with_both_filters",
+      "test/document_stores/test_filter_policy.py::test_replace_policy_with_only_init_filters"
+    ],
+    "unmappable_hunks": 0
+  },
+  "google-deepmind__optax-1063": {
+    "files": {
+      "ignored": [
+        "docs/api/utilities.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "optax/tree_utils/__init__.py",
+        "optax/tree_utils/_random.py"
+      ],
+      "test_python": [
+        "optax/tree_utils/_random_test.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "optax/tree_utils/_random.py::_tree_rng_keys_split",
+      "optax/tree_utils/_random.py::tree_random_like",
+      "optax/tree_utils/_random.py::tree_split_key_like",
+      "optax/tree_utils/_random_test.py::RandomTest",
+      "optax/tree_utils/_random_test.py::RandomTest.test_tree_split_key_like"
+    ],
+    "unmappable_hunks": 0
+  },
+  "google-deepmind__optax-897": {
+    "files": {
+      "ignored": [
+        "docs/api/losses.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "optax/__init__.py",
+        "optax/losses/__init__.py",
+        "optax/losses/_self_supervised.py"
+      ],
+      "test_python": [
+        "optax/losses/_classification_test.py",
+        "optax/losses/_self_supervised_test.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "NtxentTest",
+      "ntxent",
+      "setUp",
+      "test_batched"
+    ],
+    "symbols": [
+      "optax/losses/_self_supervised.py::ntxent",
+      "optax/losses/_self_supervised_test.py::NtxentTest",
+      "optax/losses/_self_supervised_test.py::NtxentTest.setUp",
+      "optax/losses/_self_supervised_test.py::NtxentTest.test_batched"
+    ],
+    "unmappable_hunks": 0
+  },
+  "huggingface__accelerate-255": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "src/accelerate/accelerator.py",
+        "src/accelerate/checkpointing.py",
+        "src/accelerate/utils.py"
+      ],
+      "test_python": [
+        "tests/test_state_checkpointing.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "CheckpointTest",
+      "DummyModel",
+      "__init__",
+      "dummy_dataloaders",
+      "forward",
+      "get_dataset",
+      "load_accelerator_state",
+      "save_accelerator_state",
+      "test_can_resume_training",
+      "train"
+    ],
+    "symbols": [
+      "src/accelerate/accelerator.py::Accelerator",
+      "src/accelerate/accelerator.py::Accelerator.load_state",
+      "src/accelerate/accelerator.py::Accelerator.save_state",
+      "src/accelerate/checkpointing.py::load_accelerator_state",
+      "src/accelerate/checkpointing.py::save_accelerator_state",
+      "tests/test_state_checkpointing.py::CheckpointTest",
+      "tests/test_state_checkpointing.py::CheckpointTest.test_can_resume_training",
+      "tests/test_state_checkpointing.py::DummyModel",
+      "tests/test_state_checkpointing.py::DummyModel.__init__",
+      "tests/test_state_checkpointing.py::DummyModel.forward",
+      "tests/test_state_checkpointing.py::dummy_dataloaders",
+      "tests/test_state_checkpointing.py::dummy_dataloaders.get_dataset",
+      "tests/test_state_checkpointing.py::train"
+    ],
+    "unmappable_hunks": 0
+  },
+  "huggingface__datasets-214": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "datasets/wikipedia/wikipedia.py",
+        "src/nlp/arrow_dataset.py"
+      ],
+      "test_python": [
+        "tests/test_arrow_dataset.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "BaseDatasetTest",
+      "ReaderTester",
+      "_create_dummy_dataset",
+      "_get_dataset_from_filename",
+      "map_batched",
+      "map_batched_with_indices",
+      "test_filter",
+      "test_map",
+      "test_map_batched",
+      "test_remove_colums"
+    ],
+    "symbols": [
+      "src/nlp/arrow_dataset.py::Dataset",
+      "src/nlp/arrow_dataset.py::Dataset.filter",
+      "src/nlp/arrow_dataset.py::Dataset.filter.map_function",
+      "src/nlp/arrow_dataset.py::Dataset.map",
+      "tests/test_arrow_dataset.py::BaseDatasetTest",
+      "tests/test_arrow_dataset.py::BaseDatasetTest._create_dummy_dataset",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_filter",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_map",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_map_batched",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_map_batched.map_batched",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_map_batched.map_batched_with_indices",
+      "tests/test_arrow_dataset.py::BaseDatasetTest.test_remove_colums",
+      "tests/test_arrow_dataset.py::ReaderTester",
+      "tests/test_arrow_dataset.py::ReaderTester._get_dataset_from_filename"
+    ],
+    "unmappable_hunks": 0
+  },
+  "matplotlib__matplotlib-23692": {
+    "files": {
+      "ignored": [
+        "doc/api/axis_api.rst",
+        "doc/users/next_whats_new/view_current_axis_format.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "lib/matplotlib/axes/_base.py",
+        "lib/matplotlib/axis.py"
+      ],
+      "test_python": [
+        "lib/matplotlib/tests/test_axes.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "lib/matplotlib/axes/_base.py::_AxesBase",
+      "lib/matplotlib/axes/_base.py::_AxesBase.tick_params",
+      "lib/matplotlib/axis.py::Axis",
+      "lib/matplotlib/axis.py::Axis._translate_tick_params",
+      "lib/matplotlib/axis.py::Axis.get_tick_params",
+      "lib/matplotlib/axis.py::Axis.set_tick_params",
+      "lib/matplotlib/tests/test_axes.py::test_axis_get_tick_params"
+    ],
+    "unmappable_hunks": 0
+  },
+  "matplotlib__matplotlib-26293": {
+    "files": {
+      "ignored": [
+        "doc/api/axes_api.rst",
+        "doc/api/toolkits/mplot3d/axes3d.rst",
+        "doc/users/next_whats_new/margin_getters.rst"
+      ],
+      "other_implementation": [
+        "lib/matplotlib/axes/_base.pyi"
+      ],
+      "source_python": [
+        "lib/matplotlib/axes/_base.py",
+        "lib/mpl_toolkits/mplot3d/axes3d.py"
+      ],
+      "test_python": [
+        "lib/matplotlib/tests/test_axes.py",
+        "lib/mpl_toolkits/mplot3d/tests/test_axes3d.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "lib/matplotlib/axes/_base.py::_AxesBase",
+      "lib/matplotlib/axes/_base.py::_AxesBase.get_xmargin",
+      "lib/matplotlib/axes/_base.py::_AxesBase.get_ymargin",
+      "lib/matplotlib/tests/test_axes.py::test_margin_getters",
+      "lib/mpl_toolkits/mplot3d/axes3d.py::Axes3D",
+      "lib/mpl_toolkits/mplot3d/axes3d.py::Axes3D.get_zmargin",
+      "lib/mpl_toolkits/mplot3d/tests/test_axes3d.py::test_margin_getters"
+    ],
+    "unmappable_hunks": 0
+  },
+  "pgmpy__pgmpy-1797": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [
+        "requirements/runtime.txt"
+      ],
+      "source_python": [
+        "pgmpy/utils/__init__.py",
+        "pgmpy/utils/utils.py"
+      ],
+      "test_python": [
+        "pgmpy/tests/test_utils/test_utils.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "pgmpy/tests/test_utils/test_utils.py::TestPairwiseOrientation",
+      "pgmpy/tests/test_utils/test_utils.py::TestPairwiseOrientation.test_llm",
+      "pgmpy/utils/utils.py::llm_pairwise_orient"
+    ],
+    "unmappable_hunks": 0
+  },
+  "roboflow__supervision-1237": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "supervision/detection/core.py",
+        "supervision/utils/internal.py"
+      ],
+      "test_python": [
+        "test/utils/test_internal.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "MockClass",
+      "MockDataclass",
+      "__init__",
+      "__private_method",
+      "__private_property",
+      "_protected_method",
+      "_protected_property",
+      "public_method",
+      "public_property",
+      "test_get_instance_variables"
+    ],
+    "symbols": [
+      "supervision/detection/core.py::validate_fields_both_defined_or_none",
+      "supervision/utils/internal.py::get_instance_variables",
+      "test/utils/test_internal.py::MockClass",
+      "test/utils/test_internal.py::MockClass.__init__",
+      "test/utils/test_internal.py::MockClass.__private_method",
+      "test/utils/test_internal.py::MockClass.__private_property",
+      "test/utils/test_internal.py::MockClass._protected_method",
+      "test/utils/test_internal.py::MockClass._protected_property",
+      "test/utils/test_internal.py::MockClass.public_method",
+      "test/utils/test_internal.py::MockClass.public_property",
+      "test/utils/test_internal.py::MockDataclass",
+      "test/utils/test_internal.py::MockDataclass.__private_method",
+      "test/utils/test_internal.py::MockDataclass.__private_property",
+      "test/utils/test_internal.py::MockDataclass._protected_method",
+      "test/utils/test_internal.py::MockDataclass._protected_property",
+      "test/utils/test_internal.py::MockDataclass.public_method",
+      "test/utils/test_internal.py::MockDataclass.public_property",
+      "test/utils/test_internal.py::test_get_instance_variables"
+    ],
+    "unmappable_hunks": 0
+  },
+  "roboflow__supervision-1296": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "supervision/detection/core.py",
+        "supervision/detection/lmm.py"
+      ],
+      "test_python": [
+        "test/detection/test_lmm_florence_2.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "test_florence_2"
+    ],
+    "symbols": [
+      "supervision/detection/core.py::Detections",
+      "supervision/detection/core.py::Detections.from_lmm",
+      "supervision/detection/lmm.py::LMM",
+      "supervision/detection/lmm.py::from_florence_2",
+      "supervision/detection/lmm.py::validate_lmm_and_kwargs",
+      "supervision/detection/lmm.py::validate_lmm_parameters",
+      "test/detection/test_lmm_florence_2.py::test_florence_2"
+    ],
+    "unmappable_hunks": 0
+  },
+  "roboflow__supervision-1340": {
+    "files": {
+      "ignored": [
+        "docs/detection/utils.md"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "supervision/__init__.py",
+        "supervision/detection/core.py",
+        "supervision/detection/utils.py"
+      ],
+      "test_python": [
+        "test/detection/test_utils.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "supervision/detection/core.py::Detections",
+      "supervision/detection/core.py::Detections.from_sam",
+      "supervision/detection/utils.py::xcycwh_to_xyxy",
+      "supervision/detection/utils.py::xywh_to_xyxy",
+      "test/detection/test_utils.py::test_xcycwh_to_xyxy",
+      "test/detection/test_utils.py::test_xywh_to_xyxy"
+    ],
+    "unmappable_hunks": 0
+  },
+  "roboflow__supervision-847": {
+    "files": {
+      "ignored": [
+        "docs/detection/utils.md"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "supervision/__init__.py",
+        "supervision/detection/core.py",
+        "supervision/detection/utils.py"
+      ],
+      "test_python": [
+        "test/detection/test_utils.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "supervision/detection/core.py::Detections",
+      "supervision/detection/core.py::Detections.with_nms",
+      "supervision/detection/utils.py::box_non_max_suppression",
+      "supervision/detection/utils.py::mask_iou_batch",
+      "supervision/detection/utils.py::mask_non_max_suppression",
+      "supervision/detection/utils.py::non_max_suppression",
+      "supervision/detection/utils.py::resize_masks",
+      "test/detection/test_utils.py::test_box_non_max_suppression",
+      "test/detection/test_utils.py::test_mask_non_max_suppression",
+      "test/detection/test_utils.py::test_non_max_suppression"
+    ],
+    "unmappable_hunks": 0
+  },
+  "roboflow__supervision-910": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "supervision/detection/tools/polygon_zone.py",
+        "supervision/utils/internal.py"
+      ],
+      "test_python": [
+        "test/detection/test_polygonzone.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "test_polygon_zone_trigger"
+    ],
+    "symbols": [
+      "supervision/detection/tools/polygon_zone.py::PolygonZone",
+      "supervision/detection/tools/polygon_zone.py::PolygonZone.__init__",
+      "supervision/detection/tools/polygon_zone.py::PolygonZone.trigger",
+      "supervision/utils/internal.py::deprecated_parameter",
+      "supervision/utils/internal.py::deprecated_parameter.decorator",
+      "supervision/utils/internal.py::deprecated_parameter.decorator.wrapper",
+      "test/detection/test_polygonzone.py::test_polygon_zone_trigger"
+    ],
+    "unmappable_hunks": 0
+  },
+  "scikit-learn__scikit-learn-11196": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sklearn/preprocessing/label.py",
+        "sklearn/utils/fixes.py",
+        "sklearn/utils/sparsefuncs.py"
+      ],
+      "test_python": [
+        "sklearn/utils/tests/test_sparsefuncs.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sklearn/preprocessing/label.py::_inverse_binarize_multiclass",
+      "sklearn/utils/sparsefuncs.py::_min_or_max_axis",
+      "sklearn/utils/sparsefuncs.py::_minor_reduce",
+      "sklearn/utils/sparsefuncs.py::_sparse_min_max",
+      "sklearn/utils/sparsefuncs.py::_sparse_min_or_max",
+      "sklearn/utils/sparsefuncs.py::_sparse_nan_min_max",
+      "sklearn/utils/sparsefuncs.py::min_max_axis",
+      "sklearn/utils/tests/test_sparsefuncs.py::test_min_max",
+      "sklearn/utils/tests/test_sparsefuncs.py::test_min_max_axis0",
+      "sklearn/utils/tests/test_sparsefuncs.py::test_min_max_axis1"
+    ],
+    "unmappable_hunks": 0
+  },
+  "scikit-learn__scikit-learn-17225": {
+    "files": {
+      "ignored": [
+        "doc/whats_new/v0.24.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "sklearn/metrics/_regression.py",
+        "sklearn/utils/fixes.py",
+        "sklearn/utils/stats.py"
+      ],
+      "test_python": [
+        "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py",
+        "sklearn/metrics/tests/test_score_objects.py",
+        "sklearn/utils/tests/test_stats.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "test_weighted_median_equal_weights",
+      "test_weighted_median_integer_weights",
+      "test_weighted_percentile",
+      "test_weighted_percentile_2d",
+      "test_weighted_percentile_equal",
+      "test_weighted_percentile_zero_weight"
+    ],
+    "symbols": [
+      "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py::test_weighted_percentile",
+      "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py::test_weighted_percentile_equal",
+      "sklearn/ensemble/tests/test_gradient_boosting_loss_functions.py::test_weighted_percentile_zero_weight",
+      "sklearn/metrics/_regression.py::median_absolute_error",
+      "sklearn/metrics/tests/test_score_objects.py::_make_estimators",
+      "sklearn/metrics/tests/test_score_objects.py::test_classification_scorer_sample_weight",
+      "sklearn/metrics/tests/test_score_objects.py::test_regression_scorer_sample_weight",
+      "sklearn/metrics/tests/test_score_objects.py::test_scorer_sample_weight",
+      "sklearn/utils/fixes.py::_take_along_axis",
+      "sklearn/utils/stats.py::_weighted_percentile",
+      "sklearn/utils/tests/test_stats.py::test_weighted_median_equal_weights",
+      "sklearn/utils/tests/test_stats.py::test_weighted_median_integer_weights",
+      "sklearn/utils/tests/test_stats.py::test_weighted_percentile",
+      "sklearn/utils/tests/test_stats.py::test_weighted_percentile_2d",
+      "sklearn/utils/tests/test_stats.py::test_weighted_percentile_equal",
+      "sklearn/utils/tests/test_stats.py::test_weighted_percentile_zero_weight"
+    ],
+    "unmappable_hunks": 0
+  },
+  "softlayer__softlayer-python-1766": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "SoftLayer/CLI/core.py",
+        "SoftLayer/CLI/formatting.py"
+      ],
+      "test_python": [
+        "tests/CLI/modules/account_tests.py",
+        "tests/CLI/modules/vs/vs_tests.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "SoftLayer/CLI/formatting.py::clean_table",
+      "SoftLayer/CLI/formatting.py::csv_output_format",
+      "SoftLayer/CLI/formatting.py::format_output",
+      "SoftLayer/CLI/formatting.py::write_csv_format",
+      "tests/CLI/modules/account_tests.py::AccountCLITests",
+      "tests/CLI/modules/account_tests.py::AccountCLITests.test_invoice_detail_csv_output_format",
+      "tests/CLI/modules/vs/vs_tests.py::VirtTests",
+      "tests/CLI/modules/vs/vs_tests.py::VirtTests.test_vs_detail_csv_output_format_with_nested_tables"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sphinx-doc__sphinx-9154": {
+    "files": {
+      "ignored": [
+        "CHANGES",
+        "doc/usage/extensions/autodoc.rst"
+      ],
+      "other_implementation": [],
+      "source_python": [
+        "sphinx/ext/autodoc/__init__.py",
+        "sphinx/ext/autodoc/directive.py"
+      ],
+      "test_python": [
+        "tests/test_ext_autodoc_autoclass.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sphinx/ext/autodoc/__init__.py::ClassDocumenter",
+      "sphinx/ext/autodoc/__init__.py::ClassDocumenter.get_doc",
+      "sphinx/ext/autodoc/__init__.py::class_doc_from_option",
+      "tests/test_ext_autodoc_autoclass.py::test_class_doc_from_both",
+      "tests/test_ext_autodoc_autoclass.py::test_class_doc_from_class",
+      "tests/test_ext_autodoc_autoclass.py::test_class_doc_from_init"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sympy__sympy-12417": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sympy/vector/__init__.py",
+        "sympy/vector/functions.py"
+      ],
+      "test_python": [
+        "sympy/vector/tests/test_field_functions.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sympy/vector/functions.py::directional_derivative",
+      "sympy/vector/tests/test_field_functions.py::test_directional_derivative"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sympy__sympy-13304": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sympy/polys/polyclasses.py",
+        "sympy/polys/polytools.py",
+        "sympy/polys/sqfreetools.py"
+      ],
+      "test_python": [
+        "sympy/polys/tests/test_polytools.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sympy/polys/polyclasses.py::DMP",
+      "sympy/polys/polyclasses.py::DMP.norm",
+      "sympy/polys/polytools.py::Poly",
+      "sympy/polys/polytools.py::Poly.norm",
+      "sympy/polys/sqfreetools.py::dmp_norm",
+      "sympy/polys/tests/test_polytools.py::test_norm"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sympy__sympy-14745": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/convolution.py",
+        "sympy/discrete/transforms.py"
+      ],
+      "test_python": [
+        "sympy/discrete/tests/test_convolution.py"
+      ]
+    },
+    "gold_only_symbol_names": [
+      "convolution",
+      "convolution_fft",
+      "convolution_ntt",
+      "test_convolution",
+      "test_convolution_fft",
+      "test_convolution_ntt",
+      "test_cyclic_convolution"
+    ],
+    "symbols": [
+      "sympy/discrete/convolution.py::convolution",
+      "sympy/discrete/convolution.py::convolution_fft",
+      "sympy/discrete/convolution.py::convolution_ntt",
+      "sympy/discrete/tests/test_convolution.py::test_convolution",
+      "sympy/discrete/tests/test_convolution.py::test_convolution_fft",
+      "sympy/discrete/tests/test_convolution.py::test_convolution_ntt",
+      "sympy/discrete/tests/test_convolution.py::test_cyclic_convolution",
+      "sympy/discrete/transforms.py::_number_theoretic_transform",
+      "sympy/discrete/transforms.py::intt",
+      "sympy/discrete/transforms.py::ntt"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sympy__sympy-14853": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/transforms.py"
+      ],
+      "test_python": [
+        "sympy/discrete/tests/test_transforms.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sympy/discrete/tests/test_transforms.py::test_mobius_transform",
+      "sympy/discrete/transforms.py::_mobius_transform",
+      "sympy/discrete/transforms.py::fwht",
+      "sympy/discrete/transforms.py::inverse_mobius_transform",
+      "sympy/discrete/transforms.py::mobius_transform"
+    ],
+    "unmappable_hunks": 0
+  },
+  "sympy__sympy-14928": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sympy/discrete/__init__.py",
+        "sympy/discrete/convolution.py"
+      ],
+      "test_python": [
+        "sympy/discrete/tests/test_convolution.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sympy/discrete/convolution.py::covering_product",
+      "sympy/discrete/tests/test_convolution.py::test_covering_product"
+    ],
+    "unmappable_hunks": 0
+  },
+  "tobymao__sqlglot-3145": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sqlglot/dialects/tsql.py",
+        "sqlglot/generator.py"
+      ],
+      "test_python": [
+        "tests/dialects/test_tsql.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sqlglot/dialects/tsql.py::TSQL",
+      "sqlglot/dialects/tsql.py::TSQL.Generator",
+      "sqlglot/dialects/tsql.py::TSQL.Generator.select_sql",
+      "sqlglot/generator.py::Generator",
+      "sqlglot/generator.py::Generator.query_modifiers",
+      "sqlglot/generator.py::Generator.select_sql",
+      "tests/dialects/test_tsql.py::TestTSQL",
+      "tests/dialects/test_tsql.py::TestTSQL.test_tsql"
+    ],
+    "unmappable_hunks": 0
+  },
+  "tobymao__sqlglot-3991": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sqlglot/dialects/hive.py",
+        "sqlglot/parser.py"
+      ],
+      "test_python": [
+        "tests/dialects/test_presto.py",
+        "tests/dialects/test_spark.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sqlglot/dialects/hive.py::Hive",
+      "sqlglot/dialects/hive.py::Hive.Parser",
+      "sqlglot/dialects/hive.py::Hive.Parser._to_prop_eq",
+      "sqlglot/parser.py::Parser",
+      "sqlglot/parser.py::Parser._kv_to_prop_eq",
+      "sqlglot/parser.py::Parser._to_prop_eq",
+      "tests/dialects/test_presto.py::TestPresto",
+      "tests/dialects/test_presto.py::TestPresto.test_presto",
+      "tests/dialects/test_spark.py::TestSpark",
+      "tests/dialects/test_spark.py::TestSpark.test_spark"
+    ],
+    "unmappable_hunks": 0
+  },
+  "tobymao__sqlglot-4084": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sqlglot/__init__.py",
+        "sqlglot/expressions.py"
+      ],
+      "test_python": [
+        "tests/test_build.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sqlglot/expressions.py::merge",
+      "tests/test_build.py::TestBuild",
+      "tests/test_build.py::TestBuild.test_build"
+    ],
+    "unmappable_hunks": 0
+  },
+  "tobymao__sqlglot-415": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sqlglot/expressions.py",
+        "sqlglot/parser.py"
+      ],
+      "test_python": [
+        "tests/test_build.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sqlglot/expressions.py::Select",
+      "sqlglot/expressions.py::Select.cluster_by",
+      "sqlglot/expressions.py::Select.sort_by",
+      "sqlglot/parser.py::Parser",
+      "tests/test_build.py::TestBuild",
+      "tests/test_build.py::TestBuild.test_build"
+    ],
+    "unmappable_hunks": 0
+  },
+  "tobymao__sqlglot-858": {
+    "files": {
+      "ignored": [],
+      "other_implementation": [],
+      "source_python": [
+        "sqlglot/expressions.py",
+        "sqlglot/parser.py"
+      ],
+      "test_python": [
+        "tests/test_build.py"
+      ]
+    },
+    "gold_only_symbol_names": [],
+    "symbols": [
+      "sqlglot/expressions.py::Select",
+      "sqlglot/expressions.py::Select.window",
+      "sqlglot/parser.py::Parser",
+      "sqlglot/parser.py::Parser._parse_named_window",
+      "sqlglot/parser.py::Parser._parse_window_clause",
+      "tests/test_build.py::TestBuild",
+      "tests/test_build.py::TestBuild.test_build"
+    ],
+    "unmappable_hunks": 0
+  }
+}

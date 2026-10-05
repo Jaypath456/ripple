@@ -1,0 +1,44 @@
+{
+  "completed_at": "2026-10-02T21:19:38.593760Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: sphinx/ext/autodoc/collections.py",
+    "missing or non-source path: sphinx/ext/autodoc/docstring.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 7856,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 1554,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "af31ca91aee6877d66c7f7b32933117362c38131f9fd69e809c1f63985b30ea0",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "sphinx-doc/sphinx",
+  "request_original_length": 306,
+  "request_truncated": false,
+  "request_used_length": 306,
+  "requested_seed": 42,
+  "run_id": "sphinx-doc__sphinx-9154__B3__42",
+  "runtime_seconds": 3.3038040959982027,
+  "schema_version": 1,
+  "source_ranking": [
+    "sphinx/ext/autodoc/__init__.py"
+  ],
+  "status": "completed",
+  "system": "B3",
+  "task_id": "sphinx-doc__sphinx-9154",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 9410,
+  "trace_path": null
+}

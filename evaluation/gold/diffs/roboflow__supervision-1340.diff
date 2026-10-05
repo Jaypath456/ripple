@@ -1,0 +1,199 @@
+diff --git a/docs/detection/utils.md b/docs/detection/utils.md
+index ea98c8683c..85fcacda5c 100644
+--- a/docs/detection/utils.md
++++ b/docs/detection/utils.md
+@@ -80,6 +80,18 @@ comments: true
+   <h2><a href="#supervision.detection.utils.contains_holes">contains_holes</a></h2>
+ </div>
+ 
++:::supervision.detection.utils.xywh_to_xyxy
++
++<div class="md-typeset">
++  <h2><a href="#supervision.detection.utils.xywh_to_xyxy">xywh_to_xyxy</a></h2>
++</div>
++
++:::supervision.detection.utils.xcycwh_to_xyxy
++
++<div class="md-typeset">
++  <h2><a href="#supervision.detection.utils.xcycwh_to_xyxy">xcycwh_to_xyxy</a></h2>
++</div>
++
+ :::supervision.detection.utils.contains_holes
+ 
+ <div class="md-typeset">
+diff --git a/supervision/__init__.py b/supervision/__init__.py
+index 4f28d49f47..a4126f31a0 100644
+--- a/supervision/__init__.py
++++ b/supervision/__init__.py
+@@ -67,6 +67,8 @@
+     polygon_to_mask,
+     polygon_to_xyxy,
+     scale_boxes,
++    xcycwh_to_xyxy,
++    xywh_to_xyxy,
+ )
+ from supervision.draw.color import Color, ColorPalette
+ from supervision.draw.utils import (
+diff --git a/supervision/detection/core.py b/supervision/detection/core.py
+index 61a08b7e2c..48711bce1c 100644
+--- a/supervision/detection/core.py
++++ b/supervision/detection/core.py
+@@ -686,7 +686,7 @@ def from_sam(cls, sam_result: List[dict]) -> Detections:
+         if np.asarray(xywh).shape[0] == 0:
+             return cls.empty()
+ 
+-        xyxy = xywh_to_xyxy(boxes_xywh=xywh)
++        xyxy = xywh_to_xyxy(xywh=xywh)
+         return cls(xyxy=xyxy, mask=mask)
+ 
+     @classmethod
+diff --git a/supervision/detection/utils.py b/supervision/detection/utils.py
+index 5b92aedd90..e7090be3ed 100644
+--- a/supervision/detection/utils.py
++++ b/supervision/detection/utils.py
+@@ -228,10 +228,78 @@ def pad_boxes(xyxy: np.ndarray, px: int, py: Optional[int] = None) -> np.ndarray
+     return result
+ 
+ 
+-def xywh_to_xyxy(boxes_xywh: np.ndarray) -> np.ndarray:
+-    xyxy = boxes_xywh.copy()
+-    xyxy[:, 2] = boxes_xywh[:, 0] + boxes_xywh[:, 2]
+-    xyxy[:, 3] = boxes_xywh[:, 1] + boxes_xywh[:, 3]
++def xywh_to_xyxy(xywh: np.ndarray) -> np.ndarray:
++    """
++    Converts bounding box coordinates from `(x, y, width, height)`
++    format to `(x_min, y_min, x_max, y_max)` format.
++
++    Args:
++        xywh (np.ndarray): A numpy array of shape `(N, 4)` where each row
++            corresponds to a bounding box in the format `(x, y, width, height)`.
++
++    Returns:
++        np.ndarray: A numpy array of shape `(N, 4)` where each row corresponds
++            to a bounding box in the format `(x_min, y_min, x_max, y_max)`.
++
++    Examples:
++        ```python
++        import numpy as np
++        import supervision as sv
++
++        xywh = np.array([
++            [10, 20, 30, 40],
++            [15, 25, 35, 45]
++        ])
++
++        sv.xywh_to_xyxy(xywh=xywh)
++        # array([
++        #     [10, 20, 40, 60],
++        #     [15, 25, 50, 70]
++        # ])
++        ```
++    """
++    xyxy = xywh.copy()
++    xyxy[:, 2] = xywh[:, 0] + xywh[:, 2]
++    xyxy[:, 3] = xywh[:, 1] + xywh[:, 3]
++    return xyxy
++
++
++def xcycwh_to_xyxy(xcycwh: np.ndarray) -> np.ndarray:
++    """
++    Converts bounding box coordinates from `(center_x, center_y, width, height)`
++    format to `(x_min, y_min, x_max, y_max)` format.
++
++    Args:
++        xcycwh (np.ndarray): A numpy array of shape `(N, 4)` where each row
++            corresponds to a bounding box in the format `(center_x, center_y, width,
++            height)`.
++
++    Returns:
++        np.ndarray: A numpy array of shape `(N, 4)` where each row corresponds
++            to a bounding box in the format `(x_min, y_min, x_max, y_max)`.
++
++    Examples:
++        ```python
++        import numpy as np
++        import supervision as sv
++
++        xcycwh = np.array([
++            [50, 50, 20, 30],
++            [30, 40, 10, 15]
++        ])
++
++        sv.xcycwh_to_xyxy(xcycwh=xcycwh)
++        # array([
++        #     [40, 35, 60, 65],
++        #     [25, 32.5, 35, 47.5]
++        # ])
++        ```
++    """
++    xyxy = xcycwh.copy()
++    xyxy[:, 0] = xcycwh[:, 0] - xcycwh[:, 2] / 2
++    xyxy[:, 1] = xcycwh[:, 1] - xcycwh[:, 3] / 2
++    xyxy[:, 2] = xcycwh[:, 0] + xcycwh[:, 2] / 2
++    xyxy[:, 3] = xcycwh[:, 1] + xcycwh[:, 3] / 2
+     return xyxy
+ 
+ 
+diff --git a/test/detection/test_utils.py b/test/detection/test_utils.py
+index 20c818e615..9224c6760a 100644
+--- a/test/detection/test_utils.py
++++ b/test/detection/test_utils.py
+@@ -17,6 +17,8 @@
+     move_boxes,
+     process_roboflow_result,
+     scale_boxes,
++    xcycwh_to_xyxy,
++    xywh_to_xyxy,
+ )
+ 
+ TEST_MASK = np.zeros((1, 1000, 1000), dtype=bool)
+@@ -1090,3 +1092,49 @@ def test_contains_multiple_segments(
+     with exception:
+         result = contains_multiple_segments(mask=mask, connectivity=connectivity)
+         assert result == expected_result
++
++
++@pytest.mark.parametrize(
++    "xywh, expected_result",
++    [
++        (np.array([[10, 20, 30, 40]]), np.array([[10, 20, 40, 60]])),  # standard case
++        (np.array([[0, 0, 0, 0]]), np.array([[0, 0, 0, 0]])),  # zero size bounding box
++        (
++            np.array([[50, 50, 100, 100]]),
++            np.array([[50, 50, 150, 150]]),
++        ),  # large bounding box
++        (
++            np.array([[-10, -20, 30, 40]]),
++            np.array([[-10, -20, 20, 20]]),
++        ),  # negative coordinates
++        (np.array([[50, 50, 0, 30]]), np.array([[50, 50, 50, 80]])),  # zero width
++        (np.array([[50, 50, 20, 0]]), np.array([[50, 50, 70, 50]])),  # zero height
++        (np.array([]).reshape(0, 4), np.array([]).reshape(0, 4)),  # empty array
++    ],
++)
++def test_xywh_to_xyxy(xywh: np.ndarray, expected_result: np.ndarray) -> None:
++    result = xywh_to_xyxy(xywh)
++    np.testing.assert_array_equal(result, expected_result)
++
++
++@pytest.mark.parametrize(
++    "xcycwh, expected_result",
++    [
++        (np.array([[50, 50, 20, 30]]), np.array([[40, 35, 60, 65]])),  # standard case
++        (np.array([[0, 0, 0, 0]]), np.array([[0, 0, 0, 0]])),  # zero size bounding box
++        (
++            np.array([[50, 50, 100, 100]]),
++            np.array([[0, 0, 100, 100]]),
++        ),  # large bounding box centered at (50, 50)
++        (
++            np.array([[-10, -10, 20, 30]]),
++            np.array([[-20, -25, 0, 5]]),
++        ),  # negative coordinates
++        (np.array([[50, 50, 0, 30]]), np.array([[50, 35, 50, 65]])),  # zero width
++        (np.array([[50, 50, 20, 0]]), np.array([[40, 50, 60, 50]])),  # zero height
++        (np.array([]).reshape(0, 4), np.array([]).reshape(0, 4)),  # empty array
++    ],
++)
++def test_xcycwh_to_xyxy(xcycwh: np.ndarray, expected_result: np.ndarray) -> None:
++    result = xcycwh_to_xyxy(xcycwh)
++    np.testing.assert_array_equal(result, expected_result)

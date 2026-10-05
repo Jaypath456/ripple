@@ -1,0 +1,44 @@
+{
+  "completed_at": "2026-10-02T18:12:36.140862Z",
+  "config_hash": "95668b685a987f027e7c59ee95637792a3c94a2faec2c6a05f732e9b348066f0",
+  "config_version": "final-v1",
+  "dropped_predictions": [
+    "missing or non-source path: astropy/modeling/base_classes.py"
+  ],
+  "failure_kind": null,
+  "failure_message": null,
+  "input_tokens": 7098,
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "malformed_outputs": 0,
+  "model_calls": 1,
+  "output_tokens": 121,
+  "predicted_symbols": [],
+  "prepared_request_sha256": "dc4e0d65e9b6b37a10d3b7762c3b37149a553b515315349815807c997016ec14",
+  "provider_seed_control": false,
+  "report_path": null,
+  "repository": "astropy/astropy",
+  "request_original_length": 1536,
+  "request_truncated": false,
+  "request_used_length": 1536,
+  "requested_seed": 42,
+  "run_id": "astropy__astropy-16677__B3__42",
+  "runtime_seconds": 1.0179112630012241,
+  "schema_version": 1,
+  "source_ranking": [
+    "astropy/modeling/__init__.py",
+    "astropy/modeling/core.py"
+  ],
+  "status": "completed",
+  "system": "B3",
+  "task_id": "astropy__astropy-16677",
+  "test_ranking": [],
+  "tool_calls": 0,
+  "total_tokens": 7219,
+  "trace_path": null
+}

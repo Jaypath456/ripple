@@ -1,0 +1,21 @@
+{
+  "entries": [],
+  "instructions": "Human: set each entry's label to plausible_alternative or wrong. A label applies to every seed that predicted the file. Do not change benchmark gold.",
+  "selected_task_ids": [
+    "astropy__astropy-13676",
+    "astropy__astropy-16677",
+    "astropy__astropy-7970",
+    "conan-io__conan-10154",
+    "conan-io__conan-10437",
+    "conan-io__conan-10874",
+    "conan-io__conan-11284",
+    "conan-io__conan-11585",
+    "deepset-ai__haystack-8042",
+    "google-deepmind__optax-1063",
+    "google-deepmind__optax-897",
+    "huggingface__accelerate-255",
+    "huggingface__datasets-214",
+    "matplotlib__matplotlib-23692",
+    "matplotlib__matplotlib-26293"
+  ]
+}

@@ -1,0 +1,97 @@
+diff --git a/sqlglot/dialects/hive.py b/sqlglot/dialects/hive.py
+index 990991357e..d428db71ba 100644
+--- a/sqlglot/dialects/hive.py
++++ b/sqlglot/dialects/hive.py
+@@ -436,6 +436,14 @@ def _parse_parameter(self) -> exp.Parameter:
+             self._match(TokenType.R_BRACE)
+             return self.expression(exp.Parameter, this=this, expression=expression)
+ 
++        def _to_prop_eq(self, expression: exp.Expression, index: int) -> exp.Expression:
++            if isinstance(expression, exp.Column):
++                key = expression.this
++            else:
++                key = exp.to_identifier(f"col{index + 1}")
++
++            return self.expression(exp.PropertyEQ, this=key, expression=expression)
++
+     class Generator(generator.Generator):
+         LIMIT_FETCH = "LIMIT"
+         TABLESAMPLE_WITH_METHOD = False
+diff --git a/sqlglot/parser.py b/sqlglot/parser.py
+index 17d5de3d8b..81e06ba926 100644
+--- a/sqlglot/parser.py
++++ b/sqlglot/parser.py
+@@ -5112,10 +5112,13 @@ def _parse_function_call(
+         self._match_r_paren(this)
+         return self._parse_window(this)
+ 
++    def _to_prop_eq(self, expression: exp.Expression, index: int) -> exp.Expression:
++        return expression
++
+     def _kv_to_prop_eq(self, expressions: t.List[exp.Expression]) -> t.List[exp.Expression]:
+         transformed = []
+ 
+-        for e in expressions:
++        for index, e in enumerate(expressions):
+             if isinstance(e, self.KEY_VALUE_DEFINITIONS):
+                 if isinstance(e, exp.Alias):
+                     e = self.expression(exp.PropertyEQ, this=e.args.get("alias"), expression=e.this)
+@@ -5127,6 +5130,8 @@ def _kv_to_prop_eq(self, expressions: t.List[exp.Expression]) -> t.List[exp.Expr
+ 
+                 if isinstance(e.this, exp.Column):
+                     e.this.replace(e.this.this)
++            else:
++                e = self._to_prop_eq(e, index)
+ 
+             transformed.append(e)
+ 
+diff --git a/tests/dialects/test_presto.py b/tests/dialects/test_presto.py
+index 950c89f82d..173d16eb80 100644
+--- a/tests/dialects/test_presto.py
++++ b/tests/dialects/test_presto.py
+@@ -715,9 +715,6 @@ def test_presto(self):
+         )
+         self.validate_all(
+             "SELECT ROW(1, 2)",
+-            read={
+-                "spark": "SELECT STRUCT(1, 2)",
+-            },
+             write={
+                 "presto": "SELECT ROW(1, 2)",
+                 "spark": "SELECT STRUCT(1, 2)",
+diff --git a/tests/dialects/test_spark.py b/tests/dialects/test_spark.py
+index c9b7897429..cbaa169af9 100644
+--- a/tests/dialects/test_spark.py
++++ b/tests/dialects/test_spark.py
+@@ -485,7 +485,7 @@ def test_spark(self):
+         )
+         self.validate_all(
+             "SELECT CAST(STRUCT('fooo') AS STRUCT<a: VARCHAR(2)>)",
+-            write={"spark": "SELECT CAST(STRUCT('fooo') AS STRUCT<a: STRING>)"},
++            write={"spark": "SELECT CAST(STRUCT('fooo' AS col1) AS STRUCT<a: STRING>)"},
+         )
+         self.validate_all(
+             "SELECT CAST(123456 AS VARCHAR(3))",
+@@ -718,6 +718,22 @@ def test_spark(self):
+             },
+         )
+ 
++        self.validate_all(
++            "SELECT STRUCT(1, 2)",
++            write={
++                "spark": "SELECT STRUCT(1 AS col1, 2 AS col2)",
++                "presto": "SELECT CAST(ROW(1, 2) AS ROW(col1 INTEGER, col2 INTEGER))",
++                "duckdb": "SELECT {'col1': 1, 'col2': 2}",
++            },
++        )
++        self.validate_all(
++            "SELECT STRUCT(x, 1, y AS col3, STRUCT(5)) FROM t",
++            write={
++                "spark": "SELECT STRUCT(x AS x, 1 AS col2, y AS col3, STRUCT(5 AS col1) AS col4) FROM t",
++                "duckdb": "SELECT {'x': x, 'col2': 1, 'col3': y, 'col4': {'col1': 5}} FROM t",
++            },
++        )
++
+     def test_bool_or(self):
+         self.validate_all(
+             "SELECT a, LOGICAL_OR(b) FROM table GROUP BY a",

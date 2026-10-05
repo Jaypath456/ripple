@@ -160,6 +160,9 @@ def stage_b_metrics(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
             detected / len(applicable) if applicable else None
         )
         output[f"{variant}_applicable"] = len(applicable)
+        output[f"{variant}_inapplicable"] = sum(
+            item["variant"] == variant for item in records
+        ) - len(applicable)
     controls = [
         item
         for item in records
@@ -182,6 +185,35 @@ def adjudicated_precision(
     plausible = sum(label == "plausible_alternative" for label in false_positive_labels)
     denominator = true_positives + len(false_positive_labels)
     return (true_positives + plausible) / denominator if denominator else 0.0
+
+
+def adjudicated_task_precision(
+    rows: Sequence[dict[str, Any]],
+    labels: dict[tuple[str, str], str],
+    selected: set[str],
+) -> float | None:
+    """Mean over tasks of the seed-mean per-run adjudicated precision.
+
+    Each RIPPLE run scores ``(TP + plausible false positives) / (TP + false
+    positives)``; labels are per (task, file) and shared across seeds. ``None`` means
+    a needed label is missing or invalid.
+    """
+
+    per_task: dict[str, list[float]] = defaultdict(list)
+    for row in rows:
+        if row["system"] != "RIPPLE" or row["task_id"] not in selected:
+            continue
+        false_positives = row["false_positive_paths"]
+        value = adjudicated_precision(
+            row["predicted_count"] - len(false_positives),
+            [labels.get((row["task_id"], path), "") for path in false_positives],
+        )
+        if value is None:
+            return None
+        per_task[row["task_id"]].append(value)
+    if not per_task:
+        return None
+    return fmean(fmean(values) for values in per_task.values())
 
 
 def select_adjudication_tasks(
@@ -212,16 +244,18 @@ def build_adjudication_template(
 ) -> dict[str, Any]:
     selected = set(select_adjudication_tasks(tasks))
     task_map = {item.id: item for item in tasks}
-    entries = []
+    entries: dict[tuple[str, str], dict[str, Any]] = {}
     for row in rows:
         if row["system"] != "RIPPLE" or row["task_id"] not in selected:
             continue
         for path in row.get("false_positive_paths", []):
-            entries.append(
+            entry = entries.setdefault(
+                (row["task_id"], path),
                 {
                     "task_id": row["task_id"],
                     "request": task_map[row["task_id"]].masked_request,
                     "predicted_false_positive_file": path,
+                    "seeds": [],
                     "evidence_reason": row.get("prediction_evidence", {}).get(
                         path, "See saved report and trace."
                     ),
@@ -230,12 +264,17 @@ def build_adjudication_template(
                     ),
                     "label": "",
                     "note": "",
-                }
+                },
             )
+            entry["seeds"].append(row["requested_seed"])
     payload = {
-        "instructions": "Human: set each label to plausible_alternative or wrong. Do not change benchmark gold.",
+        "instructions": (
+            "Human: set each entry's label to plausible_alternative or wrong. "
+            "A label applies to every seed that predicted the file. "
+            "Do not change benchmark gold."
+        ),
         "selected_task_ids": sorted(selected),
-        "entries": entries,
+        "entries": [entries[key] for key in sorted(entries)],
     }
     atomic_json(output, payload)
     return payload
@@ -311,6 +350,7 @@ def _score_runs(
                     "unmappable_gold_hunks": symbol_gold.get(run.task_id, {}).get(
                         "unmappable_hunks", 0
                     ),
+                    "predicted_count": len(set(run.source_ranking[:k])),
                     "tool_calls": run.tool_calls,
                     "model_calls": run.model_calls,
                     "input_tokens": run.input_tokens,
@@ -386,7 +426,7 @@ def _results_table(aggregates: Sequence[dict[str, Any]]) -> str:
         "Test P",
         "Test R",
         "Symbol R",
-        "Runtime",
+        "Runtime (s)",
         "Tools",
         "Calls",
         "Tokens",
@@ -416,34 +456,195 @@ def _results_table(aggregates: Sequence[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+PAIRED_METRICS = (*HEADLINE_METRICS, "false_positives")
+ROOT_MARKERS = ("<!-- final-results:start -->", "<!-- final-results:end -->")
+
+
+def _table(headers: Sequence[str], rows: Sequence[Sequence[Any]]) -> str:
+    lines = ["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers)]
+    lines.extend(
+        "| "
+        + " | ".join(
+            value
+            if isinstance(value, str)
+            else str(value)
+            if isinstance(value, int)
+            else _fmt(value)
+            for value in row
+        )
+        + " |"
+        for row in rows
+    )
+    return "\n".join(lines)
+
+
+def _interval_table(summary: dict[str, Any]) -> str:
+    rows = []
+    for item in summary["aggregates"]:
+        system = item["system"]
+        intervals = summary["confidence_intervals"].get(system, {})
+        rows.append(
+            [system]
+            + [
+                f"{_fmt(item[metric])} [{_fmt(intervals[metric]['low'])}, "
+                f"{_fmt(intervals[metric]['high'])}]"
+                if metric in intervals
+                else "n/a"
+                for metric in HEADLINE_METRICS
+            ]
+        )
+    return _table(("System", "P", "R", "F1", "R@5", "R@10", "MRR"), rows)
+
+
+def _paired_table(summary: dict[str, Any]) -> str:
+    rows = []
+    for name, metrics in summary["paired_differences"].items():
+        for metric, value in metrics.items():
+            rows.append(
+                (
+                    name.replace("_minus_", " − "),
+                    metric,
+                    value["task_count"],
+                    value["mean_difference"],
+                    f"[{_fmt(value['ci_low'])}, {_fmt(value['ci_high'])}]",
+                    "yes" if value["ci_excludes_zero"] else "no",
+                )
+            )
+    return _table(
+        ("Comparison", "Metric", "Tasks", "Mean diff", "95% CI", "CI excludes 0"),
+        rows,
+    )
+
+
+def _status_table(summary: dict[str, Any]) -> str:
+    statuses = sorted(
+        {key for value in summary["status_mix_by_system"].values() for key in value}
+    )
+    return _table(
+        ("System", *statuses),
+        [
+            (
+                system,
+                *(
+                    summary["status_mix_by_system"][system].get(key, 0)
+                    for key in statuses
+                ),
+            )
+            for system in summary["status_mix_by_system"]
+        ],
+    )
+
+
+def _stage_b_table(summary: dict[str, Any]) -> str:
+    rows = []
+    for source, label in (
+        ("stage_b", "Oracle Stage A"),
+        ("stage_b_ripple", "RIPPLE seed-17 report"),
+    ):
+        metrics = summary[source].get("metrics", {})
+        if not metrics:
+            continue
+        for variant, name in (
+            ("unrelated", "unrelated file → unexpected/unexplained"),
+            ("drop_tests", "dropped tests → missing_test"),
+            ("stale_caller", "stale caller → stale_caller"),
+        ):
+            rows.append(
+                (
+                    label,
+                    name,
+                    metrics[f"{variant}_applicable"],
+                    metrics[f"{variant}_inapplicable"],
+                    metrics[f"{variant}_detection_recall"],
+                )
+            )
+        rows.append(
+            (
+                label,
+                "control false-alarm rate",
+                metrics["control_runs"],
+                0,
+                metrics["control_false_alarm_rate"],
+            )
+        )
+    return _table(("Report", "Anomaly", "Applicable", "Inapplicable", "Rate"), rows)
+
+
+def _provider_text(summary: dict[str, Any]) -> str:
+    lines = []
+    for archive in summary["provider_failure_reconciliation"]:
+        outcome = ", ".join(
+            f"{key}: {value}" for key, value in archive["current_status"].items()
+        )
+        lines.append(
+            f"- `{archive['archive']}`: {archive['archived_failures']} original "
+            f"provider-failed checkpoints preserved ({', '.join(f'{key}: {value}' for key, value in archive['original_failure_kinds'].items())}); "
+            f"after one exact-checkpoint retry the current statuses are {outcome}."
+        )
+    remaining = summary["status_mix"].get("provider_failed", 0)
+    lines.append(
+        f"- Provider failures remaining in the scored denominator: {remaining} "
+        f"({', '.join(summary['remaining_provider_failures']) or 'none'})."
+    )
+    return "\n".join(lines)
+
+
+def _headline(summary: dict[str, Any]) -> str:
+    """Compact generated block shared by the results README and the root README."""
+
+    totals = summary["totals"]
+    adjudication = summary["adjudication"]
+    return f"""Generated by `ripple build-results` from `evaluation/raw/{summary["config_version"]}` ({summary["run_count"]} checkpoints, {summary["task_count"]} tasks, {summary["repository_count"]} repositories). Model systems are averaged over seeds within task, then over tasks.
+
+{_results_table(summary["aggregates"])}
+
+Status mix by system (runs):
+
+{_status_table(summary)}
+
+Paired repository-cluster bootstrap (RIPPLE minus baseline, F1 and recall):
+
+{_table(("Comparison", "Metric", "Mean diff", "95% CI"), [(name.replace("_minus_", " − "), metric, value["mean_difference"], f"[{_fmt(value['ci_low'])}, {_fmt(value['ci_high'])}]") for name, metrics in summary["paired_differences"].items() for metric, value in metrics.items() if metric in {"f1", "recall"}])}
+
+Stage B planted anomalies ({summary["stage_b"].get("task_count", 0)} tasks):
+
+{_stage_b_table(summary)}
+
+Secondary human-adjudicated RIPPLE precision on the {adjudication["selected_tasks"]} pre-selected tasks: `{_fmt(adjudication["precision"])}` ({adjudication["entries"]} false-positive judgments; {adjudication["note"]}).
+
+Totals across all {summary["run_count"]} runs: {totals["model_calls"]} model calls, {totals["total_tokens"]} tokens ({totals["input_tokens"]} input, {totals["output_tokens"]} output), {totals["tool_calls"]} tool calls, {_fmt(totals["runtime_seconds"] / 3600)} hours of recorded runtime. Provider failures still in the denominator: {summary["status_mix"].get("provider_failed", 0)}."""
+
+
 def _render(summary: dict[str, Any]) -> str:
-    return f"""# RIPPLE Evaluation
+    return f"""# RIPPLE Final Evaluation (`{summary["config_version"]}`)
+
+This file is generated by `ripple build-results`; do not edit it by hand.
 
 ## Experimental Setup
 
 Configuration `{summary["config_version"]}` (`{summary["config_hash"]}`) used model `{summary["model"]}` through the configured BullsAI OpenAI-compatible gateway. Primary requests were deterministically path-masked and truncated to the frozen character limit. The agent saw only an exact, clean base checkout. Model configurations used requested seeds {summary["seeds"]}; provider deterministic seed control was unavailable. Confidence intervals use {summary["bootstrap_samples"]} repository-cluster bootstrap samples with seed {summary["bootstrap_seed"]}.
 
-Deterministic B0–B2 set precision uses a matched *k* equal to RIPPLE's confirmed source-file count for that task and seed; *k*=0 remains zero. Ranked recall and MRR use each method's own ranking. Model seeds are averaged within each task before aggregation.
+Deterministic B0–B2 set precision uses a matched *k* equal to RIPPLE's confirmed source-file count for that task and seed; *k*=0 remains zero. Ranked recall and MRR use each method's own ranking. Model seeds are averaged within each task before aggregation. An abstaining run predicts nothing and scores zero set precision, recall, and F1; it is never removed from the denominator, and neither is a provider failure.
 
-## FEA-Bench Results
+## Headline Results
 
-{_results_table(summary["aggregates"])}
+{_headline(summary)}
 
 ## Confidence Intervals
 
-```json
-{json.dumps(summary["confidence_intervals"], indent=2, sort_keys=True)}
-```
+Point estimate with 95% repository-cluster bootstrap percentile interval.
+
+{_interval_table(summary)}
 
 ## Paired Differences
 
-```json
-{json.dumps(summary["paired_differences"], indent=2, sort_keys=True)}
-```
+RIPPLE minus each baseline over paired tasks, resampling repositories. "CI excludes 0" is descriptive; with {summary["repository_count"]} clusters no multiplicity correction was applied.
+
+{_paired_table(summary)}
 
 ## Ablations
 
-A1 removes `co_changed`; A2 removes `get_dependencies` and `find_references`; A3 removes report validation. All other frozen settings are shared. Their measurements appear in the main generated table.
+A1 removes `co_changed`; A2 removes `get_dependencies` and `find_references`; A3 removes report validation. All other frozen settings are shared. Their measurements appear in the main table.
 
 ## Recent PR Results
 
@@ -451,34 +652,102 @@ A1 removes `co_changed`; A2 removes `get_dependencies` and `find_references`; A3
 
 ## Stage B Verification
 
-```json
-{json.dumps(summary["stage_b"], indent=2, sort_keys=True)}
-```
+Deterministic post-change verification against planted anomalies; no model participates, so no model can change a category. Oracle Stage A predicts every gold source file present at base, isolating Stage B. The RIPPLE row uses the actual seed-17 report, which usually abstained (an empty prediction makes every changed file unexpected). Skipped tasks: `{json.dumps(summary["stage_b_ripple"].get("skipped", {}), sort_keys=True)}`.
 
-## Status Mix
+{_stage_b_table(summary)}
 
-```json
-{json.dumps(summary["status_mix"], indent=2, sort_keys=True)}
-```
+## Provider Failures and Retries
+
+{_provider_text(summary)}
+
+Failure taxonomy of current checkpoints: `{json.dumps(summary["failure_taxonomy"], sort_keys=True)}`.
 
 ## Cost / Runtime
 
-Calls, tokens, and runtime are in the generated table. Dollar cost is not reported because no explicit per-token end-user price was available for the university gateway.
-
-## Failure Taxonomy
-
-```json
-{json.dumps(summary["failure_taxonomy"], indent=2, sort_keys=True)}
-```
+Calls, tokens, and runtime are in the main table (per-task means). Dollar cost is not reported because no explicit per-token end-user price was available for the university gateway.
 
 ## Manual Adjudication
 
-Primary exact-diff precision is unchanged. Secondary adjudicated precision is `{_fmt(summary["adjudicated_precision"])}`. `{summary["adjudication_note"]}`
+Primary exact-diff precision is unchanged. Secondary adjudicated precision is `{_fmt(summary["adjudication"]["precision"])}` over {summary["adjudication"]["entries"]} judgments. {summary["adjudication"]["note"]}
+
+## Artifact Hashes
+
+SHA-256 of the frozen inputs and derived artifacts; per-checkpoint hashes are in `final_summary.json`.
+
+{_table(("Artifact", "SHA-256"), [(f"`{path}`", f"`{digest}`") for path, digest in summary["artifact_sha256"].items()])}
 
 ## Limitations
 
-A historical PR is one implementation, not the only plausible one. Static analysis is limited by dynamic Python behavior. Results depend on the selected model and provider. The recent-PR sample is small. The benchmark is finite and confidence intervals remain uncertain. Symbol truth excludes unmappable syntax failures. Changed-test localization is not runtime coverage. RIPPLE does not execute target code or tests.
+A historical PR is one implementation, not the only plausible one. Static analysis is limited by dynamic Python behavior. Results depend on the selected model and provider. No recent-PR contamination split was evaluated because an authoritative training cutoff for the model was unavailable. The benchmark is finite and confidence intervals remain wide. Symbol truth excludes unmappable syntax failures. Changed-test localization is not runtime coverage. RIPPLE does not execute target code or tests.
 """
+
+
+def _provider_reconciliation(
+    archives: Sequence[Path], runs: Sequence[RawRun]
+) -> list[dict[str, Any]]:
+    current = {f"{run.run_id}.json": run.status for run in runs}
+    output = []
+    for archive in archives:
+        originals = [
+            RawRun.model_validate_json(path.read_text(encoding="utf-8"))
+            for path in sorted(archive.glob("*.json"))
+        ]
+        output.append(
+            {
+                "archive": archive.as_posix(),
+                "archived_failures": len(originals),
+                "original_failure_kinds": dict(
+                    sorted(
+                        Counter(item.failure_kind or "" for item in originals).items()
+                    )
+                ),
+                "current_status": dict(
+                    sorted(
+                        Counter(
+                            current.get(f"{item.run_id}.json", "missing")
+                            for item in originals
+                        ).items()
+                    )
+                ),
+                "run_ids": [item.run_id for item in originals],
+            }
+        )
+    return output
+
+
+def _adjudication(path: Path | None, rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    if path is None or not path.exists():
+        return {
+            "precision": None,
+            "entries": 0,
+            "selected_tasks": 0,
+            "note": "Human labels have not been supplied.",
+        }
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("entries", [])
+    selected = set(payload.get("selected_task_ids", []))
+    labels = {
+        (item["task_id"], item["predicted_false_positive_file"]): item.get("label", "")
+        for item in entries
+    }
+    value = adjudicated_task_precision(rows, labels, selected)
+    if value is None:
+        note = "Human labels remain incomplete."
+    elif not entries:
+        note = (
+            "RIPPLE made no false-positive predictions on the selected tasks, so no "
+            "human judgment was required and the secondary value equals primary "
+            "precision on this subset."
+        )
+    else:
+        note = "All human labels are complete."
+    return {
+        "precision": value,
+        "entries": len(entries),
+        "selected_tasks": len(selected),
+        "label_counts": dict(sorted(Counter(labels.values()).items())),
+        "note": note,
+    }
 
 
 def build_results(
@@ -490,8 +759,12 @@ def build_results(
     output_summary: Path,
     symbol_gold_path: Path | None = None,
     stage_b_path: Path | None = None,
+    stage_b_ripple_path: Path | None = None,
     adjudication_path: Path | None = None,
     recent_summary_path: Path | None = None,
+    provider_archives: Sequence[Path] = (),
+    hashed_artifacts: Sequence[Path] = (),
+    root_readme: Path | None = None,
 ) -> dict[str, Any]:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     manifest = load_tasks(manifest_path)
@@ -505,41 +778,46 @@ def build_results(
     rows = _score_runs(runs, task_map, symbol_gold)
     aggregates, intervals = _aggregate(rows)
     task_rows = average_seeds(rows)
-    paired = {
-        f"RIPPLE_minus_{baseline}": paired_cluster_bootstrap(
-            task_rows, "RIPPLE", baseline
-        )
-        for baseline in ("B0", "B1", "B2", "B3", "B4")
-        if {"RIPPLE", baseline} <= {item["system"] for item in task_rows}
-    }
+    systems = {item["system"] for item in task_rows}
+    paired: dict[str, Any] = {}
+    for baseline in ("B0", "B1", "B2", "B3", "B4"):
+        if {"RIPPLE", baseline} <= systems:
+            paired[f"RIPPLE_minus_{baseline}"] = {}
+            for metric in PAIRED_METRICS:
+                value = paired_cluster_bootstrap(
+                    task_rows, "RIPPLE", baseline, metric=metric
+                )
+                value["ci_excludes_zero"] = value["ci_low"] > 0 or value["ci_high"] < 0
+                paired[f"RIPPLE_minus_{baseline}"][metric] = value
     stage_records = (
         json.loads(stage_b_path.read_text())
         if stage_b_path and stage_b_path.exists()
         else []
     )
-    stage = stage_b_metrics(stage_records) if stage_records else {}
-    labels: list[str] = []
-    true_positives = 0
-    adjudication_note = "Human labels have not been supplied."
-    if adjudication_path and adjudication_path.exists():
-        adjudication = json.loads(adjudication_path.read_text())
-        labels = [item.get("label", "") for item in adjudication.get("entries", [])]
-        adjudication_note = (
-            "All human labels are complete."
-            if labels and all(labels)
-            else "Human labels remain incomplete."
-        )
-        selected = set(adjudication.get("selected_task_ids", []))
-        true_positives = sum(
-            round(float(item["precision"]) * (float(item["false_positives"]) + 1))
-            for item in task_rows
-            if item["system"] == "RIPPLE" and item["task_id"] in selected
-        )
+    ripple_stage = (
+        json.loads(stage_b_ripple_path.read_text())
+        if stage_b_ripple_path and stage_b_ripple_path.exists()
+        else {}
+    )
     recent = (
         json.loads(recent_summary_path.read_text())
         if recent_summary_path and recent_summary_path.exists()
         else None
     )
+    status_by_system: dict[str, Counter[str]] = defaultdict(Counter)
+    for run in runs:
+        status_by_system[run.system][run.status] += 1
+    total_fields = (
+        "model_calls",
+        "tool_calls",
+        "input_tokens",
+        "output_tokens",
+        "total_tokens",
+    )
+    totals: dict[str, Any] = {
+        field: sum(getattr(run, field) or 0 for run in runs) for field in total_fields
+    }
+    totals["runtime_seconds"] = sum(run.runtime_seconds or 0 for run in runs)
     summary = {
         "config_version": config["version"],
         "config_hash": config["config_hash"],
@@ -547,36 +825,72 @@ def build_results(
         "seeds": config["requested_seeds"],
         "bootstrap_seed": config["bootstrap"]["seed"],
         "bootstrap_samples": config["bootstrap"]["samples"],
+        "artifact_sha256": {
+            path.as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in hashed_artifacts
+        },
         "raw_artifact_sha256": {
             path.name: hashlib.sha256(path.read_bytes()).hexdigest()
             for path in sorted(raw_root.glob("*.json"))
         },
         "task_count": len(task_map),
+        "repository_count": len({item.repository for item in task_map.values()}),
         "run_count": len(runs),
         "aggregates": aggregates,
         "confidence_intervals": intervals,
         "paired_differences": paired,
         "status_mix": dict(sorted(Counter(item.status for item in runs).items())),
+        "status_mix_by_system": {
+            system: dict(sorted(status_by_system[system].items()))
+            for system in ALL_SYSTEMS
+            if system in status_by_system
+        },
         "failure_taxonomy": dict(
             sorted(
                 Counter(item.failure_kind for item in runs if item.failure_kind).items()
             )
         ),
-        "stage_b": stage,
+        "remaining_provider_failures": sorted(
+            run.run_id for run in runs if run.status == "provider_failed"
+        ),
+        "provider_failure_reconciliation": _provider_reconciliation(
+            provider_archives, runs
+        ),
+        "totals": totals,
+        "stage_b": {
+            "task_count": len({item["task_id"] for item in stage_records}),
+            "metrics": stage_b_metrics(stage_records) if stage_records else {},
+        },
+        "stage_b_ripple": {
+            "task_count": len(
+                {item["task_id"] for item in ripple_stage.get("records", [])}
+            ),
+            "metrics": stage_b_metrics(ripple_stage["records"])
+            if ripple_stage.get("records")
+            else {},
+            "skipped": ripple_stage.get("skipped", {}),
+        },
         "recent_pr": recent,
-        "recent_pr_note": "Not available."
+        "recent_pr_note": "Not evaluated: no authoritative training cutoff was "
+        "available for the model, so no post-cutoff split could be defined."
         if recent is None
         else "Generated separately; see final_summary.json.",
-        "adjudicated_precision": adjudicated_precision(true_positives, labels)
-        if labels
-        else None,
-        "adjudication_note": adjudication_note,
+        "adjudication": _adjudication(adjudication_path, rows),
         "per_task_seed_averages": task_rows,
     }
     atomic_json(output_summary, summary)
     output_readme.parent.mkdir(parents=True, exist_ok=True)
-    rendered = _render(summary)
-    output_readme.write_text(rendered, encoding="utf-8")
+    output_readme.write_text(_render(summary), encoding="utf-8")
+    if root_readme is not None:
+        text = root_readme.read_text(encoding="utf-8")
+        start, end = ROOT_MARKERS
+        if start not in text or end not in text:
+            raise EvaluationError(f"{root_readme} lacks generated-results markers")
+        head, _, rest = text.partition(start)
+        _, _, tail = rest.partition(end)
+        root_readme.write_text(
+            f"{head}{start}\n{_headline(summary)}\n{end}{tail}", encoding="utf-8"
+        )
     return summary
 
 
@@ -589,36 +903,35 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--config", type=Path, default=Path("evaluation/final_config.json")
     )
-    parser.add_argument(
-        "--readme", type=Path, default=Path("evaluation/results/README.md")
-    )
-    parser.add_argument(
-        "--summary", type=Path, default=Path("evaluation/results/final_summary.json")
-    )
-    parser.add_argument(
-        "--symbol-gold", type=Path, default=Path("evaluation/gold/final_symbols.json")
-    )
-    parser.add_argument(
-        "--stage-b",
-        type=Path,
-        default=Path("evaluation/results/stage_b_anomalies.json"),
-    )
-    parser.add_argument(
-        "--adjudication",
-        type=Path,
-        default=Path("evaluation/adjudication/adjudication_template.json"),
-    )
     args = parser.parse_args(argv)
+    raw_parent = args.raw.parent
     build_results(
         manifest_path=args.manifest,
         raw_root=args.raw,
         config_path=args.config,
-        output_readme=args.readme,
-        output_summary=args.summary,
-        symbol_gold_path=args.symbol_gold,
-        stage_b_path=args.stage_b,
-        adjudication_path=args.adjudication,
+        output_readme=Path("evaluation/results/README.md"),
+        output_summary=Path("evaluation/results/final_summary.json"),
+        symbol_gold_path=Path("evaluation/gold/final_symbols.json"),
+        stage_b_path=Path("evaluation/results/stage_b_anomalies.json"),
+        stage_b_ripple_path=Path("evaluation/results/stage_b_ripple_reports.json"),
+        adjudication_path=Path("evaluation/adjudication/adjudication_template.json"),
+        provider_archives=sorted(raw_parent.glob(f"{args.raw.name}-provider-*")),
+        hashed_artifacts=(
+            args.config,
+            args.manifest,
+            Path("evaluation/data/final_fea_provenance.json"),
+            Path("evaluation/final_schedule.json"),
+            Path("evaluation/audits/pre_run_leak_audit.json"),
+            Path("evaluation/audits/post_run_symbol_audit.json"),
+            Path("evaluation/gold/final_symbols.json"),
+            Path("evaluation/results/stage_b_anomalies.json"),
+            Path("evaluation/results/stage_b_ripple_reports.json"),
+            Path("evaluation/adjudication/adjudication_template.json"),
+            Path("evaluation/raw/final-v1-reports-and-traces.tar.gz"),
+        ),
+        root_readme=Path("README.md"),
     )
+    print("Results: evaluation/results/README.md")
     return 0
 
 

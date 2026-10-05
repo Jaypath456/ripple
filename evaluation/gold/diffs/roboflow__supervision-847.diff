@@ -1,0 +1,489 @@
+diff --git a/docs/detection/utils.md b/docs/detection/utils.md
+index 54d1f279fb..74adc6e748 100644
+--- a/docs/detection/utils.md
++++ b/docs/detection/utils.md
+@@ -11,10 +11,22 @@ comments: true
+ :::supervision.detection.utils.box_iou_batch
+ 
+ <div class="md-typeset">
+-  <h2>non_max_suppression</h2>
++  <h2>mask_iou_batch</h2>
+ </div>
+ 
+-:::supervision.detection.utils.non_max_suppression
++:::supervision.detection.utils.mask_iou_batch
++
++<div class="md-typeset">
++  <h2>box_non_max_suppression</h2>
++</div>
++
++:::supervision.detection.utils.box_non_max_suppression
++
++<div class="md-typeset">
++  <h2>mask_non_max_suppression</h2>
++</div>
++
++:::supervision.detection.utils.mask_non_max_suppression
+ 
+ <div class="md-typeset">
+     <h2>polygon_to_mask</h2>
+diff --git a/supervision/__init__.py b/supervision/__init__.py
+index 76abe59964..961162836e 100644
+--- a/supervision/__init__.py
++++ b/supervision/__init__.py
+@@ -42,12 +42,14 @@
+ from supervision.detection.tools.smoother import DetectionsSmoother
+ from supervision.detection.utils import (
+     box_iou_batch,
++    box_non_max_suppression,
+     calculate_masks_centroids,
+     filter_polygons_by_area,
++    mask_iou_batch,
++    mask_non_max_suppression,
+     mask_to_polygons,
+     mask_to_xyxy,
+     move_boxes,
+-    non_max_suppression,
+     polygon_to_mask,
+     polygon_to_xyxy,
+     scale_boxes,
+diff --git a/supervision/detection/core.py b/supervision/detection/core.py
+index 7b92496308..e727426bf6 100644
+--- a/supervision/detection/core.py
++++ b/supervision/detection/core.py
+@@ -8,12 +8,13 @@
+ 
+ from supervision.config import CLASS_NAME_DATA_FIELD, ORIENTED_BOX_COORDINATES
+ from supervision.detection.utils import (
++    box_non_max_suppression,
+     calculate_masks_centroids,
+     extract_ultralytics_masks,
+     get_data_item,
+     is_data_equal,
++    mask_non_max_suppression,
+     merge_data,
+-    non_max_suppression,
+     process_roboflow_result,
+     validate_detections_fields,
+     xywh_to_xyxy,
+@@ -1001,7 +1002,8 @@ def with_nms(
+         self, threshold: float = 0.5, class_agnostic: bool = False
+     ) -> Detections:
+         """
+-        Perform non-maximum suppression on the current set of object detections.
++        Performs non-max suppression on detection set. If the detections result
++        from a segmentation model, the IoU mask is applied. Otherwise, box IoU is used.
+ 
+         Args:
+             threshold (float, optional): The intersection-over-union threshold
+@@ -1028,18 +1030,26 @@ def with_nms(
+ 
+         if class_agnostic:
+             predictions = np.hstack((self.xyxy, self.confidence.reshape(-1, 1)))
+-            indices = non_max_suppression(
+-                predictions=predictions, iou_threshold=threshold
++        else:
++            assert self.class_id is not None, (
++                "Detections class_id must be given for NMS to be executed. If you"
++                " intended to perform class agnostic NMS set class_agnostic=True."
++            )
++            predictions = np.hstack(
++                (
++                    self.xyxy,
++                    self.confidence.reshape(-1, 1),
++                    self.class_id.reshape(-1, 1),
++                )
+             )
+-            return self[indices]
+ 
+-        assert self.class_id is not None, (
+-            "Detections class_id must be given for NMS to be executed. If you intended"
+-            " to perform class agnostic NMS set class_agnostic=True."
+-        )
++        if self.mask is not None:
++            indices = mask_non_max_suppression(
++                predictions=predictions, masks=self.mask, iou_threshold=threshold
++            )
++        else:
++            indices = box_non_max_suppression(
++                predictions=predictions, iou_threshold=threshold
++            )
+ 
+-        predictions = np.hstack(
+-            (self.xyxy, self.confidence.reshape(-1, 1), self.class_id.reshape(-1, 1))
+-        )
+-        indices = non_max_suppression(predictions=predictions, iou_threshold=threshold)
+         return self[indices]
+diff --git a/supervision/detection/utils.py b/supervision/detection/utils.py
+index e8db4627e8..f411df288a 100644
+--- a/supervision/detection/utils.py
++++ b/supervision/detection/utils.py
+@@ -59,7 +59,119 @@ def box_area(box):
+     return area_inter / (area_true[:, None] + area_detection - area_inter)
+ 
+ 
+-def non_max_suppression(
++def mask_iou_batch(masks_true: np.ndarray, masks_detection: np.ndarray) -> np.ndarray:
++    """
++    Compute Intersection over Union (IoU) of two sets of masks -
++        `masks_true` and `masks_detection`.
++
++    Args:
++        masks_true (np.ndarray): 3D `np.ndarray` representing ground-truth masks.
++        masks_detection (np.ndarray): 3D `np.ndarray` representing detection masks.
++
++    Returns:
++        np.ndarray: Pairwise IoU of masks from `masks_true` and `masks_detection`.
++    """
++    intersection_area = np.logical_and(masks_true[:, None], masks_detection).sum(
++        axis=(2, 3)
++    )
++    masks_true_area = masks_true.sum(axis=(1, 2))
++    masks_detection_area = masks_detection.sum(axis=(1, 2))
++
++    union_area = masks_true_area[:, None] + masks_detection_area - intersection_area
++
++    return np.divide(
++        intersection_area,
++        union_area,
++        out=np.zeros_like(intersection_area, dtype=float),
++        where=union_area != 0,
++    )
++
++
++def resize_masks(masks: np.ndarray, max_dimension: int = 640) -> np.ndarray:
++    """
++    Resize all masks in the array to have a maximum dimension of max_dimension,
++    maintaining aspect ratio.
++
++    Args:
++        masks (np.ndarray): 3D array of binary masks with shape (N, H, W).
++        max_dimension (int): The maximum dimension for the resized masks.
++
++    Returns:
++        np.ndarray: Array of resized masks.
++    """
++    max_height = np.max(masks.shape[1])
++    max_width = np.max(masks.shape[2])
++    scale = min(max_dimension / max_height, max_dimension / max_width)
++
++    new_height = int(scale * max_height)
++    new_width = int(scale * max_width)
++
++    x = np.linspace(0, max_width - 1, new_width).astype(int)
++    y = np.linspace(0, max_height - 1, new_height).astype(int)
++    xv, yv = np.meshgrid(x, y)
++
++    resized_masks = masks[:, yv, xv]
++
++    resized_masks = resized_masks.reshape(masks.shape[0], new_height, new_width)
++    return resized_masks
++
++
++def mask_non_max_suppression(
++    predictions: np.ndarray,
++    masks: np.ndarray,
++    iou_threshold: float = 0.5,
++    mask_dimension: int = 640,
++) -> np.ndarray:
++    """
++    Perform Non-Maximum Suppression (NMS) on segmentation predictions.
++
++    Args:
++        predictions (np.ndarray): A 2D array of object detection predictions in
++            the format of `(x_min, y_min, x_max, y_max, score)`
++            or `(x_min, y_min, x_max, y_max, score, class)`. Shape: `(N, 5)` or
++            `(N, 6)`, where N is the number of predictions.
++        masks (np.ndarray): A 3D array of binary masks corresponding to the predictions.
++            Shape: `(N, H, W)`, where N is the number of predictions, and H, W are the
++            dimensions of each mask.
++        iou_threshold (float, optional): The intersection-over-union threshold
++            to use for non-maximum suppression.
++        mask_dimension (int, optional): The dimension to which the masks should be
++            resized before computing IOU values. Defaults to 640.
++
++    Returns:
++        np.ndarray: A boolean array indicating which predictions to keep after
++            non-maximum suppression.
++
++    Raises:
++        AssertionError: If `iou_threshold` is not within the closed
++        range from `0` to `1`.
++    """
++    assert 0 <= iou_threshold <= 1, (
++        "Value of `iou_threshold` must be in the closed range from 0 to 1, "
++        f"{iou_threshold} given."
++    )
++    rows, columns = predictions.shape
++
++    if columns == 5:
++        predictions = np.c_[predictions, np.zeros(rows)]
++
++    sort_index = predictions[:, 4].argsort()[::-1]
++    predictions = predictions[sort_index]
++    masks = masks[sort_index]
++    masks_resized = resize_masks(masks, mask_dimension)
++    ious = mask_iou_batch(masks_resized, masks_resized)
++    categories = predictions[:, 5]
++
++    keep = np.ones(rows, dtype=bool)
++    for i in range(rows):
++        if keep[i]:
++            condition = (ious[i] > iou_threshold) & (categories[i] == categories)
++            keep[i + 1 :] = np.where(condition[i + 1 :], False, keep[i + 1 :])
++
++    return keep[sort_index.argsort()]
++
++
++def box_non_max_suppression(
+     predictions: np.ndarray, iou_threshold: float = 0.5
+ ) -> np.ndarray:
+     """
+diff --git a/test/detection/test_utils.py b/test/detection/test_utils.py
+index 576b25f8f7..d09348ff58 100644
+--- a/test/detection/test_utils.py
++++ b/test/detection/test_utils.py
+@@ -6,13 +6,14 @@
+ 
+ from supervision.config import CLASS_NAME_DATA_FIELD
+ from supervision.detection.utils import (
++    box_non_max_suppression,
+     calculate_masks_centroids,
+     clip_boxes,
+     filter_polygons_by_area,
+     get_data_item,
++    mask_non_max_suppression,
+     merge_data,
+     move_boxes,
+-    non_max_suppression,
+     process_roboflow_result,
+     scale_boxes,
+ )
+@@ -113,19 +114,225 @@
+         ),  # three boxes with different category
+     ],
+ )
+-def test_non_max_suppression(
++def test_box_non_max_suppression(
+     predictions: np.ndarray,
+     iou_threshold: float,
+     expected_result: Optional[np.ndarray],
+     exception: Exception,
+ ) -> None:
+     with exception:
+-        result = non_max_suppression(
++        result = box_non_max_suppression(
+             predictions=predictions, iou_threshold=iou_threshold
+         )
+         assert np.array_equal(result, expected_result)
+ 
+ 
++@pytest.mark.parametrize(
++    "predictions, masks, iou_threshold, expected_result, exception",
++    [
++        (
++            np.empty((0, 6)),
++            np.empty((0, 5, 5)),
++            0.5,
++            np.array([]),
++            DoesNotRaise(),
++        ),  # empty predictions and masks
++        (
++            np.array([[0, 0, 0, 0, 0.8]]),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, False, False, False, False],
++                    ]
++                ]
++            ),
++            0.5,
++            np.array([True]),
++            DoesNotRaise(),
++        ),  # single mask with no category
++        (
++            np.array([[0, 0, 0, 0, 0.8, 0]]),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, False, False, False, False],
++                    ]
++                ]
++            ),
++            0.5,
++            np.array([True]),
++            DoesNotRaise(),
++        ),  # single mask with category
++        (
++            np.array([[0, 0, 0, 0, 0.8], [0, 0, 0, 0, 0.9]]),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, True, True],
++                        [False, False, False, True, True],
++                        [False, False, False, False, False],
++                    ],
++                ]
++            ),
++            0.5,
++            np.array([True, True]),
++            DoesNotRaise(),
++        ),  # two masks non-overlapping with no category
++        (
++            np.array([[0, 0, 0, 0, 0.8], [0, 0, 0, 0, 0.9]]),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, False, True, True, True],
++                        [False, False, True, True, True],
++                        [False, False, True, True, True],
++                        [False, False, False, False, False],
++                    ],
++                ]
++            ),
++            0.4,
++            np.array([False, True]),
++            DoesNotRaise(),
++        ),  # two masks partially overlapping with no category
++        (
++            np.array([[0, 0, 0, 0, 0.8, 0], [0, 0, 0, 0, 0.9, 1]]),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, True, True, True, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, False, True, True, True],
++                        [False, False, True, True, True],
++                        [False, False, True, True, True],
++                        [False, False, False, False, False],
++                    ],
++                ]
++            ),
++            0.5,
++            np.array([True, True]),
++            DoesNotRaise(),
++        ),  # two masks partially overlapping with different category
++        (
++            np.array(
++                [
++                    [0, 0, 0, 0, 0.8],
++                    [0, 0, 0, 0, 0.85],
++                    [0, 0, 0, 0, 0.9],
++                ]
++            ),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, False, False, True, True],
++                        [False, False, False, True, True],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                ]
++            ),
++            0.5,
++            np.array([False, True, True]),
++            DoesNotRaise(),
++        ),  # three masks with no category
++        (
++            np.array(
++                [
++                    [0, 0, 0, 0, 0.8, 0],
++                    [0, 0, 0, 0, 0.85, 1],
++                    [0, 0, 0, 0, 0.9, 2],
++                ]
++            ),
++            np.array(
++                [
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                    ],
++                    [
++                        [False, False, False, False, False],
++                        [False, True, True, False, False],
++                        [False, True, True, False, False],
++                        [False, False, False, False, False],
++                        [False, False, False, False, False],
++                    ],
++                ]
++            ),
++            0.5,
++            np.array([True, True, True]),
++            DoesNotRaise(),
++        ),  # three masks with different category
++    ],
++)
++def test_mask_non_max_suppression(
++    predictions: np.ndarray,
++    masks: np.ndarray,
++    iou_threshold: float,
++    expected_result: Optional[np.ndarray],
++    exception: Exception,
++) -> None:
++    with exception:
++        result = mask_non_max_suppression(
++            predictions=predictions, masks=masks, iou_threshold=iou_threshold
++        )
++        assert np.array_equal(result, expected_result)
++
++
+ @pytest.mark.parametrize(
+     "xyxy, resolution_wh, expected_result",
+     [
