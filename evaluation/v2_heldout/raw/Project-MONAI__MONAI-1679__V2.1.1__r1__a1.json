@@ -1,0 +1,54 @@
+{
+  "task_id": "Project-MONAI__MONAI-1679",
+  "repository": "Project-MONAI/MONAI",
+  "system": "V2.1.1",
+  "repeat": 1,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "monai/data/grid_dataset.py"
+  ],
+  "gold_source_files": [
+    "monai/data/__init__.py",
+    "monai/data/grid_dataset.py",
+    "monai/data/utils.py"
+  ],
+  "precision": 1.0,
+  "recall": 0.3333333333333333,
+  "f1": 0.5,
+  "recall_at_5": 0.3333333333333333,
+  "recall_at_10": 0.3333333333333333,
+  "mrr": 1.0,
+  "false_positives": 0,
+  "confirmed": 1,
+  "suspected": 7,
+  "rejected": 0,
+  "tool_calls": 4,
+  "duplicate_calls": 0,
+  "model_calls": 7,
+  "input_tokens": 16840,
+  "output_tokens": 3314,
+  "total_tokens": 20154,
+  "runtime_seconds": 13.0,
+  "decision_checkpoints": 1,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T16:45:38+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "5d5963e4cc1b607508a51a9d376724dc369db00bfe5c9a5591f1f7f367e191f6"
+}

@@ -1,0 +1,51 @@
+{
+  "task_id": "conan-io__conan-11443",
+  "repository": "conan-io/conan",
+  "system": "V1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "failed",
+  "stop_reason": "controller_error",
+  "config_version": "full-report-v1",
+  "provider_error": "LLM request failed: InternalServerError: <html><body><h1>504 Gateway Time-out</h1>\nThe server didn't respond in time.\n</body></html>",
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "conan/tools/files/__init__.py",
+    "conan/tools/files/files.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 4,
+  "rejected": 0,
+  "tool_calls": 7,
+  "duplicate_calls": 2,
+  "model_calls": 10,
+  "input_tokens": 21903,
+  "output_tokens": 4860,
+  "total_tokens": 26763,
+  "runtime_seconds": 72.9,
+  "decision_checkpoints": 0,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:19:18+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "27dd41a5c03e327de6956362ee832c780644ef5d4e913eb39f691faff62550ad"
+}

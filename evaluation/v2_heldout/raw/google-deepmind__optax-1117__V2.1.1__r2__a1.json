@@ -1,0 +1,51 @@
+{
+  "task_id": "google-deepmind__optax-1117",
+  "repository": "google-deepmind/optax",
+  "system": "V2.1.1",
+  "repeat": 2,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "optax/projections/__init__.py",
+    "optax/projections/_projections.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 3,
+  "suspected": 5,
+  "rejected": 0,
+  "tool_calls": 13,
+  "duplicate_calls": 1,
+  "model_calls": 21,
+  "input_tokens": 42946,
+  "output_tokens": 16435,
+  "total_tokens": 59381,
+  "runtime_seconds": 43.93,
+  "decision_checkpoints": 5,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "invalid migration new-file dropped: optax/projections/_projections.py"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:44:02+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "9d2b28cc5414e3b298cf4ec9556ecb45e9cdbe13d22bb3f39173f930b10568d3"
+}

@@ -1,0 +1,51 @@
+{
+  "task_id": "google-deepmind__optax-865",
+  "repository": "google-deepmind/optax",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "failed",
+  "stop_reason": "controller_error",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": "LLM request failed: InternalServerError: <html><body><h1>504 Gateway Time-out</h1>\nThe server didn't respond in time.\n</body></html>",
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "optax/tree_utils/__init__.py",
+    "optax/tree_utils/_state_utils.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 8,
+  "rejected": 0,
+  "tool_calls": 2,
+  "duplicate_calls": 0,
+  "model_calls": 2,
+  "input_tokens": 3839,
+  "output_tokens": 937,
+  "total_tokens": 4776,
+  "runtime_seconds": 59.06,
+  "decision_checkpoints": 0,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:50:48+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "3a04894a839486f1867ad3df48386211eca05df64546be2a7e0da70af9f9ad92"
+}

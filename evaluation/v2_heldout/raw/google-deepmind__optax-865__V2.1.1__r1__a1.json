@@ -1,0 +1,51 @@
+{
+  "task_id": "google-deepmind__optax-865",
+  "repository": "google-deepmind/optax",
+  "system": "V2.1.1",
+  "repeat": 1,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "optax/tree_utils/_state_utils.py"
+  ],
+  "gold_source_files": [
+    "optax/tree_utils/__init__.py",
+    "optax/tree_utils/_state_utils.py"
+  ],
+  "precision": 1.0,
+  "recall": 0.5,
+  "f1": 0.6666666666666666,
+  "recall_at_5": 0.5,
+  "recall_at_10": 0.5,
+  "mrr": 1.0,
+  "false_positives": 0,
+  "confirmed": 1,
+  "suspected": 4,
+  "rejected": 1,
+  "tool_calls": 10,
+  "duplicate_calls": 0,
+  "model_calls": 16,
+  "input_tokens": 32895,
+  "output_tokens": 12213,
+  "total_tokens": 45108,
+  "runtime_seconds": 28.04,
+  "decision_checkpoints": 4,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 0,
+  "dropped_claims": [],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:48:24+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "3a04894a839486f1867ad3df48386211eca05df64546be2a7e0da70af9f9ad92"
+}

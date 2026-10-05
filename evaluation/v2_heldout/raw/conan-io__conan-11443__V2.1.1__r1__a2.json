@@ -1,0 +1,52 @@
+{
+  "task_id": "conan-io__conan-11443",
+  "repository": "conan-io/conan",
+  "system": "V2.1.1",
+  "repeat": 1,
+  "attempt": 2,
+  "status": "abstained",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "conan/tools/files/__init__.py",
+    "conan/tools/files/files.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 1,
+  "suspected": 2,
+  "rejected": 0,
+  "tool_calls": 7,
+  "duplicate_calls": 0,
+  "model_calls": 11,
+  "input_tokens": 28453,
+  "output_tokens": 9581,
+  "total_tokens": 38034,
+  "runtime_seconds": 41.71,
+  "decision_checkpoints": 1,
+  "report_repairs": 1,
+  "invalid_tool_targets": 0,
+  "validator_drops": 2,
+  "dropped_claims": [
+    "unsupported risk dropped: The new 'rm' CLI may alter environment variable handling (PATH, PATHEXT) inadvertently affecting tools that rely on these variables via remove_files_by_mask.",
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:16:19+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "27dd41a5c03e327de6956362ee832c780644ef5d4e913eb39f691faff62550ad"
+}

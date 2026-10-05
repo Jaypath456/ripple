@@ -1,0 +1,54 @@
+{
+  "task_id": "google-deepmind__optax-1117",
+  "repository": "google-deepmind/optax",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "optax/tree_utils/_tree_math.py"
+  ],
+  "gold_source_files": [
+    "optax/projections/__init__.py",
+    "optax/projections/_projections.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 1,
+  "confirmed": 1,
+  "suspected": 7,
+  "rejected": 0,
+  "tool_calls": 6,
+  "duplicate_calls": 0,
+  "model_calls": 10,
+  "input_tokens": 21729,
+  "output_tokens": 9739,
+  "total_tokens": 31468,
+  "runtime_seconds": 29.08,
+  "decision_checkpoints": 2,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 2,
+  "dropped_claims": [
+    "unconfirmed component dropped: optax/projections/_projections.py",
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:47:08+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "9d2b28cc5414e3b298cf4ec9556ecb45e9cdbe13d22bb3f39173f930b10568d3"
+}

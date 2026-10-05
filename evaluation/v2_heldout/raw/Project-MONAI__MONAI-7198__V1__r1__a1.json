@@ -1,0 +1,53 @@
+{
+  "task_id": "Project-MONAI__MONAI-7198",
+  "repository": "Project-MONAI/MONAI",
+  "system": "V1",
+  "repeat": 1,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "no_progress",
+  "config_version": "full-report-v1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "monai/transforms/__init__.py",
+    "monai/transforms/regularization/__init__.py",
+    "monai/transforms/regularization/array.py",
+    "monai/transforms/regularization/dictionary.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 5,
+  "rejected": 0,
+  "tool_calls": 13,
+  "duplicate_calls": 2,
+  "model_calls": 19,
+  "input_tokens": 36245,
+  "output_tokens": 6936,
+  "total_tokens": 43181,
+  "runtime_seconds": 35.37,
+  "decision_checkpoints": 0,
+  "report_repairs": 0,
+  "invalid_tool_targets": 2,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T16:52:08+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "755ec20d2a1069fd04ed53e693795c38cc9497ebcc1155feaf3cf448295e0e82"
+}

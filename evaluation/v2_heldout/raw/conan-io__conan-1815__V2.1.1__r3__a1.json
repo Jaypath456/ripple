@@ -1,0 +1,56 @@
+{
+  "task_id": "conan-io__conan-1815",
+  "repository": "conan-io/conan",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "conans/client/build/cmake.py"
+  ],
+  "gold_source_files": [
+    "conans/client/tools/__init__.py",
+    "conans/client/tools/apple.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 1,
+  "confirmed": 1,
+  "suspected": 3,
+  "rejected": 4,
+  "tool_calls": 21,
+  "duplicate_calls": 0,
+  "model_calls": 32,
+  "input_tokens": 76806,
+  "output_tokens": 35295,
+  "total_tokens": 112101,
+  "runtime_seconds": 123.61,
+  "decision_checkpoints": 8,
+  "report_repairs": 0,
+  "invalid_tool_targets": 1,
+  "validator_drops": 4,
+  "dropped_claims": [
+    "unsupported risk dropped: Incorrect or incomplete handling of CONAN_CMAKE_FIND_ROOT_PATH for iOS toolchains may break dependency resolution for iOS targets.",
+    "unsupported risk dropped: Hard\u2011coded CMake generator values could be incompatible with the xcode and swifts package generators introduced for iOS.",
+    "unsupported risk dropped: The addition of new Apple\u2011specific build variables may unintentionally affect the behavior of existing Conan packages that rely on generic cross\u2011build settings.",
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:33:29+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "30e5012731f975b52243cd9710f164a24fc756a40ce281adc94c75f1b9d2e067"
+}

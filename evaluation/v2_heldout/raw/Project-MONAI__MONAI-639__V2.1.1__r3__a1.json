@@ -1,0 +1,55 @@
+{
+  "task_id": "Project-MONAI__MONAI-639",
+  "repository": "Project-MONAI/MONAI",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "monai/handlers/metric_logger.py",
+    "monai/transforms/utils.py"
+  ],
+  "gold_source_files": [
+    "monai/transforms/utility/array.py",
+    "monai/transforms/utility/dictionary.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 2,
+  "confirmed": 2,
+  "suspected": 5,
+  "rejected": 1,
+  "tool_calls": 13,
+  "duplicate_calls": 1,
+  "model_calls": 21,
+  "input_tokens": 45761,
+  "output_tokens": 20538,
+  "total_tokens": 66299,
+  "runtime_seconds": 46.39,
+  "decision_checkpoints": 4,
+  "report_repairs": 0,
+  "invalid_tool_targets": 1,
+  "validator_drops": 2,
+  "dropped_claims": [
+    "unsupported risk dropped: Applying a new array/dictionary based lambda transform in apply_transform will affect all transform modules that delegate to it, notably array, dictionary, spatial, intensity, post, and croppad transformations. A subtle change in return type or in-place behavior could introduce subtle bugs in image processing pipelines.",
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T16:50:05+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "22279b66df74e2a379ead0a5bd6eb169fbc503eabac546e1eac4104bada4431e"
+}

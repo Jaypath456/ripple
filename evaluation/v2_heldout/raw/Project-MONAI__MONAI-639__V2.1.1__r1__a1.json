@@ -1,0 +1,51 @@
+{
+  "task_id": "Project-MONAI__MONAI-639",
+  "repository": "Project-MONAI/MONAI",
+  "system": "V2.1.1",
+  "repeat": 1,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "monai/transforms/utils.py"
+  ],
+  "gold_source_files": [
+    "monai/transforms/utility/array.py",
+    "monai/transforms/utility/dictionary.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 1,
+  "confirmed": 1,
+  "suspected": 6,
+  "rejected": 1,
+  "tool_calls": 9,
+  "duplicate_calls": 2,
+  "model_calls": 17,
+  "input_tokens": 40338,
+  "output_tokens": 21511,
+  "total_tokens": 61849,
+  "runtime_seconds": 47.59,
+  "decision_checkpoints": 4,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 0,
+  "dropped_claims": [],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T16:48:12+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "22279b66df74e2a379ead0a5bd6eb169fbc503eabac546e1eac4104bada4431e"
+}

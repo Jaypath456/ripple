@@ -1,0 +1,52 @@
+{
+  "task_id": "RDFLib__rdflib-2877",
+  "repository": "RDFLib/rdflib",
+  "system": "V2.1.1",
+  "repeat": 2,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "no_progress",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "examples/patch_serializer_example.py",
+    "rdflib/plugin.py",
+    "rdflib/plugins/serializers/patch.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 5,
+  "rejected": 3,
+  "tool_calls": 17,
+  "duplicate_calls": 2,
+  "model_calls": 26,
+  "input_tokens": 62714,
+  "output_tokens": 13094,
+  "total_tokens": 75808,
+  "runtime_seconds": 41.13,
+  "decision_checkpoints": 5,
+  "report_repairs": 0,
+  "invalid_tool_targets": 1,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T16:59:20+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "08531c205a9f0477fd6f7d80fb456965b8e1fc16a495c79dcb3a15b8c78ca83e"
+}

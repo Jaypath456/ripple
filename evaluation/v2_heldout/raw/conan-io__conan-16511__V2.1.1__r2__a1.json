@@ -1,0 +1,52 @@
+{
+  "task_id": "conan-io__conan-16511",
+  "repository": "conan-io/conan",
+  "system": "V2.1.1",
+  "repeat": 2,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "conan/cli/commands/lock.py"
+  ],
+  "gold_source_files": [
+    "conan/api/subapi/lockfile.py",
+    "conan/cli/commands/lock.py",
+    "conans/model/graph_lock.py"
+  ],
+  "precision": 1.0,
+  "recall": 0.3333333333333333,
+  "f1": 0.5,
+  "recall_at_5": 0.3333333333333333,
+  "recall_at_10": 0.3333333333333333,
+  "mrr": 1.0,
+  "false_positives": 0,
+  "confirmed": 1,
+  "suspected": 4,
+  "rejected": 0,
+  "tool_calls": 7,
+  "duplicate_calls": 1,
+  "model_calls": 15,
+  "input_tokens": 27508,
+  "output_tokens": 10660,
+  "total_tokens": 38168,
+  "runtime_seconds": 33.06,
+  "decision_checkpoints": 4,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 0,
+  "dropped_claims": [],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:23:18+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "f112014bf2b5dcdaf991cfecc0a5c3ddf3d99758633ee1bac12f5eea297987f4"
+}

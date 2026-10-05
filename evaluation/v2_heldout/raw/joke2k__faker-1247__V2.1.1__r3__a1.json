@@ -1,0 +1,51 @@
+{
+  "task_id": "joke2k__faker-1247",
+  "repository": "joke2k/faker",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "failed",
+  "stop_reason": "controller_error",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": "LLM request failed: APIConnectionError: Connection error.",
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "faker/generator.py",
+    "faker/providers/misc/__init__.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 0,
+  "rejected": 0,
+  "tool_calls": 0,
+  "duplicate_calls": 0,
+  "model_calls": 0,
+  "input_tokens": null,
+  "output_tokens": null,
+  "total_tokens": null,
+  "runtime_seconds": 10.04,
+  "decision_checkpoints": 0,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:56:18+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "24e164c8d3d18269381c5b30511317919d030e0e2561650c7b6da75640c4a1d9"
+}

@@ -1,0 +1,51 @@
+{
+  "task_id": "Textualize__rich-2301",
+  "repository": "Textualize/rich",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "rich/default_styles.py",
+    "rich/highlighter.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 1,
+  "suspected": 5,
+  "rejected": 2,
+  "tool_calls": 13,
+  "duplicate_calls": 2,
+  "model_calls": 23,
+  "input_tokens": 45854,
+  "output_tokens": 21294,
+  "total_tokens": 67148,
+  "runtime_seconds": 68.41,
+  "decision_checkpoints": 5,
+  "report_repairs": 1,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "invalid migration new-file dropped: rich/highlighter.py::Iso8601Highlighter"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:06:25+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "fb45f43498484c2f247f5a439c428c93da59741a09988bce3a2408fef2cbe14a"
+}

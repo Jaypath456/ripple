@@ -1,0 +1,51 @@
+{
+  "task_id": "conan-io__conan-1815",
+  "repository": "conan-io/conan",
+  "system": "V1",
+  "repeat": 2,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "no_progress",
+  "config_version": "full-report-v1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "conans/client/tools/__init__.py",
+    "conans/client/tools/apple.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 8,
+  "rejected": 0,
+  "tool_calls": 23,
+  "duplicate_calls": 4,
+  "model_calls": 35,
+  "input_tokens": 79655,
+  "output_tokens": 21281,
+  "total_tokens": 100936,
+  "runtime_seconds": 92.77,
+  "decision_checkpoints": 0,
+  "report_repairs": 0,
+  "invalid_tool_targets": 1,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:30:12+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "30e5012731f975b52243cd9710f164a24fc756a40ce281adc94c75f1b9d2e067"
+}

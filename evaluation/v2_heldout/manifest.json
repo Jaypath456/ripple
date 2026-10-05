@@ -1,0 +1,1593 @@
+{
+  "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+  "overlap_audit": {
+    "excluded_repositories": [
+      "boto/boto3",
+      "falconry/falcon",
+      "graphql-python/graphene",
+      "prometheus/client_python"
+    ],
+    "fixtures_checked": [
+      "demo/fixtures/sample_app (synthetic, not an FEA-Bench task)",
+      "tests/fixtures/soft_delete_app (synthetic)",
+      "tests/fixtures/cli_export_app (synthetic)",
+      "tests/fixtures/v1_live_cli_export.json (RIPPLE itself)"
+    ],
+    "overlapping_tasks": {},
+    "passed": true,
+    "prior_sources": [
+      "dev_tasks",
+      "final_fea_tasks",
+      "mvp_tasks",
+      "v2_dev"
+    ],
+    "prior_task_ids_checked": 59
+  },
+  "provenance": {
+    "diff_sha256": {
+      "Project-MONAI__MONAI-1679": "a7b49e81175bd20011824efff08cf33b54e9c18e378bf70f440997e204951d03",
+      "Project-MONAI__MONAI-639": "e56747b7c17461733bf707dda20b1515a9e10e814e00611bec1a60fb43d90332",
+      "Project-MONAI__MONAI-7198": "b6124ba0fd1f33a2c711ed76d25990277fd55af1e9ce950afdcd954cb33164c4",
+      "RDFLib__rdflib-2877": "e0919484d8421d14e4c3801f91b468c461b5028920aa411792a22f94e6348ade",
+      "Textualize__rich-2301": "78ee4472ccdd4d6e3ce97a45592e1f772ef9a57436586b9a95edd65eaf486219",
+      "boto__botocore-3271": "f778c7c5185b250e230f44374c42b70d20add7947353a05d73800327198ed3d6",
+      "conan-io__conan-11443": "1b39e8b158db78a041bd823a5b0327aa7d2a9129d0acd9c7097e2dd0bce4189d",
+      "conan-io__conan-16511": "dd05d744ffb13851e63cb48c4621a971fe2cc20263febd47f2f957fbf8ec9fb1",
+      "conan-io__conan-1815": "2b8562d8a3a05ff86e7badf79ca27af6bb2fd20f8c26b7cbbdab78cf315dca8b",
+      "deepset-ai__haystack-6836": "0d73decffd87319b25799174d8cb7cbe2e190e2148a2fecfbe345d91345717cf",
+      "google-deepmind__optax-1117": "2ee6f727c4b6b60d3a32c6a5f22516754114e53e1bcecd70b8df6ef1f1dbbf89",
+      "google-deepmind__optax-865": "a3ddaab284878b4264ebd5b89ca919f06fd80cebb321986047cc9de22c45b933",
+      "joke2k__faker-1247": "13b151ad33cfcf96f2bc2cbce80e9bbd1e0a1d22b381f98522fa9d480455e8f4",
+      "joke2k__faker-215": "9001752892a6c679020665682b9203c664a600f57c1e20839458b6b50b359c14",
+      "pvlib__pvlib-python-1391": "973abd2306dfb0ca5cc9ffc1cde09a52f2d14b8103ab82855455ace109703ba7",
+      "pvlib__pvlib-python-1567": "c0ee170e10318e5228ba67beffc5dc7cb986077b36081d35cc2fddf7719be748",
+      "pydata__xarray-6135": "40bd9890d85e32732fca66905c73ab9654c6571a0099c515681f6a8cce2f4ae1",
+      "pylint-dev__pylint-4810": "4a42b11141d3b0ad6e038da250156f44ff35be692dff079a79e1d90d9cc801b4",
+      "pyvista__pyvista-4954": "dcf280e640bdf9bbaf29bed88a1f0ebf448c52fc04f96238576bd98f5fd127b6",
+      "scikit-learn__scikit-learn-10591": "002614367a6c90877a09d7303c9a8471a6463b75d6ed8ab3543227df38fd260e",
+      "scikit-learn__scikit-learn-15010": "b3e2066892438e812def4762c0a846d751f8342fd70ea3a438320219405c2eb6",
+      "scikit-learn__scikit-learn-8478": "cc03a9dd050915f4804691855ec3bf41770fa5d9c3e165938756b1e133d719ac",
+      "softlayer__softlayer-python-1668": "80f954f9acb21caed958f109c650c316c3220e873c1af4d93543026defc970ac",
+      "softlayer__softlayer-python-1818": "86303091cfa2870b9ad9e101318329f2ab0ecbc176123527c4954030965ae445",
+      "softlayer__softlayer-python-1910": "808e7aed060b10ab46761c8080bb3d206c0638d67497c84b0ba15837b6a94726",
+      "sympy__sympy-16516": "0da8c2de9199803f539e2edacd28e1c326d1c6d648a6cb1475c33cc2df35626f",
+      "sympy__sympy-16685": "07d0bce118fd66235659b991e9f52c3019d31b6afe2910fcb930aaeea14b2e32",
+      "sympy__sympy-24384": "ef35a9f76a4901685f256188aac13e6df8eba55522f1eef3ff4c662c95d54914",
+      "tobymao__sqlglot-2006": "7bfddfdc51560ac10e15d13ca0a2075c637fa2a0ea672ca4f62a80f599082fb7",
+      "tobymao__sqlglot-897": "a13471bda0fb5e16685c40130aa29d16dfb9d3b772dff6d61f658453a7e5cfce"
+    },
+    "lite_list": "https://raw.githubusercontent.com/microsoft/FEA-Bench/fb3c11274796f6057bf447410540fcf2fa1d90b1/instances_lite.json",
+    "order_salt": "ripple-v2-heldout|",
+    "per_repository_cap": 3,
+    "repositories": {
+      "Project-MONAI/MONAI": 3,
+      "RDFLib/rdflib": 1,
+      "Textualize/rich": 1,
+      "boto/botocore": 1,
+      "conan-io/conan": 3,
+      "deepset-ai/haystack": 1,
+      "google-deepmind/optax": 2,
+      "joke2k/faker": 2,
+      "pvlib/pvlib-python": 2,
+      "pydata/xarray": 1,
+      "pylint-dev/pylint": 1,
+      "pyvista/pyvista": 1,
+      "scikit-learn/scikit-learn": 3,
+      "softlayer/softlayer-python": 3,
+      "sympy/sympy": 3,
+      "tobymao/sqlglot": 2
+    },
+    "screening": [
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-14171"
+      },
+      {
+        "outcome": "excluded: used in final_fea_tasks",
+        "repository": "roboflow/supervision",
+        "task_id": "roboflow__supervision-1237"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "joke2k/faker",
+        "task_id": "joke2k__faker-215"
+      },
+      {
+        "outcome": "ineligible: 7 source files",
+        "repository": "tobymao/sqlglot",
+        "task_id": "tobymao__sqlglot-3577"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-18900"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "tobymao/sqlglot",
+        "task_id": "tobymao__sqlglot-2006"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-24384"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-16516"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "saleweaver/python-amazon-sp-api",
+        "task_id": "saleweaver__python-amazon-sp-api-869"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-8478"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-11443"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "huggingface/accelerate",
+        "task_id": "huggingface__accelerate-991"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "sphinx-doc/sphinx",
+        "task_id": "sphinx-doc__sphinx-8125"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "softlayer/softlayer-python",
+        "task_id": "softlayer__softlayer-python-1668"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-15010"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-10591"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "tobymao/sqlglot",
+        "task_id": "tobymao__sqlglot-4249"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": true,
+        "outcome": "selected",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-16685"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "Project-MONAI/MONAI",
+        "task_id": "Project-MONAI__MONAI-582"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1391"
+      },
+      {
+        "outcome": "ineligible: 7 source files",
+        "repository": "Textualize/textual",
+        "task_id": "Textualize__textual-863"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "RDFLib/rdflib",
+        "task_id": "RDFLib__rdflib-2877"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "slackapi/python-slack-sdk",
+        "task_id": "slackapi__python-slack-sdk-1130"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "softlayer/softlayer-python",
+        "task_id": "softlayer__softlayer-python-1818"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "tobymao/sqlglot",
+        "task_id": "tobymao__sqlglot-897"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-19857"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-10198"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-17077"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-29260"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1177"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "Project-MONAI/MONAI",
+        "task_id": "Project-MONAI__MONAI-639"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-21546"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-17615"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "Project-MONAI/MONAI",
+        "task_id": "Project-MONAI__MONAI-1679"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-10827"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-17306"
+      },
+      {
+        "outcome": "excluded: used in final_fea_tasks",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-10874"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-19094"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "prometheus/client_python",
+        "task_id": "prometheus__client_python-664"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-11666"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "joke2k/faker",
+        "task_id": "joke2k__faker-1075"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-17169"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "falconry/falcon",
+        "task_id": "falconry__falcon-202"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "scikit-learn/scikit-learn",
+        "task_id": "scikit-learn__scikit-learn-15557"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1567"
+      },
+      {
+        "outcome": "excluded: used in final_fea_tasks",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-12417"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "falconry/falcon",
+        "task_id": "falconry__falcon-991"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "pydata/xarray",
+        "task_id": "pydata__xarray-6910"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1907"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "pylint-dev/pylint",
+        "task_id": "pylint-dev__pylint-4810"
+      },
+      {
+        "outcome": "ineligible: 8 source files",
+        "repository": "Textualize/textual",
+        "task_id": "Textualize__textual-293"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "boto/botocore",
+        "task_id": "boto__botocore-3271"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-16142"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "prometheus/client_python",
+        "task_id": "prometheus__client_python-1005"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "falconry/falcon",
+        "task_id": "falconry__falcon-1459"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "Textualize/textual",
+        "task_id": "Textualize__textual-269"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "deepset-ai/haystack",
+        "task_id": "deepset-ai__haystack-6977"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "joke2k/faker",
+        "task_id": "joke2k__faker-1247"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "joke2k/faker",
+        "task_id": "joke2k__faker-738"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "joke2k/faker",
+        "task_id": "joke2k__faker-1122"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "falconry/falcon",
+        "task_id": "falconry__falcon-1079"
+      },
+      {
+        "outcome": "ineligible: 15 source files",
+        "repository": "django/django",
+        "task_id": "django__django-16860"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-16991"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1705"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "sympy/sympy",
+        "task_id": "sympy__sympy-12767"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "google-deepmind/optax",
+        "task_id": "google-deepmind__optax-865"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "pyvista/pyvista",
+        "task_id": "pyvista__pyvista-4954"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "Project-MONAI/MONAI",
+        "task_id": "Project-MONAI__MONAI-7198"
+      },
+      {
+        "outcome": "excluded: V2 development repository",
+        "repository": "boto/boto3",
+        "task_id": "boto__boto3-3060"
+      },
+      {
+        "outcome": "excluded: used in final_fea_tasks",
+        "repository": "astropy/astropy",
+        "task_id": "astropy__astropy-7970"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "deepset-ai/haystack",
+        "task_id": "deepset-ai__haystack-8103"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "astronomer/astronomer-cosmos",
+        "task_id": "astronomer__astronomer-cosmos-758"
+      },
+      {
+        "outcome": "skipped: repository cap",
+        "repository": "Project-MONAI/MONAI",
+        "task_id": "Project-MONAI__MONAI-745"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "pvlib/pvlib-python",
+        "task_id": "pvlib__pvlib-python-1562"
+      },
+      {
+        "outcome": "ineligible: 6 source files",
+        "repository": "tobymao/sqlglot",
+        "task_id": "tobymao__sqlglot-3463"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-15914"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "deepset-ai/haystack",
+        "task_id": "deepset-ai__haystack-6836"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "Textualize/rich",
+        "task_id": "Textualize__rich-2301"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 4 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "softlayer/softlayer-python",
+        "task_id": "softlayer__softlayer-python-1910"
+      },
+      {
+        "outcome": "ineligible: 1 source files",
+        "repository": "Textualize/rich",
+        "task_id": "Textualize__rich-1992"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 3 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-16511"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "google-deepmind/optax",
+        "task_id": "google-deepmind__optax-1117"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "conan-io/conan",
+        "task_id": "conan-io__conan-1815"
+      },
+      {
+        "eligibility": "merged PR, usable title/body, 2 source files, base fetchable",
+        "lite": false,
+        "outcome": "selected",
+        "repository": "pydata/xarray",
+        "task_id": "pydata__xarray-6135"
+      }
+    ],
+    "table": "https://huggingface.co/datasets/microsoft/FEA-Bench/resolve/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad/data/test-00000-of-00001.parquet",
+    "table_sha256": "22ebac756180b3dfd63d1c7d57a1ed7cf5707a28c1e4ce59929dc30955cf0836",
+    "target": 30
+  },
+  "schema_version": 1,
+  "selection_method": "v2-heldout: pinned FEA-Bench table; all previously used task IDs and V2 development repositories excluded; fixed sha256 order; merged PR with usable title/body; 2-4 primary Python source files; base fetchable; at most 3 per repository; first 30 eligible tasks",
+  "tasks": [
+    {
+      "base_commit": "f4560a183a09336bf6285d4d9f5d882715cde3e2",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/source/data.rst",
+        "monai/data/__init__.py",
+        "monai/data/grid_dataset.py",
+        "monai/data/utils.py",
+        "tests/test_grid_dataset.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/source/data.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "monai/data/__init__.py",
+          "monai/data/grid_dataset.py",
+          "monai/data/utils.py"
+        ],
+        "test_python": [
+          "tests/test_grid_dataset.py"
+        ]
+      },
+      "head_commit": "0726863c08c7fbbde38f3d37c60ea26fa64f7789",
+      "id": "Project-MONAI__MONAI-1679",
+      "masked_request": "1500-update grid dataset to support patch level transforms\n\nSigned-off-by: Wenqi Li <wenqil@nvidia.com>\r\n\r\nFixes #1500\r\n\r\n### Description\r\nrevised grid patch dataset to support patch level transforms and coordinates outputs.\r\n\r\n### Status\r\n**Ready**\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Breaking change (fix or new feature that would cause existing functionality to change).\r\n- [x] New tests added to cover the changes.\r\n- [x] Quick tests passed locally by running `[PATH] --quick`.\r\n- [x] In-line docstrings updated.\r\n- [x] Documentation updated, tested `make html` command in the `docs/` folder.",
+      "original_request": "1500-update grid dataset to support patch level transforms\n\nSigned-off-by: Wenqi Li <wenqil@nvidia.com>\r\n\r\nFixes #1500\r\n\r\n### Description\r\nrevised grid patch dataset to support patch level transforms and coordinates outputs.\r\n\r\n### Status\r\n**Ready**\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Breaking change (fix or new feature that would cause existing functionality to change).\r\n- [x] New tests added to cover the changes.\r\n- [x] Quick tests passed locally by running `./runtests.sh --quick`.\r\n- [x] In-line docstrings updated.\r\n- [x] Documentation updated, tested `make html` command in the `docs/` folder.",
+      "pull_number": 1679,
+      "repository": "Project-MONAI/MONAI",
+      "repository_url": "https://github.com/Project-MONAI/MONAI.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "e8c26a2baa539624c36aa1262e6de9009c74cfda",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/source/transforms.rst",
+        "monai/transforms/utility/array.py",
+        "monai/transforms/utility/dictionary.py",
+        "tests/test_lambda.py",
+        "tests/test_lambdad.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/source/transforms.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "monai/transforms/utility/array.py",
+          "monai/transforms/utility/dictionary.py"
+        ],
+        "test_python": [
+          "tests/test_lambda.py",
+          "tests/test_lambdad.py"
+        ]
+      },
+      "head_commit": "bb6c56713189fe16a00dd19c953c4f8f8ac6f695",
+      "id": "Project-MONAI__MONAI-639",
+      "masked_request": "630 Lambda Transform\n\nFixes #630 \r\n\r\n### Description\r\nAdding array and dictionary lambda transform.\r\n\r\n### Status\r\n**Ready**\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Bug fix (non-breaking change which fixes an issue)\r\n- [ ] Breaking change (fix or new feature that would cause existing functionality to change)\r\n- [x] New tests added to cover the changes\r\n- [x] [PATH] updated",
+      "original_request": "630 Lambda Transform\n\nFixes #630 \r\n\r\n### Description\r\nAdding array and dictionary lambda transform.\r\n\r\n### Status\r\n**Ready**\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Bug fix (non-breaking change which fixes an issue)\r\n- [ ] Breaking change (fix or new feature that would cause existing functionality to change)\r\n- [x] New tests added to cover the changes\r\n- [x] Docstrings/Documentation updated",
+      "pull_number": 639,
+      "repository": "Project-MONAI/MONAI",
+      "repository_url": "https://github.com/Project-MONAI/MONAI.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "97678fa75a851c411c713658059bac3b2ce5cf70",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/source/transforms.rst",
+        "docs/source/transforms_idx.rst",
+        "monai/transforms/__init__.py",
+        "monai/transforms/regularization/__init__.py",
+        "monai/transforms/regularization/array.py",
+        "monai/transforms/regularization/dictionary.py",
+        "tests/test_regularization.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/source/transforms.rst",
+          "docs/source/transforms_idx.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "monai/transforms/__init__.py",
+          "monai/transforms/regularization/__init__.py",
+          "monai/transforms/regularization/array.py",
+          "monai/transforms/regularization/dictionary.py"
+        ],
+        "test_python": [
+          "tests/test_regularization.py"
+        ]
+      },
+      "head_commit": "a59f41f3ea4da7a57217f84d9e3af204057f6d42",
+      "id": "Project-MONAI__MONAI-7198",
+      "masked_request": "2872 implementation of mixup, cutmix and cutout\n\nFixes #2872 \r\n\r\n### Description\r\n\r\nImplementation of mixup, cutmix and cutout as described in the original papers.\r\nCurrent implementation support both, the dictionary-based batches and tuples of tensors.\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Non-breaking change (fix or new feature that would not break existing functionality).\r\n- [ ] Breaking change (fix or new feature that would cause existing functionality to change).\r\n- [x] New tests added to cover the changes.\r\n- [ ] Integration tests passed locally by running `[PATH] -f -u --net --coverage`.\r\n- [x] Quick tests passed locally by running `[PATH] --quick --unittests  --disttests`.\r\n- [x] In-line docstrings updated.\r\n- [x] Documentation updated, tested `make html` command in the `docs/` folder.",
+      "original_request": "2872 implementation of mixup, cutmix and cutout\n\nFixes #2872 \r\n\r\n### Description\r\n\r\nImplementation of mixup, cutmix and cutout as described in the original papers.\r\nCurrent implementation support both, the dictionary-based batches and tuples of tensors.\r\n\r\n### Types of changes\r\n<!--- Put an `x` in all the boxes that apply, and remove the not applicable items -->\r\n- [x] Non-breaking change (fix or new feature that would not break existing functionality).\r\n- [ ] Breaking change (fix or new feature that would cause existing functionality to change).\r\n- [x] New tests added to cover the changes.\r\n- [ ] Integration tests passed locally by running `./runtests.sh -f -u --net --coverage`.\r\n- [x] Quick tests passed locally by running `./runtests.sh --quick --unittests  --disttests`.\r\n- [x] In-line docstrings updated.\r\n- [x] Documentation updated, tested `make html` command in the `docs/` folder.",
+      "pull_number": 7198,
+      "repository": "Project-MONAI/MONAI",
+      "repository_url": "https://github.com/Project-MONAI/MONAI.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "0c11debb5178157baeac27b735e49a757916d2a6",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/plugin_serializers.rst",
+        "examples/patch_serializer_example.py",
+        "rdflib/plugin.py",
+        "rdflib/plugins/serializers/patch.py",
+        "test/test_serializers/test_serializer_patch.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/plugin_serializers.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "examples/patch_serializer_example.py",
+          "rdflib/plugin.py",
+          "rdflib/plugins/serializers/patch.py"
+        ],
+        "test_python": [
+          "test/test_serializers/test_serializer_patch.py"
+        ]
+      },
+      "head_commit": "e58efff8808c4ed1029ec4c264558443f2d724ba",
+      "id": "RDFLib__rdflib-2877",
+      "masked_request": "Implement RDF Patch serializer\n\nSupports serialization from Dataset instances only; triples and quads within a Dataset are supported.\r\n\r\n# Summary of changes\r\n\r\nThree methods to create RDF Patches from RDFLib Datasets:\r\n1. Serialize a Dataset as an addition patch\r\n2. Serialize a Dataset as a delete patch\r\n3. Create a patch representing the difference between a Dataset instance and a target Dataset instance\r\n\r\nBasic usage:\r\n1. `ds.serialize(format=\"patch\", operation=\"add\")`\r\n2. `ds.serialize(format=\"patch\", operation=\"remove\")`\r\n3. `ds1.serialize(format=\"patch\", target=ds2)`\r\n\r\nComplete examples are provided in an example script.\r\n\r\n# Checklist\r\n\r\n- [x] Checked that there aren't other open pull requests for\r\n  the same change.\r\n- [x] Checked that all tests and type checking passes.\r\n- If the change adds new features or changes the RDFLib public API:\r\n  - [x] ~Created an issue to discuss the change and get in-principle agreement.~ Discussed w/ maintainers\r\n  - [x] Considered adding an example in `[PATH]`.\r\n- If the change has a potential impact on users of this project:\r\n  - [x] Updated relevant documentation to avoid inaccuracies.\r\n  - [x] Considered adding additional documentation.\r\n- [x] Considered granting [push permissions to the PR branch](https://docs.github.com/en/pull-[PATH]),\r\n  so maintainers can fix minor issues and keep your PR up to date.",
+      "original_request": "Implement RDF Patch serializer\n\nSupports serialization from Dataset instances only; triples and quads within a Dataset are supported.\r\n\r\n# Summary of changes\r\n\r\nThree methods to create RDF Patches from RDFLib Datasets:\r\n1. Serialize a Dataset as an addition patch\r\n2. Serialize a Dataset as a delete patch\r\n3. Create a patch representing the difference between a Dataset instance and a target Dataset instance\r\n\r\nBasic usage:\r\n1. `ds.serialize(format=\"patch\", operation=\"add\")`\r\n2. `ds.serialize(format=\"patch\", operation=\"remove\")`\r\n3. `ds1.serialize(format=\"patch\", target=ds2)`\r\n\r\nComplete examples are provided in an example script.\r\n\r\n# Checklist\r\n\r\n- [x] Checked that there aren't other open pull requests for\r\n  the same change.\r\n- [x] Checked that all tests and type checking passes.\r\n- If the change adds new features or changes the RDFLib public API:\r\n  - [x] ~Created an issue to discuss the change and get in-principle agreement.~ Discussed w/ maintainers\r\n  - [x] Considered adding an example in `./examples`.\r\n- If the change has a potential impact on users of this project:\r\n  - [x] Updated relevant documentation to avoid inaccuracies.\r\n  - [x] Considered adding additional documentation.\r\n- [x] Considered granting [push permissions to the PR branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork),\r\n  so maintainers can fix minor issues and keep your PR up to date.",
+      "pull_number": 2877,
+      "repository": "RDFLib/rdflib",
+      "repository_url": "https://github.com/RDFLib/rdflib.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "695256ce5316482f15818962ba8f692a460f923f",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "CONTRIBUTORS.md",
+        "docs/source/highlighting.rst",
+        "rich/default_styles.py",
+        "rich/highlighter.py",
+        "tests/test_highlighter.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "CONTRIBUTORS.md",
+          "docs/source/highlighting.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "rich/default_styles.py",
+          "rich/highlighter.py"
+        ],
+        "test_python": [
+          "tests/test_highlighter.py"
+        ]
+      },
+      "head_commit": "8443505e219e1b336ecc7d6cfebb1df887a7e41b",
+      "id": "Textualize__rich-2301",
+      "masked_request": "Add Iso8601Highlighter\n\n## Type of changes\r\n\r\n- [ ] Bug fix\r\n- [X] New feature\r\n- [ ] Documentation / docstrings\r\n- [ ] Tests\r\n- [ ] Other\r\n\r\n## Checklist\r\n\r\n- [X] I've run the latest [black](https://github.com/psf/black) with default args on new code.\r\n- [X] I've updated [PATH] and [PATH] where appropriate.\r\n- [X] I've added tests for new code.\r\n- [X] I accept that @willmcgugan may be pedantic in the code review.\r\n\r\n## Description\r\n\r\nAs suggesterd by @willmcgugan in #2295, I've added a date-time highlighter.",
+      "original_request": "Add Iso8601Highlighter\n\n## Type of changes\r\n\r\n- [ ] Bug fix\r\n- [X] New feature\r\n- [ ] Documentation / docstrings\r\n- [ ] Tests\r\n- [ ] Other\r\n\r\n## Checklist\r\n\r\n- [X] I've run the latest [black](https://github.com/psf/black) with default args on new code.\r\n- [X] I've updated CHANGELOG.md and CONTRIBUTORS.md where appropriate.\r\n- [X] I've added tests for new code.\r\n- [X] I accept that @willmcgugan may be pedantic in the code review.\r\n\r\n## Description\r\n\r\nAs suggesterd by @willmcgugan in #2295, I've added a date-time highlighter.",
+      "pull_number": 2301,
+      "repository": "Textualize/rich",
+      "repository_url": "https://github.com/Textualize/rich.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "cca16a20fdfb66249b481d652d7eeeb59f6eb33a",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "botocore/args.py",
+        "botocore/config.py",
+        "botocore/configprovider.py",
+        "botocore/exceptions.py",
+        "tests/unit/test_args.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "botocore/args.py",
+          "botocore/config.py",
+          "botocore/configprovider.py",
+          "botocore/exceptions.py"
+        ],
+        "test_python": [
+          "tests/unit/test_args.py"
+        ]
+      },
+      "head_commit": "d98da9286b2e64aaae73dcca3dacf4557107fc48",
+      "id": "boto__botocore-3271",
+      "masked_request": "Add Flexible Checksum v2 Config Options\n\n## Overview\r\nThis PR adds the ``request_checksum_calculation`` and ``response_checksum_validation`` config options. \r\n\r\n> [!NOTE]  \r\n> This PR only implements the functionality to configure the new options and doesn't actually use them for anything yet.\r\n\r\n## Request Checksum Calculation\r\nA new configuration option will be introduced that allows users to configure request checksum calculation behavior. The following configuration methods will be supported:\r\n\r\n* Environment Variable - ``AWS_REQUEST_CHECKSUM_CALCULATION``\r\n* Profile Config - ``request_checksum_calculation``\r\n* Client Config - ``request_checksum_calculation``\r\n\r\nSupported values:\r\n\r\n* ``WHEN_SUPPORTED`` (Default) - If operations are modeled with  ``\"requestChecksumRequired\":true`` OR a ``requestAlgorithmMember``, then a checksum will be calculated for all request payloads.\r\n* ``WHEN_REQUIRED`` - If operations are modeled with  ``\"requestChecksumRequired\":true`` or ``requestAlgorithmMember`` is modeled and set by the user, then a checksum will be calculated for request payloads.\r\n\r\n\r\n## Response Checksum Validation\r\nA new configuration option will be introduced that allows users to configure response checksum validation behavior. The following configuration methods will be supported:\r\n\r\n* Environment Variable - ``AWS_RESPONSE_CHECKSUM_VALIDATION``\r\n* Profile Config - ``response_checksum_validation``\r\n* Client Config - ``response_checksum_validation``\r\n\r\nSupported Values:\r\n\r\n* ``WHEN_SUPPORTED`` (Default) - Checksum validation MUST be performed on all response payloads for operations modeled with the ``responseAlgorithms`` trait, unless no modeled checksum is supported.\r\n* ``WHEN_REQUIRED`` - Checksum validation MUST NOT be performed on response payloads of operations UNLESS botocore supports the modeled checksum algorithms AND the user has set the ``requestValidationMemeber`` to ``ENABLED``.",
+      "original_request": "Add Flexible Checksum v2 Config Options\n\n## Overview\r\nThis PR adds the ``request_checksum_calculation`` and ``response_checksum_validation`` config options. \r\n\r\n> [!NOTE]  \r\n> This PR only implements the functionality to configure the new options and doesn't actually use them for anything yet.\r\n\r\n## Request Checksum Calculation\r\nA new configuration option will be introduced that allows users to configure request checksum calculation behavior. The following configuration methods will be supported:\r\n\r\n* Environment Variable - ``AWS_REQUEST_CHECKSUM_CALCULATION``\r\n* Profile Config - ``request_checksum_calculation``\r\n* Client Config - ``request_checksum_calculation``\r\n\r\nSupported values:\r\n\r\n* ``WHEN_SUPPORTED`` (Default) - If operations are modeled with  ``\"requestChecksumRequired\":true`` OR a ``requestAlgorithmMember``, then a checksum will be calculated for all request payloads.\r\n* ``WHEN_REQUIRED`` - If operations are modeled with  ``\"requestChecksumRequired\":true`` or ``requestAlgorithmMember`` is modeled and set by the user, then a checksum will be calculated for request payloads.\r\n\r\n\r\n## Response Checksum Validation\r\nA new configuration option will be introduced that allows users to configure response checksum validation behavior. The following configuration methods will be supported:\r\n\r\n* Environment Variable - ``AWS_RESPONSE_CHECKSUM_VALIDATION``\r\n* Profile Config - ``response_checksum_validation``\r\n* Client Config - ``response_checksum_validation``\r\n\r\nSupported Values:\r\n\r\n* ``WHEN_SUPPORTED`` (Default) - Checksum validation MUST be performed on all response payloads for operations modeled with the ``responseAlgorithms`` trait, unless no modeled checksum is supported.\r\n* ``WHEN_REQUIRED`` - Checksum validation MUST NOT be performed on response payloads of operations UNLESS botocore supports the modeled checksum algorithms AND the user has set the ``requestValidationMemeber`` to ``ENABLED``.",
+      "pull_number": 3271,
+      "repository": "boto/botocore",
+      "repository_url": "https://github.com/boto/botocore.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "27a4725d0213adc631ec09afde4bb7fabc8d80f4",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/tools/files/__init__.py",
+        "conan/tools/files/files.py",
+        "conans/test/unittests/tools/files/test_rm.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/tools/files/__init__.py",
+          "conan/tools/files/files.py"
+        ],
+        "test_python": [
+          "conans/test/unittests/tools/files/test_rm.py"
+        ]
+      },
+      "head_commit": "979890c1f12844f924c5f849de1cb555fa6b3a86",
+      "id": "conan-io__conan-11443",
+      "masked_request": "New rm by pattern tool\n\nChangelog: Feature: Added tool `rm` at `[PATH]` to remove files by pattern in a folder.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nInspired by the `remove_files_by_mask` from the old tools.",
+      "original_request": "New rm by pattern tool\n\nChangelog: Feature: Added tool `rm` at `conan.tools.files` to remove files by pattern in a folder.\r\nDocs: https://github.com/conan-io/docs/pull/2617\r\n\r\nInspired by the `remove_files_by_mask` from the old tools.",
+      "pull_number": 11443,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "fed5f7f4ff8d0b003f76a161d9f9931cb3199f2e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conan/api/subapi/lockfile.py",
+        "conan/cli/commands/lock.py",
+        "conans/model/graph_lock.py",
+        "test/integration/lockfile/test_user_overrides.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conan/api/subapi/lockfile.py",
+          "conan/cli/commands/lock.py",
+          "conans/model/graph_lock.py"
+        ],
+        "test_python": [
+          "test/integration/lockfile/test_user_overrides.py"
+        ]
+      },
+      "head_commit": "89e9586b2fb65498ed2d989d4105144f59fbc23d",
+      "id": "conan-io__conan-16511",
+      "masked_request": "new lock update subcommand\n\nChangelog: Feature: New ``conan lock update`` subcommand to remove + add a reference in the same command.\r\nDocs: https://github.com/conan-[PATH]\r\n\r\nClose https://github.com/conan-[PATH]",
+      "original_request": "new lock update subcommand\n\nChangelog: Feature: New ``conan lock update`` subcommand to remove + add a reference in the same command.\r\nDocs: https://github.com/conan-io/docs/pull/3784\r\n\r\nClose https://github.com/conan-io/conan/issues/16377",
+      "pull_number": 16511,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "dac34c4c1c19b94969f7b0d2aef44d0650285e3a",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "conans/client/tools/__init__.py",
+        "conans/client/tools/apple.py",
+        "conans/test/util/apple_test.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "conans/client/tools/__init__.py",
+          "conans/client/tools/apple.py"
+        ],
+        "test_python": [
+          "conans/test/util/apple_test.py"
+        ]
+      },
+      "head_commit": "ed8ef49483f8403d221ad158c9bc12ec7b2e3f53",
+      "id": "conan-io__conan-1815",
+      "masked_request": "- add tools for Apple development\n\nadd various tools I am using for apple development\r\nI was using them for my private recipes and keep copy-pasting between packages\r\nnow I am compiling bincrafters packages for iOS, and need them as well\r\nso I've decided it is beneficial to have tools in conan codebase\r\n\r\nCloses #2322",
+      "original_request": "- add tools for Apple development\n\nadd various tools I am using for apple development\r\nI was using them for my private recipes and keep copy-pasting between packages\r\nnow I am compiling bincrafters packages for iOS, and need them as well\r\nso I've decided it is beneficial to have tools in conan codebase\r\n\r\nCloses #2322",
+      "pull_number": 1815,
+      "repository": "conan-io/conan",
+      "repository_url": "https://github.com/conan-io/conan.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "a771d7f01511bcfe05ebd19961ee319865a5f3af",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/pydoc/config/retrievers_api.yml",
+        "haystack/components/retrievers/__init__.py",
+        "haystack/components/retrievers/filter_retriever.py",
+        "releasenotes/notes/add-filter-retriever-8901af26144d1a17.yaml",
+        "test/components/retrievers/test_filter_retriever.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/pydoc/config/retrievers_api.yml"
+        ],
+        "other_implementation": [
+          "releasenotes/notes/add-filter-retriever-8901af26144d1a17.yaml"
+        ],
+        "source_python": [
+          "haystack/components/retrievers/__init__.py",
+          "haystack/components/retrievers/filter_retriever.py"
+        ],
+        "test_python": [
+          "test/components/retrievers/test_filter_retriever.py"
+        ]
+      },
+      "head_commit": "a2e61fdc81bd5f3a9e46aebc6b5056f21dc69f95",
+      "id": "deepset-ai__haystack-6836",
+      "masked_request": "Feat: Add FilterRetriever\n\n### Proposed Changes:\r\n\r\nPorting `FilterRetriever` from v1. \r\n\r\n### How did you test it?\r\n\r\nUnit tests\r\n\r\n### Notes for the reviewer\r\n\r\nDiscussion notes for following points attached later on in this PR:\r\n\r\n#### Q1) Should we have top_k as an argument or not?\r\n\r\nOption 1: Don't include. Just return all docs  \r\n\r\nOption 2.1: Include. Simply return the first top_k docs.  \r\n\r\nOption 2.2: Include. Apply some sort of seeded random sampling on top.  \r\n\r\nOption 3: Include at the DocumentStore level\r\n  - Thought: Ideally this would be handled at the DocumentStore level as fetching all docs for a filter and then FilterRetriever just taking top_k docs could be much more inefficient.  \r\n    - But then top_k isn't part of the `DocumentStore.filter_documents` protocol. Could add it but maybe would bloat it as perhaps not all DocumentStores support this \"sampling with filter\"\r\n\r\n_Leaning towards Option-1, excluding top_k._\r\n     \r\n#### Q2) Runtime input metadata value filtering\r\n\r\nIdea: For a (init)-specified metadata (e.g. \"category\"), for convenience we want to allow users to provide a value (e.g. \"sports\") at runtime. Note: for instance, would be needed as part of FileSimilaritRetriever (#5629)\r\n\r\nOption 1: Make `FilterRetriever` flexible enough for this. An attribute like `filter_meta_key` at `__init__` and then `run(filter_meta_value: str,...)` which would form the corresponding filter  \r\n\t  `filters = {\"field\": self.filter_meta_key, \"operator\": \"==\", \"value\": filter_meta_value}` and pass it onto the document_store. Issue: increases complexity in the component.\r\n\r\nOption 2: Create another retriever `EqualsFilterRetriever` inheriting from `FilterRetriever` and overwriting `run`  \r\n\r\nOption 3: Create a `EqualsFilterGenerator` to create the filter and connect it to `FilterRetriever.filters`\r\n\r\n_Slightly leaning towards Option3_ though such a component feels too [PATH]\r\n\r\n#### Q3) Lazy [PATH] of the component\r\n\r\nWondering if there is a way to setup the component to only run if there is a downstream component needing its output.\r\n\r\nE.g. Possible usage: the FilterRetriever is in one of many optional branches. And we would only want to run it if the branch is followed (e.g. for a certain type of query). I guess this can be generalized to any \"inputless\" component.\r\n\r\nOne such setup could be: \r\n\r\n![filter_branch](https://github.com/deepset-[PATH])\r\n\r\nHere `FilterRetriever` may run even when it's not necessary.\r\n\r\n__Currently leaning towards letting this pass__\r\n\r\n\r\n#### Q4) location: `[PATH]` is fine?\r\n\r\n\r\n### Checklist\r\n\r\n- I have read the [contributors guidelines](https://github.com/deepset-[PATH]) and the [code of conduct](https://github.com/deepset-[PATH])\r\n- I have updated the related issue with new insights and changes\r\n- I added unit tests and updated the docstrings\r\n- I've used one of the [conventional commit types](https://www.conventionalcommits.org/en/v1.0.0/) for my PR title: `fix:`, `feat:`, `build:`, `chore:`, `ci:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`.\r\n- I documented my code\r\n- I ran [pre-commit hooks](https://github.com/deepset-[PATH]#installation) and fixed any issue",
+      "original_request": "Feat: Add FilterRetriever\n\n### Proposed Changes:\r\n\r\nPorting `FilterRetriever` from v1. \r\n\r\n### How did you test it?\r\n\r\nUnit tests\r\n\r\n### Notes for the reviewer\r\n\r\nDiscussion notes for following points attached later on in this PR:\r\n\r\n#### Q1) Should we have top_k as an argument or not?\r\n\r\nOption 1: Don't include. Just return all docs  \r\n\r\nOption 2.1: Include. Simply return the first top_k docs.  \r\n\r\nOption 2.2: Include. Apply some sort of seeded random sampling on top.  \r\n\r\nOption 3: Include at the DocumentStore level\r\n  - Thought: Ideally this would be handled at the DocumentStore level as fetching all docs for a filter and then FilterRetriever just taking top_k docs could be much more inefficient.  \r\n    - But then top_k isn't part of the `DocumentStore.filter_documents` protocol. Could add it but maybe would bloat it as perhaps not all DocumentStores support this \"sampling with filter\"\r\n\r\n_Leaning towards Option-1, excluding top_k._\r\n     \r\n#### Q2) Runtime input metadata value filtering\r\n\r\nIdea: For a (init)-specified metadata (e.g. \"category\"), for convenience we want to allow users to provide a value (e.g. \"sports\") at runtime. Note: for instance, would be needed as part of FileSimilaritRetriever (#5629)\r\n\r\nOption 1: Make `FilterRetriever` flexible enough for this. An attribute like `filter_meta_key` at `__init__` and then `run(filter_meta_value: str,...)` which would form the corresponding filter  \r\n\t  `filters = {\"field\": self.filter_meta_key, \"operator\": \"==\", \"value\": filter_meta_value}` and pass it onto the document_store. Issue: increases complexity in the component.\r\n\r\nOption 2: Create another retriever `EqualsFilterRetriever` inheriting from `FilterRetriever` and overwriting `run`  \r\n\r\nOption 3: Create a `EqualsFilterGenerator` to create the filter and connect it to `FilterRetriever.filters`\r\n\r\n_Slightly leaning towards Option3_ though such a component feels too small/specific.\r\n\r\n#### Q3) Lazy run/evaluation of the component\r\n\r\nWondering if there is a way to setup the component to only run if there is a downstream component needing its output.\r\n\r\nE.g. Possible usage: the FilterRetriever is in one of many optional branches. And we would only want to run it if the branch is followed (e.g. for a certain type of query). I guess this can be generalized to any \"inputless\" component.\r\n\r\nOne such setup could be: \r\n\r\n![filter_branch](https://github.com/deepset-ai/haystack/assets/4636315/1f6ec981-2391-40bf-874e-8605e9aa039f)\r\n\r\nHere `FilterRetriever` may run even when it's not necessary.\r\n\r\n__Currently leaning towards letting this pass__\r\n\r\n\r\n#### Q4) location: `haystack.components.retrievers.filter_retriever` is fine?\r\n\r\n\r\n### Checklist\r\n\r\n- I have read the [contributors guidelines](https://github.com/deepset-ai/haystack/blob/main/CONTRIBUTING.md) and the [code of conduct](https://github.com/deepset-ai/haystack/blob/main/code_of_conduct.txt)\r\n- I have updated the related issue with new insights and changes\r\n- I added unit tests and updated the docstrings\r\n- I've used one of the [conventional commit types](https://www.conventionalcommits.org/en/v1.0.0/) for my PR title: `fix:`, `feat:`, `build:`, `chore:`, `ci:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`.\r\n- I documented my code\r\n- I ran [pre-commit hooks](https://github.com/deepset-ai/haystack/blob/main/CONTRIBUTING.md#installation) and fixed any issue",
+      "pull_number": 6836,
+      "repository": "deepset-ai/haystack",
+      "repository_url": "https://github.com/deepset-ai/haystack.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "6355f32201eeffa12f6233c97eabe56e85c4a7f9",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/api/projections.rst",
+        "optax/projections/__init__.py",
+        "optax/projections/_projections.py",
+        "optax/projections/_projections_test.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/api/projections.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "optax/projections/__init__.py",
+          "optax/projections/_projections.py"
+        ],
+        "test_python": [
+          "optax/projections/_projections_test.py"
+        ]
+      },
+      "head_commit": "b8c2e133319480509576a7280f851e9d6ec7dccf",
+      "id": "google-deepmind__optax-1117",
+      "masked_request": "Add projection_linf_ball.\n\nAdd projection_linf_ball.",
+      "original_request": "Add projection_linf_ball.\n\nAdd projection_linf_ball.",
+      "pull_number": 1117,
+      "repository": "google-deepmind/optax",
+      "repository_url": "https://github.com/google-deepmind/optax.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "f45b2eb82ffdb8c22d57923b5039000539bed4bc",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/api/utilities.rst",
+        "optax/tree_utils/__init__.py",
+        "optax/tree_utils/_state_utils.py",
+        "optax/tree_utils/_state_utils_test.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/api/utilities.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "optax/tree_utils/__init__.py",
+          "optax/tree_utils/_state_utils.py"
+        ],
+        "test_python": [
+          "optax/tree_utils/_state_utils_test.py"
+        ]
+      },
+      "head_commit": "2e4202dbd27af78d4e946124c5e2ebea1b0e9775",
+      "id": "google-deepmind__optax-865",
+      "masked_request": "Utility to set value in a pytree (and so in state)\n\nUtility to set value in a pytree (and so in state)",
+      "original_request": "Utility to set value in a pytree (and so in state)\n\nUtility to set value in a pytree (and so in state)",
+      "pull_number": 865,
+      "repository": "google-deepmind/optax",
+      "repository_url": "https://github.com/google-deepmind/optax.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "a310d09e627fc1e1ddd6e88a3d65cab03fe22e4e",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "faker/generator.py",
+        "faker/providers/misc/__init__.py",
+        "tests/providers/test_misc.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "faker/generator.py",
+          "faker/providers/misc/__init__.py"
+        ],
+        "test_python": [
+          "tests/providers/test_misc.py"
+        ]
+      },
+      "head_commit": "eebf577fad614f75495b30206f1222116c9c70a5",
+      "id": "joke2k__faker-1247",
+      "masked_request": "JSON and Fixed Width argument group and parser support.\n\n### What does this changes\r\n\r\nThe new Argument Groups is a much cleaner way to handle parsing arguments to provider methods when building data structures like DSV, JSON and Fixed Width.  It also allows for the JSON provider to now accept a Dictionary that utilizes the Argument Groups, which is a much simpler way to build complex data structures.\r\n\r\n```Python\r\nfake.set_arguments('top_half', {'min_value': 50,'max_value': 100})\r\n\r\n[PATH](data_columns={'Name': 'name', 'Score': 'pyint:top_half'})\r\nfake.fixed_width(data_columns=[(20, 'name'), (3, 'pyint:top_half')])\r\n```\r\n\r\nIf string tokens are used then complex Strings can be created by using pystr_format under the hood.\r\n\r\n```Python\r\nfake.set_arguments('red_rgb', {'hue': 'red', 'color_format': 'rgb'})\r\n[PATH](data_columns={'Address': 'address', 'Feature': '### - {{ color:red_rgb }}'})\r\n```\r\n\r\nAll previous support for lists with tuple records is still in tacked and will not be broken.  More tests have been added to ensure absolutely safety for anyone that begins to use JSON with list format or dict format, and Fixed Width generation.",
+      "original_request": "JSON and Fixed Width argument group and parser support.\n\n### What does this changes\r\n\r\nThe new Argument Groups is a much cleaner way to handle parsing arguments to provider methods when building data structures like DSV, JSON and Fixed Width.  It also allows for the JSON provider to now accept a Dictionary that utilizes the Argument Groups, which is a much simpler way to build complex data structures.\r\n\r\n```Python\r\nfake.set_arguments('top_half', {'min_value': 50,'max_value': 100})\r\n\r\nfake.json(data_columns={'Name': 'name', 'Score': 'pyint:top_half'})\r\nfake.fixed_width(data_columns=[(20, 'name'), (3, 'pyint:top_half')])\r\n```\r\n\r\nIf string tokens are used then complex Strings can be created by using pystr_format under the hood.\r\n\r\n```Python\r\nfake.set_arguments('red_rgb', {'hue': 'red', 'color_format': 'rgb'})\r\nfake.json(data_columns={'Address': 'address', 'Feature': '### - {{ color:red_rgb }}'})\r\n```\r\n\r\nAll previous support for lists with tuple records is still in tacked and will not be broken.  More tests have been added to ensure absolutely safety for anyone that begins to use JSON with list format or dict format, and Fixed Width generation.",
+      "pull_number": 1247,
+      "repository": "joke2k/faker",
+      "repository_url": "https://github.com/joke2k/faker.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "a40a4121db15d527fad8922dee3b8f889bb55be7",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "faker/providers/address/ja_JP/__init__.py",
+        "faker/providers/company/ja_JP/__init__.py",
+        "faker/providers/person/ja_JP/__init__.py",
+        "faker/providers/phone_number/ja_JP/__init__.py",
+        "faker/tests/ja_JP/__init__.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "faker/providers/address/ja_JP/__init__.py",
+          "faker/providers/company/ja_JP/__init__.py",
+          "faker/providers/person/ja_JP/__init__.py",
+          "faker/providers/phone_number/ja_JP/__init__.py"
+        ],
+        "test_python": [
+          "faker/tests/ja_JP/__init__.py"
+        ]
+      },
+      "head_commit": "c905fa7181fa53fc91dd4303c10346b98b842e21",
+      "id": "joke2k__faker-215",
+      "masked_request": "Add localized providers ja_JP\n\nI added ja_JP(Japanese) provider, and tests.",
+      "original_request": "Add localized providers ja_JP\n\nI added ja_JP(Japanese) provider, and tests.",
+      "pull_number": 215,
+      "repository": "joke2k/faker",
+      "repository_url": "https://github.com/joke2k/faker.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "d5d1d66aae4913f0e23b9a79c655efa1bdafe5f4",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        ".github/PULL_REQUEST_TEMPLATE.md",
+        "docs/sphinx/source/reference/pv_modeling.rst",
+        "docs/sphinx/source/whatsnew/v0.9.1.rst",
+        "pvlib/clearsky.py",
+        "pvlib/temperature.py",
+        "pvlib/tests/test_temperature.py",
+        "pvlib/tools.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          ".github/PULL_REQUEST_TEMPLATE.md",
+          "docs/sphinx/source/reference/pv_modeling.rst",
+          "docs/sphinx/source/whatsnew/v0.9.1.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "pvlib/clearsky.py",
+          "pvlib/temperature.py",
+          "pvlib/tools.py"
+        ],
+        "test_python": [
+          "pvlib/tests/test_temperature.py"
+        ]
+      },
+      "head_commit": "0a0a1f39356b4fa0e5906f5daf82a6c5b57b9f8e",
+      "id": "pvlib__pvlib-python-1391",
+      "masked_request": "Add Prilliman et al transience model to pvlib.temperature\n\n- [x] Closes #1081\r\n - [x] I am familiar with the [contributing guidelines](https://pvlib-[PATH])\r\n - [x] Tests added\r\n - [x] Updates entries to [`[PATH]`](https://github.com/pvlib/pvlib-[PATH]) for API changes.\r\n - [x] Adds description and name entries in the appropriate \"what's new\" file in [`[PATH]`](https://github.com/pvlib/pvlib-[PATH]) for all changes. Includes link to the GitHub Issue with `` :issue:`num` `` or this Pull Request with `` :pull:`num` ``. Includes contributor name [PATH] GitHub username (link with `` :ghuser:`user` ``).\r\n - [x] New code is fully documented. Includes [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) compliant docstrings, examples, and comments where necessary.\r\n - [x] Pull request is nearly complete and ready for detailed review.\r\n - [x] Maintainer: Appropriate GitHub Labels and Milestone are assigned to the Pull Request and linked Issue.\r\n\r\nThis PR adds a cleaned-up version of `prilliman_v5` from this notebook: https://gist.github.com/kanderso-[PATH]\r\n\r\nAlso: I noticed that one of the links in the PR template is out of date so I updated that here too.",
+      "original_request": "Add Prilliman et al transience model to pvlib.temperature\n\n- [x] Closes #1081\r\n - [x] I am familiar with the [contributing guidelines](https://pvlib-python.readthedocs.io/en/latest/contributing.html)\r\n - [x] Tests added\r\n - [x] Updates entries to [`docs/sphinx/source/api.rst`](https://github.com/pvlib/pvlib-python/blob/master/docs/sphinx/source/api.rst) for API changes.\r\n - [x] Adds description and name entries in the appropriate \"what's new\" file in [`docs/sphinx/source/whatsnew`](https://github.com/pvlib/pvlib-python/tree/master/docs/sphinx/source/whatsnew) for all changes. Includes link to the GitHub Issue with `` :issue:`num` `` or this Pull Request with `` :pull:`num` ``. Includes contributor name and/or GitHub username (link with `` :ghuser:`user` ``).\r\n - [x] New code is fully documented. Includes [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) compliant docstrings, examples, and comments where necessary.\r\n - [x] Pull request is nearly complete and ready for detailed review.\r\n - [x] Maintainer: Appropriate GitHub Labels and Milestone are assigned to the Pull Request and linked Issue.\r\n\r\nThis PR adds a cleaned-up version of `prilliman_v5` from this notebook: https://gist.github.com/kanderso-nrel/1d6da384d7af8afc24c230f1f144eb57\r\n\r\nAlso: I noticed that one of the links in the PR template is out of date so I updated that here too.",
+      "pull_number": 1391,
+      "repository": "pvlib/pvlib-python",
+      "repository_url": "https://github.com/pvlib/pvlib-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "dd6062afdf86ac113ac53d7a493710f5c79b8935",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "docs/sphinx/source/reference/irradiance.rst",
+        "docs/sphinx/source/whatsnew/v0.9.4.rst",
+        "pvlib/irradiance.py",
+        "pvlib/modelchain.py",
+        "pvlib/tests/test_irradiance.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/sphinx/source/reference/irradiance.rst",
+          "docs/sphinx/source/whatsnew/v0.9.4.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "pvlib/irradiance.py",
+          "pvlib/modelchain.py"
+        ],
+        "test_python": [
+          "pvlib/tests/test_irradiance.py"
+        ]
+      },
+      "head_commit": "65fde50b9dc54847de738deea594fedd2a0df6d4",
+      "id": "pvlib__pvlib-python-1567",
+      "masked_request": "Implement irradiance.complete_irradiance with component sum equations\n\n<!-- Thank you for your contribution! The following items must be addressed before the code can be merged. Please don't hesitate to ask for help if you're unsure of how to accomplish any of the items. Feel free to remove checklist items that are not relevant to your change. -->\r\n\r\nAdded the function component_sum_irradiance() to independently calculate the irradiance ghi, dhi, and dni fields from the modelchains module.\r\n\r\n - [x] Closes #1565\r\n - [x] I am familiar with the [contributing guidelines](https://pvlib-[PATH])\r\n - [x] Tests added\r\n - [x] Updates entries in [`[PATH]`](https://github.com/pvlib/pvlib-[PATH]) for API changes.\r\n - [x] Adds description and name entries in the appropriate \"what's new\" file in [`[PATH]`](https://github.com/pvlib/pvlib-[PATH]) for all changes. Includes link to the GitHub Issue with `` :issue:`num` `` or this Pull Request with `` :pull:`num` ``. Includes contributor name [PATH] GitHub username (link with `` :ghuser:`user` ``).\r\n - [x] New code is fully documented. Includes [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) compliant docstrings, examples, and comments where necessary.\r\n - [x] Pull request is nearly complete and ready for detailed review.\r\n - [x] Maintainer: Appropriate GitHub Labels (including `remote-data`) and Milestone are assigned to the Pull Request and linked Issue.\r\n\r\n<!-- Brief description of the problem and proposed solution (if not already fully described in the issue linked to above): -->",
+      "original_request": "Implement irradiance.complete_irradiance with component sum equations\n\n<!-- Thank you for your contribution! The following items must be addressed before the code can be merged. Please don't hesitate to ask for help if you're unsure of how to accomplish any of the items. Feel free to remove checklist items that are not relevant to your change. -->\r\n\r\nAdded the function component_sum_irradiance() to independently calculate the irradiance ghi, dhi, and dni fields from the modelchains module.\r\n\r\n - [x] Closes #1565\r\n - [x] I am familiar with the [contributing guidelines](https://pvlib-python.readthedocs.io/en/latest/contributing.html)\r\n - [x] Tests added\r\n - [x] Updates entries in [`docs/sphinx/source/reference`](https://github.com/pvlib/pvlib-python/blob/master/docs/sphinx/source/reference) for API changes.\r\n - [x] Adds description and name entries in the appropriate \"what's new\" file in [`docs/sphinx/source/whatsnew`](https://github.com/pvlib/pvlib-python/tree/master/docs/sphinx/source/whatsnew) for all changes. Includes link to the GitHub Issue with `` :issue:`num` `` or this Pull Request with `` :pull:`num` ``. Includes contributor name and/or GitHub username (link with `` :ghuser:`user` ``).\r\n - [x] New code is fully documented. Includes [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) compliant docstrings, examples, and comments where necessary.\r\n - [x] Pull request is nearly complete and ready for detailed review.\r\n - [x] Maintainer: Appropriate GitHub Labels (including `remote-data`) and Milestone are assigned to the Pull Request and linked Issue.\r\n\r\n<!-- Brief description of the problem and proposed solution (if not already fully described in the issue linked to above): -->",
+      "pull_number": 1567,
+      "repository": "pvlib/pvlib-python",
+      "repository_url": "https://github.com/pvlib/pvlib-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "48290fa14accd3ac87768d3f73d69493b82b0be6",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/whats-new.rst",
+        "xarray/coding/cftime_offsets.py",
+        "xarray/coding/cftimeindex.py",
+        "xarray/tests/test_cftime_offsets.py",
+        "xarray/tests/test_cftimeindex.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/whats-new.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "xarray/coding/cftime_offsets.py",
+          "xarray/coding/cftimeindex.py"
+        ],
+        "test_python": [
+          "xarray/tests/test_cftime_offsets.py",
+          "xarray/tests/test_cftimeindex.py"
+        ]
+      },
+      "head_commit": "f3ce5a032b469e32221ee277c44936310a6282c8",
+      "id": "pydata__xarray-6135",
+      "masked_request": "Implement multiplication of cftime Tick offsets by floats\n\n<!-- Feel free to remove check-list items aren't relevant to your change -->\r\n\r\n- [x] Closes #6134 \r\n- [x] Tests added\r\n- [x] User visible changes (including notable bug fixes) are documented in `[PATH]`\r\n- [x] ~~New [PATH] are listed in `[PATH]`~~\r\n---\r\n- `shift` allows `float` with freq `D`, `H`, `min`, `S`, `ms`\r\n\r\n---\r\nRefs:\r\n- https://docs.python.org/3/library/datetime.html\r\n- https://pandas.pydata.org/pandas-[PATH]#pandas.Timedelta\r\n- https://xarray.pydata.org/en/stable/generated/xarray.CFTimeIndex.shift.html",
+      "original_request": "Implement multiplication of cftime Tick offsets by floats\n\n<!-- Feel free to remove check-list items aren't relevant to your change -->\r\n\r\n- [x] Closes #6134 \r\n- [x] Tests added\r\n- [x] User visible changes (including notable bug fixes) are documented in `whats-new.rst`\r\n- [x] ~~New functions/methods are listed in `api.rst`~~\r\n---\r\n- `shift` allows `float` with freq `D`, `H`, `min`, `S`, `ms`\r\n\r\n---\r\nRefs:\r\n- https://docs.python.org/3/library/datetime.html\r\n- https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Timedelta.html#pandas.Timedelta\r\n- https://xarray.pydata.org/en/stable/generated/xarray.CFTimeIndex.shift.html",
+      "pull_number": 6135,
+      "repository": "pydata/xarray",
+      "repository_url": "https://github.com/pydata/xarray.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "0b9e449111cbf59d23c23a1a98eea67ddd56ddf6",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "ChangeLog",
+        "doc/tutorial.rst",
+        "doc/whatsnew/2.10.rst",
+        "pylint/lint/pylinter.py",
+        "pylint/lint/utils.py",
+        "pylint/utils/ast_walker.py",
+        "tests/lint/test_pylinter.py",
+        "tests/lint/test_utils.py",
+        "tests/lint/unittest_expand_modules.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "ChangeLog",
+          "doc/tutorial.rst",
+          "doc/whatsnew/2.10.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "pylint/lint/pylinter.py",
+          "pylint/lint/utils.py",
+          "pylint/utils/ast_walker.py"
+        ],
+        "test_python": [
+          "tests/lint/test_pylinter.py",
+          "tests/lint/test_utils.py",
+          "tests/lint/unittest_expand_modules.py"
+        ]
+      },
+      "head_commit": "f132802d8339cc18262f2fc17b44256b6496c6d0",
+      "id": "pylint-dev__pylint-4810",
+      "masked_request": "Permit to lint to the end in case of crash on a file\n\n## Type of Changes\r\n\r\n<!-- Leave the corresponding lines for the applicable type of change: -->\r\n\r\n|     | Type                   |\r\n| --- | ---------------------- |\r\n| \u2713   | :sparkles: New feature |\r\n\r\n## Description\r\n\r\nPermit to lint to the end in case of crash on a file and add a pre-filled issue template so it's easier to open an issue.\r\nWill permit to keep using pylint when there is a crash on a code base. Also easier issue and probably more report.\r\n\r\nRelated to all the issue with a crash that are opened and completely prevent pylint from being run on a code base. I've done that prior to #4775",
+      "original_request": "Permit to lint to the end in case of crash on a file\n\n## Type of Changes\r\n\r\n<!-- Leave the corresponding lines for the applicable type of change: -->\r\n\r\n|     | Type                   |\r\n| --- | ---------------------- |\r\n| \u2713   | :sparkles: New feature |\r\n\r\n## Description\r\n\r\nPermit to lint to the end in case of crash on a file and add a pre-filled issue template so it's easier to open an issue.\r\nWill permit to keep using pylint when there is a crash on a code base. Also easier issue and probably more report.\r\n\r\nRelated to all the issue with a crash that are opened and completely prevent pylint from being run on a code base. I've done that prior to #4775",
+      "pull_number": 4810,
+      "repository": "pylint-dev/pylint",
+      "repository_url": "https://github.com/pylint-dev/pylint.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "b7737bd1ec44ae6ff86ca59642da29ea71d62900",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/source/api/utilities/geometric.rst",
+        "pyvista/core/utilities/__init__.py",
+        "pyvista/core/utilities/geometric_objects.py",
+        "pyvista/core/utilities/geometric_sources.py",
+        "tests/core/test_geometric_sources.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/source/api/utilities/geometric.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "pyvista/core/utilities/__init__.py",
+          "pyvista/core/utilities/geometric_objects.py",
+          "pyvista/core/utilities/geometric_sources.py"
+        ],
+        "test_python": [
+          "tests/core/test_geometric_sources.py"
+        ]
+      },
+      "head_commit": "a8607db715ec154549a5223bfba487a33ab7ce52",
+      "id": "pyvista__pyvista-4954",
+      "masked_request": "Add `MultipleLinesSource` class\n\n### Overview\r\n\r\n<!-- Please insert a high-level description of this pull request here. -->\r\n- Follow-up PR of #4860 . Add `CylinderSource` class.\r\n- ~~Inspired by https://github.com/pyvista/pyvista/discussions/4945 .~~\r\n\r\n<!-- Be sure to link other PRs or issues that relate to this PR here. -->\r\n\r\n<!-- If this fully addresses an issue, please use the keyword `resolves` in front of that issue number. -->\r\n\r\n\r\n### Details\r\n\r\n- [x] ~~Add sin wave line animation example.~~ (In the next PR.)",
+      "original_request": "Add `MultipleLinesSource` class\n\n### Overview\r\n\r\n<!-- Please insert a high-level description of this pull request here. -->\r\n- Follow-up PR of #4860 . Add `CylinderSource` class.\r\n- ~~Inspired by https://github.com/pyvista/pyvista/discussions/4945 .~~\r\n\r\n<!-- Be sure to link other PRs or issues that relate to this PR here. -->\r\n\r\n<!-- If this fully addresses an issue, please use the keyword `resolves` in front of that issue number. -->\r\n\r\n\r\n### Details\r\n\r\n- [x] ~~Add sin wave line animation example.~~ (In the next PR.)",
+      "pull_number": 4954,
+      "repository": "pyvista/pyvista",
+      "repository_url": "https://github.com/pyvista/pyvista.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "0550793bd61b84beb60d3a92c3eb90cc788a27a8",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/modules/classes.rst",
+        "doc/modules/model_evaluation.rst",
+        "doc/whats_new/v0.24.rst",
+        "examples/model_selection/plot_det.py",
+        "sklearn/metrics/__init__.py",
+        "sklearn/metrics/_ranking.py",
+        "sklearn/metrics/tests/test_common.py",
+        "sklearn/metrics/tests/test_ranking.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/modules/classes.rst",
+          "doc/modules/model_evaluation.rst",
+          "doc/whats_new/v0.24.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "examples/model_selection/plot_det.py",
+          "sklearn/metrics/__init__.py",
+          "sklearn/metrics/_ranking.py"
+        ],
+        "test_python": [
+          "sklearn/metrics/tests/test_common.py",
+          "sklearn/metrics/tests/test_ranking.py"
+        ]
+      },
+      "head_commit": "a54aca279bc128656cd06b5e11b0a5920c281c79",
+      "id": "scikit-learn__scikit-learn-10591",
+      "masked_request": "[MRG] Add Detection Error Tradeoff (DET) curve classification metrics\n\n#### Reference [PATH]\r\n\r\nContinuation of the awesome work in PR #4980 and PR #8724 respectively.\r\n\r\n- Resumes and closes #4980, closes #8724\r\n\r\n\r\n#### What does this [PATH]? Explain your changes.\r\n\r\nScope of this PR (and the PRs it is based on) is to implement the functionality\r\nto compute Detection Error Tradeoff (DET) curves from within scikit-learn.\r\nDET-curves can used as a classification evaluation metric in scenarios where\r\nan explicit comparison of different errors types is required.\r\n\r\n\r\n#### Any other comments?\r\n\r\nCredit goes to the authors @jkarnows @jucor of the aforementioned PRs likewise.\r\nFor now I have essentially fixed some basic inconsistencies which made test fail\r\nand prevented the doc from being compiled.\r\n\r\nDET curves are a niche classification evaluation metric.\r\nMoving forward I would like to know whether they have a place in Scikit and if contribution like this is appreciated before putting additional effort into it.\r\n\r\nIf so, I am happy to continue to work on this PR as per ToDo list below.\r\n\r\n#### ToDo list and next steps (without particular ordering)\r\n\r\n- [x] Fix [PATH] links in doc\r\n- [x] Fix failing tests\r\n- [x] Add tests for DET curves\r\n- [x] Expand Usage notes with more background information about DET curves. Explain how DET curves can be used and be interpreted.\r\n- [x] (Optional) Add example plot\r\n- [x] Add automated invariance tests\r\n\r\n\r\n#### Open questions\r\n\r\nAdditionally I compiled a list of question about the status-quo so far\r\n\r\n- Do we need references in the module description also?\r\nI compared to similar modules like ROC and Precision-Recall curves but the use of references is somewhat inconsistent. I personally would prefer to not put references in multiple places and opted to put them into the documentation.\r\n- I could not find any documentation whether or not to add contributors to the list of authors. I removed the references for now, but am happy to add them back if desired.\r\n- Any further comments of the original authors @jkarnows and @jucor ?\r\n- Any further suggestion for the ToDo list?",
+      "original_request": "[MRG] Add Detection Error Tradeoff (DET) curve classification metrics\n\n#### Reference Issues/PRs\r\n\r\nContinuation of the awesome work in PR #4980 and PR #8724 respectively.\r\n\r\n- Resumes and closes #4980, closes #8724\r\n\r\n\r\n#### What does this implement/fix? Explain your changes.\r\n\r\nScope of this PR (and the PRs it is based on) is to implement the functionality\r\nto compute Detection Error Tradeoff (DET) curves from within scikit-learn.\r\nDET-curves can used as a classification evaluation metric in scenarios where\r\nan explicit comparison of different errors types is required.\r\n\r\n\r\n#### Any other comments?\r\n\r\nCredit goes to the authors @jkarnows @jucor of the aforementioned PRs likewise.\r\nFor now I have essentially fixed some basic inconsistencies which made test fail\r\nand prevented the doc from being compiled.\r\n\r\nDET curves are a niche classification evaluation metric.\r\nMoving forward I would like to know whether they have a place in Scikit and if contribution like this is appreciated before putting additional effort into it.\r\n\r\nIf so, I am happy to continue to work on this PR as per ToDo list below.\r\n\r\n#### ToDo list and next steps (without particular ordering)\r\n\r\n- [x] Fix broken/non-existent links in doc\r\n- [x] Fix failing tests\r\n- [x] Add tests for DET curves\r\n- [x] Expand Usage notes with more background information about DET curves. Explain how DET curves can be used and be interpreted.\r\n- [x] (Optional) Add example plot\r\n- [x] Add automated invariance tests\r\n\r\n\r\n#### Open questions\r\n\r\nAdditionally I compiled a list of question about the status-quo so far\r\n\r\n- Do we need references in the module description also?\r\nI compared to similar modules like ROC and Precision-Recall curves but the use of references is somewhat inconsistent. I personally would prefer to not put references in multiple places and opted to put them into the documentation.\r\n- I could not find any documentation whether or not to add contributors to the list of authors. I removed the references for now, but am happy to add them back if desired.\r\n- Any further comments of the original authors @jkarnows and @jucor ?\r\n- Any further suggestion for the ToDo list?",
+      "pull_number": 10591,
+      "repository": "scikit-learn/scikit-learn",
+      "repository_url": "https://github.com/scikit-learn/scikit-learn.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "a91bae74aaca4979f5d927db327654b1d8e3ae58",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/whats_new/v0.22.rst",
+        "sklearn/impute/_base.py",
+        "sklearn/impute/_iterative.py",
+        "sklearn/impute/_knn.py",
+        "sklearn/impute/tests/test_base.py",
+        "sklearn/impute/tests/test_common.py",
+        "sklearn/impute/tests/test_impute.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/whats_new/v0.22.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "sklearn/impute/_base.py",
+          "sklearn/impute/_iterative.py",
+          "sklearn/impute/_knn.py"
+        ],
+        "test_python": [
+          "sklearn/impute/tests/test_base.py",
+          "sklearn/impute/tests/test_common.py",
+          "sklearn/impute/tests/test_impute.py"
+        ]
+      },
+      "head_commit": "a138bbddc618eedd2e95254590d46e81ea35fb31",
+      "id": "scikit-learn__scikit-learn-15010",
+      "masked_request": "[MRG] ENH add missing indicator in KNNImputer\n\nAdd the `add_indicator` to KNNImputer for consistency with other imputers.\r\nSince all imputers would share this feature, we can create a private base class.\r\n\r\nTODO:\r\n\r\n- [x] add the missing indicator to `KNNImputer`\r\n- [x] potentially create a base class for all future imputer\r\n- [x] add either common test / test for KNNImputer\r\n\r\nFor another PR\r\n\r\n- [ ] update the example to use the feature + notebook style",
+      "original_request": "[MRG] ENH add missing indicator in KNNImputer\n\nAdd the `add_indicator` to KNNImputer for consistency with other imputers.\r\nSince all imputers would share this feature, we can create a private base class.\r\n\r\nTODO:\r\n\r\n- [x] add the missing indicator to `KNNImputer`\r\n- [x] potentially create a base class for all future imputer\r\n- [x] add either common test / test for KNNImputer\r\n\r\nFor another PR\r\n\r\n- [ ] update the example to use the feature + notebook style",
+      "pull_number": 15010,
+      "repository": "scikit-learn/scikit-learn",
+      "repository_url": "https://github.com/scikit-learn/scikit-learn.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "312f64053d7249a326a19a07fa635ef5b5c6ed99",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/modules/classes.rst",
+        "doc/modules/impute.rst",
+        "examples/plot_missing_values.py",
+        "sklearn/impute.py",
+        "sklearn/tests/test_impute.py",
+        "sklearn/utils/estimator_checks.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/modules/classes.rst",
+          "doc/modules/impute.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "examples/plot_missing_values.py",
+          "sklearn/impute.py",
+          "sklearn/utils/estimator_checks.py"
+        ],
+        "test_python": [
+          "sklearn/tests/test_impute.py"
+        ]
+      },
+      "head_commit": "1c38fd643b605507614da80ebe3f80d4ce6ee1db",
+      "id": "scikit-learn__scikit-learn-8478",
+      "masked_request": "[MRG+2] Basic version of MICE Imputation\n\nReference Issue\r\n\r\nThis is in reference to #7840, and builds on #7838.\r\n\r\nFixes #7840.\r\n\r\nThis code provides basic MICE imputation functionality. It currently only uses Bayesian linear regression as the prediction model. Once this is merged, I will add predictive mean matching (slower but sometimes better). See here for a reference: https://stat.ethz.ch/education/semesters/ss2012/ams/paper/mice.pdf",
+      "original_request": "[MRG+2] Basic version of MICE Imputation\n\nReference Issue\r\n\r\nThis is in reference to #7840, and builds on #7838.\r\n\r\nFixes #7840.\r\n\r\nThis code provides basic MICE imputation functionality. It currently only uses Bayesian linear regression as the prediction model. Once this is merged, I will add predictive mean matching (slower but sometimes better). See here for a reference: https://stat.ethz.ch/education/semesters/ss2012/ams/paper/mice.pdf",
+      "pull_number": 8478,
+      "repository": "scikit-learn/scikit-learn",
+      "repository_url": "https://github.com/scikit-learn/scikit-learn.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "54ddf9ccdbfbffa281dd3d114c9102c6695a7cb8",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "SoftLayer/CLI/block/object_storage_permission.py",
+        "SoftLayer/CLI/routes.py",
+        "SoftLayer/fixtures/SoftLayer_Network_Storage_Hub_Cleversafe_Account.py",
+        "SoftLayer/managers/storage.py",
+        "docs/cli/block.rst",
+        "tests/CLI/modules/block_tests.py",
+        "tests/managers/block_tests.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/cli/block.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "SoftLayer/CLI/block/object_storage_permission.py",
+          "SoftLayer/CLI/routes.py",
+          "SoftLayer/fixtures/SoftLayer_Network_Storage_Hub_Cleversafe_Account.py",
+          "SoftLayer/managers/storage.py"
+        ],
+        "test_python": [
+          "tests/CLI/modules/block_tests.py",
+          "tests/managers/block_tests.py"
+        ]
+      },
+      "head_commit": "55821e096233c3f955b1299c6b2b6636d6242779",
+      "id": "softlayer__softlayer-python-1668",
+      "masked_request": "new feature block object-storage permissions command\n\n[#issue1667](https://github.com/softlayer/softlayer-[PATH])\r\n\r\n![image](https://user-[PATH])",
+      "original_request": "new feature block object-storage permissions command\n\n[#issue1667](https://github.com/softlayer/softlayer-python/issues/1667)\r\n\r\n![image](https://user-images.githubusercontent.com/22535437/174163393-d8d50c76-650c-451e-84a5-97e60d0dc82a.png)",
+      "pull_number": 1668,
+      "repository": "softlayer/softlayer-python",
+      "repository_url": "https://github.com/softlayer/softlayer-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "8ebebc36df35b308f3eade1a21f1f17e5de45ba2",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "SoftLayer/CLI/routes.py",
+        "SoftLayer/CLI/user/grant_access.py",
+        "SoftLayer/fixtures/SoftLayer_User_Customer.py",
+        "SoftLayer/managers/user.py",
+        "docs/cli/users.rst",
+        "tests/CLI/modules/user_tests.py",
+        "tests/managers/user_tests.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/cli/users.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "SoftLayer/CLI/routes.py",
+          "SoftLayer/CLI/user/grant_access.py",
+          "SoftLayer/fixtures/SoftLayer_User_Customer.py",
+          "SoftLayer/managers/user.py"
+        ],
+        "test_python": [
+          "tests/CLI/modules/user_tests.py",
+          "tests/managers/user_tests.py"
+        ]
+      },
+      "head_commit": "66dd10d657afe31680567da1f3be7b4d500fdbb6",
+      "id": "softlayer__softlayer-python-1818",
+      "masked_request": "New Command: `slcli user grant-access`\n\nIssue: https://github.com/softlayer/softlayer-[PATH]\r\nObservations: `slcli user grant-access` command and unit tests were added\r\n```\r\nslcli user grant-access 8344222 --hardware 1532729 --virtual 132364928\r\nGrant to access to hardware: 1532729\r\nGrant to access to virtual guest: 132364928\r\n```",
+      "original_request": "New Command: `slcli user grant-access`\n\nIssue: https://github.com/softlayer/softlayer-python/issues/1816\r\nObservations: `slcli user grant-access` command and unit tests were added\r\n```\r\nslcli user grant-access 8344222 --hardware 1532729 --virtual 132364928\r\nGrant to access to hardware: 1532729\r\nGrant to access to virtual guest: 132364928\r\n```",
+      "pull_number": 1818,
+      "repository": "softlayer/softlayer-python",
+      "repository_url": "https://github.com/softlayer/softlayer-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "182f7b3b73d28946c933f617cfe52bc604d6ef79",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "SoftLayer/CLI/routes.py",
+        "SoftLayer/CLI/user/vpn_password.py",
+        "SoftLayer/fixtures/SoftLayer_User_Customer.py",
+        "SoftLayer/managers/user.py",
+        "docs/cli/users.rst",
+        "tests/CLI/modules/user_tests.py",
+        "tests/managers/user_tests.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "docs/cli/users.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "SoftLayer/CLI/routes.py",
+          "SoftLayer/CLI/user/vpn_password.py",
+          "SoftLayer/fixtures/SoftLayer_User_Customer.py",
+          "SoftLayer/managers/user.py"
+        ],
+        "test_python": [
+          "tests/CLI/modules/user_tests.py",
+          "tests/managers/user_tests.py"
+        ]
+      },
+      "head_commit": "7e2597fb0a881cf861d1157c0bf91b028616bc73",
+      "id": "softlayer__softlayer-python-1910",
+      "masked_request": "New Command: `slcli user vpn-password`\n\nRelated to: https://github.com/softlayer/softlayer-[PATH], task 1 of 3\r\nIssue: https://github.com/softlayer/softlayer-[PATH]\r\nObservations: the new command and unit tests were added\r\n```\r\nslcli user vpn-password 7115248 --password=Mypassword1.2\r\nSuccessfully updated user VPN password.\r\n```",
+      "original_request": "New Command: `slcli user vpn-password`\n\nRelated to: https://github.com/softlayer/softlayer-python/issues/1906, task 1 of 3\r\nIssue: https://github.com/softlayer/softlayer-python/issues/1908\r\nObservations: the new command and unit tests were added\r\n```\r\nslcli user vpn-password 7115248 --password=Mypassword1.2\r\nSuccessfully updated user VPN password.\r\n```",
+      "pull_number": 1910,
+      "repository": "softlayer/softlayer-python",
+      "repository_url": "https://github.com/softlayer/softlayer-python.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "fb98dbb5a50dc13489b365ea6558e1efc5e62377",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "doc/src/modules/crypto.rst",
+        "sympy/crypto/__init__.py",
+        "sympy/crypto/crypto.py",
+        "sympy/crypto/tests/test_crypto.py"
+      ],
+      "gold_files": {
+        "ignored": [
+          "doc/src/modules/crypto.rst"
+        ],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/crypto/__init__.py",
+          "sympy/crypto/crypto.py"
+        ],
+        "test_python": [
+          "sympy/crypto/tests/test_crypto.py"
+        ]
+      },
+      "head_commit": "1422d39622885340844379f8a6f4795d5ee2d499",
+      "id": "sympy__sympy-16516",
+      "masked_request": "Added ROT13 and Atbash to sympy.crypto\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\". See\r\nhttps://github.com/blog/1506-closing-issues-via-pull-requests . Please also\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\nFixes #16495 \r\n\r\n#### Brief description of what is fixed or changed\r\n- Added ```encipher_rot13``` , ```decipher_rot13```\r\n- Added ```encipher_atbash```, ```decipher_atbash```\r\n- Updated tests and documentation for both.\r\n\r\n#### Other comments\r\n- Both encipher and decipher do the same thing, in theory. However I made them different functions because they are intended for different uses even though they are functionally equivalent, and would also maintain code quality and prevent ambiguity in future.\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below. See\r\nhttps://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information\r\non how to write release notes. The bot will check your release notes\r\nautomatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n* crypto\r\n  * added ```rot13``` and ```atbash``` ciphers\r\n<!-- END RELEASE NOTES -->",
+      "original_request": "Added ROT13 and Atbash to sympy.crypto\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\". See\r\nhttps://github.com/blog/1506-closing-issues-via-pull-requests . Please also\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\nFixes #16495 \r\n\r\n#### Brief description of what is fixed or changed\r\n- Added ```encipher_rot13``` , ```decipher_rot13```\r\n- Added ```encipher_atbash```, ```decipher_atbash```\r\n- Updated tests and documentation for both.\r\n\r\n#### Other comments\r\n- Both encipher and decipher do the same thing, in theory. However I made them different functions because they are intended for different uses even though they are functionally equivalent, and would also maintain code quality and prevent ambiguity in future.\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below. See\r\nhttps://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information\r\non how to write release notes. The bot will check your release notes\r\nautomatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n* crypto\r\n  * added ```rot13``` and ```atbash``` ciphers\r\n<!-- END RELEASE NOTES -->",
+      "pull_number": 16516,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "d10b94aa5a5863957c63eef687cee2a9d27bf99a",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/matrices/__init__.py",
+        "sympy/matrices/expressions/hadamard.py",
+        "sympy/matrices/expressions/tests/test_hadamard.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/matrices/__init__.py",
+          "sympy/matrices/expressions/hadamard.py"
+        ],
+        "test_python": [
+          "sympy/matrices/expressions/tests/test_hadamard.py"
+        ]
+      },
+      "head_commit": "cd45432eaa93b88e094eee90cbd194db53c5c23e",
+      "id": "sympy__sympy-16685",
+      "masked_request": "Canonicalization of Hadamard Product\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\". See\r\nhttps://github.com/blog/1506-closing-issues-via-pull-requests . Please also\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\n\r\n\r\n#### Brief description of what is fixed or changed\r\n\r\nWith matrix of ones implemented in #16676, we may use the identity to make hadamard product more canonical.\r\n\r\n- [X] Associative (Default)\r\n- [X] Commutative\r\n- [X] Identity for Hadamard product by one matrix\r\n- [X] Absorbing to zero matrix when multiplied with zero matrix\r\n- [x] Rewriting to Hadamard power when repetitive matrices are multiplied.\r\n- [ ] (Optional) Reduce to diagonal matrix when multiplied with `IdentityMatrix` (Or any rectangular `eye`) After the decision is made for #16682 \r\n\r\n#### Other comments\r\n\r\nThis is still work in progress, and I will add some tests if the design is set\r\n\r\nI also think that `HadamardProduct` can automatically unpack its argument, if given a single argument, like in SymPy's `Add`, `Mul`.\r\nAs it is confusing that\r\n`HadamardProduct(A) == A` is giving `False` because it does not unpacks single arguent\r\nbut `hadamard_product(A) == A` is giving `True`.\r\nAnd the printing is not suggestive that `HadamardProduct` is wrapped on this.\r\nThough changing this would make some tests fail, and there may be some discussion for design change?\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below. See\r\nhttps://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information\r\non how to write release notes. The bot will check your release notes\r\nautomatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n- matrices\r\n  - Improved canonicalization for `HadamardProduct`\r\n  - Deleted `rules` from `[PATH]`\r\n<!-- END RELEASE NOTES -->",
+      "original_request": "Canonicalization of Hadamard Product\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\". See\r\nhttps://github.com/blog/1506-closing-issues-via-pull-requests . Please also\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\n\r\n\r\n#### Brief description of what is fixed or changed\r\n\r\nWith matrix of ones implemented in #16676, we may use the identity to make hadamard product more canonical.\r\n\r\n- [X] Associative (Default)\r\n- [X] Commutative\r\n- [X] Identity for Hadamard product by one matrix\r\n- [X] Absorbing to zero matrix when multiplied with zero matrix\r\n- [x] Rewriting to Hadamard power when repetitive matrices are multiplied.\r\n- [ ] (Optional) Reduce to diagonal matrix when multiplied with `IdentityMatrix` (Or any rectangular `eye`) After the decision is made for #16682 \r\n\r\n#### Other comments\r\n\r\nThis is still work in progress, and I will add some tests if the design is set\r\n\r\nI also think that `HadamardProduct` can automatically unpack its argument, if given a single argument, like in SymPy's `Add`, `Mul`.\r\nAs it is confusing that\r\n`HadamardProduct(A) == A` is giving `False` because it does not unpacks single arguent\r\nbut `hadamard_product(A) == A` is giving `True`.\r\nAnd the printing is not suggestive that `HadamardProduct` is wrapped on this.\r\nThough changing this would make some tests fail, and there may be some discussion for design change?\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below. See\r\nhttps://github.com/sympy/sympy/wiki/Writing-Release-Notes for more information\r\non how to write release notes. The bot will check your release notes\r\nautomatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n- matrices\r\n  - Improved canonicalization for `HadamardProduct`\r\n  - Deleted `rules` from `matrices.expressions.hadamard`\r\n<!-- END RELEASE NOTES -->",
+      "pull_number": 16685,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "bd7bbeaa9a12ab357df3b18416c0a949b3481d3d",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sympy/combinatorics/named_groups.py",
+        "sympy/combinatorics/perm_groups.py",
+        "sympy/combinatorics/tests/test_perm_groups.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sympy/combinatorics/named_groups.py",
+          "sympy/combinatorics/perm_groups.py"
+        ],
+        "test_python": [
+          "sympy/combinatorics/tests/test_perm_groups.py"
+        ]
+      },
+      "head_commit": "28caebe3766c69dc58a45fd552f9355b2344e1ac",
+      "id": "sympy__sympy-24384",
+      "masked_request": "Add a `PermutationGroup.is_dihedral` property\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\" (see\r\nhttps://tinyurl.com/auto-closing for more information). Also, please\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\n\r\n\r\n#### Brief description of what is fixed or changed\r\n\r\nGive the `PermutationGroup` class an `is_dihedral` property.\r\n\r\n#### Other comments\r\n\r\nMost of the other existing \"named groups\" (symmetric, alternating, cyclic) already have a corresponding `is_` property. However, while we do have a `DihedralGroup` function in `[PATH]`, we don't currently have a matching `is_` property.\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below between the BEGIN and END\r\nstatements. The basic format is a bulleted list with the name of the subpackage\r\nand the release note for this PR. For example:\r\n\r\n* solvers\r\n  * Added a new solver for logarithmic equations.\r\n\r\n* functions\r\n  * Fixed a bug with log of integers.\r\n\r\nor if no release note(s) should be included use:\r\n\r\nNO ENTRY\r\n\r\nSee https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more\r\ninformation on how to write release notes. The bot will check your release\r\nnotes automatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n* combinatorics\r\n  * Provide `PermutationGroup.is_dihedral` property\r\n<!-- END RELEASE NOTES -->",
+      "original_request": "Add a `PermutationGroup.is_dihedral` property\n\n<!-- Your title above should be a short description of what\r\nwas changed. Do not include the issue number in the title. -->\r\n\r\n#### References to other Issues or PRs\r\n<!-- If this pull request fixes an issue, write \"Fixes #NNNN\" in that exact\r\nformat, e.g. \"Fixes #1234\" (see\r\nhttps://tinyurl.com/auto-closing for more information). Also, please\r\nwrite a comment on that issue linking back to this pull request once it is\r\nopen. -->\r\n\r\n\r\n#### Brief description of what is fixed or changed\r\n\r\nGive the `PermutationGroup` class an `is_dihedral` property.\r\n\r\n#### Other comments\r\n\r\nMost of the other existing \"named groups\" (symmetric, alternating, cyclic) already have a corresponding `is_` property. However, while we do have a `DihedralGroup` function in `combinatorics/named_groups.py`, we don't currently have a matching `is_` property.\r\n\r\n#### Release Notes\r\n\r\n<!-- Write the release notes for this release below between the BEGIN and END\r\nstatements. The basic format is a bulleted list with the name of the subpackage\r\nand the release note for this PR. For example:\r\n\r\n* solvers\r\n  * Added a new solver for logarithmic equations.\r\n\r\n* functions\r\n  * Fixed a bug with log of integers.\r\n\r\nor if no release note(s) should be included use:\r\n\r\nNO ENTRY\r\n\r\nSee https://github.com/sympy/sympy/wiki/Writing-Release-Notes for more\r\ninformation on how to write release notes. The bot will check your release\r\nnotes automatically to see if they are formatted correctly. -->\r\n\r\n<!-- BEGIN RELEASE NOTES -->\r\n* combinatorics\r\n  * Provide `PermutationGroup.is_dihedral` property\r\n<!-- END RELEASE NOTES -->",
+      "pull_number": 24384,
+      "repository": "sympy/sympy",
+      "repository_url": "https://github.com/sympy/sympy.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "2a76eb8bcdf78c53f91f9e3f228dc6dad0223b03",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/dialects/__init__.py",
+        "sqlglot/dialects/dialect.py",
+        "sqlglot/dialects/doris.py",
+        "tests/dialects/test_dialect.py",
+        "tests/dialects/test_doris.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/dialects/__init__.py",
+          "sqlglot/dialects/dialect.py",
+          "sqlglot/dialects/doris.py"
+        ],
+        "test_python": [
+          "tests/dialects/test_dialect.py",
+          "tests/dialects/test_doris.py"
+        ]
+      },
+      "head_commit": "b43383fe08e4cc684ed0377d58a7615af62f6d76",
+      "id": "tobymao__sqlglot-2006",
+      "masked_request": "Feat: add apache doris dialect\n\nImplemented dialect support for Apache Doris",
+      "original_request": "Feat: add apache doris dialect\n\nImplemented dialect support for Apache Doris",
+      "pull_number": 2006,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    },
+    {
+      "base_commit": "ef992fab86e6e01c226f0235f82bdf4e38c6e680",
+      "benchmark_source": "https://huggingface.co/datasets/microsoft/FEA-Bench/tree/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad",
+      "benchmark_split": "lite",
+      "gold_changed_files": [
+        "sqlglot/expressions.py",
+        "sqlglot/optimizer/annotate_types.py",
+        "sqlglot/parser.py",
+        "sqlglot/serde.py",
+        "tests/test_serde.py"
+      ],
+      "gold_files": {
+        "ignored": [],
+        "other_implementation": [],
+        "source_python": [
+          "sqlglot/expressions.py",
+          "sqlglot/optimizer/annotate_types.py",
+          "sqlglot/parser.py",
+          "sqlglot/serde.py"
+        ],
+        "test_python": [
+          "tests/test_serde.py"
+        ]
+      },
+      "head_commit": "b015a4c3367e9032cb8ec6685377b9dc7d614b42",
+      "id": "tobymao__sqlglot-897",
+      "masked_request": "[PATH]\n\n[PATH] an AST [PATH] JSON\r\n\r\nContext: https://tobiko-[PATH]",
+      "original_request": "dump/load\n\nDump/load an AST to/from JSON\r\n\r\nContext: https://tobiko-data.slack.com/archives/C0448SFS3PF/p1673005789088219",
+      "pull_number": 897,
+      "repository": "tobymao/sqlglot",
+      "repository_url": "https://github.com/tobymao/sqlglot.git",
+      "selection_bucket": "2-4"
+    }
+  ]
+}

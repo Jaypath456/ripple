@@ -1,0 +1,56 @@
+{
+  "task_id": "boto__botocore-3271",
+  "repository": "boto/botocore",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "completed",
+  "stop_reason": "submitted",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [
+    "botocore/httpchecksum.py"
+  ],
+  "gold_source_files": [
+    "botocore/args.py",
+    "botocore/config.py",
+    "botocore/configprovider.py",
+    "botocore/exceptions.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 1,
+  "confirmed": 2,
+  "suspected": 6,
+  "rejected": 0,
+  "tool_calls": 6,
+  "duplicate_calls": 0,
+  "model_calls": 10,
+  "input_tokens": 26696,
+  "output_tokens": 6182,
+  "total_tokens": 32878,
+  "runtime_seconds": 19.62,
+  "decision_checkpoints": 2,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 2,
+  "dropped_claims": [
+    "unsupported risk dropped: Unit tests in tests/unit/test_httpchecksum.py may fail or give false positives if the new configuration keys alter expected behaviour.",
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:12:25+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "205e57952b95d9c933da35167716864b0ab002e84f364a1ac1f8ba43401340c9"
+}

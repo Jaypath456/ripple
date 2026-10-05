@@ -1,0 +1,51 @@
+{
+  "task_id": "deepset-ai__haystack-6836",
+  "repository": "deepset-ai/haystack",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 1,
+  "status": "abstained",
+  "stop_reason": "no_ledger_progress",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": null,
+  "harness_error": null,
+  "predicted_source_files": [],
+  "gold_source_files": [
+    "haystack/components/retrievers/__init__.py",
+    "haystack/components/retrievers/filter_retriever.py"
+  ],
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "recall_at_5": 0.0,
+  "recall_at_10": 0.0,
+  "mrr": 0.0,
+  "false_positives": 0,
+  "confirmed": 0,
+  "suspected": 7,
+  "rejected": 1,
+  "tool_calls": 13,
+  "duplicate_calls": 4,
+  "model_calls": 22,
+  "input_tokens": 62189,
+  "output_tokens": 14622,
+  "total_tokens": 76811,
+  "runtime_seconds": 42.23,
+  "decision_checkpoints": 5,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:37:44+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "5e609dd89d46634f0aba4c0d0e9a6c6b0c26d965a7069100e29a5aea30705abe"
+}

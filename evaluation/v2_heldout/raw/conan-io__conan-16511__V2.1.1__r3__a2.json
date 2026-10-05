@@ -1,0 +1,56 @@
+{
+  "task_id": "conan-io__conan-16511",
+  "repository": "conan-io/conan",
+  "system": "V2.1.1",
+  "repeat": 3,
+  "attempt": 2,
+  "status": "failed",
+  "stop_reason": "controller_error",
+  "config_version": "full-report-v2.1.1",
+  "provider_error": "LLM request failed: InternalServerError: <html><body><h1>504 Gateway Time-out</h1>\nThe server didn't respond in time.\n</body></html>",
+  "harness_error": null,
+  "predicted_source_files": [
+    "conan/api/subapi/lockfile.py",
+    "conan/cli/commands/lock.py",
+    "conans/model/graph_lock.py"
+  ],
+  "gold_source_files": [
+    "conan/api/subapi/lockfile.py",
+    "conan/cli/commands/lock.py",
+    "conans/model/graph_lock.py"
+  ],
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "recall_at_5": 1.0,
+  "recall_at_10": 1.0,
+  "mrr": 1.0,
+  "false_positives": 0,
+  "confirmed": 3,
+  "suspected": 2,
+  "rejected": 0,
+  "tool_calls": 10,
+  "duplicate_calls": 2,
+  "model_calls": 16,
+  "input_tokens": 29447,
+  "output_tokens": 11494,
+  "total_tokens": 40941,
+  "runtime_seconds": 88.67,
+  "decision_checkpoints": 4,
+  "report_repairs": 0,
+  "invalid_tool_targets": 0,
+  "validator_drops": 1,
+  "dropped_claims": [
+    "unsupported LLM blind spots replaced by observed conditions"
+  ],
+  "unsupported_accepted_claims": [],
+  "completed_at": "2026-10-05T17:26:35+00:00",
+  "leak_checks": [
+    "head_is_exact_base",
+    "working_tree_clean",
+    "target_head_not_reachable",
+    "gold_only_paths_absent",
+    "request_has_no_gold_paths"
+  ],
+  "request_sha256": "f112014bf2b5dcdaf991cfecc0a5c3ddf3d99758633ee1bac12f5eea297987f4"
+}
