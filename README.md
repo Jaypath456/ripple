@@ -125,6 +125,32 @@ ripple verify /path/to/repo --report latest --range main..feature-branch  # Stag
 go to `.ripple/reports/`, traces to `.ripple/runs/`, and verifications to
 `.ripple/verifications/`.
 
+## Interactive Demo
+
+A Streamlit app in [`demo/`](demo/README.md) explains RIPPLE in a few minutes:
+the architecture, the seven tools, the trust boundary, the Stage B categories, the
+prompts, and the frozen benchmark results.
+
+```shell
+python -m pip install -e '.[demo]'
+streamlit run demo/app.py
+```
+
+- **Guided Replay** steps through three saved runs on a bundled sample repository,
+  from feature request to agent trace, candidate ledger, validation, Stage A report,
+  real diff, and Stage B findings. The three runs demonstrate soft delete, a stale
+  caller, and a missing test with an unexpected change. Replay needs **no API key
+  and makes no model calls**. The fixtures come from the real core. Only the model's
+  decisions are scripted, and the app says so.
+- **Live Analysis** runs the real Stage A, and optionally Stage B, on a Git
+  repository on your machine. It needs an OpenAI-compatible model configured through
+  the `RIPPLE_LLM_*` variables. Live analysis is for local use; a hosted demo should
+  offer replay only.
+
+The final-v1 results shown in the demo are read from
+`evaluation/results/final_summary.json`. They are frozen and independent of whatever
+model the demo is configured with.
+
 ## Benchmark methodology
 
 The held-out benchmark is built from [FEA-Bench](https://huggingface.co/datasets/microsoft/FEA-Bench)
