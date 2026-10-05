@@ -9,8 +9,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 AGENT_CONFIG_VERSION = "mvp-v1.1"
 MVP_CONFIG_VERSION = AGENT_CONFIG_VERSION
 FULL_REPORT_CONFIG_VERSION = "full-report-v1"
-# V2 adds the candidate-decision checkpoint protocol; V1 remains pinned for history.
-FULL_REPORT_V2_CONFIG_VERSION = "full-report-v2"
+# V2 adds the candidate-decision checkpoint protocol (V2.1: new-feature decision
+# framing); V1 remains pinned for history.
+FULL_REPORT_V2_CONFIG_VERSION = "full-report-v2.1"
 
 
 class FrozenModel(BaseModel):

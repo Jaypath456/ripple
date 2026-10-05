@@ -251,13 +251,27 @@ def _evidence_summary(record: EvidenceRecord) -> str:
         paths = list(dict.fromkeys(hit.get("path") for hit in data.get("hits", [])))
         return f"lexical hits in {', '.join(map(str, paths[:6]))}"
     if name == "inspect_symbol":
+        if "outline" in data:  # a file: show what it defines, the architecture cue
+            names = [
+                str(item.get("id", "")).partition("::")[2]
+                for item in data.get("outline", [])
+            ]
+            more = f" (+{len(names) - 15} more)" if len(names) > 15 else ""
+            return (
+                f"file {data.get('path')} defines {len(names)} symbols: "
+                f"{', '.join(names[:15]) or 'none'}{more}"
+            )
+        signature = f": {data['signature']}" if data.get("signature") else ""
         return (
-            f"{data.get('kind', 'file')} {data.get('id') or data.get('path')} "
-            f"exists (lines {data.get('start_line', '?')}-{data.get('end_line', '?')})"
+            f"{data.get('kind', 'symbol')} {data.get('id')}{signature} "
+            f"(lines {data.get('start_line', '?')}-{data.get('end_line', '?')})"
         )
     if name == "find_references":
-        files = sorted({item.get("path") for item in data.get("references", [])})
-        return f"{len(data.get('references', []))} references in {', '.join(files[:6])}"
+        references = data.get("references", [])
+        if not references:
+            return "no references found"
+        files = sorted({item.get("path") for item in references})
+        return f"{len(references)} references in {', '.join(files[:6])}"
     if name == "find_tests":
         tests = sorted({item.get("test_path") for item in data.get("tests", [])})
         return f"mapped tests: {', '.join(tests[:6]) or 'none'}"
@@ -266,8 +280,51 @@ def _evidence_summary(record: EvidenceRecord) -> str:
         paths = [str(item.get("path")) for item in data.get(key, [])]
         return f"{name} of {data.get('path')}: {', '.join(paths[:6]) or 'none'}"
     if name == "repo_facts":
-        return f"{len(data.get('facts', []))} {data.get('kind')} facts"
+        facts = data.get("facts", [])
+        named = [
+            str(fact.get("symbol_id") or fact.get("directory") or fact.get("path"))
+            for fact in facts
+        ]
+        return (
+            f"{len(facts)} {data.get('kind')} facts: {', '.join(named[:5]) or 'none'}"
+        )
     return name
+
+
+# V2.1: decide relevance to a *future* change from current architecture, without
+# demanding proof that new behaviour already exists. Python's checks are unchanged.
+CHECKPOINT_INSTRUCTIONS = (
+    "Decide which existing source targets belong to the change surface of the "
+    "requested change. The requested behaviour may not exist yet: a request to add "
+    "something new will usually not be found in the current code, so never ask for "
+    "proof that the requested feature already exists, and never treat its absence "
+    "as evidence against a target. Judge each candidate from the current "
+    "architecture shown in its listed evidence (what it defines, what uses it, which "
+    "tests cover it), using only facts present in that evidence.\n"
+    "How to reason by kind of change:\n"
+    "- Adding new behaviour: where would it logically be implemented, registered, "
+    "or wired in, given what the evidence shows the target already does?\n"
+    "- Modifying existing behaviour: the symbols that implement it, their callers, "
+    "and their tests.\n"
+    "- Removing or deprecating behaviour: its implementation points and the callers "
+    "shown.\n"
+    "- Configuration, schema, or migration changes: only targets supported by "
+    "framework facts or related evidence.\n"
+    "Return one decision per candidate:\n"
+    "- confirm: the evidence supports this target as a plausible implementation, "
+    "wiring, integration, schema, or configuration point for the requested change. "
+    "Confirm means plausible affected target, not a proven future diff.\n"
+    "- keep: relevance is genuinely unresolved; say in missing_evidence which "
+    "concrete structural evidence (a symbol, caller, dependency, or test "
+    "relationship) would resolve it. Never request evidence that the new behaviour "
+    "already exists.\n"
+    "- reject: the listed evidence contradicts or materially weakens relevance, for "
+    "example by showing the target serves an unrelated purpose. Absence of proof is "
+    "not a reason to reject.\n"
+    "Cite only evidence IDs listed for that candidate. A confirmation must cite at "
+    "least one record marked strong. Python verifies every decision and ignores "
+    "anything that does not match the listed evidence.\n"
+)
 
 
 class AgentController:
@@ -301,6 +358,7 @@ class AgentController:
         self.invalid_targets = 0
         self.presented: dict[str, set[str]] = {}
         self.offered_complete: set[str] = set()
+        self.intent: FeatureIntent | None = None
         self.missing_notes: dict[str, str] = {}
         self.semantic_cache: dict[str, tuple[int, ToolResult]] = {}
         self._symbols = {item.id for item in index.symbols}
@@ -686,6 +744,14 @@ class AgentController:
             view.append(entry)
         return view
 
+    def _candidate_type(self, target: str) -> str:
+        if "::" not in target:
+            return "file"
+        kind = next(
+            (item.kind for item in self.index.symbols if item.id == target), None
+        )
+        return kind or "symbol"
+
     def _checkpoint(
         self, request: FeatureRequest, *, stall: int, force: bool = False
     ) -> bool:
@@ -743,41 +809,38 @@ class AgentController:
             "checkpoint_started",
             candidates={target: sorted(ids) for target, ids in offered.items()},
         )
-        prompt = (
-            "Decide the status of each source candidate below using only the evidence "
-            "listed for it. Return one decision per candidate: confirm = the evidence "
-            "shows this source target must change to implement the request (tests are "
-            "suggested separately); reject = the evidence "
-            "shows it is unrelated to the request; keep = undecided, and say in "
-            "missing_evidence exactly which evidence is still needed. Cite only "
-            "evidence IDs listed for that candidate. A confirmation must cite at "
-            "least one record marked strong. Python verifies every decision and "
-            "ignores anything that does not match the listed evidence.\n"
-            + _prompt_data(
-                "repository_data",
-                {
-                    "request": request.text,
-                    "candidates": [
-                        {
-                            "target": item.target,
-                            "current_reason": item.reason,
-                            "checked_refs": item.checked_refs,
-                            "checked_tests": item.checked_tests,
-                            "evidence": [
-                                {
-                                    "evidence_id": record.evidence_id,
-                                    "tool": record.tool_name,
-                                    "arguments": record.arguments,
-                                    "strong": record.strong,
-                                    "shows": _evidence_summary(record),
-                                }
-                                for record in support
-                            ],
-                        }
-                        for item, support in ready
-                    ],
-                },
-            )
+        prompt = CHECKPOINT_INSTRUCTIONS + _prompt_data(
+            "repository_data",
+            {
+                "request": request.text,
+                "interpreted_intent": {
+                    "summary": self.intent.summary,
+                    "change_kinds": list(self.intent.change_kinds),
+                }
+                if self.intent
+                else None,
+                "candidates": [
+                    {
+                        "target": item.target,
+                        "candidate_type": self._candidate_type(item.target),
+                        "current_reason": item.reason,
+                        "checked_refs": item.checked_refs,
+                        "checked_tests": item.checked_tests,
+                        "previously_missing": self.missing_notes.get(item.target),
+                        "evidence": [
+                            {
+                                "evidence_id": record.evidence_id,
+                                "tool": record.tool_name,
+                                "arguments": record.arguments,
+                                "strong": record.strong,
+                                "shows": _evidence_summary(record),
+                            }
+                            for record in support
+                        ],
+                    }
+                    for item, support in ready
+                ],
+            },
         )
         for target, ids in offered.items():
             self.presented.setdefault(target, set()).update(ids)
@@ -974,6 +1037,7 @@ class AgentController:
             repo_map = build_repository_map(self.index)
             self.trace.write("repository_map_created", characters=len(repo_map))
             intent = self._interpret(request, repo_map)
+            self.intent = intent
             self._seed(intent)
             no_progress = 0
             stall = 0  # V2: explore steps since the last ledger change

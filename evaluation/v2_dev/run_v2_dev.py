@@ -14,7 +14,6 @@ frozen V1 protocol and the V2 protocol with the same live model, back to back.
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 import sys
 from collections import Counter
@@ -56,8 +55,10 @@ DEV_TASKS = (
 PROTOCOLS = {"v1": AGENT_VARIANTS["RIPPLE"], "v2": RIPPLE_V2}
 # v2-r1 records came from the first V2 revision; r2 bounds checkpoint frequency
 # (re-offer only on new strong evidence, a hard cap). V1 code is unchanged.
-REVISIONS = {"v1": "v1", "v2": "v2-r2"}
-COLUMNS = ("v1", "v2-r1", "v2-r2")
+# v2.1 reframes checkpoint decisions for new features (agent.CHECKPOINT_INSTRUCTIONS)
+# and shows richer evidence context; Python's acceptance rules are unchanged.
+REVISIONS = {"v1": "v1", "v2": "v2.1"}
+COLUMNS = ("v1", "v2-r1", "v2-r2", "v2.1")
 REPEATS = {"ripple_cli_markdown_export": 2}
 
 
@@ -286,8 +287,15 @@ def write_readme(records: list[dict]) -> None:
         "  `v2-r2` is the single follow-up revision, made after r1 showed unbounded",
         "  checkpoint frequency (12 checkpoints in one run) and a confirmed *test* file:",
         "  candidates are re-offered only on new non-lexical evidence, checkpoints are",
-        "  capped per run, and only source candidates are offered. No further tuning",
-        "  was done after r2.",
+        "  capped per run, and only source candidates are offered.",
+        "- **V2.1** (separate iteration on its own branch) keeps every Python check and",
+        "  changes only how the checkpoint question is asked: the requested behaviour",
+        "  may not exist yet, confirm means a plausible implementation or wiring point",
+        "  rather than a proven future diff, absence of proof is not grounds to",
+        "  reject, and guidance covers new, modified, removed, and config changes.",
+        "  The checkpoint also shows each file's outline, the candidate type, the",
+        "  interpreted intent, and the model's own earlier missing-evidence notes.",
+        "  It was run once on the same cases; no tuning followed.",
         "- **Scoring.** Source files only, at k equal to the number of predicted",
         "  source files, as in the frozen V1 development methodology. Abstention",
         "  scores zero. Provider-failed runs are excluded from behaviour rows, listed",
@@ -338,8 +346,8 @@ def write_readme(records: list[dict]) -> None:
         "Behaviour rows exclude runs that ended on a provider failure; those are",
         "counted separately and were retried at most once.",
         "",
-        "| Metric | V1 | V2-r1 | V2-r2 |",
-        "|---|---:|---:|---:|",
+        "| Metric | V1 | V2-r1 | V2-r2 | V2.1 |",
+        "|---|---:|---:|---:|---:|",
     ]
     groups = {
         name: [row for row in records if row["protocol_revision"] == name]
@@ -419,6 +427,20 @@ def write_readme(records: list[dict]) -> None:
         "  report draft labelled it `new_file`; the validator correctly dropped it.",
         "- V1's failures in these runs show the same pattern as the motivating live",
         "  run: few or no ledger proposals, many duplicate and wrong-target calls.",
+        "- **V2.1:** no checkpoint *keep* asked for proof that the requested feature",
+        "  already exists; keep notes asked for concrete callers, references, or",
+        "  tests instead. On the known case `src/ripple/cli.py` was confirmed in both",
+        "  runs as the command-registration point. In the second run the model's",
+        "  report draft then labelled it `new_file` and the validator correctly",
+        "  dropped it, so it is missing from that run's prediction (the same",
+        "  draft-step mislabel seen in the first V2 graphene run).",
+        "- **V2.1:** `src/ripple/render.py::render_markdown` (the Stage A renderer)",
+        "  was confirmed in both known-case runs. It is evidence-backed but most",
+        "  likely a false positive, so the plausibility bar has a precision cost that",
+        "  this case cannot measure (it has no gold).",
+        "- **V2.1:** no live run abstained. Abstention remains possible (the",
+        "  deterministic tests show keep-everything still abstains), but this small",
+        "  set did not exercise genuinely unanswerable requests.",
         "",
         "## Limitations",
         "",
@@ -475,7 +497,6 @@ def main() -> int:
                         flush=True,
                     )
     write_readme(records)
-    shutil.rmtree(WORKSPACE / "runs", ignore_errors=True)
     return 0
 
 

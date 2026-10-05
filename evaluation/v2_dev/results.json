@@ -899,5 +899,326 @@
     "precision": 0.0,
     "recall": 0.0,
     "f1": 0.0
+  },
+  {
+    "case": "ripple_cli_markdown_export",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 5,
+    "suspected": 0,
+    "rejected": 0,
+    "tool_calls": 13,
+    "duplicate_calls": 0,
+    "model_calls": 18,
+    "total_tokens": 81621,
+    "runtime_seconds": 46.82,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 3,
+    "ledger_proposals": 5,
+    "predicted_files": [
+      "src/ripple/cli.py",
+      "src/ripple/verification.py",
+      "src/ripple/verification_render.py",
+      "src/ripple/render.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 1,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:53:04+00:00"
+  },
+  {
+    "case": "ripple_cli_markdown_export",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 6,
+    "suspected": 1,
+    "rejected": 0,
+    "tool_calls": 18,
+    "duplicate_calls": 0,
+    "model_calls": 26,
+    "total_tokens": 77021,
+    "runtime_seconds": 42.89,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 6,
+    "ledger_proposals": 9,
+    "predicted_files": [
+      "src/ripple/verification.py",
+      "src/ripple/verification_render.py",
+      "src/ripple/render.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 1,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:53:48+00:00"
+  },
+  {
+    "case": "sample_soft_delete",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 1,
+    "suspected": 7,
+    "rejected": 0,
+    "tool_calls": 7,
+    "duplicate_calls": 0,
+    "model_calls": 11,
+    "total_tokens": 29005,
+    "runtime_seconds": 19.55,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 2,
+    "ledger_proposals": 2,
+    "predicted_files": [
+      "users/service.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 0,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:54:08+00:00",
+    "gold_files": [
+      "users/migrations/0002_add_deleted_at.py",
+      "users/models.py",
+      "users/service.py"
+    ],
+    "predicted_source_files": [
+      "users/service.py"
+    ],
+    "precision": 1.0,
+    "recall": 0.3333333333333333,
+    "f1": 0.5
+  },
+  {
+    "case": "sample_required_argument",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 2,
+    "suspected": 5,
+    "rejected": 1,
+    "tool_calls": 9,
+    "duplicate_calls": 0,
+    "model_calls": 13,
+    "total_tokens": 35955,
+    "runtime_seconds": 27.64,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 2,
+    "ledger_proposals": 3,
+    "predicted_files": [
+      "users/service.py",
+      "users/routes.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 1,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:54:36+00:00",
+    "gold_files": [
+      "users/routes.py",
+      "users/service.py"
+    ],
+    "predicted_source_files": [
+      "users/routes.py",
+      "users/service.py"
+    ],
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "case": "sample_deletion_behavior",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 2,
+    "suspected": 5,
+    "rejected": 1,
+    "tool_calls": 12,
+    "duplicate_calls": 0,
+    "model_calls": 19,
+    "total_tokens": 45673,
+    "runtime_seconds": 30.66,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 5,
+    "ledger_proposals": 7,
+    "predicted_files": [
+      "users/models.py",
+      "users/service.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 1,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:55:07+00:00",
+    "gold_files": [
+      "orders/service.py",
+      "users/service.py"
+    ],
+    "predicted_source_files": [
+      "users/models.py",
+      "users/service.py"
+    ],
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1": 0.5
+  },
+  {
+    "case": "boto__boto3-74",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 4,
+    "suspected": 4,
+    "rejected": 0,
+    "tool_calls": 9,
+    "duplicate_calls": 0,
+    "model_calls": 14,
+    "total_tokens": 41014,
+    "runtime_seconds": 20.87,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 2,
+    "ledger_proposals": 4,
+    "predicted_files": [
+      "boto3/resources/params.py",
+      "boto3/exceptions.py",
+      "boto3/resources/factory.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 2,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:55:28+00:00",
+    "gold_files": [
+      "boto3/docs.py",
+      "boto3/resources/factory.py"
+    ],
+    "predicted_source_files": [
+      "boto3/exceptions.py",
+      "boto3/resources/factory.py",
+      "boto3/resources/params.py"
+    ],
+    "precision": 0.3333333333333333,
+    "recall": 0.5,
+    "f1": 0.4
+  },
+  {
+    "case": "graphql-python__graphene-1506",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 2,
+    "suspected": 6,
+    "rejected": 0,
+    "tool_calls": 9,
+    "duplicate_calls": 0,
+    "model_calls": 13,
+    "total_tokens": 44455,
+    "runtime_seconds": 22.46,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 2,
+    "ledger_proposals": 3,
+    "predicted_files": [
+      "graphene/types/inputobjecttype.py",
+      "graphene/types/inputfield.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 1,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:55:52+00:00",
+    "gold_files": [
+      "graphene/types/inputobjecttype.py",
+      "graphene/validation/depth_limit.py"
+    ],
+    "predicted_source_files": [
+      "graphene/types/inputfield.py",
+      "graphene/types/inputobjecttype.py"
+    ],
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1": 0.5
+  },
+  {
+    "case": "prometheus__client_python-302",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 1,
+    "suspected": 7,
+    "rejected": 0,
+    "tool_calls": 4,
+    "duplicate_calls": 0,
+    "model_calls": 7,
+    "total_tokens": 19598,
+    "runtime_seconds": 7.54,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 1,
+    "ledger_proposals": 1,
+    "predicted_files": [
+      "prometheus_client/multiprocess.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 0,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:56:00+00:00",
+    "gold_files": [
+      "prometheus_client/core.py",
+      "prometheus_client/multiprocess.py"
+    ],
+    "predicted_source_files": [
+      "prometheus_client/multiprocess.py"
+    ],
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1": 0.6666666666666666
+  },
+  {
+    "case": "falconry__falcon-640",
+    "protocol": "v2",
+    "protocol_revision": "v2.1",
+    "status": "completed",
+    "stop_reason": "submitted",
+    "confirmed": 1,
+    "suspected": 6,
+    "rejected": 1,
+    "tool_calls": 5,
+    "duplicate_calls": 0,
+    "model_calls": 8,
+    "total_tokens": 30684,
+    "runtime_seconds": 14.15,
+    "invalid_tool_targets": 0,
+    "decision_checkpoints": 1,
+    "ledger_proposals": 3,
+    "predicted_files": [
+      "falcon/request.py"
+    ],
+    "unsupported_accepted_claims": [],
+    "dropped_claims": 2,
+    "provider_error": null,
+    "model": "openai/gpt-oss-20b",
+    "completed_at": "2026-10-05T15:56:15+00:00",
+    "gold_files": [
+      "falcon/request.py",
+      "falcon/util/misc.py",
+      "falcon/util/uri.py"
+    ],
+    "predicted_source_files": [
+      "falcon/request.py"
+    ],
+    "precision": 1.0,
+    "recall": 0.3333333333333333,
+    "f1": 0.5
   }
 ]

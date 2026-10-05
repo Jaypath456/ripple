@@ -184,6 +184,17 @@ eventually stopped the run, and RIPPLE abstained.
   answered from run metadata with no model call. Other questions still go to
   the grounded explainer.
 
+**V2.1** fixes the next bottleneck found in V2's traces: for a new feature, the
+model kept plausible wiring points while asking for proof that the feature
+already existed. V2.1 changes only how the checkpoint question is asked:
+- the requested behaviour may not exist yet;
+- "confirm" means a plausible implementation or wiring point, not a proven
+  future diff;
+- absence of proof is not grounds to reject.
+
+It also shows the model each file's outline. Every Python acceptance rule is
+unchanged.
+
 `ripple analyze` and the demo's live analysis use V2. The historical evaluation
 harnesses stay pinned to the V1 protocol, and the final-v1 artifacts are guarded
 by a hash test. V2 development measurements are in

@@ -240,7 +240,7 @@ def test_v2_protocol_converts_the_same_evidence_into_a_report(
     report = v2_run.report
     assert report.status == "completed"
     assert report.run_stats.stop_reason == "submitted"
-    assert report.run_stats.config_version == "full-report-v2"
+    assert report.run_stats.config_version == "full-report-v2.1"
     states = _states(v2)
     confirmed_paths = {target.partition("::")[0] for target in states["confirmed"]}
     assert CLI in confirmed_paths
@@ -698,3 +698,148 @@ def test_checkpoints_offer_only_source_candidates(cli_repo, tmp_path: Path) -> N
         for target in event["candidates"]
     ]
     assert offered and not any(t.partition("::")[0] in tests for t in offered)
+
+
+# ----------------------------------------------------------------- V2.1 framing
+
+
+class RecordingPolicy(ObservedPolicyLLM):
+    """ObservedPolicyLLM that also keeps the raw checkpoint prompts."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.raw_checkpoints: list[str] = []
+
+    def decide_candidates(self, prompt: str) -> LLMResponse:
+        self.raw_checkpoints.append(prompt)
+        return super().decide_candidates(prompt)
+
+
+WIRING_PLAN = (
+    ("inspect_symbol", {"target": CLI}),
+    ("find_references", {"symbol_id": f"{CLI}::main"}),
+    ("find_tests", {"target": CLI}),
+)
+
+
+def test_new_cli_feature_target_is_confirmable_without_the_feature_existing(
+    cli_repo, tmp_path: Path
+) -> None:
+    # The requested export command does not exist anywhere in the repository.
+    assert not any("export" in item.id.casefold() for item in cli_repo.symbols)
+    llm = RecordingPolicy(plan=WIRING_PLAN, relevant=frozenset({CLI}))
+    controller, run, _ = _run(cli_repo, llm, tmp_path, RIPPLE_V2)
+    assert CLI in {
+        target.partition("::")[0] for target in _states(controller)["confirmed"]
+    }
+    assert run.report.status == "completed"
+    prompt = llm.raw_checkpoints[0]
+    assert "may not exist yet" in prompt
+    assert "never ask for proof that the requested feature already exists" in prompt
+    assert "Confirm means plausible affected target, not a proven future diff" in prompt
+    assert "must change to implement" not in prompt  # the V2-r2 framing defect
+
+
+def test_new_render_feature_module_is_confirmable(cli_repo, tmp_path: Path) -> None:
+    plan = (
+        ("inspect_symbol", {"target": f"{RENDER}::render_verification_markdown"}),
+        ("find_references", {"symbol_id": f"{RENDER}::render_verification_markdown"}),
+        ("find_tests", {"target": f"{RENDER}::render_verification_markdown"}),
+    )
+    llm = RecordingPolicy(plan=plan, relevant=frozenset({RENDER}))
+    controller, run, _ = _run(cli_repo, llm, tmp_path, RIPPLE_V2)
+    assert f"{RENDER}::render_verification_markdown" in _states(controller)["confirmed"]
+    assert run.report.status == "completed"
+
+
+def test_checkpoint_context_shows_architecture_type_intent_and_prior_gaps(
+    cli_repo, tmp_path: Path
+) -> None:
+    plan = (
+        *WIRING_PLAN,
+        # New strong evidence on the kept candidate re-opens it.
+        ("inspect_symbol", {"target": f"{CLI}::latest"}),
+        ("find_references", {"symbol_id": f"{CLI}::latest"}),
+        ("find_tests", {"target": f"{CLI}::latest"}),
+    )
+    llm = RecordingPolicy(plan=plan, relevant=frozenset(), distractors=frozenset())
+    _run(cli_repo, llm, tmp_path, RIPPLE_V2)
+    first = _data(llm.raw_checkpoints[0])
+    assert first["interpreted_intent"]["summary"] == INTENT["summary"]
+    candidate = next(c for c in first["candidates"] if c["target"].startswith(CLI))
+    assert candidate["candidate_type"] in {"file", "function", "class", "method"}
+    shows = " ".join(item["shows"] for item in candidate["evidence"])
+    # The file outline is visible (V2-r2 only said "file ... exists").
+    assert "defines" in shows and "_run_verify" in shows and "main" in shows
+    later = [_data(prompt) for prompt in llm.raw_checkpoints[1:]]
+    noted = [
+        c["previously_missing"]
+        for data in later
+        for c in data["candidates"]
+        if c["previously_missing"]
+    ]
+    assert noted, "keep notes must be shown back at later checkpoints"
+
+
+def test_empty_reference_results_are_summarised_explicitly(cli_repo) -> None:
+    from ripple.agent import _evidence_summary, _strong_evidence, _touched_targets
+    from ripple.tools import ToolSession
+
+    session = ToolSession(cli_repo)
+    arguments = {"symbol_id": "src/app/cli.py::latest", "limit": 10}
+    result = session.invoke("find_references", arguments)
+    record = EvidenceRecord(
+        result.evidence_id,
+        "find_references",
+        arguments,
+        result,
+        _touched_targets("find_references", arguments, result),
+        _strong_evidence("find_references", result),
+    )
+    assert _evidence_summary(record) == "no references found"
+
+
+def test_absence_of_a_feature_is_not_citable_negative_evidence(cli_repo) -> None:
+    from ripple.tools import ToolSession
+
+    session = ToolSession(cli_repo)
+    missing = session.invoke("search_code", {"query": "zzqqxxwv"})
+    assert not missing.ok  # "feature not found"
+    inspect = session.invoke("inspect_symbol", {"target": CLI})
+    records = [
+        EvidenceRecord(
+            missing.evidence_id, "search_code", {}, missing, frozenset(), False
+        ),
+        EvidenceRecord(
+            inspect.evidence_id, "inspect_symbol", {}, inspect, frozenset({CLI}), True
+        ),
+    ]
+    ledger = _ledger_with(cli_repo, records)
+    ledger.seed(CLI, "seed", inspect.evidence_id)
+    support = {record.evidence_id for record in ledger.support(CLI)}
+    assert missing.evidence_id not in support  # never presented for the target
+    refused = ledger.decide(
+        CLI, "reject", (missing.evidence_id,), "feature not found", frozenset(support)
+    )
+    assert refused == (False, "cited evidence was not presented for this target")
+    assert ledger.candidates[CLI].status == "suspected"
+
+
+def test_existing_behaviour_change_still_completes(cli_repo, tmp_path: Path) -> None:
+    llm = RecordingPolicy(plan=WIRING_PLAN, relevant=frozenset({CLI}))
+    controller = AgentController(
+        cli_repo, llm, output_root=tmp_path / "modify", variant=RIPPLE_V2
+    )
+    run = controller.run(
+        FeatureRequest(text="Change the verify command to require a --strict flag.")
+    )
+    assert run.report.status == "completed"
+    assert any(item.target.startswith(CLI) for item in run.report.affected_components)
+
+
+def test_checkpoint_framing_is_generic() -> None:
+    from ripple.agent import CHECKPOINT_INSTRUCTIONS
+
+    text = CHECKPOINT_INSTRUCTIONS.casefold()
+    for specific in (r"\bcli\b", r"\.py\b", r"\bexport", r"markdown", r"verification"):
+        assert not re.search(specific, text), specific
