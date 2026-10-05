@@ -152,6 +152,45 @@ The final-v1 results shown in the demo are read from
 `evaluation/results/final_summary.json`. They are frozen and independent of whatever
 model the demo is configured with.
 
+## V2 (in development)
+
+The final-v1 implementation and its benchmark below are frozen; nothing in this
+section changes or reinterprets them. V2 is a new development iteration, started
+after the final-v1 results were known.
+
+**What V1 got wrong.** A live run on RIPPLE's own repository showed the pattern
+behind the final-v1 abstentions. Discovery worked and the evidence existed, and
+several candidates had already passed the reference and test checks. Yet the
+model never proposed a candidate-state change: it left the optional
+`ledger_updates` field empty in every one of that run's decisions. The no-progress safeguard
+eventually stopped the run, and RIPPLE abstained.
+
+**What V2 changes (the LLM still proposes; Python still decides):**
+
+- **Decision checkpoints.** Python periodically shows the model each source
+  candidate with the evidence that touched it, and asks for an explicit
+  confirm, reject, or keep. "Keep" must state what evidence is still missing.
+  Confirmation requires at least one non-lexical evidence record that Python
+  presented for that target. Confirm and reject are no longer accepted from
+  ordinary tool-choice responses.
+- **Tool-target checks.** A file path given to `find_references` is refused
+  before execution, with a list of real symbols defined in that file; nothing
+  is silently corrected.
+- **Bounded progress.** Calls that differ only by `limit` reuse earlier
+  results, and a stall bound stops exploration that never changes the ledger.
+  Checkpoints are capped per run. The tool-call budget is unchanged.
+- **Deterministic run diagnostics.** In the demo, run-status questions ("Why
+  did it abstain?", "Did the provider fail?", "How many tool calls?") are
+  answered from run metadata with no model call. Other questions still go to
+  the grounded explainer.
+
+`ripple analyze` and the demo's live analysis use V2. The historical evaluation
+harnesses stay pinned to the V1 protocol, and the final-v1 artifacts are guarded
+by a hash test. V2 development measurements are in
+[`evaluation/v2_dev/README.md`](evaluation/v2_dev/README.md). They come from a
+handful of development cases chosen after V1's results were known, so they are
+**not** a held-out benchmark and support no claim that V2 is better in general.
+
 ## Benchmark methodology
 
 The held-out benchmark is built from [FEA-Bench](https://huggingface.co/datasets/microsoft/FEA-Bench)

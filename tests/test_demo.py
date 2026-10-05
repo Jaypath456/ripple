@@ -422,3 +422,294 @@ def test_every_showcase_page_renders(page: str, monkeypatch) -> None:
             item.value for item in at.caption
         )
         assert "F1 0.299" in rendered and "F1 0.016" in rendered
+
+
+# ----------------------------------------------------------------- V2 diagnostics
+
+DIAGNOSTIC_QUESTIONS = {
+    "Why did it fail?": "failure",
+    "Why did it abstain?": "failure",
+    "Why did it stop?": "stop_reason",
+    "Did it crash?": "crash",
+    "Was there a provider failure?": "provider",
+    "What was the stop reason?": "stop_reason",
+    "How many candidates were confirmed?": "candidates",
+    "How many were suspected candidates?": "candidates",
+    "How many tool calls?": "tool_calls",
+    "How many model calls?": "model_calls",
+    "How many tokens?": "tokens",
+    "How long did it take?": "runtime",
+}
+SEMANTIC_QUESTIONS = (
+    "Why was users/service.py selected?",
+    "What evidence supports this prediction?",
+    "Why was billing/service.py::delete_invoice rejected?",
+    "Why is admin/users.py a stale caller?",
+)
+
+
+def _captured_run(tmp_path: Path, llm) -> dict:
+    from ripple.agent import AgentController
+    from ripple.agent_models import FeatureRequest
+    from ripple.scanner import scan_repository
+
+    repo = tmp_path / "repo"
+    subprocess.run(
+        [
+            "cp",
+            "-r",
+            str(Path(__file__).parent / "fixtures" / "cli_export_app"),
+            str(repo),
+        ],
+        check=True,
+    )
+    for args in (
+        ["init", "-q"],
+        ["add", "."],
+        ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "f"],
+    ):
+        subprocess.run(["git", "-C", str(repo), *args], check=True)
+    controller = AgentController(
+        scan_repository(repo), llm, output_root=tmp_path / "out"
+    )
+    run = controller.run(FeatureRequest(text="Export the latest verification report"))
+    return logic.capture_run(controller, run)
+
+
+def _abstaining_llm():
+    from ripple.llm import ScriptedLLM
+
+    return ScriptedLLM(
+        interpretations=[
+            {
+                "summary": "export",
+                "change_kinds": ["api"],
+                "search_terms": ["verification", "markdown", "latest"],
+            }
+        ],
+        decisions=[
+            {
+                "tool_name": "inspect_symbol",
+                "arguments": {"target": "src/app/cli.py"},
+                "reason": "inspect",
+            }
+        ]
+        * 6,
+    )
+
+
+def test_diagnostic_questions_are_routed_and_semantic_ones_are_not() -> None:
+    for question, intent in DIAGNOSTIC_QUESTIONS.items():
+        assert logic.diagnostic_intent(question) == intent, question
+    for question in SEMANTIC_QUESTIONS:
+        assert logic.diagnostic_intent(question) is None, question
+
+
+def test_why_did_it_fail_is_answered_from_run_metadata(tmp_path: Path) -> None:
+    payload = _captured_run(tmp_path, _abstaining_llm())
+    stats = payload["report"]["run_stats"]
+    assert payload["report"]["status"] == "abstained"
+    for question in ("Why did it fail?", "Why did it abstain?"):
+        answer = logic.answer_diagnostic(question, payload)
+        assert answer.startswith("The run did not crash.")
+        assert f"stopped with `{stats['stop_reason']}`" in answer
+        assert "confirmed none" in answer
+        assert f"after {stats['tool_calls']} tool calls" in answer
+        assert "The provider itself did not fail." in answer
+        assert "The model never proposed a candidate-state change." in answer
+    summary = logic.outcome_summary(payload)
+    assert summary["why"] == "No candidate gathered enough validated evidence."
+    assert summary["investigated"] == len(payload["ledger"])
+
+
+def test_count_answers_use_the_recorded_fields(tmp_path: Path) -> None:
+    payload = _captured_run(tmp_path, _abstaining_llm())
+    stats = payload["report"]["run_stats"]
+    answer = logic.answer_diagnostic
+    assert answer("How many tool calls?", payload).startswith(
+        f"{stats['tool_calls']} tool calls ran. {stats['duplicate_calls']} repeated"
+    )
+    assert answer("How many model calls?", payload).startswith(
+        f"{stats['llm_calls']} model calls"
+    )
+    assert "did not report token usage" in answer("How many tokens?", payload)
+    assert answer("How long did it take?", payload) == (
+        f"The run took {stats['runtime_seconds']:.1f} seconds."
+    )
+    assert "`no_progress`" in answer("What was the stop reason?", payload)
+    assert answer("Was there a provider failure?", payload) == (
+        "No provider failure was recorded in this run's trace."
+    )
+    stats_payload = {"report": {"run_stats": {"total_tokens": 94484}}, "trace": []}
+    assert answer("How many tokens?", stats_payload) == (
+        "The provider reported 94,484 tokens."
+    )
+
+
+def test_provider_failure_is_diagnosed_as_provider_not_crash(tmp_path: Path) -> None:
+    from ripple.llm import LLMError, ScriptedLLM
+
+    llm = ScriptedLLM(
+        interpretations=[
+            {
+                "summary": "export",
+                "change_kinds": ["api"],
+                "search_terms": ["verification", "markdown", "latest"],
+            }
+        ],
+        decisions=[
+            LLMError(
+                "LLM request failed: InternalServerError: <html><h1>504 Gateway "
+                "Time-out</h1></html>"
+            )
+        ],
+    )
+    payload = _captured_run(tmp_path, llm)
+    assert payload["report"]["status"] == "failed"
+    diagnosis = logic.answer_diagnostic("Why did it fail?", payload)
+    assert diagnosis.startswith(
+        "RIPPLE itself did not crash; the model provider failed"
+    )
+    assert "504 Gateway Time-out" in diagnosis and "<html>" not in diagnosis
+    assert "The provider itself did not fail." not in diagnosis
+    assert logic.answer_diagnostic("Did the provider fail?", payload).startswith("Yes.")
+    assert logic.outcome_summary(payload)["why"] == (
+        "The model provider failed during the run."
+    )
+
+
+def test_diagnostics_never_call_a_model(monkeypatch, tmp_path: Path) -> None:
+    payload = _captured_run(tmp_path, _abstaining_llm())
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("diagnostics must not call a model")
+
+    monkeypatch.setattr(OpenAILLM, "__init__", forbidden)
+    monkeypatch.setattr(OpenAILLM, "_call", forbidden)
+    for question in DIAGNOSTIC_QUESTIONS:
+        assert logic.answer_diagnostic(question, payload)
+    assert logic.diagnose_run(payload)
+
+
+def test_semantic_questions_still_go_through_the_strict_explainer(
+    scenarios,
+) -> None:
+    scenario = scenarios["soft_delete"]
+    context = logic.build_explainer_context(scenario)
+    for question in SEMANTIC_QUESTIONS:
+        assert logic.answer_diagnostic(question, scenario) is None
+
+    class Inventing:
+        def _call(self, prompt, model):
+            return LLMResponse(
+                payload={
+                    "supported": True,
+                    "answer": "Because of billing/refunds.py.",
+                    "citations": ["billing/refunds.py"],
+                },
+                model="fake",
+            )
+
+    answer = logic.ask_explainer(SEMANTIC_QUESTIONS[0], context, Inventing())
+    assert answer.answer == logic.REFUSAL
+
+
+def test_live_page_shows_a_compact_diagnosis_for_abstention(
+    monkeypatch, tmp_path: Path
+) -> None:
+    testing = pytest.importorskip("streamlit.testing.v1")
+    repo = tmp_path / "repo"
+    subprocess.run(
+        [
+            "cp",
+            "-r",
+            str(Path(__file__).parent / "fixtures" / "cli_export_app"),
+            str(repo),
+        ],
+        check=True,
+    )
+    for args in (
+        ["init", "-q"],
+        ["add", "."],
+        ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "f"],
+    ):
+        subprocess.run(["git", "-C", str(repo), *args], check=True)
+    source = APP.read_text().replace("from __future__ import annotations", "")
+    source = source.replace(
+        'st.navigation(list(NAVIGATION), position="top").run()', "page_live()"
+    )
+    patch = (
+        "from ripple.llm import OpenAILLM, ScriptedLLM\n"
+        "OpenAILLM.from_env = classmethod(lambda cls: ScriptedLLM(\n"
+        "    interpretations=[{'summary': 'export', 'change_kinds': ['api'],\n"
+        "                      'search_terms': ['verification', 'markdown', 'latest']}],\n"
+        "    decisions=[{'tool_name': 'inspect_symbol',\n"
+        "                'arguments': {'target': 'src/app/cli.py'},\n"
+        "                'reason': 'inspect'}] * 6,\n"
+        "    candidate_decisions=[{'decisions': []}] * 6))\n"
+    )
+    at = testing.AppTest.from_string(
+        f"import sys\nsys.path.insert(0, {str(APP.parent.parent)!r})\n"
+        + patch
+        + source,
+        default_timeout=120,
+    ).run()
+    monkeypatch.setattr(logic, "LIVE_OUTPUT", tmp_path / "live")
+    at.text_input[0].set_value(str(repo))
+    at.text_input[1].set_value("Export the latest verification report as Markdown")
+    at.button(key="live-analyze").click().run()
+    assert not at.exception, [item.value for item in at.exception]
+    rendered = " ".join(item.value for item in at.markdown)
+    assert "RIPPLE ABSTAINED" in rendered
+    assert "No candidate gathered enough validated evidence." in rendered
+    assert at.metric[0].value == "no_progress"
+    at.button(key="explain-run").click().run()
+    rendered = " ".join(item.value for item in at.markdown)
+    assert "RIPPLE abstained because it stopped with `no_progress`" in rendered
+
+
+def test_v2_development_results_are_loaded_separately(tmp_path: Path) -> None:
+    assert logic.load_v2_dev(tmp_path / "missing.json") is None
+    row = {
+        "case": "c",
+        "status": "abstained",
+        "confirmed": 0,
+        "unsupported_accepted_claims": [],
+        "tool_calls": 20,
+        "model_calls": 30,
+        "duplicate_calls": 9,
+        "invalid_tool_targets": 3,
+    }
+    path = tmp_path / "results.json"
+    path.write_text(
+        json.dumps(
+            [
+                row | {"protocol": "v1", "protocol_revision": "v1"},
+                row | {"protocol": "v2", "protocol_revision": "v2-r1"},
+                row
+                | {
+                    "protocol": "v2",
+                    "protocol_revision": "v2-r2",
+                    "status": "completed",
+                    "confirmed": 2,
+                },
+                row
+                | {
+                    "protocol": "v2",
+                    "protocol_revision": "v2-r2",
+                    "status": "failed",
+                    "provider_error": "APITimeoutError",
+                },
+            ]
+        )
+    )
+    dev = logic.load_v2_dev(path)
+    assert list(dev["protocols"]) == ["v1", "v2-r1", "v2-r2"]  # never merged
+    assert dev["protocols"]["v1"]["abstained"] == 1
+    assert dev["protocols"]["v2-r2"]["with_confirmed"] == 1
+    assert dev["protocols"]["v2-r2"]["provider_failures"] == 1
+    assert dev["protocols"]["v2-r2"]["completed"] == 1
+    assert dev["protocols"]["v2-r2"]["unsupported_accepted"] == 0
+    (tmp_path / "bad.json").write_text("{")
+    with pytest.raises(logic.DemoError):
+        logic.load_v2_dev(tmp_path / "bad.json")

@@ -1128,6 +1128,12 @@ def suggested_questions(scenario: dict[str, Any]) -> list[str]:
     if groups["Rejected"]:
         questions.append(f"Why was {groups['Rejected'][0]['target']} rejected?")
     questions.append("What evidence supports this prediction?")
+    status = scenario.get("report", {}).get("status")
+    if status in {"abstained", "failed"}:
+        questions.insert(
+            0, f"Why did it {'abstain' if status == 'abstained' else 'fail'}?"
+        )
+    questions.append("How many tool calls were used?")
     flagged = [
         card
         for card in stage_b_cards(scenario.get("verification") or {})
@@ -1138,3 +1144,295 @@ def suggested_questions(scenario: dict[str, Any]) -> list[str]:
             f"Why is {flagged[0]['path']} flagged as {flagged[0]['category']}?"
         )
     return questions
+
+
+# --------------------------------------------------------------------------- diagnostics
+# Run-status questions are answered from structured run metadata in Python. Only
+# questions that are not diagnostic go to the grounded LLM explainer.
+
+_STOP_EXPLANATIONS = {
+    "submitted": "the model submitted its findings and Python accepted the submission",
+    "no_progress": (
+        f"the no-progress safeguard stopped the run after "
+        f"{agent_module.MAX_NO_PROGRESS} consecutive steps with neither new evidence "
+        "nor a valid candidate-state change"
+    ),
+    "no_ledger_progress": (
+        f"the stall bound stopped the run after {agent_module.MAX_STALL} "
+        "investigation steps without any candidate-state change"
+    ),
+    "tool_budget": (
+        f"the run used its full budget of {agent_module.MAX_TOOL_CALLS} tool calls"
+    ),
+    "candidate_cap": (
+        f"the candidate list reached its cap of {agent_module.MAX_CANDIDATES}"
+    ),
+    "token_ceiling": "the configured token ceiling was reached",
+    "invalid_report": (
+        "the model's report draft was invalid, so a deterministic partial report "
+        "was used"
+    ),
+    "controller_error": "the controller stopped on an error",
+}
+_STOP_SHORT = {
+    "no_progress": "the no-progress safeguard stopped the run",
+    "no_ledger_progress": "the stall bound stopped the run",
+    "tool_budget": "the tool-call budget ran out",
+    "candidate_cap": "the candidate cap was reached",
+    "token_ceiling": "the token ceiling was reached",
+}
+_DIAGNOSTIC_INTENTS = (
+    ("provider", r"provider|\bapi\b|gateway|time ?out|timed out|network|\b50\d\b"),
+    ("crash", r"crash|\bbroke|\bbug\b|exception"),
+    (
+        "candidates",
+        (
+            r"how many\b.*\b(candidate|confirm|suspect|reject)|"
+            r"\b(confirmed|suspected|rejected) (count|candidates)"
+        ),
+    ),
+    ("tool_calls", r"tool[ -]?calls?|how many tools"),
+    ("model_calls", r"model calls?|llm calls?|how many (model |llm )?(calls|requests)"),
+    ("tokens", r"\btokens?\b"),
+    ("runtime", r"how long|runtime|duration|took|how much time|how fast"),
+    ("stop_reason", r"stop[ _]reason|why did (it|the run|ripple) stop"),
+    (
+        "failure",
+        (
+            r"\b(why|what)\b.*\b(fail|failed|failure|abstain|abstained|abstention|"
+            r"no (prediction|result)|nothing|empty|went wrong|happened)\b|"
+            r"\bdid it (fail|abstain|work|succeed)"
+        ),
+    ),
+)
+
+
+def run_facts(payload: dict[str, Any]) -> dict[str, Any]:
+    """Structured facts about one run, from its report, ledger, and trace."""
+
+    report = payload["report"]
+    stats = report.get("run_stats", {})
+    states = {"confirmed": 0, "suspected": 0, "rejected": 0}
+    for row in payload.get("ledger", []):
+        states[row["status"]] = states.get(row["status"], 0) + 1
+    trace = payload.get("trace", [])
+
+    def clean(text: str) -> str:
+        return " ".join(redact(re.sub(r"<[^>]+>", " ", text)).split())[:200].rstrip(".")
+
+    provider = [
+        clean(str(e.get("error", ""))) for e in trace if e["event"] == "provider_error"
+    ]
+    errors = [clean(str(e.get("error", ""))) for e in trace if e["event"] == "error"]
+    proposals = [e for e in trace if e["event"] == "ledger_update" and "update" in e]
+    decisions = [e for e in trace if e["event"] == "candidate_decision"]
+    return {
+        "status": report.get("status"),
+        "stop_reason": stats.get("stop_reason"),
+        **states,
+        "candidates": sum(states.values()),
+        "tool_calls": stats.get("tool_calls"),
+        "duplicate_calls": stats.get("duplicate_calls", 0),
+        "model_calls": stats.get("llm_calls"),
+        "total_tokens": stats.get("total_tokens"),
+        "runtime_seconds": stats.get("runtime_seconds"),
+        "invalid_tool_targets": stats.get("invalid_tool_targets", 0),
+        "decision_checkpoints": stats.get("decision_checkpoints", 0),
+        "model": stats.get("model"),
+        "protocol": stats.get("config_version"),
+        "provider_error": provider[-1] if provider else None,
+        "controller_error": errors[-1] if errors and not provider else None,
+        "ledger_proposals": len(proposals) + len(decisions),
+        "accepted_proposals": sum(
+            bool(e.get("accepted")) for e in [*proposals, *decisions]
+        ),
+    }
+
+
+def _crash_sentence(facts: dict[str, Any]) -> str:
+    if facts["provider_error"]:
+        return (
+            "RIPPLE itself did not crash; the model provider failed "
+            f"({facts['provider_error']})."
+        )
+    if facts["status"] == "failed":
+        return f"The run failed on an internal error: {facts['controller_error']}."
+    return "The run did not crash."
+
+
+def _candidate_sentence(facts: dict[str, Any]) -> str:
+    if facts["confirmed"] == 0:
+        return (
+            f"It found {facts['suspected']} suspected candidate"
+            f"{'s' if facts['suspected'] != 1 else ''} but confirmed none."
+        )
+    return (
+        f"It confirmed {facts['confirmed']}, left {facts['suspected']} suspected, and "
+        f"rejected {facts['rejected']}."
+    )
+
+
+def diagnose_run(payload: dict[str, Any]) -> str:
+    """A complete deterministic explanation of why the run ended as it did."""
+
+    facts = run_facts(payload)
+    stop = facts["stop_reason"]
+    explanation = _STOP_EXPLANATIONS.get(stop, f"it stopped with `{stop}`")
+    parts = [_crash_sentence(facts)]
+    if facts["status"] == "abstained":
+        parts.append(f"RIPPLE abstained because it stopped with `{stop}`.")
+    elif facts["status"] == "failed":
+        parts.append(f"RIPPLE could not finish; the stop reason is `{stop}`.")
+    else:
+        parts.append(f"RIPPLE finished with status `{facts['status']}`: {explanation}.")
+    parts.append(_candidate_sentence(facts))
+    if facts["status"] == "abstained":
+        if facts["ledger_proposals"] == 0:
+            parts.append("The model never proposed a candidate-state change.")
+        elif facts["accepted_proposals"] == 0:
+            parts.append(
+                f"The model proposed {facts['ledger_proposals']} candidate-state "
+                "changes, and Python refused all of them for lack of supporting "
+                "evidence."
+            )
+        parts.append(
+            "After repeated investigation without a valid candidate-state change, "
+            f"{_STOP_SHORT.get(stop, explanation)} after {facts['tool_calls']} "
+            "tool calls."
+        )
+    if not facts["provider_error"]:
+        parts.append("The provider itself did not fail.")
+    return " ".join(parts)
+
+
+def diagnostic_intent(question: str) -> str | None:
+    lowered = question.casefold()
+    for intent, pattern in _DIAGNOSTIC_INTENTS:
+        if re.search(pattern, lowered):
+            return intent
+    return None
+
+
+def answer_diagnostic(question: str, payload: dict[str, Any]) -> str | None:
+    """Answer run-status questions from metadata; ``None`` means not diagnostic."""
+
+    intent = diagnostic_intent(question)
+    if intent is None:
+        return None
+    facts = run_facts(payload)
+    if intent == "provider":
+        return (
+            f"Yes. The model provider failed: {facts['provider_error']}."
+            if facts["provider_error"]
+            else "No provider failure was recorded in this run's trace."
+        )
+    if intent == "crash":
+        return _crash_sentence(facts)
+    if intent == "candidates":
+        return (
+            f"{facts['candidates']} candidates were tracked: {facts['confirmed']} "
+            f"confirmed, {facts['suspected']} suspected, {facts['rejected']} rejected."
+        )
+    if intent == "tool_calls":
+        return (
+            f"{facts['tool_calls']} tool calls ran. {facts['duplicate_calls']} repeated "
+            "calls reused a cached result, and "
+            f"{facts['invalid_tool_targets']} calls were refused before execution "
+            "for invalid arguments or targets."
+        )
+    if intent == "model_calls":
+        return f"{facts['model_calls']} model calls were made" + (
+            f", including {facts['decision_checkpoints']} decision checkpoints."
+            if facts["decision_checkpoints"]
+            else "."
+        )
+    if intent == "tokens":
+        return (
+            f"The provider reported {fmt_count(facts['total_tokens'])} tokens."
+            if facts["total_tokens"] is not None
+            else "The provider did not report token usage for this run."
+        )
+    if intent == "runtime":
+        return f"The run took {float(facts['runtime_seconds'] or 0):.1f} seconds."
+    if intent == "stop_reason":
+        stop = facts["stop_reason"]
+        return (
+            f"The stop reason is `{stop}`: "
+            f"{_STOP_EXPLANATIONS.get(stop, 'see the trace')}."
+        )
+    return diagnose_run(payload)
+
+
+def outcome_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    """Compact card data for a run that did not complete."""
+
+    facts = run_facts(payload)
+    if facts["provider_error"]:
+        why = "The model provider failed during the run."
+    elif facts["status"] == "failed":
+        why = "The run stopped on an internal error."
+    elif facts["confirmed"] == 0:
+        why = "No candidate gathered enough validated evidence."
+    else:
+        why = "Confirmed candidates were not submitted."
+    return {
+        "status": facts["status"],
+        "why": why,
+        "stop_reason": facts["stop_reason"],
+        "investigated": facts["candidates"],
+        "confirmed": facts["confirmed"],
+    }
+
+
+V2_DEV_RESULTS = ROOT / "evaluation" / "v2_dev" / "results.json"
+
+
+def load_v2_dev(path: Path = V2_DEV_RESULTS) -> dict[str, Any] | None:
+    """Development-only V1-vs-V2 protocol comparison; never a benchmark.
+
+    Grouped by protocol revision; provider-failed runs are counted separately and
+    excluded from behaviour rows, matching evaluation/v2_dev/README.md.
+    """
+
+    if not path.is_file():
+        return None
+    try:
+        records = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise DemoError(f"V2 development results are unreadable: {error}")
+    summary: dict[str, Any] = {
+        "runs": len(records),
+        "cases": sorted({row["case"] for row in records}),
+        "protocols": {},
+    }
+    revisions = list(
+        dict.fromkeys(row.get("protocol_revision", row["protocol"]) for row in records)
+    )
+    for revision in sorted(revisions):
+        rows = [
+            row
+            for row in records
+            if row.get("protocol_revision", row["protocol"]) == revision
+        ]
+        clean = [row for row in rows if not row.get("provider_error")]
+
+        def mean(key: str, clean: list[dict] = clean) -> float | None:
+            values = [row[key] for row in clean if row.get(key) is not None]
+            return sum(values) / len(values) if values else None
+
+        summary["protocols"][revision] = {
+            "runs": len(rows),
+            "provider_failures": len(rows) - len(clean),
+            "completed": sum(row["status"] == "completed" for row in clean),
+            "partial": sum(row["status"] == "partial" for row in clean),
+            "abstained": sum(row["status"] == "abstained" for row in clean),
+            "with_confirmed": sum(row["confirmed"] > 0 for row in clean),
+            "unsupported_accepted": sum(
+                len(row["unsupported_accepted_claims"]) for row in rows
+            ),
+            "tool_calls": mean("tool_calls"),
+            "model_calls": mean("model_calls"),
+            "duplicate_calls": mean("duplicate_calls"),
+            "invalid_tool_targets": mean("invalid_tool_targets"),
+        }
+    return summary

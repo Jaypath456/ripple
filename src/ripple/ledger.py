@@ -126,6 +126,64 @@ class CandidateLedger:
         )
         return changed
 
+    def support(self, target: str) -> list[EvidenceRecord]:
+        """Successful evidence records that actually touched ``target``."""
+
+        return [
+            record
+            for record in self.evidence.values()
+            if record.result.ok and target in record.touched_targets
+        ]
+
+    def decide(
+        self,
+        target: str,
+        decision: str,
+        evidence_ids: tuple[str, ...],
+        reason: str,
+        presented: frozenset[str],
+    ) -> tuple[bool, str | None]:
+        """Apply one V2 checkpoint decision; returns (changed, refusal reason).
+
+        Stricter than ``apply``: every cited ID must be one Python presented for this
+        target, must exist, and must have touched it; confirmation also needs at
+        least one strong (non-lexical) record. ``keep`` never changes state.
+        """
+
+        current = self.candidates.get(target)
+        if current is None or current.status != "suspected":
+            return False, "target is not a suspected candidate"
+        if decision == "keep":
+            return False, None
+        if not evidence_ids:
+            return False, "no evidence cited"
+        if any(item not in presented for item in evidence_ids):
+            return False, "cited evidence was not presented for this target"
+        records = [self.evidence.get(item) for item in evidence_ids]
+        if any(
+            record is None or target not in record.touched_targets for record in records
+        ):
+            return False, "cited evidence did not touch this target"
+        if decision == "confirm" and not any(record.strong for record in records):
+            return False, "confirmation needs non-lexical evidence"
+        status: CandidateStatus = "confirmed" if decision == "confirm" else "rejected"
+        if status == "rejected":
+            current.rejection_count += 1
+        current.status = status
+        current.reason = reason
+        current.evidence_ids.extend(
+            item for item in evidence_ids if item not in current.evidence_ids
+        )
+        current.history.append(
+            {
+                "status": status,
+                "reason": reason,
+                "evidence_ids": list(evidence_ids),
+                "via": "checkpoint",
+            }
+        )
+        return True, None
+
     def confirmed(self) -> tuple[Candidate, ...]:
         return tuple(
             candidate

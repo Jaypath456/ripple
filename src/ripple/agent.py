@@ -16,10 +16,12 @@ from pydantic import ValidationError
 
 from ripple.agent_models import (
     FULL_REPORT_CONFIG_VERSION,
+    FULL_REPORT_V2_CONFIG_VERSION,
     AffectedComponent,
     AgentDecision,
     AgentRun,
     BlindSpot,
+    CandidateDecisionSet,
     ChangeImpactReport,
     ChangeKind,
     FeatureIntent,
@@ -40,6 +42,21 @@ MAX_TOOL_CALLS = 25
 MAX_NO_PROGRESS = 4
 MAX_CANDIDATES = 30
 SEED_LIMIT = 8
+# V2 protocol bounds (budgets above are unchanged).
+CHECKPOINT_INTERVAL = 3  # explore steps without a ledger change before a checkpoint
+MAX_STALL = 8  # explore steps without any ledger change before stopping
+CHECKPOINT_CANDIDATES = 8
+MAX_CHECKPOINTS = 8  # hard cap on extra decision calls per run
+SYMBOL_HINTS = 8
+ARGUMENT_SHAPES = {
+    "search_code": "{query, kind: any|symbol|file|string, limit: 1..15}",
+    "inspect_symbol": "{target}",
+    "find_references": "{symbol_id: path::name, limit: 1..40}",
+    "get_dependencies": "{path, direction: imports|imported_by, depth: 1|2}",
+    "find_tests": "{target}",
+    "repo_facts": "{kind: routes|models|settings|migrations|entry_points, filter}",
+    "co_changed": "{path, limit: 1..10}",
+}
 
 
 @dataclass(frozen=True)
@@ -51,6 +68,9 @@ class AgentVariant:
     dependencies: bool = True
     references: bool = True
     validator: bool = True
+    # "v1" is the frozen final-v1 protocol; "v2" adds decision checkpoints,
+    # tool-target pre-validation, semantic dedup, and a ledger-stall bound.
+    protocol: str = "v1"
 
 
 AGENT_VARIANTS = {
@@ -59,6 +79,8 @@ AGENT_VARIANTS = {
     "A2": AgentVariant(name="A2", dependencies=False, references=False),
     "A3": AgentVariant(name="A3", validator=False),
 }
+# Product default (CLI analyze, demo). Historical harnesses keep AGENT_VARIANTS.
+RIPPLE_V2 = AgentVariant(name="RIPPLE-v2", protocol="v2")
 
 
 class TraceWriter:
@@ -220,6 +242,34 @@ def _strong_evidence(name: str, result: ToolResult) -> bool:
     return any(item.get("confidence") == "high" for item in references)
 
 
+def _evidence_summary(record: EvidenceRecord) -> str:
+    """A short deterministic description of what one evidence record showed."""
+
+    data = record.result.data if isinstance(record.result.data, dict) else {}
+    name = record.tool_name
+    if name == "search_code":
+        paths = list(dict.fromkeys(hit.get("path") for hit in data.get("hits", [])))
+        return f"lexical hits in {', '.join(map(str, paths[:6]))}"
+    if name == "inspect_symbol":
+        return (
+            f"{data.get('kind', 'file')} {data.get('id') or data.get('path')} "
+            f"exists (lines {data.get('start_line', '?')}-{data.get('end_line', '?')})"
+        )
+    if name == "find_references":
+        files = sorted({item.get("path") for item in data.get("references", [])})
+        return f"{len(data.get('references', []))} references in {', '.join(files[:6])}"
+    if name == "find_tests":
+        tests = sorted({item.get("test_path") for item in data.get("tests", [])})
+        return f"mapped tests: {', '.join(tests[:6]) or 'none'}"
+    if name in {"get_dependencies", "co_changed"}:
+        key = "neighbors" if name == "get_dependencies" else "partners"
+        paths = [str(item.get("path")) for item in data.get(key, [])]
+        return f"{name} of {data.get('path')}: {', '.join(paths[:6]) or 'none'}"
+    if name == "repo_facts":
+        return f"{len(data.get('facts', []))} {data.get('kind')} facts"
+    return name
+
+
 class AgentController:
     def __init__(
         self,
@@ -246,6 +296,16 @@ class AgentController:
         self.output_tokens = 0
         self.total_tokens = 0
         self.usage_known = False
+        self.v2 = variant.protocol == "v2"
+        self.checkpoints = 0
+        self.invalid_targets = 0
+        self.presented: dict[str, set[str]] = {}
+        self.offered_complete: set[str] = set()
+        self.missing_notes: dict[str, str] = {}
+        self.semantic_cache: dict[str, tuple[int, ToolResult]] = {}
+        self._symbols = {item.id for item in index.symbols}
+        self._files = {item.path.as_posix() for item in index.files}
+        self._tests = {item.path.as_posix() for item in index.files if item.is_test}
         self.run_id = (
             datetime.now(UTC).strftime("%Y%m%dT%H%M%S")
             + f"-{index.commit[:7]}-{uuid.uuid4().hex[:8]}"
@@ -315,6 +375,74 @@ class AgentController:
         )
         return intent
 
+    def _symbols_in(self, path: str) -> list[str]:
+        records = sorted(
+            (item for item in self.index.symbols if item.path.as_posix() == path),
+            key=lambda item: ("." in item.qualname, item.start_line),
+        )
+        return [item.id for item in records[:SYMBOL_HINTS]]
+
+    def _target_problem(self, name: str, canonical: dict[str, Any]) -> str | None:
+        """V2: refuse calls whose target is the wrong kind, before spending budget.
+
+        Only certain failures are refused; anything else still reaches the tool and
+        its own validation. Guidance lists real indexed IDs; nothing is invented.
+        """
+
+        if name == "find_references":
+            symbol = str(canonical["symbol_id"])
+            file_part, separator, _ = symbol.partition("::")
+            if symbol in self._symbols or file_part not in self._files:
+                return None
+            hints = self._symbols_in(file_part)
+            known = (
+                f"Symbols defined in {file_part} include: {', '.join(hints)}."
+                if hints
+                else f"{file_part} defines no symbols."
+            )
+            if not separator:
+                return (
+                    "find_references requires a symbol_id of the form path::name, "
+                    f"not a file path. {known}"
+                )
+            return f"symbol not found: {symbol}. {known}"
+        if name in {"get_dependencies", "co_changed"}:
+            path = str(canonical["path"])
+            if "::" in path:
+                return (
+                    f"{name} requires a file path, not a symbol ID; the file part of "
+                    f"{path} is {path.partition('::')[0]}."
+                )
+        return None
+
+    def _semantic_duplicate(
+        self, name: str, canonical: dict[str, Any]
+    ) -> ToolResult | None:
+        """V2: a call differing only by ``limit`` reuses a sufficient earlier result."""
+
+        base = json.dumps(
+            [name, {k: v for k, v in canonical.items() if k != "limit"}],
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        previous = self.semantic_cache.get(base)
+        if previous is None:
+            return None
+        limit, result = previous
+        if result.truncated and limit < int(canonical.get("limit") or 0):
+            return None
+        return result
+
+    def _remember(
+        self, name: str, canonical: dict[str, Any], result: ToolResult
+    ) -> None:
+        base = json.dumps(
+            [name, {k: v for k, v in canonical.items() if k != "limit"}],
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        self.semantic_cache[base] = (int(canonical.get("limit") or 0), result)
+
     def _execute(
         self, name: str, arguments: object, *, count_explore: bool = True
     ) -> tuple[ToolResult | None, bool]:
@@ -334,13 +462,34 @@ class AgentController:
             self.trace.write(
                 "validation_error", operation="tool", tool=name, error=str(error)
             )
-            self.observations.append({"tool": name, "error": str(error)})
+            message = str(error)
+            if self.v2 and name in ARGUMENT_SHAPES:
+                self.invalid_targets += 1
+                message += f"; expected {name}={ARGUMENT_SHAPES[name]}"
+            self.observations.append({"tool": name, "error": message})
             return None, False
+        if self.v2 and count_explore:
+            problem = self._target_problem(name, canonical)
+            if problem:
+                self.invalid_targets += 1
+                self.trace.write(
+                    "tool_target_rejected",
+                    tool=name,
+                    arguments=canonical,
+                    guidance=problem,
+                )
+                self.observations.append(
+                    {"tool": name, "arguments": canonical, "error": problem}
+                )
+                return None, False
         key = json.dumps([name, canonical], sort_keys=True, separators=(",", ":"))
-        if key in self.cache:
+        cached = self.cache.get(key)
+        if cached is None and self.v2:
+            cached = self._semantic_duplicate(name, canonical)
+        if cached is not None:
             if count_explore:
                 self.duplicate_calls += 1
-            result = self.cache[key]
+            result = cached
             self.trace.write(
                 "tool_result",
                 tool=name,
@@ -365,6 +514,8 @@ class AgentController:
         if count_explore:
             self.tool_calls += 1
         self.cache[key] = result
+        if self.v2:
+            self._remember(name, canonical, result)
         record = EvidenceRecord(
             evidence_id=result.evidence_id,
             tool_name=name,
@@ -424,7 +575,7 @@ class AgentController:
         ]
         context = {
             "intent": intent.model_dump(mode="json"),
-            "ledger": self.ledger.prompt_view(),
+            "ledger": self._candidate_view() if self.v2 else self.ledger.prompt_view(),
             "last_three_observations": self.observations[-3:],
             "older_observation_summaries": older,
             "budgets": {
@@ -450,6 +601,31 @@ class AgentController:
             if self.variant.references
             else "find_tests"
         )
+        if self.v2:
+            context["submission_ready"] = (
+                bool(self.ledger.confirmed()) and self._submission_problem() is None
+            )
+            return (
+                "Choose exactly one registered tool or submit_report. Do not propose "
+                "shell, file edits, or new tools. Python decides candidate status at "
+                "separate checkpoints from the evidence listed per candidate, so pick "
+                "tools that supply each candidate's `needs`. Ledger updates here are "
+                "optional and only add new suspected targets touched by the most "
+                f"recent observation. Before submission, every confirmed target needs "
+                f"{reference_requirement}. find_references takes a symbol_id "
+                "path::name, never a bare file path; get_dependencies and co_changed "
+                "take a file path. Do not repeat a call whose result you already have. "
+                "When submission_ready is true and no suspected candidate still needs "
+                f"evidence, call submit_report. Available tools: {', '.join(tools)}. "
+                "Use only these exact argument shapes: search_code={query, kind: "
+                "any|symbol|file|string, limit:1..15}; inspect_symbol={target}; "
+                "find_references={symbol_id, limit:1..40}; get_dependencies={path, "
+                "direction:imports|imported_by, depth:1|2}; find_tests={target}; "
+                "repo_facts={kind:routes|models|settings|migrations|entry_points, "
+                "filter:string|null}; co_changed={path, limit:1..10}; "
+                "submit_report={}. Do not add any other argument keys.\n"
+                + _prompt_data("repository_data", context)
+            )
         return (
             "Choose exactly one registered tool or submit_report. Do not propose shell, "
             "file edits, or new tools. Ledger updates must cite the most recent observation "
@@ -466,17 +642,216 @@ class AgentController:
             + _prompt_data("repository_data", context)
         )
 
+    def _submission_problem(self) -> str | None:
+        return self.ledger.submission_problem(require_refs=self.variant.references)
+
+    def _needs(self, target: str, status: str, strong: bool) -> list[str]:
+        """Deterministic next evidence a candidate requires, as concrete calls."""
+
+        candidate = self.ledger.candidates[target]
+        needs: list[str] = []
+        if status == "suspected" and not strong:
+            needs.append(f"inspect_symbol(target={target}) or another non-lexical tool")
+        if status == "rejected":
+            return needs
+        if self.variant.references and not candidate.checked_refs:
+            path, separator, _ = target.partition("::")
+            symbols = [target] if separator else self._symbols_in(path)[:3]
+            needs.append(
+                "find_references(symbol_id=" + " | ".join(symbols) + ")"
+                if symbols
+                else f"no symbols in {path}; references cannot be checked"
+            )
+        if not candidate.checked_tests:
+            needs.append(f"find_tests(target={target})")
+        return needs
+
+    def _candidate_view(self) -> list[dict[str, Any]]:
+        view = []
+        for item in self.ledger.candidates.values():
+            support = self.ledger.support(item.target)
+            strong = [record.evidence_id for record in support if record.strong]
+            entry: dict[str, Any] = {
+                "target": item.target,
+                "status": item.status,
+                "reason": item.reason,
+                "supporting_evidence": [record.evidence_id for record in support],
+                "non_lexical_evidence": strong,
+                "checked_refs": item.checked_refs,
+                "checked_tests": item.checked_tests,
+                "needs": self._needs(item.target, item.status, bool(strong)),
+            }
+            if item.target in self.missing_notes:
+                entry["missing_evidence"] = self.missing_notes[item.target]
+            view.append(entry)
+        return view
+
+    def _checkpoint(
+        self, request: FeatureRequest, *, stall: int, force: bool = False
+    ) -> bool:
+        """V2: ask for an explicit decision on candidates with new strong evidence.
+
+        Python chooses when to ask and which evidence IDs may be cited; the model
+        proposes confirm/reject/keep; ``CandidateLedger.decide`` verifies each one.
+        Returns whether the ledger changed.
+        """
+
+        if self.checkpoints >= MAX_CHECKPOINTS:
+            return False
+
+        def complete(item) -> bool:
+            return item.checked_tests and (
+                item.checked_refs or not self.variant.references
+            )
+
+        ready = []
+        for item in self.ledger.candidates.values():
+            # Only source targets are decided here; tests come from find_tests/Expand.
+            if item.status != "suspected" or (
+                item.target.partition("::")[0] in self._tests
+            ):
+                continue
+            support = self.ledger.support(item.target)
+            strong = {record.evidence_id for record in support if record.strong}
+            # Only new non-lexical evidence gives the model something new to decide.
+            if strong and (force or strong - self.presented.get(item.target, set())):
+                ready.append((item, support))
+        # Ask at once when a candidate first becomes submittable; otherwise batch.
+        due = (
+            force
+            or stall >= CHECKPOINT_INTERVAL
+            or any(
+                complete(item) and item.target not in self.offered_complete
+                for item, _ in ready
+            )
+        )
+        if not ready or not due:
+            return False
+        ready.sort(
+            key=lambda pair: (
+                not (pair[0].checked_refs and pair[0].checked_tests),
+                -sum(record.strong for record in pair[1]),
+            )
+        )
+        ready = ready[:CHECKPOINT_CANDIDATES]
+        offered = {
+            item.target: frozenset(record.evidence_id for record in support)
+            for item, support in ready
+        }
+        self.checkpoints += 1
+        self.trace.write(
+            "checkpoint_started",
+            candidates={target: sorted(ids) for target, ids in offered.items()},
+        )
+        prompt = (
+            "Decide the status of each source candidate below using only the evidence "
+            "listed for it. Return one decision per candidate: confirm = the evidence "
+            "shows this source target must change to implement the request (tests are "
+            "suggested separately); reject = the evidence "
+            "shows it is unrelated to the request; keep = undecided, and say in "
+            "missing_evidence exactly which evidence is still needed. Cite only "
+            "evidence IDs listed for that candidate. A confirmation must cite at "
+            "least one record marked strong. Python verifies every decision and "
+            "ignores anything that does not match the listed evidence.\n"
+            + _prompt_data(
+                "repository_data",
+                {
+                    "request": request.text,
+                    "candidates": [
+                        {
+                            "target": item.target,
+                            "current_reason": item.reason,
+                            "checked_refs": item.checked_refs,
+                            "checked_tests": item.checked_tests,
+                            "evidence": [
+                                {
+                                    "evidence_id": record.evidence_id,
+                                    "tool": record.tool_name,
+                                    "arguments": record.arguments,
+                                    "strong": record.strong,
+                                    "shows": _evidence_summary(record),
+                                }
+                                for record in support
+                            ],
+                        }
+                        for item, support in ready
+                    ],
+                },
+            )
+        )
+        for target, ids in offered.items():
+            self.presented.setdefault(target, set()).update(ids)
+        self.offered_complete.update(item.target for item, _ in ready if complete(item))
+        try:
+            response = self._llm("decide_candidates", prompt)
+            decisions = CandidateDecisionSet.model_validate(response.payload)
+        except ValidationError as error:
+            self.trace.write(
+                "validation_error", operation="decide_candidates", error=str(error)
+            )
+            return False
+        changed = False
+        for decision in decisions.decisions:
+            if decision.target not in offered:
+                accepted, problem = False, "target was not offered at this checkpoint"
+            else:
+                accepted, problem = self.ledger.decide(
+                    decision.target,
+                    decision.decision,
+                    decision.evidence_ids,
+                    decision.reason,
+                    offered[decision.target],
+                )
+            if decision.decision == "keep" and decision.missing_evidence:
+                self.missing_notes[decision.target] = decision.missing_evidence
+            changed = changed or accepted
+            self.trace.write(
+                "candidate_decision",
+                decision=decision.model_dump(mode="json"),
+                accepted=accepted,
+                refusal=problem,
+            )
+        return changed
+
+    def _submit_guidance(self, problem: str) -> str:
+        if not self.ledger.confirmed():
+            pending = {
+                item.target: self.missing_notes.get(item.target, "no decision yet")
+                for item in self.ledger.candidates.values()
+                if item.status == "suspected"
+                and any(record.strong for record in self.ledger.support(item.target))
+            }
+            return (
+                f"Submission refused: {problem}. Candidates with non-lexical evidence "
+                f"and what is still missing: {json.dumps(pending)}. Gather that "
+                "evidence; a checkpoint will follow."
+            )
+        missing = {
+            item.target: self._needs(item.target, item.status, True)
+            for item in self.ledger.confirmed()
+        }
+        return f"Submission refused: {problem}. Run these calls first: " + json.dumps(
+            {target: needs for target, needs in missing.items() if needs}
+        )
+
     def _apply_updates(
         self, decision: AgentDecision, latest_evidence: str | None
     ) -> bool:
         changed = False
         for update in decision.ledger_updates:
-            accepted = self.ledger.apply(update, latest_evidence)
+            # V2: confirm/reject happen only at checkpoints (strong evidence required).
+            refused = self.v2 and update.status != "suspected"
+            accepted = not refused and self.ledger.apply(update, latest_evidence)
             changed = changed or accepted
             self.trace.write(
                 "ledger_update",
                 accepted=accepted,
                 update=update.model_dump(mode="json"),
+                **(
+                    {"refusal": "status changes are decided at checkpoints"}
+                    if refused
+                    else {}
+                ),
             )
         return changed
 
@@ -580,12 +955,15 @@ class AgentController:
 
     def run(self, request: FeatureRequest) -> AgentRun:
         started = perf_counter()
+        config_version = (
+            FULL_REPORT_V2_CONFIG_VERSION if self.v2 else FULL_REPORT_CONFIG_VERSION
+        )
         self.trace.write(
             "run_started",
             run_id=self.run_id,
             commit=self.index.commit,
             dirty=self.index.dirty,
-            config_version=FULL_REPORT_CONFIG_VERSION,
+            config_version=config_version,
             request=request.text,
             model=self.llm.model,
         )
@@ -598,12 +976,16 @@ class AgentController:
             intent = self._interpret(request, repo_map)
             self._seed(intent)
             no_progress = 0
+            stall = 0  # V2: explore steps since the last ledger change
             while True:
                 if self.tool_calls >= MAX_TOOL_CALLS:
                     stop_reason = "tool_budget"
                     break
                 if no_progress >= MAX_NO_PROGRESS:
                     stop_reason = "no_progress"
+                    break
+                if self.v2 and stall >= MAX_STALL:
+                    stop_reason = "no_ledger_progress"
                     break
                 if len(self.ledger.candidates) >= MAX_CANDIDATES:
                     stop_reason = "candidate_cap"
@@ -638,19 +1020,39 @@ class AgentController:
                 )
                 ledger_changed = self._apply_updates(decision, latest_evidence)
                 if decision.tool_name == "submit_report":
-                    problem = self.ledger.submission_problem(
-                        require_refs=self.variant.references
-                    )
+                    problem = self._submission_problem()
+                    # V2: the model believes it is done, so give it one explicit
+                    # decision before refusing.
+                    if (
+                        problem
+                        and self.v2
+                        and not self.ledger.confirmed()
+                        and self._checkpoint(request, stall=stall, force=True)
+                    ):
+                        ledger_changed = True
+                        problem = self._submission_problem()
                     if problem:
                         self.trace.write("submit_rejected", reason=problem)
-                        self.observations.append({"controller": problem})
+                        self.observations.append(
+                            {
+                                "controller": self._submit_guidance(problem)
+                                if self.v2
+                                else problem
+                            }
+                        )
                         no_progress = 0 if ledger_changed else no_progress + 1
+                        stall = 0 if ledger_changed else stall + 1
                         continue
                     self.trace.write("submit_accepted")
                     stop_reason = "submitted"
                     requested_completion = True
                     break
                 _, tool_progress = self._execute(decision.tool_name, decision.arguments)
+                if self.v2:
+                    stall = 0 if ledger_changed else stall + 1
+                    if self._checkpoint(request, stall=stall):
+                        ledger_changed = True
+                        stall = 0
                 no_progress = 0 if ledger_changed or tool_progress else no_progress + 1
             expansion = self._expand(intent)
             draft = (
@@ -707,6 +1109,9 @@ class AgentController:
                 runtime_seconds=perf_counter() - started,
                 stop_reason=stop_reason,
                 dirty=self.index.dirty,
+                config_version=config_version,
+                decision_checkpoints=self.checkpoints,
+                invalid_tool_targets=self.invalid_targets,
             ),
         )
         report_path = self.output_root / "reports" / f"{self.run_id}.json"
@@ -740,6 +1145,8 @@ class AgentController:
             llm_calls=report.run_stats.llm_calls,
             total_tokens=report.run_stats.total_tokens,
             runtime_seconds=report.run_stats.runtime_seconds,
+            decision_checkpoints=self.checkpoints,
+            invalid_tool_targets=self.invalid_targets,
         )
         return AgentRun(
             report=report,

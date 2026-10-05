@@ -36,3 +36,7 @@ def indexed_repo(tmp_path: Path):
     _git(tmp_path, "add", ".")
     _git(tmp_path, "commit", "-qm", "fixture")
     return scan_repository(tmp_path)
+
+
+# Fixture repositories contain their own test files; they are data, not tests.
+collect_ignore_glob = ["fixtures/*"]

@@ -9,6 +9,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 AGENT_CONFIG_VERSION = "mvp-v1.1"
 MVP_CONFIG_VERSION = AGENT_CONFIG_VERSION
 FULL_REPORT_CONFIG_VERSION = "full-report-v1"
+# V2 adds the candidate-decision checkpoint protocol; V1 remains pinned for history.
+FULL_REPORT_V2_CONFIG_VERSION = "full-report-v2"
 
 
 class FrozenModel(BaseModel):
@@ -81,6 +83,20 @@ class AgentDecision(FrozenModel):
     ledger_updates: tuple[CandidateUpdate, ...] = ()
 
 
+class CandidateDecision(FrozenModel):
+    """One model proposal at a V2 decision checkpoint; Python validates it."""
+
+    target: str
+    decision: Literal["confirm", "reject", "keep"]
+    evidence_ids: tuple[str, ...] = ()
+    reason: str = Field(min_length=3, max_length=500)
+    missing_evidence: str | None = Field(default=None, max_length=300)
+
+
+class CandidateDecisionSet(FrozenModel):
+    decisions: tuple[CandidateDecision, ...]
+
+
 class AffectedComponent(FrozenModel):
     target: str
     change_type: Literal["modify", "add", "delete", "new_file"]
@@ -147,6 +163,8 @@ class RunStats(FrozenModel):
     stop_reason: str
     dirty: bool
     config_version: str = FULL_REPORT_CONFIG_VERSION
+    decision_checkpoints: int = Field(default=0, ge=0)
+    invalid_tool_targets: int = Field(default=0, ge=0)
 
 
 RunStatus = Literal["completed", "partial", "abstained", "failed"]

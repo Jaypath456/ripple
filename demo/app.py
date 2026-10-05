@@ -13,7 +13,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from demo import logic
-from ripple.agent import AgentController
+from ripple.agent import RIPPLE_V2, AgentController
 from ripple.agent_models import FeatureRequest
 from ripple.llm import LLMError, OpenAILLM
 from ripple.scanner import ScanError, scan_repository
@@ -253,34 +253,65 @@ def timeline_section(scenario: dict) -> None:
         st.json(scenario["trace"], expanded=False)
 
 
+def outcome_card(payload: dict) -> None:
+    """Compact, deterministic diagnosis for a run that did not complete."""
+
+    summary = logic.outcome_summary(payload)
+    title = "RIPPLE abstained" if summary["status"] == "abstained" else "Run failed"
+    with st.container(border=True):
+        st.markdown(
+            badge(
+                title.upper(), "r-warn" if summary["status"] == "abstained" else "r-bad"
+            )
+            + f'<div class="r-title">{esc(summary["why"])}</div>',
+            unsafe_allow_html=True,
+        )
+        columns = st.columns(3)
+        columns[0].metric("Stop reason", summary["stop_reason"])
+        columns[1].metric("Candidate areas investigated", summary["investigated"])
+        columns[2].metric("Confirmed", summary["confirmed"])
+        if st.button("Explain this run", key="explain-run"):
+            st.markdown(logic.diagnose_run(payload))
+            st.caption("Answered from run metadata · no model call")
+
+
 def explainer_section(scenario: dict, key: str) -> None:
     heading("Optional", "Ask RIPPLE about this result")
     st.caption(
-        "Answers may use only this result's report, evidence, trace, and post-change "
-        "findings. Answers citing anything else are replaced with: "
-        f"“{logic.REFUSAL}”"
+        "Run-status questions (why it stopped, calls, tokens, runtime, provider "
+        "errors) are answered directly from run metadata with no model call. Other "
+        "questions go to a model that may use only this result's report, evidence, "
+        "trace, and post-change findings; answers citing anything else are replaced "
+        f"with: “{logic.REFUSAL}”"
     )
-    if not logic.llm_config_status()["configured"]:
-        st.info(
-            "Needs a model configured via RIPPLE_LLM_API_KEY and RIPPLE_LLM_MODEL. "
-            "Everything above works without it."
-        )
-        return
     picked = st.pills(
         "Suggested questions", logic.suggested_questions(scenario), key=f"pills-{key}"
     )
     question = st.text_input("Question", value=picked or "", key=f"question-{key}")
-    if st.button("Ask", key=f"ask-{key}"):
-        context = logic.build_explainer_context(scenario, _benchmark())
-        try:
-            with st.spinner("Answering from the saved evidence…"):
-                answer = logic.ask_explainer(question, context, OpenAILLM.from_env())
-        except (LLMError, logic.DemoError) as error:
-            st.error(logic.friendly_error(error))
-            return
-        st.markdown(logic.redact(answer.answer))
-        if answer.citations:
-            st.caption("Citations: " + " · ".join(answer.citations))
+    if not st.button("Ask", key=f"ask-{key}"):
+        return
+    diagnostic = logic.answer_diagnostic(question, scenario)
+    if diagnostic is not None:
+        st.markdown(diagnostic)
+        st.caption("Answered from run metadata · no model call")
+        return
+    if not logic.llm_config_status()["configured"]:
+        st.info(
+            "That question needs the grounded explainer, which requires "
+            "RIPPLE_LLM_API_KEY and RIPPLE_LLM_MODEL. Run-status questions work "
+            "without it."
+        )
+        return
+    context = logic.build_explainer_context(scenario, _benchmark())
+    try:
+        with st.spinner("Answering from the saved evidence…"):
+            answer = logic.ask_explainer(question, context, OpenAILLM.from_env())
+    except (LLMError, logic.DemoError) as error:
+        st.error(logic.friendly_error(error))
+        return
+    st.markdown(logic.redact(answer.answer))
+    if answer.citations:
+        st.caption("Citations: " + " · ".join(answer.citations))
 
 
 # --------------------------------------------------------------------------- Demo
@@ -586,6 +617,55 @@ def page_results() -> None:
         )
     with st.expander("View full research metrics"):
         research_metrics(benchmark)
+    v2_development_section()
+
+
+def v2_development_section() -> None:
+    try:
+        dev = logic.load_v2_dev()
+    except logic.DemoError as error:
+        st.error(str(error))
+        return
+    if not dev:
+        return
+    with st.expander("V2 development results (not a benchmark)"):
+        st.warning(
+            "Development-only comparison of the V1 and V2 agent protocols on "
+            f"{len(dev['cases'])} development cases chosen after V1's results were "
+            "known. It does not replace the frozen final-v1 benchmark above; a V2 "
+            "benchmark would need a new untouched held-out set."
+        )
+        labels = (
+            ("runs", "Runs"),
+            ("provider_failures", "Provider failures (excluded below)"),
+            ("completed", "Completed"),
+            ("partial", "Partial (confirmed, not submitted)"),
+            ("abstained", "Abstained"),
+            ("with_confirmed", "Runs with a confirmed candidate"),
+            ("unsupported_accepted", "Unsupported claims accepted"),
+            ("tool_calls", "Mean tool calls"),
+            ("model_calls", "Mean model calls"),
+            ("duplicate_calls", "Mean duplicate calls"),
+            ("invalid_tool_targets", "Mean invalid tool-target attempts"),
+        )
+        protocols = dev["protocols"]
+        st.dataframe(
+            [
+                {"Metric": label}
+                | {
+                    name.upper(): (
+                        f"{protocols[name][key]:.1f}"
+                        if isinstance(protocols[name][key], float)
+                        else protocols[name][key]
+                    )
+                    for name in protocols
+                }
+                for key, label in labels
+            ],
+            hide_index=True,
+            width="stretch",
+        )
+        st.caption("Source: evaluation/v2_dev/results.json · details in its README.")
 
 
 def research_metrics(benchmark: dict) -> None:
@@ -688,7 +768,9 @@ def _run_live(repo_text: str, request_text: str, allow_dirty: bool) -> None:
             "uncommitted changes."
         )
         return
-    controller = AgentController(index, llm, output_root=logic.LIVE_OUTPUT / repo.name)
+    controller = AgentController(
+        index, llm, output_root=logic.LIVE_OUTPUT / repo.name, variant=RIPPLE_V2
+    )
     started = time.perf_counter()
     with st.status("Analyzing…") as status:
         with ThreadPoolExecutor(max_workers=1) as pool:
@@ -712,13 +794,8 @@ def _run_live(repo_text: str, request_text: str, allow_dirty: bool) -> None:
 def _show_live(live: dict) -> None:
     payload = live["payload"]
     report = payload["report"]
-    if report["status"] == "failed":
-        st.error(logic.run_failure(payload) or "The run failed; see Run details.")
-    elif report["status"] == "abstained":
-        st.warning(
-            "RIPPLE abstained: it did not gather enough validated evidence to predict. "
-            "That is its intended conservative behavior, not a crash."
-        )
+    if report["status"] in {"abstained", "failed"}:
+        outcome_card(payload)
     heading("Result", "Predicted impact")
     cards = logic.impact_cards(payload)
     if cards:

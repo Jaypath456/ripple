@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from ripple.agent_models import (
     AgentDecision,
     BaselineDecision,
+    CandidateDecisionSet,
     FeatureIntent,
     RankedPathDraft,
     ReportDraft,
@@ -50,6 +51,8 @@ class LLMClient(Protocol):
     def react_decide(self, prompt: str) -> LLMResponse: ...
 
     def investigate_diff(self, prompt: str) -> LLMResponse: ...
+
+    def decide_candidates(self, prompt: str) -> LLMResponse: ...
 
 
 class OpenAILLM:
@@ -217,6 +220,9 @@ class OpenAILLM:
     def investigate_diff(self, prompt: str) -> LLMResponse:
         return self._call(prompt, InvestigationDecision)
 
+    def decide_candidates(self, prompt: str) -> LLMResponse:
+        return self._call(prompt, CandidateDecisionSet)
+
 
 class ScriptedLLM:
     """Queue-backed fake implementing the same interface for paid-API-free tests."""
@@ -230,6 +236,7 @@ class ScriptedLLM:
         rankings: Iterable[object] = (),
         react_decisions: Iterable[object] = (),
         investigations: Iterable[object] = (),
+        candidate_decisions: Iterable[object] = (),
         model: str = "scripted",
     ) -> None:
         self.model = model
@@ -239,6 +246,7 @@ class ScriptedLLM:
         self._rankings = deque(rankings)
         self._react_decisions = deque(react_decisions)
         self._investigations = deque(investigations)
+        self._candidate_decisions = deque(candidate_decisions)
 
     def _next(self, queue: deque[object], operation: str) -> LLMResponse:
         if not queue:
@@ -265,3 +273,6 @@ class ScriptedLLM:
 
     def investigate_diff(self, prompt: str) -> LLMResponse:
         return self._next(self._investigations, "diff investigation")
+
+    def decide_candidates(self, prompt: str) -> LLMResponse:
+        return self._next(self._candidate_decisions, "candidate decision")

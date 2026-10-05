@@ -132,7 +132,17 @@ The app states this on the replay page. The fixtures were scripted because they 
 replay identically without an API key. `tests/test_demo.py` rebuilds the repository
 and checks that the core reproduces the saved predictions and Stage B findings.
 
-## Ask RIPPLE (optional explainer)
+## Ask RIPPLE
+
+Run-status questions are answered **deterministically from run metadata, with no
+model call**. These include "Why did it fail / abstain / stop?", "Did it crash?",
+"Did the provider fail?", the stop reason, candidate counts, and tool calls,
+model calls, tokens and runtime. Live runs that abstain or fail show a compact
+diagnosis card with an **Explain this run** button that uses the same logic. Live
+analysis uses the V2 agent protocol; the replays above were generated with the
+frozen V1 protocol and are unchanged.
+
+### Grounded explainer (semantic questions)
 
 If a model is configured, each analysis offers an explainer. The model receives only
 a JSON context containing:

@@ -9,7 +9,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from time import perf_counter
 
-from ripple.agent import analyze_repository
+from ripple.agent import RIPPLE_V2, analyze_repository
 from ripple.agent_models import FeatureRequest
 from ripple.cache import ScanResult, scan_repository_cached
 from ripple.evaluation import (
@@ -319,7 +319,9 @@ def _run_analyze(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
             return 1
-        run = analyze_repository(scan_result.index, request, OpenAILLM.from_env())
+        run = analyze_repository(
+            scan_result.index, request, OpenAILLM.from_env(), variant=RIPPLE_V2
+        )
     except (ScanError, LLMError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
