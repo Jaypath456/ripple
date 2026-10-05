@@ -359,6 +359,7 @@ class AgentController:
         self.presented: dict[str, set[str]] = {}
         self.offered_complete: set[str] = set()
         self.intent: FeatureIntent | None = None
+        self.report_repairs = 0
         self.missing_notes: dict[str, str] = {}
         self.semantic_cache: dict[str, tuple[int, ToolResult]] = {}
         self._symbols = {item.id for item in index.symbols}
@@ -992,6 +993,92 @@ class AgentController:
                 prompt += "\nYour prior report was invalid. Return a valid object only."
         return None
 
+    def _repairable_errors(self, draft: ReportDraft) -> list[dict[str, str]]:
+        """V2: draft classifications that contradict repository facts.
+
+        Only one class is repairable: a confirmed target that already exists in the
+        index drafted as ``new_file``. Nothing is rewritten here; the errors are
+        reported back to the model, and the validator still decides.
+        """
+
+        confirmed = {item.target for item in self.ledger.confirmed()}
+        return [
+            {
+                "target": component.target,
+                "error": "existing_target_classified_new_file",
+                "message": (
+                    "This target already exists in the repository and therefore "
+                    "cannot be classified as a new file."
+                ),
+            }
+            for component in draft.affected_components
+            if component.change_type == "new_file"
+            and component.target in confirmed
+            and self.ledger.valid_target(component.target)
+        ]
+
+    def _repair_draft(self, request: FeatureRequest, draft: ReportDraft) -> ReportDraft:
+        """V2: at most one repair call for repairable classification errors.
+
+        No tools run and no new repository context is given. The returned draft
+        (repaired if it parsed, otherwise the original) is validated as usual.
+        """
+
+        errors = self._repairable_errors(draft)
+        if not errors:
+            return draft
+        self.report_repairs += 1
+        self.trace.write(
+            "report_repair_started",
+            reason="repairable classification errors",
+            errors=len(errors),
+            error_types=sorted({item["error"] for item in errors}),
+            targets=[item["target"] for item in errors],
+        )
+        prompt = (
+            "Your change-impact report draft contradicts repository facts. Redraft the "
+            "whole report using only classifications consistent with the supplied "
+            "repository facts and confirmed ledger. Do not add targets or evidence; "
+            "anything unsupported will still be removed.\n"
+            + _prompt_data(
+                "repository_data",
+                {
+                    "request": request.text,
+                    "confirmed_ledger": [
+                        item
+                        for item in self.ledger.prompt_view()
+                        if item["status"] == "confirmed"
+                    ],
+                    "repository_facts": {
+                        item["target"]: {"exists_in_repository": True}
+                        for item in errors
+                    },
+                    "original_draft": draft.model_dump(mode="json"),
+                    "validation_errors": errors,
+                },
+            )
+        )
+        try:
+            response = self._llm("draft_report", prompt)
+            repaired = ReportDraft.model_validate(response.payload)
+        except ValidationError as error:
+            self.trace.write(
+                "report_repair_completed",
+                parsed=False,
+                remaining_errors=len(errors),
+                used_repaired_draft=False,
+                error=str(error)[:300],
+            )
+            return draft
+        remaining = self._repairable_errors(repaired)
+        self.trace.write(
+            "report_repair_completed",
+            parsed=True,
+            remaining_errors=len(remaining),
+            used_repaired_draft=True,
+        )
+        return repaired
+
     def _fallback_draft(self) -> ReportDraft:
         components = []
         tests: list[SuggestedTest] = []
@@ -1128,6 +1215,8 @@ class AgentController:
                 draft = self._fallback_draft()
                 requested_completion = False
                 stop_reason = "invalid_report"
+            elif self.v2 and requested_completion and self.variant.validator:
+                draft = self._repair_draft(request, draft)
             validated = (
                 validate_report_draft(draft, self.index, self.ledger, expansion)
                 if self.variant.validator
@@ -1176,6 +1265,7 @@ class AgentController:
                 config_version=config_version,
                 decision_checkpoints=self.checkpoints,
                 invalid_tool_targets=self.invalid_targets,
+                report_repairs=self.report_repairs,
             ),
         )
         report_path = self.output_root / "reports" / f"{self.run_id}.json"
@@ -1211,6 +1301,7 @@ class AgentController:
             runtime_seconds=report.run_stats.runtime_seconds,
             decision_checkpoints=self.checkpoints,
             invalid_tool_targets=self.invalid_targets,
+            report_repairs=self.report_repairs,
         )
         return AgentRun(
             report=report,

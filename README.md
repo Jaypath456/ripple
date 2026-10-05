@@ -195,6 +195,13 @@ already existed. V2.1 changes only how the checkpoint question is asked:
 It also shows the model each file's outline. Every Python acceptance rule is
 unchanged.
 
+**V2.1.1** is a report-generation correctness repair, not an accuracy change. A
+confirmed target that already exists can be drafted as a `new_file`; the
+validator correctly drops that classification. V2.1.1 now feeds the exact
+validation error back to the model for **one** redraft, which runs no tools,
+and validates the result unchanged. Python never rewrites the classification
+itself.
+
 `ripple analyze` and the demo's live analysis use V2. The historical evaluation
 harnesses stay pinned to the V1 protocol, and the final-v1 artifacts are guarded
 by a hash test. V2 development measurements are in

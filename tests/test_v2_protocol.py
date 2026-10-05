@@ -240,7 +240,7 @@ def test_v2_protocol_converts_the_same_evidence_into_a_report(
     report = v2_run.report
     assert report.status == "completed"
     assert report.run_stats.stop_reason == "submitted"
-    assert report.run_stats.config_version == "full-report-v2.1"
+    assert report.run_stats.config_version == "full-report-v2.1.1"
     states = _states(v2)
     confirmed_paths = {target.partition("::")[0] for target in states["confirmed"]}
     assert CLI in confirmed_paths
@@ -843,3 +843,235 @@ def test_checkpoint_framing_is_generic() -> None:
     text = CHECKPOINT_INSTRUCTIONS.casefold()
     for specific in (r"\bcli\b", r"\.py\b", r"\bexport", r"markdown", r"verification"):
         assert not re.search(specific, text), specific
+
+
+# ----------------------------------------------------------------- V2.1.1 repair
+
+
+def _component(target, change_type="modify", evidence=("e2",)):
+    return {
+        "target": target,
+        "change_type": change_type,
+        "change_kind": "api",
+        "reason": "Wire the new command here.",
+        "confidence": "high",
+        "evidence": list(evidence),
+    }
+
+
+CONFIRMED = "@confirmed"  # placeholder: the target Python actually confirmed
+
+
+class DraftScript(ObservedPolicyLLM):
+    """Confirms CLI targets at checkpoints, then returns scripted drafts in order."""
+
+    def __init__(self, drafts) -> None:
+        super().__init__(plan=WIRING_PLAN, relevant=frozenset({CLI}))
+        self.drafts = list(drafts)
+        self.draft_prompts: list[str] = []
+
+    def draft_report(self, prompt: str) -> LLMResponse:
+        self.draft_prompts.append(prompt)
+        if not self.drafts:
+            raise AssertionError("more report drafts requested than allowed")
+        data = _data(prompt)
+        ledger = data.get("ledger") or data.get("confirmed_ledger")
+        confirmed = next(item for item in ledger if item["status"] == "confirmed")
+        components = [
+            item
+            | (
+                {
+                    "target": confirmed["target"],
+                    "evidence": item["evidence"] or confirmed["evidence_ids"][-1:],
+                }
+                if item["target"] == CONFIRMED
+                else {}
+            )
+            for item in self.drafts.pop(0)
+        ]
+        return self._reply({"affected_components": components})
+
+
+def _repair_run(cli_repo, tmp_path, drafts, variant=RIPPLE_V2):
+    llm = DraftScript(drafts)
+    controller, run, trace = _run(cli_repo, llm, tmp_path, variant)
+    confirmed = [item.target for item in controller.ledger.confirmed()]
+    assert confirmed and all(t.startswith(CLI) for t in confirmed)
+    return llm, run, trace, confirmed[0]
+
+
+def test_mislabelled_existing_target_survives_one_repair(
+    cli_repo, tmp_path: Path
+) -> None:
+    llm, run, trace, target = _repair_run(
+        cli_repo,
+        tmp_path,
+        [
+            [_component(CONFIRMED, "new_file", ())],
+            [_component(CONFIRMED, "modify", ())],
+        ],
+    )
+    assert len(llm.draft_prompts) == 2
+    assert target in {item.target for item in run.report.affected_components}
+    assert run.report.run_stats.report_repairs == 1
+    assert run.report.run_stats.config_version == "full-report-v2.1.1"
+    started = next(e for e in trace if e["event"] == "report_repair_started")
+    assert started["targets"] == [target]
+    assert started["error_types"] == ["existing_target_classified_new_file"]
+    completed = next(e for e in trace if e["event"] == "report_repair_completed")
+    assert completed["used_repaired_draft"] and completed["remaining_errors"] == 0
+    repair_prompt = llm.draft_prompts[1]
+    assert "cannot be classified as a new file" in repair_prompt
+    assert '"exists_in_repository": true' in repair_prompt
+    # No tool ran between the repair request and its validation.
+    between = trace[trace.index(started) : trace.index(completed)]
+    assert not any(e["event"] in {"tool_call", "tool_result"} for e in between)
+
+
+def test_only_one_repair_and_invalid_repair_still_fails_safely(
+    cli_repo, tmp_path: Path
+) -> None:
+    llm, run, trace, target = _repair_run(
+        cli_repo,
+        tmp_path,
+        [
+            [_component(CONFIRMED, "new_file", ())],
+            [_component(CONFIRMED, "new_file", ())],
+        ],
+    )
+    assert len(llm.draft_prompts) == 2  # no third request
+    assert target not in {item.target for item in run.report.affected_components}
+    assert f"invalid migration new-file dropped: {target}" in run.report.dropped_claims
+    assert run.report.run_stats.report_repairs == 1
+    completed = next(e for e in trace if e["event"] == "report_repair_completed")
+    assert completed["remaining_errors"] == 1
+
+
+def test_repair_never_rescues_unsupported_targets_or_evidence(
+    cli_repo, tmp_path: Path
+) -> None:
+    invented = "src/app/invented.py::export"
+    _, run, _, target = _repair_run(
+        cli_repo,
+        tmp_path,
+        [
+            [_component(CONFIRMED, "new_file", ()), _component(invented)],
+            [
+                _component(CONFIRMED, "modify", ()),
+                _component(invented),
+                _component(RENDER, "modify", ("e999",)),
+            ],
+        ],
+    )
+    targets = {item.target for item in run.report.affected_components}
+    assert target in targets
+    assert invented not in targets and RENDER not in targets
+    assert any(invented in item for item in run.report.dropped_claims)
+    assert any(RENDER in item for item in run.report.dropped_claims)
+
+
+def test_repair_cannot_launder_fabricated_evidence(cli_repo, tmp_path: Path) -> None:
+    _, run, _, target = _repair_run(
+        cli_repo,
+        tmp_path,
+        [
+            [_component(CONFIRMED, "new_file", ())],
+            [_component(CONFIRMED, "modify", ("e999",))],
+        ],
+    )
+    assert target not in {item.target for item in run.report.affected_components}
+    assert f"unsupported component dropped: {target}" in run.report.dropped_claims
+
+
+def test_valid_first_draft_makes_no_repair_call(cli_repo, tmp_path: Path) -> None:
+    llm, run, trace, _ = _repair_run(
+        cli_repo, tmp_path, [[_component(CONFIRMED, "modify", ())]]
+    )
+    assert len(llm.draft_prompts) == 1
+    assert run.report.run_stats.report_repairs == 0
+    assert not any(e["event"].startswith("report_repair") for e in trace)
+
+
+def test_genuinely_new_files_are_not_repaired_or_newly_rejected(
+    cli_repo, tmp_path: Path
+) -> None:
+    new_file = "src/app/exporter.py"
+    llm, run, trace, _ = _repair_run(
+        cli_repo,
+        tmp_path,
+        [[_component(CONFIRMED, "modify", ()), _component(new_file, "new_file")]],
+    )
+    assert len(llm.draft_prompts) == 1  # a non-indexed path is not repairable
+    assert not any(e["event"].startswith("report_repair") for e in trace)
+    # The validator's existing rule for model-proposed new files is unchanged.
+    assert (
+        f"invalid migration new-file dropped: {new_file}" in run.report.dropped_claims
+    )
+
+
+def test_deterministic_migration_proposals_are_never_flagged(
+    cli_repo, tmp_path: Path
+) -> None:
+    from ripple.agent_models import ReportDraft
+
+    controller = AgentController(
+        cli_repo,
+        ObservedPolicyLLM(),
+        output_root=tmp_path,
+        variant=RIPPLE_V2,
+    )
+    controller.ledger.seed(CLI, "seed", "e1")
+    controller.ledger.candidates[CLI].status = "confirmed"
+    draft = ReportDraft.model_validate(
+        {
+            "affected_components": [
+                _component("src/app/migrations/<proposed migration>", "new_file"),
+                _component("src/app/brand_new.py", "new_file"),
+                _component(CLI, "new_file"),
+            ]
+        }
+    )
+    flagged = [item["target"] for item in controller._repairable_errors(draft)]
+    assert flagged == [CLI]
+
+
+def test_v1_protocol_never_repairs_reports(cli_repo, tmp_path: Path) -> None:
+    llm = ScriptedLLM(
+        interpretations=[INTENT],
+        decisions=[
+            {
+                "tool_name": "inspect_symbol",
+                "arguments": {"target": CLI},
+                "reason": "investigate",
+            },
+            {
+                "tool_name": "find_references",
+                "arguments": {"symbol_id": f"{CLI}::main"},
+                "reason": "investigate",
+                "ledger_updates": [
+                    {
+                        "target": f"{CLI}::latest",
+                        "status": "confirmed",
+                        "reason": "wiring point",
+                        "evidence_ids": ["e2"],
+                    }
+                ],
+            },
+            {
+                "tool_name": "find_tests",
+                "arguments": {"target": CLI},
+                "reason": "investigate",
+            },
+            {"tool_name": "submit_report", "arguments": {}, "reason": "done"},
+        ],
+        reports=[{"affected_components": [_component(f"{CLI}::latest", "new_file")]}],
+    )
+    _, run, trace = _run(cli_repo, llm, tmp_path, AGENT_VARIANTS["RIPPLE"])
+    assert run.report.run_stats.stop_reason == "submitted"
+    assert run.report.run_stats.report_repairs == 0
+    assert run.report.run_stats.config_version == "full-report-v1"
+    assert not any(e["event"].startswith("report_repair") for e in trace)
+    assert (
+        f"invalid migration new-file dropped: {CLI}::latest"
+        in run.report.dropped_claims
+    )

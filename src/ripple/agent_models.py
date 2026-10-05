@@ -10,8 +10,8 @@ AGENT_CONFIG_VERSION = "mvp-v1.1"
 MVP_CONFIG_VERSION = AGENT_CONFIG_VERSION
 FULL_REPORT_CONFIG_VERSION = "full-report-v1"
 # V2 adds the candidate-decision checkpoint protocol (V2.1: new-feature decision
-# framing); V1 remains pinned for history.
-FULL_REPORT_V2_CONFIG_VERSION = "full-report-v2.1"
+# framing; V2.1.1: one bounded report-classification repair); V1 remains pinned.
+FULL_REPORT_V2_CONFIG_VERSION = "full-report-v2.1.1"
 
 
 class FrozenModel(BaseModel):
@@ -166,6 +166,7 @@ class RunStats(FrozenModel):
     config_version: str = FULL_REPORT_CONFIG_VERSION
     decision_checkpoints: int = Field(default=0, ge=0)
     invalid_tool_targets: int = Field(default=0, ge=0)
+    report_repairs: int = Field(default=0, ge=0)
 
 
 RunStatus = Literal["completed", "partial", "abstained", "failed"]
