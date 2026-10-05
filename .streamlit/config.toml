@@ -1,0 +1,13 @@
+# Theme for the demo app (streamlit run demo/app.py from the repository root).
+# Separate light/dark sections keep the visitor's system theme preference.
+[theme.light]
+primaryColor = "#2563eb"
+
+[theme.dark]
+primaryColor = "#3b82f6"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

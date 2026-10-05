@@ -239,3 +239,186 @@ def test_replay_fixtures_regenerate_from_the_real_core(
             c["target"] for c in saved["report"]["affected_components"]
         ]
         assert fresh["report"]["dropped_claims"] == saved["report"]["dropped_claims"]
+
+
+# ----------------------------------------------------------------- showcase layer
+
+APP = Path(__file__).resolve().parent.parent / "demo" / "app.py"
+
+
+def _page_titles() -> list[str]:
+    import ast
+
+    titles = []
+    for node in ast.walk(ast.parse(APP.read_text())):
+        if (
+            isinstance(node, ast.Call)
+            and getattr(node.func, "attr", "") == "Page"
+            and any(keyword.arg == "title" for keyword in node.keywords)
+        ):
+            keyword = next(item for item in node.keywords if item.arg == "title")
+            titles.append(keyword.value.value)
+    return titles
+
+
+def test_showcase_has_a_small_top_level_navigation() -> None:
+    assert _page_titles() == [
+        "Demo",
+        "How it works",
+        "Results",
+        "Live analysis",
+        "Technical details",
+    ]
+
+
+def test_impact_cards_come_from_the_validated_report(scenarios) -> None:
+    cards = logic.impact_cards(scenarios["soft_delete"])
+    report = scenarios["soft_delete"]["report"]
+    sources = [card for card in cards if card["kind"] == "source"]
+    assert [card["path"] for card in sources] == [
+        item["target"].partition("::")[0] for item in report["affected_components"]
+    ]
+    badges = {card["path"]: card["badge"] for card in cards}
+    assert badges["users/models.py"] == "CONFIRMED"
+    assert badges["tests/test_users.py"] == "TEST IMPACT"
+    test_card = next(card for card in cards if card["kind"] == "test")
+    assert test_card["reason"].startswith("Static test mapping")
+    assert "PROPOSED BY PYTHON" in badges["users/migrations/<proposed migration>"]
+    for card in cards:
+        assert card["evidence"], card["path"]
+        assert all(
+            item["evidence_id"] in scenarios["soft_delete"]["evidence"]
+            for item in card["evidence"]
+        )
+    assert "users/auth.py" not in badges  # dropped claim never becomes a card
+
+
+def test_stage_b_cards_keep_categories_and_disclose_the_migration_caveat(
+    scenarios,
+) -> None:
+    for scenario in scenarios.values():
+        cards = logic.stage_b_cards(scenario["verification"])
+        saved = sorted(
+            (item["path"], item["category"])
+            for item in scenario["verification"]["findings"]
+        )
+        assert sorted((card["path"], card["category"]) for card in cards) == saved
+        flags = [card["flagged"] for card in cards]
+        assert flags == sorted(flags, reverse=True)  # flagged issues first
+    soft = logic.stage_b_cards(scenarios["soft_delete"]["verification"])
+    caveats = [card for card in soft if card["caveat"]]
+    assert [card["path"] for card in caveats] == [
+        "users/migrations/0002_add_deleted_at.py"
+    ]
+    assert caveats[0]["category"] == "missing_test"
+
+
+def test_timeline_progress_and_narrowing_are_derived_from_the_trace(scenarios) -> None:
+    scenario = scenarios["soft_delete"]
+    timeline = logic.investigation_timeline(scenario)
+    assert timeline[1]["purpose"] == "Inspect User"
+    assert timeline[1]["tool"] == "inspect_symbol"
+    assert len(timeline) == len(logic.trace_steps(scenario))
+    groups = logic.narrowing_columns(scenario)
+    assert {row["target"] for row in groups["Rejected"]} == {
+        "billing/service.py::delete_invoice"
+    }
+    stages = dict(logic.replay_progress(scenario))
+    assert next(iter(stages)) == "Scanning repository"
+    assert "1 unsupported claims dropped" in stages["Validating evidence"]
+
+
+def test_showcase_headline_reads_the_canonical_summary() -> None:
+    benchmark = logic.load_benchmark()
+    head = logic.showcase_headline(benchmark)
+    summary = json.loads(logic.SUMMARY_PATH.read_text())
+    assert (head["tasks"], head["repositories"], head["runs"]) == (
+        summary["task_count"],
+        summary["repository_count"],
+        summary["run_count"],
+    )
+    rows = {row["system"]: row for row in summary["aggregates"]}
+    assert head["b3_f1"] == rows["B3"]["f1"]
+    assert head["ripple_f1"] == rows["RIPPLE"]["f1"]
+    assert (
+        head["stage_b_false_alarm"]
+        == (summary["stage_b"]["metrics"]["control_false_alarm_rate"])
+    )
+    assert (head["baselines"], head["ablations"]) == (5, 3)
+
+
+def test_suggested_questions_only_mention_items_in_the_context(scenarios) -> None:
+    for scenario in scenarios.values():
+        context = logic.build_explainer_context(scenario)
+        for question in logic.suggested_questions(scenario):
+            mentioned = [word for word in question.split() if "/" in word]
+            assert all(word.rstrip("?") in context for word in mentioned), question
+
+
+def test_showcase_helpers_make_no_api_calls(monkeypatch, scenarios) -> None:
+    def forbidden(*args, **kwargs):
+        raise AssertionError("showcase replay must not call a model")
+
+    monkeypatch.setattr(OpenAILLM, "__init__", forbidden)
+    monkeypatch.setattr(OpenAILLM, "_call", forbidden)
+    for scenario in scenarios.values():
+        logic.impact_cards(scenario)
+        logic.stage_b_cards(scenario["verification"])
+        logic.investigation_timeline(scenario)
+        logic.replay_progress(scenario)
+        logic.suggested_questions(scenario)
+    logic.showcase_headline(logic.load_benchmark())
+
+
+def _app_test():
+    testing = pytest.importorskip("streamlit.testing.v1")
+    return testing.AppTest.from_file(str(APP), default_timeout=60)
+
+
+def test_guided_demo_discloses_progressively(monkeypatch) -> None:
+    monkeypatch.delenv("RIPPLE_LLM_API_KEY", raising=False)
+    monkeypatch.setattr(OpenAILLM, "__init__", lambda *a, **k: pytest.fail("API"))
+    at = _app_test().run()
+    assert not at.exception
+    text = lambda: " ".join(item.value for item in at.markdown)
+    assert "Know what a code change can break" in text()
+    assert "Step 1" not in text()
+    at.button(key="cta-try").click().run()
+    assert "Pick a change to make" in text() and "Predicted impact" not in text()
+    at.button(key="pick-required_argument").click().run()
+    assert "required actor argument" in text()
+    at.button(key="analyze").click().run()
+    assert not at.exception
+    assert "Predicted impact" in text() and "CONFIRMED" in text()
+    assert "After the code was changed" not in text()
+    at.button(key="after").click().run()
+    assert not at.exception
+    assert "STALE CALLER" in text() and "admin/users.py" in text()
+
+
+@pytest.mark.parametrize(
+    "page", ["page_how", "page_results", "page_live", "page_about"]
+)
+def test_every_showcase_page_renders(page: str, monkeypatch) -> None:
+    testing = pytest.importorskip("streamlit.testing.v1")
+    monkeypatch.delenv("RIPPLE_LLM_API_KEY", raising=False)
+    source = APP.read_text().replace("from __future__ import annotations", "")
+    source = source.replace(
+        'st.navigation(list(NAVIGATION), position="top").run()', f"{page}()"
+    )
+    assert f"{page}()" in source
+    at = testing.AppTest.from_string(
+        f"import sys\nsys.path.insert(0, {str(APP.parent.parent)!r})\n" + source,
+        default_timeout=60,
+    ).run()
+    assert not at.exception, [item.value for item in at.exception]
+    assert len(at.markdown) >= 2  # CSS plus page content really rendered
+    if page == "page_results":
+        rendered = " ".join(item.value for item in at.markdown)
+        assert "did not beat the simpler baseline" in " ".join(
+            item.value for item in at.error
+        )
+        assert "Oracle Stage-A result; not end-to-end RIPPLE accuracy" in " ".join(
+            item.value for item in at.caption
+        )
+        assert "F1 0.299" in rendered and "F1 0.016" in rendered

@@ -14,6 +14,7 @@ COPY src ./src
 RUN pip install --no-cache-dir ".[demo]"
 
 COPY demo ./demo
+COPY .streamlit ./.streamlit
 COPY evaluation/final_config.json ./evaluation/final_config.json
 COPY evaluation/results/final_summary.json ./evaluation/results/final_summary.json
 

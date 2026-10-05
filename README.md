@@ -127,16 +127,17 @@ go to `.ripple/reports/`, traces to `.ripple/runs/`, and verifications to
 
 ## Interactive Demo
 
-A Streamlit app in [`demo/`](demo/README.md) explains RIPPLE in a few minutes:
-the architecture, the seven tools, the trust boundary, the Stage B categories, the
-prompts, and the frozen benchmark results.
+A Streamlit showcase in [`demo/`](demo/README.md) explains RIPPLE in about two
+minutes: a guided demo, how it works, honest results, and live analysis, with every
+technical detail one click away. (The detailed developer UI is on the `ripple-demo`
+branch.)
 
 ```shell
 python -m pip install -e '.[demo]'
 streamlit run demo/app.py
 ```
 
-- **Guided Replay** steps through three saved runs on a bundled sample repository,
+- **Demo** (guided replay) steps through three saved runs on a bundled sample repository,
   from feature request to agent trace, candidate ledger, validation, Stage A report,
   real diff, and Stage B findings. The three runs demonstrate soft delete, a stale
   caller, and a missing test with an unexpected change. Replay needs **no API key

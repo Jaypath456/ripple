@@ -1,6 +1,22 @@
-# RIPPLE interactive demo
+# RIPPLE showcase
 
-A Streamlit app that explains and exercises RIPPLE in a few minutes. It is a separate
+A Streamlit app that explains and exercises RIPPLE in 60–120 seconds. This branch
+(`ripple-showcase`) is the recruiter/client-facing version. The detailed
+developer/research UI, with ten pages and every internal shown up front, lives on
+the `ripple-demo` branch.
+
+## Navigation
+
+| Page | What it shows |
+| --- | --- |
+| **Demo** | Hero, then a guided story: pick a change → *Analyze change* (replayed progress with real counts) → impact cards with **Why?** evidence → *See what happened after coding* (post-change findings, flagged issues first). The investigation timeline, “How RIPPLE narrowed the search” (the candidate ledger), the raw trace, and the diff are behind expanders. |
+| **How it works** | One flow diagram and “The LLM proposes. Python decides.”, with expandable sections for the AST, the seven tools, the ledger, the validator, safety controls, post-change categories, and prompts. |
+| **Results** | The headline numbers from `final_summary.json`, B3 vs RIPPLE F1, the honest callout and why, what was demonstrated, and the oracle Stage-B card with its caveat. The full research tables sit behind *View full research metrics*. |
+| **Live analysis** | Repository + request → one progress indicator → predicted impact, then diff verification. Tokens, calls, stop reason, the ledger, and the trace are in *Run details*. |
+| **Technical details** | Supported / not supported, plain-English metrics, and replay provenance. |
+
+The app reads `.streamlit/config.toml` (accent colour for light and dark themes, minimal
+toolbar) when started from the repository root. It is a separate
 layer on top of the finished core: it imports `ripple` modules directly, copies no
 algorithm, and never changes the frozen `final-v1` benchmark artifacts.
 
@@ -41,7 +57,7 @@ meant for local use.
 
 ## Two modes
 
-**Guided Replay (no API key, no model calls).** Three saved runs on the bundled sample
+**Demo / guided replay (no API key, no model calls).** Three saved runs on the bundled sample
 repository `fixtures/sample_app`. Each run steps through:
 
 1. the feature request;

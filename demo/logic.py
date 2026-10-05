@@ -250,7 +250,7 @@ def report_view(report: dict[str, Any]) -> dict[str, Any]:
         "tests": [
             {
                 "test": item["test_path"],
-                "reason": item.get("reason", ""),
+                "reason": item.get("rationale", ""),
                 "evidence": ", ".join(item.get("evidence", [])),
             }
             for item in report.get("suggested_tests", [])
@@ -885,3 +885,256 @@ def ask_explainer(question: str, context: str, llm: Any) -> ExplainerAnswer:
     # instead of creating a second client.
     response = llm._call(explainer_prompt(question, context), ExplainerAnswer)
     return check_answer(response.payload, context)
+
+
+# --------------------------------------------------------------------------- showcase
+# Presentation-only view models for the recruiter showcase. They reshape the same
+# saved artifacts; nothing is recomputed or invented.
+
+FLAGGED = ("stale_caller", "unexpected", "missing_test", "missing_predicted")
+STAGE_B_ICON = {
+    "expected": "✅",
+    "adjacent": "🟡",
+    "unexpected": "🔴",
+    "missing_test": "🔴",
+    "stale_caller": "🔴",
+    "missing_predicted": "🟠",
+}
+
+
+def _short(target: str) -> str:
+    return target.partition("::")[2] or target.partition("::")[0]
+
+
+def step_purpose(tool: str, arguments: dict[str, Any]) -> str:
+    """Human-readable purpose for a tool call, built from its real arguments."""
+
+    if tool == "search_code":
+        return f"Search the code for “{arguments.get('query', '')}”"
+    if tool == "inspect_symbol":
+        return f"Inspect {_short(str(arguments.get('target', '')))}"
+    if tool == "find_references":
+        return f"Find code that uses {_short(str(arguments.get('symbol_id', '')))}"
+    if tool == "find_tests":
+        return f"Find tests for {_short(str(arguments.get('target', '')))}"
+    if tool == "get_dependencies":
+        path = arguments.get("path", "")
+        if arguments.get("direction") == "imports":
+            return f"Find what {path} imports"
+        return f"Find modules that import {path}"
+    if tool == "repo_facts":
+        return f"Look up project {arguments.get('kind', 'facts')}"
+    if tool == "co_changed":
+        return f"Check what usually changes with {arguments.get('path', '')}"
+    if tool == "submit_report":
+        return "Submit findings for validation"
+    return tool
+
+
+def investigation_timeline(scenario: dict[str, Any]) -> list[dict[str, Any]]:
+    """The trace as a readable vertical timeline (purpose first, tool name second)."""
+
+    return [
+        {
+            "purpose": step_purpose(step["tool"], step["arguments"]),
+            "tool": step["tool"],
+            "phase": step["phase"],
+            "summary": step["summary"],
+            "evidence_id": step["evidence_id"],
+            "reason": step["reason"],
+            "duplicate": step["duplicate"],
+            "notes": step["ledger"],
+        }
+        for step in trace_steps(scenario)
+    ]
+
+
+def narrowing_columns(scenario: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """Ledger grouped for 'How RIPPLE narrowed the search'."""
+
+    label = {
+        "suspected": "Investigating",
+        "confirmed": "Confirmed",
+        "rejected": "Rejected",
+    }
+    groups: dict[str, list[dict[str, Any]]] = {name: [] for name in label.values()}
+    for row in ledger_rows(scenario):
+        groups[label[row["status"]]].append(row)
+    return groups
+
+
+def _evidence_details(scenario: dict[str, Any], ids: list[str]) -> list[dict]:
+    index = scenario.get("evidence", {})
+    return [
+        {
+            "evidence_id": evidence_id,
+            "tool": index[evidence_id]["tool"],
+            "purpose": step_purpose(
+                index[evidence_id]["tool"], index[evidence_id]["arguments"]
+            ),
+            "arguments": index[evidence_id]["arguments"],
+        }
+        for evidence_id in dict.fromkeys(ids)
+        if evidence_id in index
+    ]
+
+
+def impact_cards(scenario: dict[str, Any]) -> list[dict[str, Any]]:
+    """Predicted files as cards: validated components first, then mapped tests."""
+
+    report = scenario["report"]
+    ledger = {row["target"]: row for row in scenario.get("ledger", [])}
+    cards: list[dict[str, Any]] = []
+    for item in report.get("affected_components", []):
+        target = item["target"]
+        row = ledger.get(target)
+        if row is not None and row["status"] == "confirmed":
+            badge = "CONFIRMED"
+        elif item["change_type"] == "new_file":
+            badge = "NEW FILE · PROPOSED BY PYTHON"
+        else:
+            badge = "PREDICTED"
+        ids = [*(row["evidence_ids"] if row else []), *item["evidence"]]
+        cards.append(
+            {
+                "path": target.partition("::")[0],
+                "symbol": target.partition("::")[2] or None,
+                "badge": badge,
+                "kind": "source",
+                "reason": item["reason"],
+                "confidence": item["confidence"],
+                "evidence": _evidence_details(scenario, ids),
+                "checks": {
+                    "references": row["checked_refs"],
+                    "tests": row["checked_tests"],
+                }
+                if row
+                else None,
+            }
+        )
+    for item in report.get("suggested_tests", []):
+        cards.append(
+            {
+                "path": item["test_path"],
+                "symbol": None,
+                "badge": "TEST IMPACT",
+                "kind": "test",
+                "reason": item.get("rationale", ""),
+                "confidence": None,
+                "evidence": _evidence_details(scenario, list(item.get("evidence", []))),
+                "checks": None,
+            }
+        )
+    return cards
+
+
+def stage_b_cards(analysis: dict[str, Any]) -> list[dict[str, Any]]:
+    """Stage B findings with flagged issues first; categories are never altered."""
+
+    order = {name: position for position, name in enumerate(FLAGGED)}
+    cards = [
+        row
+        | {
+            "icon": STAGE_B_ICON[row["category"]],
+            "flagged": row["category"] in FLAGGED,
+            "one_liner": CATEGORY_INFO[row["category"]]["meaning"],
+            "caveat": (
+                "Migration files rarely have mapped tests, so this flag is arguably "
+                "a false alarm. It is shown exactly as RIPPLE produced it."
+            )
+            if row["category"] == "missing_test" and "/migrations/" in row["path"]
+            else None,
+        }
+        for row in stage_b_rows(analysis)
+    ]
+    return sorted(
+        cards, key=lambda card: (order.get(card["category"], 99), card["path"])
+    )
+
+
+def replay_progress(scenario: dict[str, Any]) -> list[tuple[str, str]]:
+    """Pipeline stages annotated with real counts from the saved run."""
+
+    repository = scenario["repository"]
+    steps = trace_steps(scenario)
+    seed = next((step for step in steps if step["phase"] == "seed"), None)
+    explored = sum(
+        step["phase"] == "explore" and step["tool"] != "submit_report" for step in steps
+    )
+    groups = narrowing_columns(scenario)
+    report = scenario["report"]
+    return [
+        (
+            "Scanning repository",
+            (
+                f"{len(repository['files'])} Python files and {repository['symbols']} "
+                "symbols indexed with the Python AST"
+            ),
+        ),
+        ("Finding relevant code", seed["summary"] if seed else "no seed search"),
+        ("Investigating relationships", f"{explored} model-chosen tool calls"),
+        (
+            "Validating evidence",
+            (
+                f"{len(groups['Confirmed'])} confirmed, {len(groups['Rejected'])} "
+                f"rejected, {len(report.get('dropped_claims', []))} unsupported claims "
+                "dropped"
+            ),
+        ),
+        (
+            "Building impact report",
+            (
+                f"{len(report.get('affected_components', []))} affected components, "
+                f"{len(report.get('suggested_tests', []))} mapped tests"
+            ),
+        ),
+    ]
+
+
+def showcase_headline(benchmark: dict[str, Any]) -> dict[str, Any]:
+    """The handful of numbers the Results page leads with, read from the artifact."""
+
+    summary = benchmark["summary"]
+    oracle = summary["stage_b"]["metrics"]
+    recalls = [
+        oracle["unrelated_detection_recall"],
+        oracle["drop_tests_detection_recall"],
+        oracle["stale_caller_detection_recall"],
+    ]
+    return {
+        "tasks": summary["task_count"],
+        "repositories": summary["repository_count"],
+        "runs": summary["run_count"],
+        "b3_f1": benchmark["aggregates"]["B3"]["f1"],
+        "ripple_f1": benchmark["aggregates"]["RIPPLE"]["f1"],
+        "ripple_abstained": benchmark["ripple_abstained"],
+        "ripple_runs": benchmark["ripple_runs"],
+        "stage_b_tasks": summary["stage_b"]["task_count"],
+        "stage_b_min_recall": min(recalls),
+        "stage_b_false_alarm": oracle["control_false_alarm_rate"],
+        "baselines": sum(name != "RIPPLE" for name in HEADLINE_SYSTEMS),
+        "ablations": len(ABLATIONS),
+    }
+
+
+def suggested_questions(scenario: dict[str, Any]) -> list[str]:
+    """Explainer prompts that refer only to items present in this result."""
+
+    groups = narrowing_columns(scenario)
+    questions = []
+    if groups["Confirmed"]:
+        target = groups["Confirmed"][0]["target"].partition("::")[0]
+        questions.append(f"Why was {target} selected?")
+    if groups["Rejected"]:
+        questions.append(f"Why was {groups['Rejected'][0]['target']} rejected?")
+    questions.append("What evidence supports this prediction?")
+    flagged = [
+        card
+        for card in stage_b_cards(scenario.get("verification") or {})
+        if card["flagged"]
+    ]
+    if flagged:
+        questions.append(
+            f"Why is {flagged[0]['path']} flagged as {flagged[0]['category']}?"
+        )
+    return questions
