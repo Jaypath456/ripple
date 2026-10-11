@@ -8,3 +8,8 @@ __pycache__/
 dist/
 build/
 .env
+
+# RIPPLE evaluation runtime artifacts
+evaluation/v2_heldout/runner.pid
+evaluation/v2_heldout/*.log
+evaluation/v2_heldout/raw/
