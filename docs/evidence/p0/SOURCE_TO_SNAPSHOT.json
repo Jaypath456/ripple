@@ -1,0 +1,847 @@
+{
+  "baseline_commit": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+  "files": [
+    {
+      "bytes": 469,
+      "sha256": "3c72f2d99ab3bb82bd2b586f143da777537f985daef02a5d675edf23b869e2b3",
+      "snapshot_path": "docs/reference/delivery-ci.yml",
+      "source": {
+        "archive_path": ".github/workflows/ci.yml",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 372,
+      "sha256": "10ac4edd0379a1737c7f4a54fddc6737cde77c7d10c5ba73406d2f1043824937",
+      "snapshot_path": ".gitignore",
+      "source": {
+        "archive_path": ".gitignore",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 564,
+      "sha256": "27725972e2bce9190feabf02751fc7cdbe0cb3fa7bd7e2233dc665a2fd746bb6",
+      "snapshot_path": "pyproject.toml",
+      "source": {
+        "archive_path": "pyproject.toml",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 576,
+      "sha256": "485c0d24242afd8d66f63182cc931dcdacbe5bc11a27dc4f851cda621d288d92",
+      "snapshot_path": "src/ripple/__init__.py",
+      "source": {
+        "archive_path": "src/ripple/__init__.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 35873,
+      "sha256": "3ce302e71468bae744e1b3959c4706eddc4b20e72c24e568b36910ceaefe9fd5",
+      "snapshot_path": "src/ripple/agent.py",
+      "source": {
+        "archive_path": "src/ripple/agent.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 5854,
+      "sha256": "780c4bd70b32e969f5741cb888b502ce4ab4a44e676cf15b56ce954628633110",
+      "snapshot_path": "src/ripple/agent_models.py",
+      "source": {
+        "archive_path": "src/ripple/agent_models.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 7276,
+      "sha256": "74064a21f36b03cb27b160a7303dc4b3bd10a855b4bf81e2d18d177d095d667c",
+      "snapshot_path": "src/ripple/baselines.py",
+      "source": {
+        "archive_path": "src/ripple/baselines.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 4030,
+      "sha256": "88150aaac7e6895b3deaf7fde115ea6be8e92f84a7097427f463e1a4ae7c4b76",
+      "snapshot_path": "src/ripple/cache.py",
+      "source": {
+        "archive_path": "src/ripple/cache.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 20361,
+      "sha256": "ae14728808e1113a83ea5f2350cc25492067a93328d390f4876b65be3ca3ef96",
+      "snapshot_path": "src/ripple/cli.py",
+      "source": {
+        "archive_path": "src/ripple/cli.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 7500,
+      "sha256": "ee8ed1c7e8634d1ecddaab0d5005443f2bf08d98f64a3aca9f9f3b4e7aff1b0a",
+      "snapshot_path": "src/ripple/demo.py",
+      "source": {
+        "archive_path": "src/ripple/demo.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2554,
+      "sha256": "ef61baf5384509c9871f1374977f3863b36b2775b4a130aa6b01fd79c0efc1c0",
+      "snapshot_path": "src/ripple/diff_models.py",
+      "source": {
+        "archive_path": "src/ripple/diff_models.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10955,
+      "sha256": "30ef6a372d51d88327a06af152505eb052061038a83ab86b0d7e0d401d6e2b74",
+      "snapshot_path": "src/ripple/diffing.py",
+      "source": {
+        "archive_path": "src/ripple/diffing.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 51548,
+      "sha256": "ba584f613614230682ae462cfb8684ed4c73cfd66df9e85f2800c0efe5e057e9",
+      "snapshot_path": "src/ripple/evaluation.py",
+      "source": {
+        "archive_path": "src/ripple/evaluation.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 35576,
+      "sha256": "b712e79685c0939f42281460dcb3b5fd9c9855376ae7ce2a4fc7c455289e2e5a",
+      "snapshot_path": "src/ripple/evaluation_results.py",
+      "source": {
+        "archive_path": "src/ripple/evaluation_results.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10448,
+      "sha256": "7cdb80b652adf099f6032b47206c0be730b83429bebd3478fcf6db4cf83c7654",
+      "snapshot_path": "src/ripple/expand.py",
+      "source": {
+        "archive_path": "src/ripple/expand.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 14676,
+      "sha256": "9679441ef8fc09f77b00f59a0cec0908c45313e4608f9fbf4b14a6624348b9d0",
+      "snapshot_path": "src/ripple/facts.py",
+      "source": {
+        "archive_path": "src/ripple/facts.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 11214,
+      "sha256": "0fff298cc56fd65ca718b82a731571e63f2840e110b9b26f42b1f30e8bfc588c",
+      "snapshot_path": "src/ripple/final_data.py",
+      "source": {
+        "archive_path": "src/ripple/final_data.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 21692,
+      "sha256": "938a037b108b3efdc9505b0ee81e853152ad1e14320bbc0f4d2aae534e517a8c",
+      "snapshot_path": "src/ripple/final_evaluation.py",
+      "source": {
+        "archive_path": "src/ripple/final_evaluation.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 4936,
+      "sha256": "15c1652075532fc793af2b6280efda34f7699dce60bbfb7a1cf8dde0805a6fe8",
+      "snapshot_path": "src/ripple/graph.py",
+      "source": {
+        "archive_path": "src/ripple/graph.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2728,
+      "sha256": "4f892e315d8e528b7d7dc51bed263c2a056aef5b3bc660f33a80fb2ecc3d686a",
+      "snapshot_path": "src/ripple/history.py",
+      "source": {
+        "archive_path": "src/ripple/history.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6561,
+      "sha256": "5e25ef105ad1a436c9bfa0eb312ca2845bbb4842369aee1caf2c13b4366746d3",
+      "snapshot_path": "src/ripple/ledger.py",
+      "source": {
+        "archive_path": "src/ripple/ledger.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10379,
+      "sha256": "869509639cf8925ebbd2e7ad9886cd16f7a7048106e44172d03df10ba2fc15e0",
+      "snapshot_path": "src/ripple/llm.py",
+      "source": {
+        "archive_path": "src/ripple/llm.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2792,
+      "sha256": "1e0073923482a18d0c0c7e1b3d92ee393cd90d7cfc6230c2b0ae76a8189f4356",
+      "snapshot_path": "src/ripple/models.py",
+      "source": {
+        "archive_path": "src/ripple/models.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6548,
+      "sha256": "9b853d9e9f25efb6c782654426429ad04b309f0142de7c16500715b97203aa6d",
+      "snapshot_path": "src/ripple/phase5_baselines.py",
+      "source": {
+        "archive_path": "src/ripple/phase5_baselines.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10908,
+      "sha256": "b738e49729504e59237657d12065b88226cf521d4eb2c6bd45a171bba175f952",
+      "snapshot_path": "src/ripple/references.py",
+      "source": {
+        "archive_path": "src/ripple/references.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 4182,
+      "sha256": "4c8de83039249a64062ced10700695a1dd5f8462be56cf299f4b634cc80fbf04",
+      "snapshot_path": "src/ripple/render.py",
+      "source": {
+        "archive_path": "src/ripple/render.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 13624,
+      "sha256": "e4c0787378fbf184ebbb2d0f3b0634128d90929646176402de89dbfdf7ff13e2",
+      "snapshot_path": "src/ripple/scanner.py",
+      "source": {
+        "archive_path": "src/ripple/scanner.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 7177,
+      "sha256": "03eb419ff5ee95eeb62aa86ab491cc837161ba642b01593884f52b5cdd61d3cb",
+      "snapshot_path": "src/ripple/search.py",
+      "source": {
+        "archive_path": "src/ripple/search.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2961,
+      "sha256": "0ddf4fdff033772c7676b2d3661293bd83bc0918552768d606bbb85236bbd3fa",
+      "snapshot_path": "src/ripple/show_run.py",
+      "source": {
+        "archive_path": "src/ripple/show_run.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 1996,
+      "sha256": "561bcec130a53010b95f065b8cd09a140d44a1db2846f2670613f6696166e951",
+      "snapshot_path": "src/ripple/source.py",
+      "source": {
+        "archive_path": "src/ripple/source.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2783,
+      "sha256": "b37df4b7d5f73b3a2e39a0ad8631f610e9fbd42ca889f56f104ad5a92973f1c0",
+      "snapshot_path": "src/ripple/test_mapping.py",
+      "source": {
+        "archive_path": "src/ripple/test_mapping.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 18986,
+      "sha256": "c12de7b4c649de13cfa5b734fcc9600c355ac9279ba98aa98884e380954714a7",
+      "snapshot_path": "src/ripple/tools.py",
+      "source": {
+        "archive_path": "src/ripple/tools.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 11165,
+      "sha256": "aab1000ce6162d68404fe5bd43e6f8f5eed6e64c3b9ab55902fc799eab36f826",
+      "snapshot_path": "src/ripple/validate.py",
+      "source": {
+        "archive_path": "src/ripple/validate.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 29560,
+      "sha256": "4a43bd525fd57e0f6f900e5e0b4dbf0bbcedb9059f08a02900157fb998a46a38",
+      "snapshot_path": "src/ripple/verification.py",
+      "source": {
+        "archive_path": "src/ripple/verification.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 3937,
+      "sha256": "46ac944ab7d2a1797ec93e582ef0fc6cd244b4152e93ab6b0ff2b8a11b374202",
+      "snapshot_path": "src/ripple/verification_render.py",
+      "source": {
+        "archive_path": "src/ripple/verification_render.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6148,
+      "sha256": "435a3257fa9f954a5632b66bdfc6aa5591752cd2c93cb32521a90f80908fa03c",
+      "snapshot_path": "src/ripple/verify_tools.py",
+      "source": {
+        "archive_path": "src/ripple/verify_tools.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 1171,
+      "sha256": "974ab9fabba3f33247f12723d8c7f68b11a276d68cf7e81e8867458bc7ef0357",
+      "snapshot_path": "tests/conftest.py",
+      "source": {
+        "archive_path": "tests/conftest.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 37,
+      "sha256": "27618b03472be107ce136dd0b19f47bcd6eb23b2e75f58fc0a7dbea28a0df80e",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/__init__.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/__init__.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 93,
+      "sha256": "19781c475dbca2f40aa0321804f196bbdd9b73f542dce4758c7ebc26876abe37",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/auth.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/auth.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 50,
+      "sha256": "9fb79725b672f443c9785fb171e8fd3e078537c9bef4e747edb262d7f6fad8e6",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/migrations/0001_users.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/migrations/0001_users.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 231,
+      "sha256": "f15a2cb701b32da0d2eb978a7f7f6bd74835ba9c39e80a80aa81854f14671d9a",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/models.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/models.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 282,
+      "sha256": "424c26b43fff168d34ab6d7f8640055f7bca92ce9d6941380986ba59f2b3b8a8",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/routes.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/routes.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 91,
+      "sha256": "e3a425eeeb1d9619a25dff57f9c1039af7e6d5b8a461414a17ca99f27091388f",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/schemas.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/schemas.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 109,
+      "sha256": "1fdaad0920833d05fd2f643061d6d1c277cac5bd85c4e0dea95a3a41ecfb297b",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/service.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/service.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 72,
+      "sha256": "35b396b3cf690281f1c9bb92c2c5dc203a6e18f8098ca256fd3abaa672093705",
+      "snapshot_path": "tests/fixtures/soft_delete_app/app/settings.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/app/settings.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 122,
+      "sha256": "f09dbf10c7b99cefa04acfe848be67adb1fa2661bf763f8b72bab29801e3e97b",
+      "snapshot_path": "tests/fixtures/soft_delete_app/tests/user_checks.py",
+      "source": {
+        "archive_path": "tests/fixtures/soft_delete_app/tests/user_checks.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 15231,
+      "sha256": "04745ac4e2d61a4db612f0b47d3c0dcaf0f2df4a654cbb260f6671db9945680b",
+      "snapshot_path": "tests/test_agent.py",
+      "source": {
+        "archive_path": "tests/test_agent.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10724,
+      "sha256": "a117e6b6c5436bd6c75cdb7f42071d6885780e334957725c829d51ef616e25c0",
+      "snapshot_path": "tests/test_delivery_resilience.py",
+      "source": {
+        "archive_path": "tests/test_delivery_resilience.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 12364,
+      "sha256": "48e08c1fa03b1d8bfa44a864db6e25f41072943ac4e620aae291ac87e5fb8f2d",
+      "snapshot_path": "tests/test_delivery_security.py",
+      "source": {
+        "archive_path": "tests/test_delivery_security.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 16489,
+      "sha256": "dd2f2fd909ef962370ecb123b766aeb3d858e2c23265a4c6e55817217f8fc6ff",
+      "snapshot_path": "tests/test_evaluation.py",
+      "source": {
+        "archive_path": "tests/test_evaluation.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 10221,
+      "sha256": "4405974716489913c84865886c0874b8e555a4db24571c24ad5edca41d8cd093",
+      "snapshot_path": "tests/test_final_evaluation.py",
+      "source": {
+        "archive_path": "tests/test_final_evaluation.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 5570,
+      "sha256": "a0cecbe849245bd26ff2ec0756ea9379ff7b32fbed8aa0bd1a8b65abae0d3a50",
+      "snapshot_path": "tests/test_graph.py",
+      "source": {
+        "archive_path": "tests/test_graph.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6846,
+      "sha256": "5b809d77ba2efbf6b817918e807741f983bd630d65963c7746fa22985a0f8b8a",
+      "snapshot_path": "tests/test_phase5_baselines_show_e2e.py",
+      "source": {
+        "archive_path": "tests/test_phase5_baselines_show_e2e.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 7339,
+      "sha256": "9481216a761e18812773e2801b2fe9bd128bcc90b7eba781c8887b3c7ff52d72",
+      "snapshot_path": "tests/test_phase5_expand_render.py",
+      "source": {
+        "archive_path": "tests/test_phase5_expand_render.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 5229,
+      "sha256": "68d6ee96fbe188e55f2ab236bc2e73382defc752b657a2bc2b14298283def8cf",
+      "snapshot_path": "tests/test_phase5_facts_history.py",
+      "source": {
+        "archive_path": "tests/test_phase5_facts_history.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6203,
+      "sha256": "5a9c6e6e3e29ccc4b9d45a531eb554349e9bb4822dafaf3b5202cdc569638832",
+      "snapshot_path": "tests/test_phase6_diffing.py",
+      "source": {
+        "archive_path": "tests/test_phase6_diffing.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 19866,
+      "sha256": "d3c5d849f6da24e50915c00dfb058324b787cdbc990f081dbb930b2cb6cff8ca",
+      "snapshot_path": "tests/test_phase6_verification.py",
+      "source": {
+        "archive_path": "tests/test_phase6_verification.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 6412,
+      "sha256": "7686720d56a4752a15a5241b1435ee823b2851c45f58e1c24bf65e74ae3302fe",
+      "snapshot_path": "tests/test_references.py",
+      "source": {
+        "archive_path": "tests/test_references.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 17176,
+      "sha256": "d598b233bf468036079b3782782f4428bf4b2a61db51004505cf4e694d0d639d",
+      "snapshot_path": "tests/test_scanner.py",
+      "source": {
+        "archive_path": "tests/test_scanner.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 2375,
+      "sha256": "26978891b5254902d3f32746194b14cb36fd5800eb7d5337f05893a4d173af99",
+      "snapshot_path": "tests/test_search.py",
+      "source": {
+        "archive_path": "tests/test_search.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 11167,
+      "sha256": "63d6a541cfd5ba29e4ed8bc55e5ac4c44ad8452520c61e11e03604f8e5bc8a92",
+      "snapshot_path": "tests/test_tools.py",
+      "source": {
+        "archive_path": "tests/test_tools.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 9042,
+      "sha256": "336be635b3e3dbb7d6ccceb5fb7f6584b0390bcb07b942ea0d1940c80e4192d9",
+      "snapshot_path": "tests/test_validation.py",
+      "source": {
+        "archive_path": "tests/test_validation.py",
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "type": "verified_zip_source"
+      }
+    },
+    {
+      "bytes": 95782,
+      "sha256": "b44ffd419cfb2e89d5ff738e91ef08ec258c41d3523328d6c3cc67e61ec95fc4",
+      "snapshot_path": "docs/reference/delivery-vs-358dbff.patch",
+      "source": {
+        "path": "delivery-source-and-tests.patch",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 3707,
+      "sha256": "afe0a1c0c12571bd19a09d59bdf458f65c33b970f861101908091292c3e97a95",
+      "snapshot_path": "evaluation/check_fresh_install.py",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "patch_path": "evaluation/check_fresh_install.py",
+        "type": "verified_zip_new_file_patch"
+      }
+    },
+    {
+      "bytes": 8185,
+      "sha256": "b4e1d6076e4986f3cbc2abcf030161ce686aa8fbff1156b56bf0d601f793beb7",
+      "snapshot_path": "evaluation/diagnose_abstentions.py",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "patch_path": "evaluation/diagnose_abstentions.py",
+        "type": "verified_zip_new_file_patch"
+      }
+    },
+    {
+      "bytes": 4095,
+      "sha256": "563328f9a370c72a22531cd7b692ea8e949461c9f4c714f77038cc3fd0780c47",
+      "snapshot_path": "evaluation/stress_index.py",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "patch_path": "evaluation/stress_index.py",
+        "type": "verified_zip_new_file_patch"
+      }
+    },
+    {
+      "bytes": 7753,
+      "sha256": "22d681a50664e0ed467ba9ba019e33fd1d1815aef1835175b088636bc01f1b10",
+      "snapshot_path": "docs/ARCHITECTURE_REVIEW.md",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "git_blob": "898f36c428e64b99cda30b91836fd67aa16665ff",
+        "type": "verified_delivery_documentation"
+      }
+    },
+    {
+      "bytes": 26517,
+      "sha256": "4a7badee18873c1226d34c44f008ee27e18c1f1ee47b60eb1ad59adecb6d3092",
+      "snapshot_path": "docs/RIPPLE_DELIVERY.md",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "git_blob": "2471b71a831a0fe58d55583e8a0c387969ab256d",
+        "type": "verified_delivery_documentation"
+      }
+    },
+    {
+      "bytes": 36110,
+      "sha256": "17543c44b019b01296318e09273697489d670d96311bc3eb7096d5ae91107792",
+      "snapshot_path": "docs/PREDICTION_QUALITY_REVIEW.md",
+      "source": {
+        "delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+        "git_blob": "b1c143ffeff0c88fff8f1574a218aa0abda2d3e4",
+        "type": "verified_delivery_documentation"
+      }
+    },
+    {
+      "bytes": 14316,
+      "sha256": "1d19ecf1333be6fbe8b458794587959801641b2c0a3319f9c50a120509b43283",
+      "snapshot_path": "docs/RIPPLE_P0_EVIDENCE_REPORT.md",
+      "source": {
+        "path": "RIPPLE_P0_EVIDENCE_REPORT.md",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 6035,
+      "sha256": "a59c3e4e20851505efe0285c5735a072477b842fcc92842aed4e6ad1f9df074c",
+      "snapshot_path": "docs/REGRESSION_MAP.md",
+      "source": {
+        "path": "REGRESSION_MAP.md",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 371,
+      "sha256": "ea4555ef737475639798ad148df0563d2ed7ff547e2d2d8239335dea314aa9af",
+      "snapshot_path": "docs/reference/offline-network-guard.txt",
+      "source": {
+        "path": "offline_network_guard.py",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 7808,
+      "sha256": "1098ba7cd00860e30a698253e8adcd97582dacf8bec728d7e29afab5917cfed0",
+      "snapshot_path": "docs/evidence/p0/baseline_test_outcomes.json",
+      "source": {
+        "path": "baseline_test_outcomes.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 9360,
+      "sha256": "344845a0f64a6b64ec534fc7cdfaaac91019f6f07e985da6dcefd192339766d9",
+      "snapshot_path": "docs/evidence/p0/delivery_source_sha256.json",
+      "source": {
+        "path": "delivery_source_sha256.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 28316,
+      "sha256": "523f38ba85301195acad1f099bfb0e8a375309b85bfe1313984bf0caecd1a47c",
+      "snapshot_path": "docs/evidence/p0/delivery_test_outcomes.json",
+      "source": {
+        "path": "delivery_test_outcomes.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 1551,
+      "sha256": "d67d79336459dfeeff8e5543a027aaac9190e75471b4d22f32a18ba3204877e4",
+      "snapshot_path": "docs/evidence/p0/existing_delivery_commit_files.txt",
+      "source": {
+        "path": "existing_delivery_commit_files.txt",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 14845,
+      "sha256": "89c4dd1e99582f4ad7676da0b27dd09a9562bd713e90a2be43623157f3f23e05",
+      "snapshot_path": "docs/evidence/p0/fea_bench_census.json",
+      "source": {
+        "path": "fea_bench_census.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 20345,
+      "sha256": "8aaa66ef948dde19a40da1706decdfa097758d0bc1abda46d8457123b68d1e24",
+      "snapshot_path": "docs/evidence/p0/git_comparison.json",
+      "source": {
+        "path": "git_comparison.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 130548,
+      "sha256": "2feaf13371edc140ca51c8badd549816181b794ba931880a9d904c12167017b4",
+      "snapshot_path": "docs/evidence/p0/heldout_attempt_inventory.json",
+      "source": {
+        "path": "heldout_attempt_inventory.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 2057,
+      "sha256": "5beb9f0a02a71d984308bd7f59efc8fe827a5ed7df6c3a8bf8cef4b5d5220f72",
+      "snapshot_path": "docs/evidence/p0/heldout_reference_summary.json",
+      "source": {
+        "path": "heldout_reference_summary.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 134757,
+      "sha256": "720db488c89e4758598d495c5bc77a24a1bd47501aed9d565bf8aa7d30e44ad1",
+      "snapshot_path": "docs/evidence/p0/heldout_v211_selected_checkpoints.json",
+      "source": {
+        "path": "heldout_v211_selected_checkpoints.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 982,
+      "sha256": "9b3f3b4cc4fdfe3c7e941d52b9c5ab6c53c9026bc32e995e312f9d25f2c18e9e",
+      "snapshot_path": "docs/evidence/p0/inherited_archive_audit.json",
+      "source": {
+        "path": "inherited_archive_audit.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 1358,
+      "sha256": "9d2da3429c753e17b8308b07e3a60ae3d0ea65ee6113992e5c1a02ba2522382c",
+      "snapshot_path": "docs/evidence/p0/offline_check_results.json",
+      "source": {
+        "path": "offline_check_results.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 17368,
+      "sha256": "ed35ce6c2ff87f85611fb1aca92d219ca437597ffdc6eaaa00076b55d4645167",
+      "snapshot_path": "docs/evidence/p0/priority_confirmed_report_lost.json",
+      "source": {
+        "path": "priority_confirmed_report_lost.json",
+        "type": "verified_zip"
+      }
+    },
+    {
+      "bytes": 37247,
+      "sha256": "36aaf7aa2b2986f986c84b588d6637c52f0d69f1f4178f99a85a02dad2d9e037",
+      "snapshot_path": "docs/evidence/p0/priority_zero_confirmation.json",
+      "source": {
+        "path": "priority_zero_confirmation.json",
+        "type": "verified_zip"
+      }
+    }
+  ],
+  "frozen_v211_commit": "f381d1c7c6f55e504cee3f9e6beb425d2387ec0d",
+  "scope_notes": [
+    "62 original source/test/config files; original workflow retained as reference documentation.",
+    "Three newly added evaluation utility source files reconstructed from the verified patch.",
+    "Architecture/delivery/quality documents read from the verified delivery Git commit, not local edits.",
+    "Remaining selected evidence copied byte-for-byte from the verified ZIP."
+  ],
+  "source_delivery_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+  "source_zip_sha256": "387ce0b397848009f8475f55ca3363b74466b93fe0d000f05636feed722aebd0"
+}

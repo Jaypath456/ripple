@@ -1,0 +1,70 @@
+{
+  "architecture_delivery_quality_docs_from_verified_delivery_git_objects": true,
+  "baseline_commit": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+  "checksum_scope": "SHA256SUMS covers every published file except itself; PUBLISHED_FILES.txt lists all files including itself and SHA256SUMS.",
+  "delivery_source_commit": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+  "excluded": [
+    "Raw benchmark archives/datasets/labels",
+    "Original provider responses and JSONL traces",
+    "Environment/credential files",
+    "Local private search records and detailed scan-location records",
+    "Virtual environments/caches",
+    "Binary ZIP/tar copies",
+    "Original Git history and author identities"
+  ],
+  "frozen_v211_commit": "f381d1c7c6f55e504cee3f9e6beb425d2387ec0d",
+  "historical_full_suite": {
+    "limitation": "Benchmark manifests and datasets are omitted; only the 49 delivery regressions were rerun.",
+    "passed": 219,
+    "rerun_for_this_snapshot": false
+  },
+  "inference_calls": 0,
+  "input_zip_integrity_and_84_member_checksums_verified": true,
+  "input_zip_sha256": "387ce0b397848009f8475f55ca3363b74466b93fe0d000f05636feed722aebd0",
+  "original_ci_retained_as_inactive_reference": true,
+  "original_repository_preserved": true,
+  "privacy_scan": {
+    "counts": {
+      "files_scanned": 87,
+      "reviewed_code_expression": 2,
+      "reviewed_git_ssh_syntax": 1,
+      "reviewed_python_decorator_syntax": 1,
+      "reviewed_synthetic_placeholder": 2,
+      "reviewed_synthetic_redaction_test_token": 1,
+      "synthetic_example_email": 22
+    },
+    "matching_credential_values_printed": false,
+    "method": "Signatures, private keys, JWTs, authenticated URLs, bearer tokens, assignments, known local secrets, personal paths/email and high-entropy literals; synthetic fixtures reviewed.",
+    "sensitive_findings": [],
+    "status": "passed"
+  },
+  "purpose": "Independent root-commit review snapshot for Claude; not production or an integration.",
+  "snapshot_checks": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 10.599
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.061
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.022
+      }
+    ],
+    "dependencies_installed": false,
+    "full_219_suite_rerun": false,
+    "inference_calls": 0,
+    "network_guard": "Socket connect/connect_ex/create_connection blocked; API credential variables removed; Git SSH disabled.",
+    "passed": 49,
+    "scope": "Two delivery regression modules executed against the isolated snapshot source.",
+    "source_import_verified_from_snapshot": true
+  },
+  "source_and_tests_byte_identical_to_verified_delivery": true,
+  "three_evaluation_utilities_reconstructed_from_verified_patch": true
+}

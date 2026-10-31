@@ -1,0 +1,934 @@
+{
+  "baseline": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+  "caution": "Textual simulation only; no implementation was merged or changed.",
+  "delivery_changes": [
+    {
+      "path": ".env.example",
+      "status": "M"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "A"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M"
+    },
+    {
+      "path": "README.md",
+      "status": "M"
+    },
+    {
+      "path": "docs/ARCHITECTURE_REVIEW.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/PREDICTION_QUALITY_REVIEW.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/REVIEW_PUBLICATION_FILES.txt",
+      "status": "A"
+    },
+    {
+      "path": "docs/RIPPLE_DELIVERY.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/abstentions.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/changes.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/anomaly.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/control.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/negative_report.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/report.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/report.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/summary.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/trace.jsonl",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/environment.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/frozen_regeneration.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/final_checks.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/fresh_install.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/security_baseline.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/stress_baseline.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/stress_current.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/security_current.txt",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/tests_current.txt",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/check_fresh_install.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/diagnose_abstentions.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/stress_index.py",
+      "status": "A"
+    },
+    {
+      "path": "src/ripple/agent.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/agent_models.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/cache.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/cli.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/demo.py",
+      "status": "A"
+    },
+    {
+      "path": "src/ripple/diffing.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/evaluation.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/facts.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/ledger.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/llm.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/models.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/scanner.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/search.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/source.py",
+      "status": "A"
+    },
+    {
+      "path": "src/ripple/tools.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/validate.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/verification.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_delivery_resilience.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_delivery_security.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_phase5_baselines_show_e2e.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_phase5_expand_render.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_references.py",
+      "status": "M"
+    }
+  ],
+  "delivery_vs_frozen": [
+    {
+      "path": ".dockerignore",
+      "status": "D"
+    },
+    {
+      "path": ".env.example",
+      "status": "M"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "A"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M"
+    },
+    {
+      "path": ".streamlit/config.toml",
+      "status": "D"
+    },
+    {
+      "path": "README.md",
+      "status": "M"
+    },
+    {
+      "path": "demo/Dockerfile",
+      "status": "D"
+    },
+    {
+      "path": "demo/README.md",
+      "status": "D"
+    },
+    {
+      "path": "demo/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/app.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/build_fixtures.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/replay/deletion_behavior.json",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/replay/required_argument.json",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/replay/soft_delete.json",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/README.md",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/admin/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/admin/users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/billing/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/billing/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/orders/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/orders/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/settings.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/tests/test_orders.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/tests/test_users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/migrations/0001_create_users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/migrations/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/models.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/routes.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/tests/test_users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/users/models.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/users/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v2/orders/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v2/tests/test_orders.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/deletion_behavior/orders/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/deletion_behavior/users/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/tests/test_users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/users/routes.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/users/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/tests/test_users.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/migrations/0002_add_deleted_at.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/models.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/service.py",
+      "status": "D"
+    },
+    {
+      "path": "demo/logic.py",
+      "status": "D"
+    },
+    {
+      "path": "docs/ARCHITECTURE_REVIEW.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/PREDICTION_QUALITY_REVIEW.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/REVIEW_PUBLICATION_FILES.txt",
+      "status": "A"
+    },
+    {
+      "path": "docs/RIPPLE_DELIVERY.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/abstentions.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/changes.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/anomaly.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/control.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/negative_report.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/report.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/report.md",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/summary.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/demo/trace.jsonl",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/environment.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/frozen_regeneration.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/final_checks.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/fresh_install.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/security_baseline.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/stress_baseline.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/sanitized/stress_current.json",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/security_current.txt",
+      "status": "A"
+    },
+    {
+      "path": "docs/evidence/tests_current.txt",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/check_fresh_install.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/diagnose_abstentions.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/stress_index.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/v2_dev/README.md",
+      "status": "D"
+    },
+    {
+      "path": "evaluation/v2_dev/results.json",
+      "status": "D"
+    },
+    {
+      "path": "evaluation/v2_dev/run_v2_dev.py",
+      "status": "D"
+    },
+    {
+      "path": "pyproject.toml",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/agent.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/agent_models.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/cache.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/cli.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/demo.py",
+      "status": "A"
+    },
+    {
+      "path": "src/ripple/diffing.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/evaluation.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/facts.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/ledger.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/llm.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/models.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/scanner.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/search.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/source.py",
+      "status": "A"
+    },
+    {
+      "path": "src/ripple/tools.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/validate.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/verification.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/conftest.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/__init__.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/cli.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/render.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/verification.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/verification_render.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/tests/test_cli.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/tests/test_verification.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/fixtures/v1_live_cli_export.json",
+      "status": "D"
+    },
+    {
+      "path": "tests/test_delivery_resilience.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_delivery_security.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_demo.py",
+      "status": "D"
+    },
+    {
+      "path": "tests/test_phase5_baselines_show_e2e.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_phase5_expand_render.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_references.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/test_v2_protocol.py",
+      "status": "D"
+    }
+  ],
+  "frozen": "f381d1c7c6f55e504cee3f9e6beb425d2387ec0d",
+  "frozen_changes": [
+    {
+      "path": ".dockerignore",
+      "status": "A"
+    },
+    {
+      "path": ".streamlit/config.toml",
+      "status": "A"
+    },
+    {
+      "path": "README.md",
+      "status": "M"
+    },
+    {
+      "path": "demo/Dockerfile",
+      "status": "A"
+    },
+    {
+      "path": "demo/README.md",
+      "status": "A"
+    },
+    {
+      "path": "demo/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/app.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/build_fixtures.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/replay/deletion_behavior.json",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/replay/required_argument.json",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/replay/soft_delete.json",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/README.md",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/admin/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/admin/users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/billing/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/billing/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/orders/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/orders/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/settings.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/tests/test_orders.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/tests/test_users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/migrations/0001_create_users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/migrations/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/models.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/routes.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/base/users/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/tests/test_users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/users/models.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v1/users/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v2/orders/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/history/v2/tests/test_orders.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/deletion_behavior/orders/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/deletion_behavior/users/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/tests/test_users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/users/routes.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/required_argument/users/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/tests/test_users.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/migrations/0002_add_deleted_at.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/models.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/fixtures/sample_app/scenarios/soft_delete/users/service.py",
+      "status": "A"
+    },
+    {
+      "path": "demo/logic.py",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/v2_dev/README.md",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/v2_dev/results.json",
+      "status": "A"
+    },
+    {
+      "path": "evaluation/v2_dev/run_v2_dev.py",
+      "status": "A"
+    },
+    {
+      "path": "pyproject.toml",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/agent.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/agent_models.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/cli.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/ledger.py",
+      "status": "M"
+    },
+    {
+      "path": "src/ripple/llm.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/conftest.py",
+      "status": "M"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/__init__.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/cli.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/render.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/verification.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/src/app/verification_render.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/tests/test_cli.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/cli_export_app/tests/test_verification.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/fixtures/v1_live_cli_export.json",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_demo.py",
+      "status": "A"
+    },
+    {
+      "path": "tests/test_v2_protocol.py",
+      "status": "A"
+    }
+  ],
+  "head": "baf2fc6fa5f34e092b773a2c87d5f3b76bfeb965",
+  "merge_base": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+  "overlap": [
+    "README.md",
+    "src/ripple/agent.py",
+    "src/ripple/agent_models.py",
+    "src/ripple/cli.py",
+    "src/ripple/ledger.py",
+    "src/ripple/llm.py"
+  ],
+  "results_ref": "0119bee5666dfbabecbdf50790bccfe560717c2a",
+  "three_way_file_merge_checks": [
+    {
+      "exit_code": 1,
+      "path": "README.md",
+      "textual_conflict": true
+    },
+    {
+      "exit_code": 4,
+      "path": "src/ripple/agent.py",
+      "textual_conflict": true
+    },
+    {
+      "exit_code": 1,
+      "path": "src/ripple/agent_models.py",
+      "textual_conflict": true
+    },
+    {
+      "exit_code": 0,
+      "path": "src/ripple/cli.py",
+      "textual_conflict": false
+    },
+    {
+      "exit_code": 0,
+      "path": "src/ripple/ledger.py",
+      "textual_conflict": false
+    },
+    {
+      "exit_code": 0,
+      "path": "src/ripple/llm.py",
+      "textual_conflict": false
+    }
+  ]
+}

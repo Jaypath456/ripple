@@ -1,0 +1,242 @@
+[
+  {
+    "test": "tests.test_delivery_security::test_tracked_symlink_does_not_index_external_source",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_state_directory_symlink_cannot_redirect_cache_writes",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_unknown_encoding_is_a_per_file_error",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_failed_tool_result_cannot_confirm_or_validate",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[tab\\tname.py]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[quote\"name.py]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[caf\\xe9.py]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[line\\nname.py]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[:(literal)special.py]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_file_to_symlink_change_stays_visible",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_never_executes_textconv",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_provider_failure_is_failed_and_preserves_no_fabricated_output",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[schema_changes]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[risks]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[suggested_tests]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_proposed_test_path_cannot_escape_repository",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-README.md]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-comment]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-docstring]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-README.md]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-comment]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-docstring]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-README.md]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-comment]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-docstring]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_evaluation_preserves_unowned_existing_checkout",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_security::test_owned_evaluation_checkout_resumes_but_preserves_user_edits",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_rejection_reason_reaches_next_prompt_and_trace",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_token_ceiling_also_blocks_interpretation_retry",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_token_ceiling_also_blocks_report_retry",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_keyboard_interrupt_is_not_swallowed",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_missing_provider_total_usage_is_unknown_not_zero",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[\\xff\\xff]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[\\x00]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[def invalid(:\\n]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_massive_file_and_long_line_are_visible_skips[content0]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_massive_file_and_long_line_are_visible_skips[content1]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_committed_empty_python_corpus_is_supported",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_404_fallback_and_partial_json_are_not_certified",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_status_and_usage_are_preserved[completed]",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_status_and_usage_are_preserved[incomplete]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_non_404_provider_failure_does_not_fallback_or_retry",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_chat_server_retries_are_bounded",
+    "status": "passed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[-1]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[NaN]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[Infinity]",
+    "status": "failed",
+    "failure_type": null
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_evaluate_agent_cli_uses_supported_arguments",
+    "status": "failed",
+    "failure_type": null
+  }
+]

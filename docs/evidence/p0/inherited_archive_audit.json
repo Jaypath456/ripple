@@ -1,0 +1,36 @@
+{
+  "files": 1366,
+  "jsonl_traces": 456,
+  "trace_filename_dates": {
+    "20261001": 17,
+    "20261002": 368,
+    "20261003": 71
+  },
+  "events": {
+    "run_started": 456,
+    "repository_map_created": 456,
+    "llm_request": 9076,
+    "llm_response": 9039,
+    "intent_created": 443,
+    "tool_call": 7118,
+    "tool_result": 9596,
+    "ledger_update": 580,
+    "validation_error": 211,
+    "decision": 8533,
+    "submit_rejected": 914,
+    "expand_started": 419,
+    "expand_completed": 419,
+    "report_validated": 455,
+    "report_written": 455,
+    "markdown_written": 455,
+    "run_finished": 455,
+    "tool_disabled": 6,
+    "provider_error": 36,
+    "error": 36,
+    "submit_accepted": 10
+  },
+  "raw_provider_payload_key_hits": {},
+  "october5_jsonl_traces": 0,
+  "not_v211_heldout": true,
+  "note": "Inherited archive remains untouched and is not copied into this evidence package; decisions are model-authored structured proposals and carry public benchmark context."
+}

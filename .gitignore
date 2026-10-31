@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ripple/
+.venv/
+dist/
+build/
+.env
+.env.*
+!.env.example
+
+# Preserve local diagnostic originals; publish reviewed copies in sanitized/.
+/docs/evidence/final_checks.json
+/docs/evidence/fresh_install.json
+/docs/evidence/security_baseline.txt
+/docs/evidence/stress_baseline.json
+/docs/evidence/stress_current.json

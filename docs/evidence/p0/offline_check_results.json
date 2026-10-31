@@ -1,0 +1,43 @@
+{
+  "python": "Python 3.13.16",
+  "tests": {
+    "passed": 219,
+    "duration_seconds": 18.09,
+    "security_passed": 27,
+    "resilience_passed": 22
+  },
+  "ruff_check": "passed",
+  "ruff_format": {
+    "status": "passed",
+    "python_files": 75
+  },
+  "pip_check": "passed",
+  "network": "socket connect, connect_ex and create_connection blocked in test interpreters; API credential environment variables removed; Git SSH disabled in tests",
+  "baseline": {
+    "commit": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+    "security": {
+      "failed": 16,
+      "passed": 11
+    },
+    "resilience": {
+      "failed": 12,
+      "passed": 9,
+      "deselected": 1
+    },
+    "test_only_import_adaptations": [
+      "Removed import of absent ripple.demo; deselected its demo test",
+      "Replaced import of absent ripple.source size constants with identical numeric values (1048576 and 16384)"
+    ],
+    "production_source_modified": false
+  },
+  "commands": [
+    "python -m pytest -q -p no:cacheprovider --basetemp <fresh temporary directory> --junitxml <private temporary result>",
+    "ruff check --no-cache .",
+    "ruff format --check --no-cache .",
+    "python -m pip check"
+  ],
+  "limitations": [
+    "Only local Python 3.13 was executed; CI Python 3.11 was not run",
+    "No live-provider, stress benchmark, or inference script was executed"
+  ]
+}

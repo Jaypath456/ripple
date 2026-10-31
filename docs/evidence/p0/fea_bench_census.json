@@ -1,0 +1,392 @@
+{
+  "available_manifest_sets": {
+    "dev_tasks": {
+      "repositories": 10,
+      "tasks": 10
+    },
+    "final_fea_tasks": {
+      "repositories": 14,
+      "tasks": 35
+    },
+    "mvp_tasks": {
+      "repositories": 20,
+      "tasks": 20
+    },
+    "v2_heldout": {
+      "repositories": 16,
+      "tasks": 30
+    }
+  },
+  "eligible_in_available_prepared_manifests_after_strict_exclusion": 0,
+  "eligible_repositories_in_available_prepared_manifests_after_strict_exclusion": 0,
+  "final_lite_saved_provenance": {
+    "composition": {
+      "per_repository": {
+        "astropy/astropy": 3,
+        "conan-io/conan": 5,
+        "deepset-ai/haystack": 1,
+        "google-deepmind/optax": 2,
+        "huggingface/accelerate": 1,
+        "huggingface/datasets": 1,
+        "matplotlib/matplotlib": 2,
+        "pgmpy/pgmpy": 1,
+        "roboflow/supervision": 5,
+        "scikit-learn/scikit-learn": 2,
+        "softlayer/softlayer-python": 1,
+        "sphinx-doc/sphinx": 1,
+        "sympy/sympy": 5,
+        "tobymao/sqlglot": 5
+      },
+      "repositories": 14,
+      "strata": {
+        "2-4": 35
+      },
+      "tasks": 35
+    },
+    "eligible_before_repository_cap": 61,
+    "official_lite_candidates": 200,
+    "post_selection_exclusions": {},
+    "screening": {
+      "development_excluded": 20,
+      "source_files_1": 119,
+      "source_files_2-4": 61
+    },
+    "tasks": {
+      "astropy__astropy-13676": {
+        "diff_sha256": "d521f9dc4e81e4bf6b94d3277fd39372c3a0ab195f9476dd2a40d63edb7a1a94",
+        "pull_url": "https://github.com/astropy/astropy/pull/13676"
+      },
+      "astropy__astropy-16677": {
+        "diff_sha256": "d3b9490016bee57f89dabda779b07eb6f27c62b88f4d709f62630068a2984c6a",
+        "pull_url": "https://github.com/astropy/astropy/pull/16677"
+      },
+      "astropy__astropy-7970": {
+        "diff_sha256": "a461459c13acd833173f8151dfc00ddf5f41c18222f57f7536ae8cd58d5b217f",
+        "pull_url": "https://github.com/astropy/astropy/pull/7970"
+      },
+      "conan-io__conan-10154": {
+        "diff_sha256": "4b8dd76e4c37a5d4d7979cfb53558bf05434e4a419bf23cb19643c3dfffab6de",
+        "pull_url": "https://github.com/conan-io/conan/pull/10154"
+      },
+      "conan-io__conan-10437": {
+        "diff_sha256": "a6b35da389ee7c88688991df6c796ad8628e976cae39d9380f54735d909afcd3",
+        "pull_url": "https://github.com/conan-io/conan/pull/10437"
+      },
+      "conan-io__conan-10874": {
+        "diff_sha256": "9d8211ed7df377941b9bae89495feaef34d258872b5575cf43ac7f779835a619",
+        "pull_url": "https://github.com/conan-io/conan/pull/10874"
+      },
+      "conan-io__conan-11284": {
+        "diff_sha256": "e6ae5c9862f5ea8a899585cb3a83a3772d596c0217da129302140cecab47bd5f",
+        "pull_url": "https://github.com/conan-io/conan/pull/11284"
+      },
+      "conan-io__conan-11585": {
+        "diff_sha256": "e3a565a49e25841fdf99f7c9f090f1cb8a9d45a7a4ea7126b257ea928d4d300a",
+        "pull_url": "https://github.com/conan-io/conan/pull/11585"
+      },
+      "deepset-ai__haystack-8042": {
+        "diff_sha256": "32600ccd02704e29a165ea562d2b301c3a0cfb75065c3bd0baf89b4c40c191f9",
+        "pull_url": "https://github.com/deepset-ai/haystack/pull/8042"
+      },
+      "google-deepmind__optax-1063": {
+        "diff_sha256": "9b7ff983e9c83d83f19634b229ad736f0086e975cf177d7b1a5727094b20e256",
+        "pull_url": "https://github.com/google-deepmind/optax/pull/1063"
+      },
+      "google-deepmind__optax-897": {
+        "diff_sha256": "8022179453619453006e0d0192b40a9babc1f6807520cead5fa2ae96b065d17e",
+        "pull_url": "https://github.com/google-deepmind/optax/pull/897"
+      },
+      "huggingface__accelerate-255": {
+        "diff_sha256": "7c28d06deccecbaf723e5f0c6e7066525fcbea157d12d81ae615e5eb3580a2e8",
+        "pull_url": "https://github.com/huggingface/accelerate/pull/255"
+      },
+      "huggingface__datasets-214": {
+        "diff_sha256": "553e0ef0f5d1a61df9ef916dfc8668e9eaf971ca91745209cf5f74471f02ac64",
+        "pull_url": "https://github.com/huggingface/datasets/pull/214"
+      },
+      "matplotlib__matplotlib-23692": {
+        "diff_sha256": "04a7f12aab93e22aa7024d8630862aeace4b96dc9666ed96aecf3d8b0a57cca2",
+        "pull_url": "https://github.com/matplotlib/matplotlib/pull/23692"
+      },
+      "matplotlib__matplotlib-26293": {
+        "diff_sha256": "2795e006e63fc1d8bebae9bd46106015d563d085498ee3212eed0583ac39d6c2",
+        "pull_url": "https://github.com/matplotlib/matplotlib/pull/26293"
+      },
+      "pgmpy__pgmpy-1797": {
+        "diff_sha256": "dcdd3391fba4e9ee04e2308cb953020d650f63836ee63a730affcf6428ad6065",
+        "pull_url": "https://github.com/pgmpy/pgmpy/pull/1797"
+      },
+      "roboflow__supervision-1237": {
+        "diff_sha256": "b1a96b5b5c452cce0a8bbfb6e3ac41c4802c214fe5baf0cda736577ce0116404",
+        "pull_url": "https://github.com/roboflow/supervision/pull/1237"
+      },
+      "roboflow__supervision-1296": {
+        "diff_sha256": "6805f4bd087e34c33b7eac50a7645092c87d9d89a7d97ef118527cef8e48ac8c",
+        "pull_url": "https://github.com/roboflow/supervision/pull/1296"
+      },
+      "roboflow__supervision-1340": {
+        "diff_sha256": "7b0e3d6cb0591e69e73237931022a5d0604650e35043ad855b9235bcb5a1b80f",
+        "pull_url": "https://github.com/roboflow/supervision/pull/1340"
+      },
+      "roboflow__supervision-847": {
+        "diff_sha256": "652c519f5f1ca1a31226031ec7f77ec8f4734305c559f86add286b3d05fdcc3b",
+        "pull_url": "https://github.com/roboflow/supervision/pull/847"
+      },
+      "roboflow__supervision-910": {
+        "diff_sha256": "54597259b50dcffa42d1f9d4afadd445dd8c777b1500aac9b33f659b12a30320",
+        "pull_url": "https://github.com/roboflow/supervision/pull/910"
+      },
+      "scikit-learn__scikit-learn-11196": {
+        "diff_sha256": "f29d48d5192e6822c74d9d936804f37b2dc0174a50011d9435beac616ca0b369",
+        "pull_url": "https://github.com/scikit-learn/scikit-learn/pull/11196"
+      },
+      "scikit-learn__scikit-learn-17225": {
+        "diff_sha256": "1c30ad60fb79d33eb67a55bca27303d41155387269fe16e0245755564d38f9d0",
+        "pull_url": "https://github.com/scikit-learn/scikit-learn/pull/17225"
+      },
+      "softlayer__softlayer-python-1766": {
+        "diff_sha256": "da3df67ce65eaba3167118edbd91b6ff02dd1c39de5c0d1bc08e88c6f308b330",
+        "pull_url": "https://github.com/softlayer/softlayer-python/pull/1766"
+      },
+      "sphinx-doc__sphinx-9154": {
+        "diff_sha256": "7f67c71231ae035ae419f2b94f7d05e27e914109bf69a9f5789c8704bad4d69b",
+        "pull_url": "https://github.com/sphinx-doc/sphinx/pull/9154"
+      },
+      "sympy__sympy-12417": {
+        "diff_sha256": "142dda12e022d93ebf56a17c9173aaf9da8fc9786fa889baddea97258d0a4681",
+        "pull_url": "https://github.com/sympy/sympy/pull/12417"
+      },
+      "sympy__sympy-13304": {
+        "diff_sha256": "493da16065d6c0f645207715886eaa0c76fc063a4f68bdd59f554de24ddabe7c",
+        "pull_url": "https://github.com/sympy/sympy/pull/13304"
+      },
+      "sympy__sympy-14745": {
+        "diff_sha256": "a417211f03965ef681565d6d6f7e3f62c413b3ac7beddd1ed299b3c0d7083db7",
+        "pull_url": "https://github.com/sympy/sympy/pull/14745"
+      },
+      "sympy__sympy-14853": {
+        "diff_sha256": "fd168a8e4ee1e734feae628a2880e54f55f8b394a47a6e19c585653ffd38b809",
+        "pull_url": "https://github.com/sympy/sympy/pull/14853"
+      },
+      "sympy__sympy-14928": {
+        "diff_sha256": "8b9822c6a8cb93b1a74b08a5e6cfa90b579cb676a0c640a6ca60c308aee1859f",
+        "pull_url": "https://github.com/sympy/sympy/pull/14928"
+      },
+      "tobymao__sqlglot-3145": {
+        "diff_sha256": "2a0d6ff233318f8c56f1db87ef3d8ecce3b83392177e25f7d1669229cf69d202",
+        "pull_url": "https://github.com/tobymao/sqlglot/pull/3145"
+      },
+      "tobymao__sqlglot-3991": {
+        "diff_sha256": "2371e201af81c15e98fb51525be092d959ccece48c8c1b0a651bf7b96b31716d",
+        "pull_url": "https://github.com/tobymao/sqlglot/pull/3991"
+      },
+      "tobymao__sqlglot-4084": {
+        "diff_sha256": "cdd286b8787f272bcd4e2fb014f35c62ff4e760d1ab718267c7370d70f33d9b5",
+        "pull_url": "https://github.com/tobymao/sqlglot/pull/4084"
+      },
+      "tobymao__sqlglot-415": {
+        "diff_sha256": "b67e22baf00c10d16821b5c4a3fcbce0240101dc54f8a9d0006a8fba7c03a819",
+        "pull_url": "https://github.com/tobymao/sqlglot/pull/415"
+      },
+      "tobymao__sqlglot-858": {
+        "diff_sha256": "e85c492951ba61c0246ea40d38ebbed2633be24970ed6fff22d9ab43916fdaf1",
+        "pull_url": "https://github.com/tobymao/sqlglot/pull/858"
+      }
+    }
+  },
+  "full_dataset_eligible_repository_count": null,
+  "full_dataset_eligible_task_count": null,
+  "full_dataset_pin": "https://huggingface.co/datasets/microsoft/FEA-Bench/resolve/55ee2f78126a3ecdeac6f595fa1ba6ae5c600bad/data/test-00000-of-00001.parquet",
+  "full_dataset_sha256": "22ebac756180b3dfd63d1c7d57a1ed7cf5707a28c1e4ce59929dc30955cf0836",
+  "historical_screening_rows": 84,
+  "historical_screening_rows_outside_all_prior_repositories_and_tasks": [
+    {
+      "outcome": "ineligible: 1 source files",
+      "repository": "saleweaver/python-amazon-sp-api",
+      "task_id": "saleweaver__python-amazon-sp-api-869"
+    },
+    {
+      "outcome": "ineligible: 7 source files",
+      "repository": "Textualize/textual",
+      "task_id": "Textualize__textual-863"
+    },
+    {
+      "outcome": "ineligible: 1 source files",
+      "repository": "slackapi/python-slack-sdk",
+      "task_id": "slackapi__python-slack-sdk-1130"
+    },
+    {
+      "outcome": "ineligible: 8 source files",
+      "repository": "Textualize/textual",
+      "task_id": "Textualize__textual-293"
+    },
+    {
+      "outcome": "ineligible: 1 source files",
+      "repository": "Textualize/textual",
+      "task_id": "Textualize__textual-269"
+    },
+    {
+      "outcome": "ineligible: 15 source files",
+      "repository": "django/django",
+      "task_id": "django__django-16860"
+    },
+    {
+      "outcome": "ineligible: 1 source files",
+      "repository": "astronomer/astronomer-cosmos",
+      "task_id": "astronomer__astronomer-cosmos-758"
+    }
+  ],
+  "known_manifest_unique_task_count": 85,
+  "missing": [
+    "Pinned full FEA-Bench parquet/table",
+    "Pinned complete Lite rows/list",
+    "Diffs and merged-PR metadata for unsampled tasks",
+    "Fresh base checkouts and fetchability validation",
+    "Optional pyarrow dependency for historical full-table builder"
+  ],
+  "potential_for_80_repository_disjoint_tasks": "Not determinable from available local data; no verified fresh tasks.",
+  "prior_repositories": [
+    "Project-MONAI/MONAI",
+    "PyThaiNLP/pythainlp",
+    "RDFLib/rdflib",
+    "Textualize/rich",
+    "astropy/astropy",
+    "aws-powertools/powertools-lambda-python",
+    "aws/sagemaker-python-sdk",
+    "boto/boto3",
+    "boto/botocore",
+    "conan-io/conan",
+    "deepset-ai/haystack",
+    "embeddings-benchmark/mteb",
+    "falconry/falcon",
+    "google-deepmind/optax",
+    "graphql-python/graphene",
+    "huggingface/accelerate",
+    "huggingface/datasets",
+    "joke2k/faker",
+    "matplotlib/matplotlib",
+    "pgmpy/pgmpy",
+    "prometheus/client_python",
+    "pvlib/pvlib-python",
+    "pydata/xarray",
+    "pylint-dev/pylint",
+    "pyvista/pyvista",
+    "roboflow/supervision",
+    "scikit-learn/scikit-learn",
+    "softlayer/softlayer-python",
+    "sphinx-doc/sphinx",
+    "sqlfluff/sqlfluff",
+    "sympy/sympy",
+    "tobymao/sqlglot"
+  ],
+  "prior_task_ids": [
+    "Project-MONAI__MONAI-1679",
+    "Project-MONAI__MONAI-465",
+    "Project-MONAI__MONAI-639",
+    "Project-MONAI__MONAI-7198",
+    "PyThaiNLP__pythainlp-1054",
+    "RDFLib__rdflib-1968",
+    "RDFLib__rdflib-2877",
+    "Textualize__rich-2301",
+    "Textualize__rich-901",
+    "astropy__astropy-13676",
+    "astropy__astropy-16135",
+    "astropy__astropy-16677",
+    "astropy__astropy-7970",
+    "aws-powertools__powertools-lambda-python-5588",
+    "aws__sagemaker-python-sdk-3432",
+    "boto__boto3-74",
+    "boto__botocore-3271",
+    "conan-io__conan-10154",
+    "conan-io__conan-10437",
+    "conan-io__conan-10874",
+    "conan-io__conan-11284",
+    "conan-io__conan-11443",
+    "conan-io__conan-11585",
+    "conan-io__conan-12887",
+    "conan-io__conan-16511",
+    "conan-io__conan-1815",
+    "deepset-ai__haystack-6836",
+    "deepset-ai__haystack-8042",
+    "embeddings-benchmark__mteb-1256",
+    "falconry__falcon-640",
+    "google-deepmind__optax-1063",
+    "google-deepmind__optax-1117",
+    "google-deepmind__optax-632",
+    "google-deepmind__optax-865",
+    "google-deepmind__optax-897",
+    "graphql-python__graphene-1506",
+    "huggingface__accelerate-255",
+    "huggingface__datasets-214",
+    "joke2k__faker-1247",
+    "joke2k__faker-215",
+    "matplotlib__matplotlib-23692",
+    "matplotlib__matplotlib-26293",
+    "pgmpy__pgmpy-1753",
+    "pgmpy__pgmpy-1797",
+    "prometheus__client_python-302",
+    "pvlib__pvlib-python-1391",
+    "pvlib__pvlib-python-1567",
+    "pydata__xarray-6135",
+    "pylint-dev__pylint-4810",
+    "pyvista__pyvista-4954",
+    "ripple_cli_markdown_export",
+    "roboflow__supervision-1237",
+    "roboflow__supervision-1296",
+    "roboflow__supervision-1340",
+    "roboflow__supervision-245",
+    "roboflow__supervision-847",
+    "roboflow__supervision-910",
+    "sample_deletion_behavior",
+    "sample_required_argument",
+    "sample_soft_delete",
+    "scikit-learn__scikit-learn-10591",
+    "scikit-learn__scikit-learn-11196",
+    "scikit-learn__scikit-learn-15010",
+    "scikit-learn__scikit-learn-17225",
+    "scikit-learn__scikit-learn-8478",
+    "softlayer__softlayer-python-1668",
+    "softlayer__softlayer-python-1766",
+    "softlayer__softlayer-python-1818",
+    "softlayer__softlayer-python-1910",
+    "softlayer__softlayer-python-2073",
+    "sphinx-doc__sphinx-9131",
+    "sphinx-doc__sphinx-9154",
+    "sqlfluff__sqlfluff-3937",
+    "sympy__sympy-12417",
+    "sympy__sympy-13304",
+    "sympy__sympy-14745",
+    "sympy__sympy-14853",
+    "sympy__sympy-14928",
+    "sympy__sympy-16516",
+    "sympy__sympy-16685",
+    "sympy__sympy-24384",
+    "tobymao__sqlglot-1252",
+    "tobymao__sqlglot-2006",
+    "tobymao__sqlglot-3145",
+    "tobymao__sqlglot-3991",
+    "tobymao__sqlglot-4084",
+    "tobymao__sqlglot-415",
+    "tobymao__sqlglot-858",
+    "tobymao__sqlglot-897"
+  ],
+  "prior_unique_benchmark_task_count": 85,
+  "prior_unique_repository_count": 32,
+  "prior_unique_task_count_including_synthetic_cases": 89,
+  "synthetic_cases_excluded_from_benchmark_task_count": [
+    "ripple_cli_markdown_export",
+    "sample_deletion_behavior",
+    "sample_required_argument",
+    "sample_soft_delete"
+  ],
+  "v2_dev_unique_cases": [
+    "boto__boto3-74",
+    "falconry__falcon-640",
+    "graphql-python__graphene-1506",
+    "prometheus__client_python-302",
+    "ripple_cli_markdown_export",
+    "sample_deletion_behavior",
+    "sample_required_argument",
+    "sample_soft_delete"
+  ]
+}

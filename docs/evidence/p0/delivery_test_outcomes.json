@@ -1,0 +1,878 @@
+[
+  {
+    "test": "tests.test_agent::test_complete_scripted_run_writes_report_and_trace",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_duplicate_calls_reuse_evidence_and_stop_without_progress",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_malformed_interpretation_repairs_then_falls_back",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_premature_submission_is_rejected_four_times",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_repository_map_is_compact_and_uses_index_facts",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_feature_request_rejects_unhelpful_or_oversized_text[short]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_feature_request_rejects_unhelpful_or_oversized_text[onewordlong]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_feature_request_rejects_unhelpful_or_oversized_text[text2]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[data_model]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[api]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[auth]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[config]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[migration]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[business_logic]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[ui]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_every_phase4_change_kind_is_accepted[tests]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_agent_reuses_phase2_tool_argument_models[search_code-arguments0-limit]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_agent_reuses_phase2_tool_argument_models[inspect_symbol-arguments1-target]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_agent_reuses_phase2_tool_argument_models[find_references-arguments2-limit]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_agent_reuses_phase2_tool_argument_models[get_dependencies-arguments3-depth]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_agent_reuses_phase2_tool_argument_models[find_tests-arguments4-target]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_tool_argument_revalidation_fails_closed[unknown-arguments0]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_tool_argument_revalidation_fails_closed[search_code-arguments1]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_tool_argument_revalidation_fails_closed[inspect_symbol-arguments2]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_tool_argument_revalidation_fails_closed[get_dependencies-arguments3]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_lexical_fallback_is_deterministic_and_has_three_terms",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_feature_intent_rejects_duplicate_terms_below_minimum",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_decision_and_component_forbid_unknown_or_empty_fields",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_scripted_llm_has_bounded_queues",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_malformed_report_uses_partial_deterministic_fallback",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_dirty_repository_is_refused_by_default",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_trace_redacts_secret_values_and_sensitive_keys",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_checked_in_mvp_manifest_is_fixed_at_twenty_distinct_repositories",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_tool_budget_stops_before_an_extra_execution",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_token_ceiling_stops_before_decision",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_agent::test_repository_prompt_injection_cannot_expand_tool_registry",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_rejection_reason_reaches_next_prompt_and_trace",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_token_ceiling_also_blocks_interpretation_retry",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_token_ceiling_also_blocks_report_retry",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_keyboard_interrupt_is_not_swallowed",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_missing_provider_total_usage_is_unknown_not_zero",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[\\xff\\xff]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[\\x00]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[def invalid(:\\n]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_parser_edge_cases_do_not_crash[]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_massive_file_and_long_line_are_visible_skips[content0]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_massive_file_and_long_line_are_visible_skips[content1]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_committed_empty_python_corpus_is_supported",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_404_fallback_and_partial_json_are_not_certified",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_status_and_usage_are_preserved[completed]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_responses_status_and_usage_are_preserved[incomplete]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_non_404_provider_failure_does_not_fallback_or_retry",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_chat_server_retries_are_bounded",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[-1]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[NaN]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_invalid_retry_after_cannot_cause_invalid_sleep[Infinity]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_demo_exercises_real_evidence_and_stage_b",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_resilience::test_evaluate_agent_cli_uses_supported_arguments",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_tracked_symlink_does_not_index_external_source",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_state_directory_symlink_cannot_redirect_cache_writes",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_unknown_encoding_is_a_per_file_error",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_failed_tool_result_cannot_confirm_or_validate",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[tab\\tname.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[quote\"name.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[caf\\xe9.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[line\\nname.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_preserves_unusual_git_paths[:(literal)special.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_file_to_symlink_change_stays_visible",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_diff_never_executes_textconv",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_provider_failure_is_failed_and_preserves_no_fabricated_output",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[schema_changes]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[risks]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_one_supported_target_cannot_launder_unrelated_claims[suggested_tests]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_proposed_test_path_cannot_escape_repository",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-README.md]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-comment]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[shell-docstring]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-README.md]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-comment]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[exfiltrate-docstring]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-README.md]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-comment]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_repository_injection_stays_inside_deterministic_boundary[fabricate-docstring]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_evaluation_preserves_unowned_existing_checkout",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_delivery_security::test_owned_evaluation_checkout_resumes_but_preserves_user_edits",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_task_loader_validates_fields_and_fixed_manifest",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_checked_in_manifest_is_stable_and_has_ten_tasks",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_evaluation_request_preparation_is_deterministic_prefix_only",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_mvp_v1_1_prepares_all_twenty_requests_without_gold_inputs",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_task_rejects_inconsistent_mask_and_gold_groups",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_fea_bench_ingestion_uses_request_and_official_diff",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_request_sanitizer[Change app/auth/service.py now-Change [PATH] now]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_request_sanitizer[Change app.auth.service now-Change [PATH] now]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_request_sanitizer[Keep ordinary prose about versions 1.2-Keep ordinary prose about versions 1.2]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_request_sanitizer[See https://github.com/owner/repo/issues/1-See https://github.com/owner/repo/issues/1]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_request_sanitizer[Use a.py, then a.py-Use [PATH], then [PATH]]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_gold_file_classification",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_metrics_cover_perfect_partial_empty_and_ranked_cases",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_recall_at_ten_and_mrr_no_hit",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_test_metrics_are_separate",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_b0_ranks_keywords_deduplicates_files_and_excludes_tests",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_b1_adds_importers_importees_and_keeps_tests_separate",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_cluster_bootstrap_is_deterministic_and_contains_fixture_mean",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_leak_check_passes_clean_base_and_rejects_wrong_head",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_leak_check_rejects_future_ref",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_leak_check_rejects_visible_gold_only_file",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_static_scan_never_executes_target_source",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_cli_writes_results_and_prints_table",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_evaluation::test_cli_handles_invalid_task_file",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_final_selection_excludes_development_stratifies_and_caps_repositories",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_request_masking_limit_and_gold_split",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_schedule_is_deterministic_interleaved_and_has_three_seeds",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_seed_average_precedes_cluster_bootstrap_and_is_deterministic",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_paired_cluster_bootstrap_is_paired",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_matched_k_including_zero",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_failure_classification_and_checkpoint_protection",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_status_denominator_stage_b_and_adjudication",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_adjudication_selection_is_predeclared_and_stratified",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_results_regeneration_is_byte_deterministic",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_final_evaluation::test_adjudicated_task_precision_uses_true_positives_and_seed_means",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_graph::test_graph_queries_ignore_external_and_type_checking_edges",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_graph::test_implementation_order_is_dependency_first_and_cycle_safe",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_graph::test_test_mapping_uses_import_reference_and_exact_naming",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_baselines_show_e2e::test_b2_is_deterministic_and_excludes_tests",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_baselines_show_e2e::test_b3_uses_one_call_preserves_order_and_drops_hallucination",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_baselines_show_e2e::test_b4_has_no_ledger_expand_or_validator_and_basic_path_filter",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_baselines_show_e2e::test_show_run_replays_without_model_call",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_baselines_show_e2e::test_soft_delete_full_report_end_to_end",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_expand_render::test_expand_keeps_regression_separate_and_adds_migration_tests_order",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_expand_render::test_validator_keeps_deterministic_migration_and_requires_risk_evidence",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_expand_render::test_unsupported_fact_claim_is_dropped",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_expand_render::test_markdown_is_stable_and_handles_empty_sections",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_static_facts_cover_route_models_settings_and_migrations",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_flask_and_django_routes_and_django_model",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_repo_facts_tool_errors_are_structured",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_cochange_counts_support_order_and_limit",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_cochange_uses_head_history_only_and_excludes_future",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase5_facts_history::test_cochange_unknown_and_no_partner_errors",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_diff_parser_handles_a_m_d_r_zero_context_and_binary",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_changed_symbol_mapping_added_deleted_nested_and_parse_failure",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_cosmetic_ast_ignores_whitespace_comments_and_docstrings[x=1\\n-x = 1\\n]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_cosmetic_ast_ignores_whitespace_comments_and_docstrings[x = 1\\n-# note\\nx = 1\\n]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_cosmetic_ast_ignores_whitespace_comments_and_docstrings[def f():\\n    \"\"\"old\"\"\"\\n    return 1\\n-def f():\\n    \"\"\"new\"\"\"\\n    return 1\\n]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_cosmetic_ast_detects_expression_change",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_file_diff_tool_results_and_errors",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_diffing::test_resolve_range_mismatch_uses_report_ancestry_and_rejects_invalid",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_all_primary_classifications_and_planted_anomalies",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_control_has_no_unexpected_missing_test_or_stale_caller",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_changed_caller_avoids_stale_warning",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_predicted_rename_matches_without_missing_or_unexpected",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_adjacent_via_cochange_without_import_edge",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_required_keyword_only_and_unchanged_signature_detection",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_investigation_is_bounded_and_rejects_unsupported_or_empty_evidence",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_cli_verify_explicit_latest_unknown_and_invalid_range",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_unknown_report_direct_error",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_ignored_file_stays_visible_without_normal_judgment",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_mismatched_requested_base_is_persisted_as_warning",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_phase6_verification::test_soft_delete_stage_b_control_demo",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_references::test_resolves_imported_and_same_file_references",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_references::test_schema_two_cache_is_rebuilt_with_phase_two_facts",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_non_git_directory_is_rejected_cleanly",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_scan_discovers_only_tracked_python_files",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_test_file_detection[tests/helpers.py-True]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_test_file_detection[app/test_users.py-True]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_test_file_detection[app/users_test.py-True]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_test_file_detection[app/users.py-False]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_module_names_for_package_init_and_src_layout",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_scan_captures_current_commit",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_repository_without_commits_is_rejected_cleanly",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_cli_scan_prints_summary",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_cli_reports_normal_errors_without_a_traceback",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_scan_extracts_structural_symbols",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_syntax_error_is_recorded_without_stopping_scan",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_cli_summary_includes_symbols_imports_and_parse_errors",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_extracts_and_resolves_absolute_imports",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_resolves_relative_and_type_checking_imports",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_clean_index_is_cached_and_round_trips",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_no_cache_bypasses_reads_and_writes",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_dirty_python_content_produces_distinct_cache_keys",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_json_output_contains_only_the_repository_index",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_cli_reports_cache_hits_and_no_cache_mode",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_serialized_collections_are_deterministically_ordered",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_scanner::test_deleted_files_and_ripple_state_do_not_break_scanning",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_search::test_tokenizer_splits_names_paths_and_case",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_search::test_bm25_ranking_filters_limits_and_breaks_ties_deterministically",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_registry_validates_arguments_and_assigns_evidence_ids",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_search_code_happy_path_errors_and_limit",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_inspect_symbol_file_symbol_errors_and_source_cap",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_find_references_aliases_ambiguity_and_cap",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_get_dependencies_directions_depth_errors_and_cap",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_find_tests_matches_symbols_no_tests_errors_and_cap",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_each_tool_is_callable_from_cli[search_code-arguments0]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_each_tool_is_callable_from_cli[inspect_symbol-arguments1]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_each_tool_is_callable_from_cli[find_references-arguments2]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_each_tool_is_callable_from_cli[get_dependencies-arguments3]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_each_tool_is_callable_from_cli[find_tests-arguments4]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_tools::test_cli_handles_unknown_tool_and_invalid_json",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_rejects_nonexistent_and_stale_updates",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_transition_and_submission_checks",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_twice_rejected_candidate_cannot_be_resuspected",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_validator_drops_unconfirmed_missing_and_bad_evidence",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_validator_requires_find_tests_evidence_and_existing_updates",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_validator_allows_clearly_proposed_new_test",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[src/auth.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[src/auth.py::refresh_token]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[src/service.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[src/service.py::service]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[tests/test_auth.py]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_ledger_accepts_only_exact_existing_file_or_symbol_targets[tests/test_auth.py::test_refresh]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_candidate_cap_is_enforced",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_confirmed_candidate_is_terminal",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_evidence_must_touch_the_updated_target",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_new_file_component_is_dropped_even_when_target_exists",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[schema_changes]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[api_changes]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[config_changes]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[regression_areas]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[implementation_order]",
+    "status": "passed"
+  },
+  {
+    "test": "tests.test_validation::test_phase5_narrative_claims_are_transparently_dropped[risks]",
+    "status": "passed"
+  }
+]
