@@ -1,0 +1,139 @@
+{
+  "approved_commit_rerun": {
+    "all_previous_test_statuses_preserved": true,
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 68.279
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.032
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.02
+      }
+    ],
+    "passed": 342,
+    "seconds": 67.8,
+    "skipped": 6
+  },
+  "baseline": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 63.42
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.106
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.022
+      }
+    ],
+    "passed": 285,
+    "skipped": 6
+  },
+  "baseline_test_statuses_preserved": true,
+  "final": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 81.444
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.068
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.023
+      }
+    ],
+    "passed": 342,
+    "skipped": 6
+  },
+  "final_review_fix": "A refused unoffered checkpoint keep decision cannot store missing-evidence notes; reproduced on exact P0 and covered before the final full rerun.",
+  "inference_calls": 0,
+  "intentional_existing_test_revision": "test_twice_rejected_candidate_cannot_be_resuspected now counts two accepted rejection transitions. A refused duplicate cannot mutate the counter.",
+  "new_regressions": {
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[confirmed-already_confirmed]": "passed",
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[missing-invalid_target]": "passed",
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[repeat_reject-already_rejected]": "passed",
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[stale-latest_evidence_required]": "passed",
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[unknown-unknown_evidence]": "passed",
+    "tests.test_p1_evidence_protocol::test_action_refusals_have_codes_and_are_atomic[untouched-untouched_target]": "passed",
+    "tests.test_p1_evidence_protocol::test_checkpoint_refusals_are_atomic[confirm-ids1-presented1-no_evidence]": "passed",
+    "tests.test_p1_evidence_protocol::test_checkpoint_refusals_are_atomic[confirm-ids2-presented2-not_presented]": "passed",
+    "tests.test_p1_evidence_protocol::test_checkpoint_refusals_are_atomic[confirm-ids3-presented3-strong_evidence_required]": "passed",
+    "tests.test_p1_evidence_protocol::test_checkpoint_refusals_are_atomic[invented-ids0-presented0-invalid_decision]": "passed",
+    "tests.test_p1_evidence_protocol::test_checkpoint_visibility_is_additive": "passed",
+    "tests.test_p1_evidence_protocol::test_evidence_is_append_only_and_isolated_from_caller_mutations": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_cannot_support_even_a_forged_strong_record[apply]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_cannot_support_even_a_forged_strong_record[checkpoint]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_is_rejected_from_every_claim_section[api_changes]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_is_rejected_from_every_claim_section[config_changes]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_is_rejected_from_every_claim_section[risks]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_is_rejected_from_every_claim_section[schema_changes]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_evidence_is_rejected_from_every_claim_section[suggested_tests]": "passed",
+    "tests.test_p1_evidence_protocol::test_failed_observation_does_not_replace_latest_success": "passed",
+    "tests.test_p1_evidence_protocol::test_legacy_seed_placeholder_cannot_be_used_as_proposal_support": "passed",
+    "tests.test_p1_evidence_protocol::test_only_failed_and_unknown_observations_give_no_required_support": "passed",
+    "tests.test_p1_evidence_protocol::test_refused_checkpoint_keep_cannot_write_missing_notes": "passed",
+    "tests.test_p1_evidence_protocol::test_v2_failure_does_not_relax_checkpoint_only_confirmation": "passed",
+    "tests.test_p1_provider_reliability::test_ambiguous_or_vetoed_failures_never_replay[error0]": "passed",
+    "tests.test_p1_provider_reliability::test_ambiguous_or_vetoed_failures_never_replay[error1]": "passed",
+    "tests.test_p1_provider_reliability::test_ambiguous_or_vetoed_failures_never_replay[error2]": "passed",
+    "tests.test_p1_provider_reliability::test_ambiguous_or_vetoed_failures_never_replay[error3]": "passed",
+    "tests.test_p1_provider_reliability::test_backoff_is_injected_and_attempts_are_bounded": "passed",
+    "tests.test_p1_provider_reliability::test_chat_fallback_and_retry_share_one_attempt_budget": "passed",
+    "tests.test_p1_provider_reliability::test_default_refuses_request_replay_with_billing_diagnostic[429]": "passed",
+    "tests.test_p1_provider_reliability::test_default_refuses_request_replay_with_billing_diagnostic[503]": "passed",
+    "tests.test_p1_provider_reliability::test_explicit_replay_retries_transient_responses_without_changing_payload[429]": "passed",
+    "tests.test_p1_provider_reliability::test_explicit_replay_retries_transient_responses_without_changing_payload[503]": "passed",
+    "tests.test_p1_provider_reliability::test_invalid_retry_after_uses_bounded_backoff[-2]": "passed",
+    "tests.test_p1_provider_reliability::test_invalid_retry_after_uses_bounded_backoff[inf]": "passed",
+    "tests.test_p1_provider_reliability::test_invalid_retry_after_uses_bounded_backoff[nan]": "passed",
+    "tests.test_p1_provider_reliability::test_invalid_retry_after_uses_bounded_backoff[not a date]": "passed",
+    "tests.test_p1_provider_reliability::test_malformed_success_is_not_replayed": "passed",
+    "tests.test_p1_provider_reliability::test_provider_diagnostics_reach_trace_without_response_schema_changes": "passed",
+    "tests.test_p1_provider_reliability::test_retry_after_beyond_budget_does_not_retry_earlier_than_requested": "passed",
+    "tests.test_p1_provider_reliability::test_retry_budget_cannot_multiply_through_endpoint_fallback": "passed",
+    "tests.test_p1_provider_reliability::test_retry_opt_in_environment_is_explicit": "passed",
+    "tests.test_p1_provider_reliability::test_retry_policy_bounds_are_validated[kwargs0]": "passed",
+    "tests.test_p1_provider_reliability::test_retry_policy_bounds_are_validated[kwargs1]": "passed",
+    "tests.test_p1_provider_reliability::test_retry_policy_bounds_are_validated[kwargs2]": "passed",
+    "tests.test_p1_provider_reliability::test_retry_policy_bounds_are_validated[kwargs3]": "passed",
+    "tests.test_p1_provider_reliability::test_retry_policy_bounds_are_validated[kwargs4]": "passed",
+    "tests.test_p1_provider_reliability::test_shared_client_keeps_concurrent_request_budgets_and_diagnostics_separate": "passed",
+    "tests.test_p1_token_boundaries::test_classification_repair_budget_is_checked_before_increment": "passed",
+    "tests.test_p1_token_boundaries::test_every_request_boundary_checks_spent_budget[choose_next_action]": "passed",
+    "tests.test_p1_token_boundaries::test_every_request_boundary_checks_spent_budget[decide_candidates]": "passed",
+    "tests.test_p1_token_boundaries::test_every_request_boundary_checks_spent_budget[draft_report]": "passed",
+    "tests.test_p1_token_boundaries::test_every_request_boundary_checks_spent_budget[interpret]": "passed",
+    "tests.test_p1_token_boundaries::test_unknown_or_split_usage_cannot_bypass_ceiling[usage0]": "passed",
+    "tests.test_p1_token_boundaries::test_unknown_or_split_usage_cannot_bypass_ceiling[usage1]": "passed",
+    "tests.test_p1_token_boundaries::test_zero_budget_stops_before_interpretation_and_is_not_provider_failure": "passed"
+  },
+  "test_guard": "Socket connections blocked; API credential variables stripped; provider operations mocked.",
+  "unchanged_optional_skips": {
+    "tests.test_demo::test_every_showcase_page_renders[page_about]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_how]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_live]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_results]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_guided_demo_discloses_progressively": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_live_page_shows_a_compact_diagnosis_for_abstention": "could not import 'streamlit.testing.v1': No module named 'streamlit'"
+  }
+}

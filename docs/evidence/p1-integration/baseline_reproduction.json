@@ -1,0 +1,9 @@
+{
+  "baseline_commit": "fef4c3d0958b64f4add2a5b71f8f9a9bffb9f108",
+  "failed_observation_became_latest": true,
+  "refused_checkpoint_keep_mutated_missing_notes": true,
+  "refused_rejection_mutated_counter": true,
+  "scope_note": "Action-update path reproduced; V2 checkpoint support already filters successful records. No inference.",
+  "successful_only_update_refused": true,
+  "zero_budget_still_made_request": true
+}

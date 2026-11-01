@@ -1,5 +1,6 @@
 """Python-owned candidate and evidence ledgers."""
 
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -8,7 +9,7 @@ from ripple.models import RepositoryIndex
 from ripple.tools import ToolResult
 
 
-@dataclass
+@dataclass(frozen=True)
 class EvidenceRecord:
     evidence_id: str
     tool_name: str
@@ -16,6 +17,15 @@ class EvidenceRecord:
     result: ToolResult
     touched_targets: frozenset[str]
     strong: bool
+
+
+@dataclass(frozen=True)
+class LedgerOutcome:
+    """Additive machine-readable result; refused updates never change state."""
+
+    changed: bool
+    reason_code: str | None = None
+    refusal: str | None = None
 
 
 @dataclass
@@ -45,6 +55,12 @@ class CandidateLedger:
         return target in self._paths or target in self._symbols
 
     def add_evidence(self, record: EvidenceRecord) -> None:
+        if record.evidence_id in self.evidence:
+            raise ValueError("evidence IDs are append-only")
+        if record.evidence_id != record.result.evidence_id:
+            raise ValueError("evidence ID does not match tool result")
+        # Isolate the recorded observation from later caller-owned mutations.
+        record = deepcopy(record)
         self.evidence[record.evidence_id] = record
         if not record.result.ok:
             return
@@ -70,6 +86,13 @@ class CandidateLedger:
     def seed(self, target: str, reason: str, evidence_id: str) -> bool:
         if not self.valid_target(target) or target in self.candidates:
             return False
+        record = self.evidence.get(evidence_id)
+        # Preserve the trusted seeding API used by historical fixture builders.
+        # Proposals still require existing successful evidence in apply/decide.
+        if record is not None and (
+            not record.result.ok or target not in record.touched_targets
+        ):
+            return False
         if len(self.candidates) >= self.cap:
             return False
         self.candidates[target] = Candidate(
@@ -82,32 +105,73 @@ class CandidateLedger:
         return True
 
     def apply(self, update: CandidateUpdate, latest_evidence: str | None) -> bool:
+        """Compatibility wrapper for callers expecting a boolean."""
+
+        return self.apply_checked(update, latest_evidence).changed
+
+    def apply_checked(
+        self, update: CandidateUpdate, latest_evidence: str | None
+    ) -> LedgerOutcome:
         if not self.valid_target(update.target):
-            return False
+            return LedgerOutcome(False, "invalid_target", "target is not indexed")
         if latest_evidence is None or latest_evidence not in update.evidence_ids:
-            return False
+            return LedgerOutcome(
+                False,
+                "latest_evidence_required",
+                "latest successful observation must be cited",
+            )
         records = [self.evidence.get(item) for item in update.evidence_ids]
         if any(record is None for record in records):
-            return False
+            return LedgerOutcome(
+                False, "unknown_evidence", "cited evidence does not exist"
+            )
+        if any(not record.result.ok for record in records if record):
+            return LedgerOutcome(
+                False, "failed_evidence", "failed observations cannot support updates"
+            )
         if not any(
             update.target in record.touched_targets for record in records if record
         ):
-            return False
+            return LedgerOutcome(
+                False, "untouched_target", "cited evidence did not touch this target"
+            )
         current = self.candidates.get(update.target)
         if current is None:
-            if update.status != "suspected" or len(self.candidates) >= self.cap:
-                return False
-            return self.seed(update.target, update.reason, update.evidence_ids[-1])
+            if update.status != "suspected":
+                return LedgerOutcome(
+                    False, "invalid_transition", "new candidates must be suspected"
+                )
+            if len(self.candidates) >= self.cap:
+                return LedgerOutcome(False, "candidate_cap", "candidate cap reached")
+            evidence_id = next(
+                record.evidence_id
+                for record in reversed(records)
+                if record and update.target in record.touched_targets
+            )
+            return LedgerOutcome(self.seed(update.target, update.reason, evidence_id))
         if current.status == "confirmed":
-            return False
+            return LedgerOutcome(
+                False, "already_confirmed", "confirmed candidates cannot be changed"
+            )
         if current.status == "rejected":
             if update.status == "rejected":
-                current.rejection_count += 1
-                return False
+                return LedgerOutcome(
+                    False, "already_rejected", "candidate is already rejected"
+                )
             if update.status != "suspected" or current.rejection_count >= 2:
-                return False
+                return LedgerOutcome(
+                    False,
+                    "rejection_limit"
+                    if current.rejection_count >= 2
+                    else "invalid_transition",
+                    "rejected candidate cannot make this transition",
+                )
         elif update.status not in {"confirmed", "rejected"}:
-            return False
+            return LedgerOutcome(
+                False,
+                "invalid_transition",
+                "suspected candidate must be confirmed or rejected",
+            )
         if update.status == "rejected":
             current.rejection_count += 1
         changed = current.status != update.status or current.reason != update.reason
@@ -124,7 +188,7 @@ class CandidateLedger:
                 "evidence_ids": list(update.evidence_ids),
             }
         )
-        return changed
+        return LedgerOutcome(changed)
 
     def support(self, target: str) -> list[EvidenceRecord]:
         """Successful evidence records that actually touched ``target``."""
@@ -150,22 +214,53 @@ class CandidateLedger:
         least one strong (non-lexical) record. ``keep`` never changes state.
         """
 
+        outcome = self.decide_checked(target, decision, evidence_ids, reason, presented)
+        return outcome.changed, outcome.refusal
+
+    def decide_checked(
+        self,
+        target: str,
+        decision: str,
+        evidence_ids: tuple[str, ...],
+        reason: str,
+        presented: frozenset[str],
+    ) -> LedgerOutcome:
         current = self.candidates.get(target)
         if current is None or current.status != "suspected":
-            return False, "target is not a suspected candidate"
+            return LedgerOutcome(
+                False, "not_suspected", "target is not a suspected candidate"
+            )
+        if decision not in {"confirm", "reject", "keep"}:
+            return LedgerOutcome(
+                False, "invalid_decision", "unknown checkpoint decision"
+            )
         if decision == "keep":
-            return False, None
+            return LedgerOutcome(False)
         if not evidence_ids:
-            return False, "no evidence cited"
+            return LedgerOutcome(False, "no_evidence", "no evidence cited")
         if any(item not in presented for item in evidence_ids):
-            return False, "cited evidence was not presented for this target"
+            return LedgerOutcome(
+                False,
+                "not_presented",
+                "cited evidence was not presented for this target",
+            )
         records = [self.evidence.get(item) for item in evidence_ids]
         if any(
             record is None or target not in record.touched_targets for record in records
         ):
-            return False, "cited evidence did not touch this target"
+            return LedgerOutcome(
+                False, "untouched_target", "cited evidence did not touch this target"
+            )
+        if any(not record.result.ok for record in records if record):
+            return LedgerOutcome(
+                False, "failed_evidence", "failed observations cannot support decisions"
+            )
         if decision == "confirm" and not any(record.strong for record in records):
-            return False, "confirmation needs non-lexical evidence"
+            return LedgerOutcome(
+                False,
+                "strong_evidence_required",
+                "confirmation needs non-lexical evidence",
+            )
         status: CandidateStatus = "confirmed" if decision == "confirm" else "rejected"
         if status == "rejected":
             current.rejection_count += 1
@@ -182,7 +277,7 @@ class CandidateLedger:
                 "via": "checkpoint",
             }
         )
-        return True, None
+        return LedgerOutcome(True)
 
     def confirmed(self) -> tuple[Candidate, ...]:
         return tuple(

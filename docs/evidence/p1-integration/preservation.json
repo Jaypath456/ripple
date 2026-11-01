@@ -1,0 +1,21 @@
+{
+  "agent_report_schemas_and_versions_identical": true,
+  "all_other_p0_tracked_files_identical": true,
+  "all_prompt_assignments_identical": true,
+  "exact_responses_and_chat_request_payload_asts_identical": true,
+  "frozen_evaluation_files_unchanged": 870,
+  "inference_calls": 0,
+  "integration_branch_head": "fef4c3d0958b64f4add2a5b71f8f9a9bffb9f108",
+  "llm_response_schema_identical": true,
+  "merges": 0,
+  "original_and_p0_checkout_state_unchanged": true,
+  "original_file_contents_unchanged": 8758,
+  "preexisting_user_refs_unchanged": true,
+  "prompt_context_builders_and_policy_constants_identical": true,
+  "pushes": 0,
+  "ranking_output_hashes_reverified_before_commit": 3,
+  "reverified_after_final_atomicity_fix": true,
+  "staged_files": 0,
+  "task_commits": 0,
+  "verification_stage": "Final review before the separately approved local commit; Git-state fields describe the pre-staging state."
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "bytes": 60273,
+    "path": "src/ripple/agent.py",
+    "sha256": "460505d1d043b77c94a1d10858e8a699d89fe43f6b63a53c383607dd5f8a0f64"
+  },
+  {
+    "bytes": 12224,
+    "path": "src/ripple/ledger.py",
+    "sha256": "64ae74e22b4ec4e72dc6d8700a7653e0bb8d49496c0745623e0df053f302354c"
+  },
+  {
+    "bytes": 15457,
+    "path": "src/ripple/llm.py",
+    "sha256": "5691003bc04e02d9f794e4d32ed20ac5fa9bd0800d858ded781463fdd53cb9a0"
+  },
+  {
+    "bytes": 10413,
+    "path": "src/ripple/validate.py",
+    "sha256": "f22851245746fd4cc2d604beb3ca7d0cc5eaac9ec76ac2aa61ffc747ef1fa8d3"
+  },
+  {
+    "bytes": 12125,
+    "path": "tests/test_p1_evidence_protocol.py",
+    "sha256": "acd77f35c530f419b3c67cbd46f50977b1a4b2ff32099542dfeadbc30c6ded7a"
+  },
+  {
+    "bytes": 9589,
+    "path": "tests/test_p1_provider_reliability.py",
+    "sha256": "8da0d6cd8bbddf24340b6287843fac0b6b8cfda79944fc7ab233beb67d147e79"
+  },
+  {
+    "bytes": 3527,
+    "path": "tests/test_p1_token_boundaries.py",
+    "sha256": "bc0bc2d8f7213dfb944623c97bf0b788a2c0a7d233e9c357af2a4d4a28b2415c"
+  },
+  {
+    "bytes": 9259,
+    "path": "tests/test_validation.py",
+    "sha256": "0914afe70ca3e9c6f203fd09ad932e74455dfd73da1ba212b832598fcfe15616"
+  }
+]

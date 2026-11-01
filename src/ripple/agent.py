@@ -31,7 +31,7 @@ from ripple.agent_models import (
     SuggestedTest,
 )
 from ripple.expand import ExpansionResult, expand_report
-from ripple.ledger import CandidateLedger, EvidenceRecord
+from ripple.ledger import CandidateLedger, EvidenceRecord, LedgerOutcome
 from ripple.llm import LLMClient, LLMError, LLMResponse
 from ripple.models import RepositoryIndex
 from ripple.render import render_markdown
@@ -48,6 +48,12 @@ MAX_STALL = 8  # explore steps without any ledger change before stopping
 CHECKPOINT_CANDIDATES = 8
 MAX_CHECKPOINTS = 8  # hard cap on extra decision calls per run
 SYMBOL_HINTS = 8
+
+
+class TokenBudgetExceeded(RuntimeError):
+    """The next model request cannot be admitted under the configured budget."""
+
+
 ARGUMENT_SHAPES = {
     "search_code": "{query, kind: any|symbol|file|string, limit: 1..15}",
     "inspect_symbol": "{target}",
@@ -353,6 +359,8 @@ class AgentController:
         self.output_tokens = 0
         self.total_tokens = 0
         self.usage_known = False
+        self._budget_tokens = 0
+        self._budget_usage_complete = True
         self.v2 = variant.protocol == "v2"
         self.checkpoints = 0
         self.invalid_targets = 0
@@ -378,6 +386,16 @@ class AgentController:
             if value is not None:
                 setattr(self, attr, getattr(self, attr) + value)
                 self.usage_known = True
+        usage = response.total_tokens
+        if not (type(usage) is int and usage >= 0):
+            parts = (response.input_tokens, response.output_tokens)
+            usage = (
+                sum(parts) if all(type(v) is int and v >= 0 for v in parts) else None
+            )
+        if usage is None:
+            self._budget_usage_complete = False
+        else:
+            self._budget_tokens += usage
         self.trace.write(
             "llm_response",
             operation=operation,
@@ -389,7 +407,24 @@ class AgentController:
             endpoint=response.endpoint,
         )
 
+    def _check_request_budget(self, operation: str) -> None:
+        if self.max_tokens is None:
+            return
+        if not self._budget_usage_complete or self._budget_tokens >= self.max_tokens:
+            reason = (
+                "usage_unknown" if not self._budget_usage_complete else "token_ceiling"
+            )
+            self.trace.write(
+                "request_boundary_blocked",
+                operation=operation,
+                reason_code=reason,
+                tokens_accounted=self._budget_tokens,
+                token_ceiling=self.max_tokens,
+            )
+            raise TokenBudgetExceeded(reason)
+
     def _llm(self, operation: str, prompt: str) -> LLMResponse:
+        self._check_request_budget(operation)
         self.trace.write("llm_request", operation=operation)
         method = getattr(self.llm, operation)
         try:
@@ -397,6 +432,13 @@ class AgentController:
         except LLMError as error:
             self.trace.write("provider_error", operation=operation, error=str(error))
             raise
+        finally:
+            drain = getattr(self.llm, "drain_diagnostics", None)
+            if callable(drain):
+                for diagnostic in drain():
+                    self.trace.write(
+                        "provider_diagnostic", operation=operation, **diagnostic
+                    )
         self._record_llm(operation, response)
         return response
 
@@ -764,6 +806,7 @@ class AgentController:
         """
 
         if self.checkpoints >= MAX_CHECKPOINTS:
+            self.trace.write("checkpoint_deferred", reason_code="checkpoint_cap")
             return False
 
         def complete(item) -> bool:
@@ -793,6 +836,11 @@ class AgentController:
             )
         )
         if not ready or not due:
+            self.trace.write(
+                "checkpoint_deferred",
+                reason_code="no_new_strong_evidence" if not ready else "not_due",
+                ready_candidates=len(ready),
+            )
             return False
         ready.sort(
             key=lambda pair: (
@@ -805,7 +853,16 @@ class AgentController:
             item.target: frozenset(record.evidence_id for record in support)
             for item, support in ready
         }
+        self._check_request_budget("decide_candidates")
         self.checkpoints += 1
+        self.trace.write(
+            "checkpoint_visibility",
+            candidates=len(ready),
+            stall=stall,
+            forced=force,
+            checkpoints_used=self.checkpoints,
+            checkpoints_max=MAX_CHECKPOINTS,
+        )
         self.trace.write(
             "checkpoint_started",
             candidates={target: sorted(ids) for target, ids in offered.items()},
@@ -857,16 +914,25 @@ class AgentController:
         changed = False
         for decision in decisions.decisions:
             if decision.target not in offered:
-                accepted, problem = False, "target was not offered at this checkpoint"
+                outcome = LedgerOutcome(
+                    False,
+                    "target_not_offered",
+                    "target was not offered at this checkpoint",
+                )
             else:
-                accepted, problem = self.ledger.decide(
+                outcome = self.ledger.decide_checked(
                     decision.target,
                     decision.decision,
                     decision.evidence_ids,
                     decision.reason,
                     offered[decision.target],
                 )
-            if decision.decision == "keep" and decision.missing_evidence:
+            accepted, problem = outcome.changed, outcome.refusal
+            if (
+                outcome.reason_code is None
+                and decision.decision == "keep"
+                and decision.missing_evidence
+            ):
                 self.missing_notes[decision.target] = decision.missing_evidence
             changed = changed or accepted
             self.trace.write(
@@ -874,6 +940,7 @@ class AgentController:
                 decision=decision.model_dump(mode="json"),
                 accepted=accepted,
                 refusal=problem,
+                reason_code=outcome.reason_code,
             )
         return changed
 
@@ -905,19 +972,39 @@ class AgentController:
         for update in decision.ledger_updates:
             # V2: confirm/reject happen only at checkpoints (strong evidence required).
             refused = self.v2 and update.status != "suspected"
-            accepted = not refused and self.ledger.apply(update, latest_evidence)
+            outcome = (
+                LedgerOutcome(
+                    False,
+                    "checkpoint_required",
+                    "status changes are decided at checkpoints",
+                )
+                if refused
+                else self.ledger.apply_checked(update, latest_evidence)
+            )
+            accepted = outcome.changed
             changed = changed or accepted
             self.trace.write(
                 "ledger_update",
                 accepted=accepted,
                 update=update.model_dump(mode="json"),
-                **(
-                    {"refusal": "status changes are decided at checkpoints"}
-                    if refused
-                    else {}
-                ),
+                reason_code=outcome.reason_code,
+                latest_successful_evidence=latest_evidence,
+                **({"refusal": outcome.refusal} if outcome.refusal else {}),
             )
         return changed
+
+    def _latest_successful_evidence(self) -> str | None:
+        """Failed observations remain recorded but cannot become required support."""
+
+        for observation in reversed(self.observations):
+            result = observation.get("result")
+            if not isinstance(result, dict) or result.get("ok") is not True:
+                continue
+            evidence_id = result.get("evidence_id")
+            record = self.ledger.evidence.get(evidence_id)
+            if record is not None and record.result.ok:
+                return evidence_id
+        return None
 
     def _expand(self, intent: FeatureIntent) -> ExpansionResult:
         self.trace.write("expand_started", confirmed=len(self.ledger.confirmed()))
@@ -1027,6 +1114,7 @@ class AgentController:
         errors = self._repairable_errors(draft)
         if not errors:
             return draft
+        self._check_request_budget("draft_report")
         self.report_repairs += 1
         self.trace.write(
             "report_repair_started",
@@ -1161,14 +1249,7 @@ class AgentController:
                     no_progress += 1
                     continue
                 self.trace.write("decision", decision=decision.model_dump(mode="json"))
-                latest_evidence = next(
-                    (
-                        item["result"]["evidence_id"]
-                        for item in reversed(self.observations)
-                        if isinstance(item.get("result"), dict)
-                    ),
-                    None,
-                )
+                latest_evidence = self._latest_successful_evidence()
                 ledger_changed = self._apply_updates(decision, latest_evidence)
                 if decision.tool_name == "submit_report":
                     problem = self._submission_problem()
@@ -1228,6 +1309,19 @@ class AgentController:
                 status = "partial"
             else:
                 status = "abstained"
+        except TokenBudgetExceeded:
+            budget_draft = self._fallback_draft().model_copy(
+                update={
+                    "blind_spots": (
+                        BlindSpot(
+                            description="Token budget prevented another model request."
+                        ),
+                    )
+                }
+            )
+            validated = validate_report_draft(budget_draft, self.index, self.ledger)
+            status = "partial" if validated.components else "abstained"
+            stop_reason = "token_ceiling"
         except Exception as error:  # noqa: BLE001 - terminal controller safety boundary
             self.trace.write("error", error=f"{type(error).__name__}: {error}")
             validated = validate_report_draft(

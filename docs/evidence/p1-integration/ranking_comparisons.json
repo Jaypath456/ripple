@@ -1,0 +1,212 @@
+{
+  "all_complete_and_identical": true,
+  "baseline_commit": "fef4c3d0958b64f4add2a5b71f8f9a9bffb9f108",
+  "candidate_branch": "integration/v2.1.1-p1",
+  "cases": {
+    "Textualize__rich-2301": {
+      "base_commit": "695256ce5316482f15818962ba8f692a460f923f",
+      "changed_index_fields": [],
+      "complete": true,
+      "gate_passed": true,
+      "index_counts_after": {
+        "dependency_graph": 187,
+        "files": 187,
+        "imports": 1207,
+        "references": 6968,
+        "symbols": 1658,
+        "test_mappings": 176
+      },
+      "index_counts_before": {
+        "dependency_graph": 187,
+        "files": 187,
+        "imports": 1207,
+        "references": 6968,
+        "symbols": 1658,
+        "test_mappings": 176
+      },
+      "inference_calls": 0,
+      "normalized_index_identical": true,
+      "normalized_index_sha256": "032735bb4e813b25b0250059827c7a4d30c1bfc72b6713b3b5cf8da100ee709a",
+      "output_sha256": {
+        "B0": "7796de6375b608beabc1c0de451e1b1c935470b556ba94eb6e4ea4812780ace6",
+        "B1": "13da4da3fe64d01382531ba029d323575ca2dab9c3db051ba3c0bc1c4fdac99c",
+        "B2": "8b9e7768d341197526cf56933cf71859ee3d3c1b233e377890896ee2929c52da"
+      },
+      "parallel_implementations": 2,
+      "rankings": {
+        "B0": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B1": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B2": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        }
+      },
+      "request_sha256": "fb45f43498484c2f247f5a439c428c93da59741a09988bce3a2408fef2cbe14a",
+      "runs": [
+        {
+          "exit_code": 0,
+          "implementation": "p0",
+          "seconds": 6.618,
+          "timed_out": false
+        },
+        {
+          "exit_code": 0,
+          "implementation": "p1",
+          "seconds": 6.665,
+          "timed_out": false
+        }
+      ],
+      "task_id": "Textualize__rich-2301",
+      "timeout_rationale": "Full pinned Rich source and complete B0-B2 outputs, five-minute per-implementation budget.",
+      "timeout_seconds_per_implementation": 300
+    },
+    "Textualize__rich-901": {
+      "base_commit": "a9c0f917aed8d0bba232b7584742962f03a9a293",
+      "changed_index_fields": [],
+      "complete": true,
+      "gate_passed": true,
+      "index_counts_after": {
+        "dependency_graph": 155,
+        "files": 155,
+        "imports": 923,
+        "references": 4622,
+        "symbols": 1153,
+        "test_mappings": 148
+      },
+      "index_counts_before": {
+        "dependency_graph": 155,
+        "files": 155,
+        "imports": 923,
+        "references": 4622,
+        "symbols": 1153,
+        "test_mappings": 148
+      },
+      "inference_calls": 0,
+      "normalized_index_identical": true,
+      "normalized_index_sha256": "8ac79609eac76fad1c98b09964b41d479533c01d627e2567c1752ad035158c39",
+      "output_sha256": {
+        "B0": "c7475cb5e560edee3d3d357a39d7f8834d225ae3dfee873ccf4289c64c3ebe6c",
+        "B1": "6299b252f0f2447b9505b3e61c625044f722b301c3ed35cc110787f9821e37c8",
+        "B2": "83baf8b6072859fa4c8fc545a91696592b6ed70e0e30f8f8ff2a8b13a7579507"
+      },
+      "parallel_implementations": 2,
+      "rankings": {
+        "B0": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B1": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B2": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        }
+      },
+      "request_sha256": "bc495f2c0408429912460b507741be2c6af8ab50520fe26aa15b6dcda015d2bd",
+      "runs": [
+        {
+          "exit_code": 0,
+          "implementation": "p0",
+          "seconds": 5.821,
+          "timed_out": false
+        },
+        {
+          "exit_code": 0,
+          "implementation": "p1",
+          "seconds": 5.893,
+          "timed_out": false
+        }
+      ],
+      "task_id": "Textualize__rich-901",
+      "timeout_rationale": "Full pinned Rich source and complete B0-B2 outputs, five-minute per-implementation budget.",
+      "timeout_seconds_per_implementation": 300
+    },
+    "sympy__sympy-14928": {
+      "base_commit": "e53b24ad345e11769dd1989e4873380c0f94b4e2",
+      "changed_index_fields": [],
+      "complete": true,
+      "gate_passed": true,
+      "index_counts_after": {
+        "dependency_graph": 1251,
+        "files": 1251,
+        "imports": 11084,
+        "references": 248832,
+        "symbols": 24987,
+        "test_mappings": 2720
+      },
+      "index_counts_before": {
+        "dependency_graph": 1251,
+        "files": 1251,
+        "imports": 11084,
+        "references": 248832,
+        "symbols": 24987,
+        "test_mappings": 2720
+      },
+      "inference_calls": 0,
+      "normalized_index_identical": true,
+      "normalized_index_sha256": "f9d66473cba84b00ea609f6aa79a8a12370239f3b71ac669e0dcca0a7918126a",
+      "output_sha256": {
+        "B0": "5c24af8585e415eb5b871197dccc47142f43414e8e06678c40404f4afa0e897b",
+        "B1": "00e2dc96f030317d5cc24498dec3edd30ea914969468ee396d21f186fcd5918d",
+        "B2": "dbf60a4c0b123c488eaa7d9bdc17d4bf371b332304754e9b78565c6870ef76cc"
+      },
+      "parallel_implementations": 2,
+      "rankings": {
+        "B0": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B1": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        },
+        "B2": {
+          "identical": true,
+          "source_order_identical": true,
+          "test_order_identical": true
+        }
+      },
+      "request_sha256": "a3d3c7af4515ea8d0ae6c69450e499e5d4f5f1925551636e6a3bda78a5327535",
+      "runs": [
+        {
+          "exit_code": 0,
+          "implementation": "p0",
+          "seconds": 385.421,
+          "timed_out": false
+        },
+        {
+          "exit_code": 0,
+          "implementation": "p1",
+          "seconds": 389.629,
+          "timed_out": false
+        }
+      ],
+      "task_id": "sympy__sympy-14928",
+      "timeout_rationale": "Full 1,251-file pinned SymPy repository, including generated integration rules and complete B0-B2 outputs; 15 minutes is 3.75 times the prior failed 240-second audit budget.",
+      "timeout_seconds_per_implementation": 900
+    }
+  },
+  "inference_calls": 0,
+  "normalized_index_omitted_fields": [
+    "schema_version",
+    "created_at",
+    "repo_root"
+  ],
+  "scope": "Three pinned representative corpora, same requests and 501-level history; no full 85-task ranking replay. All indexing/ranking implementation files and historical audit evidence are byte-identical to P0."
+}

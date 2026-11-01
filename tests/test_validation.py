@@ -79,13 +79,17 @@ def test_twice_rejected_candidate_cannot_be_resuspected(indexed_repo) -> None:
     )
     assert ledger.apply(reject, "e1")
     assert not ledger.apply(reject, "e1")
-    assert ledger.candidates[target].rejection_count == 2
+    # A refused duplicate is atomic; count only accepted rejection transitions.
+    assert ledger.candidates[target].rejection_count == 1
     resuspect = CandidateUpdate(
         target=target,
         status="suspected",
         reason="try to reopen",
         evidence_ids=("e1",),
     )
+    assert ledger.apply(resuspect, "e1")
+    assert ledger.apply(reject, "e1")
+    assert ledger.candidates[target].rejection_count == 2
     assert not ledger.apply(resuspect, "e1")
     assert ledger.candidates[target].status == "rejected"
 

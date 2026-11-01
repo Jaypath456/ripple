@@ -92,6 +92,7 @@ def validate_report_draft(
             evidence_id
             for evidence_id in component.evidence
             if evidence_id in ledger.evidence
+            and ledger.evidence[evidence_id].result.ok
             and component.target in ledger.evidence[evidence_id].touched_targets
         )
         if not valid_evidence:
@@ -130,7 +131,10 @@ def validate_report_draft(
                 continue
             if claim in required:
                 continue
-            valid_evidence = all(item in ledger.evidence for item in claim.evidence)
+            valid_evidence = all(
+                item in ledger.evidence and ledger.evidence[item].result.ok
+                for item in claim.evidence
+            )
             touched = all(
                 any(
                     target in ledger.evidence[item].touched_targets
@@ -157,6 +161,7 @@ def validate_report_draft(
             evidence_id
             for evidence_id in test.evidence
             if evidence_id in ledger.evidence
+            and ledger.evidence[evidence_id].result.ok
             and ledger.evidence[evidence_id].tool_name == "find_tests"
         )
         if not valid_evidence:
@@ -180,7 +185,10 @@ def validate_report_draft(
     for risk in draft.risks:
         if isinstance(risk, str):
             continue
-        if not all(item in ledger.evidence for item in risk.evidence):
+        if not all(
+            item in ledger.evidence and ledger.evidence[item].result.ok
+            for item in risk.evidence
+        ):
             dropped.append(f"risk without valid evidence dropped: {risk.description}")
             continue
         if not all(target in allowed_targets for target in risk.related_targets):
