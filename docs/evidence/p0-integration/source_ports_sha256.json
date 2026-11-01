@@ -1,0 +1,90 @@
+[
+  {
+    "baseline_sha256": "dcda36b349a0d6cd482867d0dac06c782d62653097e1a1f6b5b09570cfef320b",
+    "delivery_sha256": "88150aaac7e6895b3deaf7fde115ea6be8e92f84a7097427f463e1a4ae7c4b76",
+    "intentional_adaptation": "Delivery safeguards plus cache-only source-policy provenance/freshness.",
+    "matches_delivery_file": false,
+    "path": "src/ripple/cache.py",
+    "sha256": "0451e91949ec9c93aad3c9e40bc9475ecba343df1a9b10576fd07a60b0913749"
+  },
+  {
+    "baseline_sha256": "1d609408840c46eb0aeabf6989f7fde0bcd3ded0d851af345ea29e4ded7520ec",
+    "delivery_sha256": "ae14728808e1113a83ea5f2350cc25492067a93328d390f4876b65be3ca3ef96",
+    "intentional_adaptation": "Selective offline verification and evaluate-agent fixes on frozen V2 CLI.",
+    "matches_delivery_file": false,
+    "path": "src/ripple/cli.py",
+    "sha256": "a5d979b230365d2f9898b5d6270ee5a9ef6bbbe592edf0e300e01e9be7c7429e"
+  },
+  {
+    "baseline_sha256": "b0413abe37b2079e46e81596aa06a824cc45aa8e4c0fe7d8c30cff74b1c1d56e",
+    "delivery_sha256": "30ef6a372d51d88327a06af152505eb052061038a83ab86b0d7e0d401d6e2b74",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/diffing.py",
+    "sha256": "30ef6a372d51d88327a06af152505eb052061038a83ab86b0d7e0d401d6e2b74"
+  },
+  {
+    "baseline_sha256": "c97a1c0a63ee547ba2f0fa92291347b7b2e3eccf1907b9fbeb83708b340db918",
+    "delivery_sha256": "ba584f613614230682ae462cfb8684ed4c73cfd66df9e85f2800c0efe5e057e9",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/evaluation.py",
+    "sha256": "ba584f613614230682ae462cfb8684ed4c73cfd66df9e85f2800c0efe5e057e9"
+  },
+  {
+    "baseline_sha256": "8ec5286b12eb7ae079cda6e1472fe01ff9d6970174fa88f17f3dcae65085774c",
+    "delivery_sha256": "9679441ef8fc09f77b00f59a0cec0908c45313e4608f9fbf4b14a6624348b9d0",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/facts.py",
+    "sha256": "9679441ef8fc09f77b00f59a0cec0908c45313e4608f9fbf4b14a6624348b9d0"
+  },
+  {
+    "baseline_sha256": "f1288e14ca563e93e10ed16940e47d2cbc506b049e3166de2ae3c97eae8492ad",
+    "delivery_sha256": "1e0073923482a18d0c0c7e1b3d92ee393cd90d7cfc6230c2b0ae76a8189f4356",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/models.py",
+    "sha256": "1e0073923482a18d0c0c7e1b3d92ee393cd90d7cfc6230c2b0ae76a8189f4356"
+  },
+  {
+    "baseline_sha256": "6047b73418e707bf6040808b73f1c9d9e9630e09a0a7630f9281e822d3f3d74c",
+    "delivery_sha256": "e4c0787378fbf184ebbb2d0f3b0634128d90929646176402de89dbfdf7ff13e2",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/scanner.py",
+    "sha256": "e4c0787378fbf184ebbb2d0f3b0634128d90929646176402de89dbfdf7ff13e2"
+  },
+  {
+    "baseline_sha256": "a192481bdc6ebda66faf75146e5c2c2854b2523091dbad02a0598c35b977dee7",
+    "delivery_sha256": "03eb419ff5ee95eeb62aa86ab491cc837161ba642b01593884f52b5cdd61d3cb",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/search.py",
+    "sha256": "03eb419ff5ee95eeb62aa86ab491cc837161ba642b01593884f52b5cdd61d3cb"
+  },
+  {
+    "baseline_sha256": null,
+    "delivery_sha256": "561bcec130a53010b95f065b8cd09a140d44a1db2846f2670613f6696166e951",
+    "intentional_adaptation": "Approved 2 MiB / 32,768-character bounds; named bounded in-memory reader preserves frozen encoding-error diagnostics. All path/open/read guards unchanged.",
+    "matches_delivery_file": false,
+    "path": "src/ripple/source.py",
+    "sha256": "a8513b8b9dbc1723bcb31879aad778e46afbe0524af94d87fd998664da85e8a5"
+  },
+  {
+    "baseline_sha256": "e93e8f4d84d020ac6bfe2df2df837b58177a32cba4b6311039293aa87f08dd7c",
+    "delivery_sha256": "c12de7b4c649de13cfa5b734fcc9600c355ac9279ba98aa98884e380954714a7",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/tools.py",
+    "sha256": "c12de7b4c649de13cfa5b734fcc9600c355ac9279ba98aa98884e380954714a7"
+  },
+  {
+    "baseline_sha256": "c653daa9b3846e232bf05b0fcb67cc6b113f58f4e6511579d51b8cf28c5be636",
+    "delivery_sha256": "4a43bd525fd57e0f6f900e5e0b4dbf0bbcedb9059f08a02900157fb998a46a38",
+    "intentional_adaptation": null,
+    "matches_delivery_file": true,
+    "path": "src/ripple/verification.py",
+    "sha256": "4a43bd525fd57e0f6f900e5e0b4dbf0bbcedb9059f08a02900157fb998a46a38"
+  }
+]

@@ -1,0 +1,118 @@
+{
+  "actual_pinned_sympy_and_both_rich_fixtures_exercised": true,
+  "baseline": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 41.355
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.062
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.021
+      }
+    ],
+    "passed": 235,
+    "skipped": 6
+  },
+  "baseline_test_statuses_preserved": true,
+  "final_followup": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 5.289
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.023
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.023
+      }
+    ],
+    "passed": 25,
+    "skipped": 0
+  },
+  "final_full_suite": {
+    "check": {
+      "check": "pytest",
+      "exit_code": 0,
+      "seconds": 62.998
+    },
+    "passed": 285,
+    "skipped": 6
+  },
+  "inference_calls": 0,
+  "new_regressions": {
+    "tests.test_p0_cli::test_evaluate_agent_uses_supported_arguments": "passed",
+    "tests.test_p0_cli::test_verify_default_preserves_configured_provider_wiring": "passed",
+    "tests.test_p0_cli::test_verify_offline_never_constructs_configured_provider": "passed",
+    "tests.test_p0_security::test_committed_empty_python_corpus_is_supported": "passed",
+    "tests.test_p0_security::test_diff_never_executes_textconv": "passed",
+    "tests.test_p0_security::test_diff_preserves_unusual_git_paths[:(literal)special.py]": "passed",
+    "tests.test_p0_security::test_diff_preserves_unusual_git_paths[caf\\xe9.py]": "passed",
+    "tests.test_p0_security::test_diff_preserves_unusual_git_paths[line\\nname.py]": "passed",
+    "tests.test_p0_security::test_diff_preserves_unusual_git_paths[quote\"name.py]": "passed",
+    "tests.test_p0_security::test_diff_preserves_unusual_git_paths[tab\\tname.py]": "passed",
+    "tests.test_p0_security::test_evaluation_preserves_unowned_existing_checkout": "passed",
+    "tests.test_p0_security::test_file_to_symlink_change_stays_visible": "passed",
+    "tests.test_p0_security::test_massive_file_and_long_line_are_visible_skips[content0]": "passed",
+    "tests.test_p0_security::test_massive_file_and_long_line_are_visible_skips[content1]": "passed",
+    "tests.test_p0_security::test_owned_evaluation_checkout_resumes_but_preserves_user_edits": "passed",
+    "tests.test_p0_security::test_parser_edge_cases_do_not_crash[\\x00]": "passed",
+    "tests.test_p0_security::test_parser_edge_cases_do_not_crash[\\xff\\xff]": "passed",
+    "tests.test_p0_security::test_parser_edge_cases_do_not_crash[]": "passed",
+    "tests.test_p0_security::test_parser_edge_cases_do_not_crash[def invalid(:\\n]": "passed",
+    "tests.test_p0_security::test_state_directory_symlink_cannot_redirect_cache_writes": "passed",
+    "tests.test_p0_security::test_tracked_symlink_does_not_index_external_source": "passed",
+    "tests.test_p0_security::test_unknown_encoding_is_a_per_file_error": "passed",
+    "tests.test_p0_source_security::test_cache_rebuilds_when_line_limit_changes": "passed",
+    "tests.test_p0_source_security::test_cache_rebuilds_when_source_limits_change": "passed",
+    "tests.test_p0_source_security::test_encoding_errors_preserve_frozen_reader_diagnostics[# coding: nonexistent-codec\\nx = 1\\n]": "passed",
+    "tests.test_p0_source_security::test_encoding_errors_preserve_frozen_reader_diagnostics[\\xef\\xbb\\xbf# coding: latin-1\\nx = 1\\n]": "passed",
+    "tests.test_p0_source_security::test_encoding_errors_preserve_frozen_reader_diagnostics[\\xffinvalid\\n]": "passed",
+    "tests.test_p0_source_security::test_inspection_character_cap_reports_truncation": "passed",
+    "tests.test_p0_source_security::test_line_limit_accepts_boundary_and_rejects_one_extra": "passed",
+    "tests.test_p0_source_security::test_pinned_rich_fixture_is_indexed_with_its_string_document[Textualize__rich-2301-9c11d1c7189972e98a865e4e3bdf877282839f8c9e7843a6f9a59a31c201b680-27514]": "passed",
+    "tests.test_p0_source_security::test_pinned_rich_fixture_is_indexed_with_its_string_document[Textualize__rich-901-048ba0f89f19f8e77cefcc77a0678f6b0ad2bafde7816667c4a5dc05a70b622b-26718]": "passed",
+    "tests.test_p0_source_security::test_pinned_sympy_sine_is_indexed_successfully": "passed",
+    "tests.test_p0_source_security::test_scanner_rejects_source_over_two_mib_with_short_lines": "passed",
+    "tests.test_p0_source_security::test_scanner_safely_rejects_valid_literal_line_over_32768": "passed",
+    "tests.test_p0_source_security::test_schema_four_cache_without_source_policy_is_rebuilt": "passed",
+    "tests.test_p0_source_security::test_source_byte_limit_accepts_boundary_and_rejects_one_extra": "passed",
+    "tests.test_p0_source_security::test_source_reader_rejects_fifo_without_waiting_for_a_writer": "passed",
+    "tests.test_p0_source_security::test_source_reader_rejects_path_escape[../outside.py]": "passed",
+    "tests.test_p0_source_security::test_source_reader_rejects_path_escape[/outside.py]": "passed",
+    "tests.test_p0_source_security::test_source_reader_rejects_symlink_directory": "passed",
+    "tests.test_p0_source_security::test_stale_index_reader_cannot_follow_replaced_source[dirty_cache]": "passed",
+    "tests.test_p0_source_security::test_stale_index_reader_cannot_follow_replaced_source[facts]": "passed",
+    "tests.test_p0_source_security::test_stale_index_reader_cannot_follow_replaced_source[inspect]": "passed",
+    "tests.test_p0_source_security::test_stale_index_reader_cannot_follow_replaced_source[search]": "passed",
+    "tests.test_p0_source_security::test_valid_python_lines_remain_indexable[16384]": "passed",
+    "tests.test_p0_source_security::test_valid_python_lines_remain_indexable[27514]": "passed",
+    "tests.test_p0_source_security::test_valid_python_lines_remain_indexable[32768]": "passed",
+    "tests.test_p0_verification_security::test_verification_clone_ignores_hostile_checkout_hook": "passed",
+    "tests.test_p0_verification_security::test_verification_rejects_symlinked_output_directory": "passed",
+    "tests.test_p0_verification_security::test_verification_rejects_symlinked_report_directory": "passed"
+  },
+  "resolved_lint_finding": "SIM117 in one new diagnostic test. Combined nested contexts, then reran that entire 25-case module, full-repository Ruff and formatting.",
+  "skipped_optional_tests": {
+    "tests.test_demo::test_every_showcase_page_renders[page_about]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_how]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_live]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_results]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_guided_demo_discloses_progressively": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_live_page_shows_a_compact_diagnosis_for_abstention": "could not import 'streamlit.testing.v1': No module named 'streamlit'"
+  },
+  "socket_guard_enabled": true
+}

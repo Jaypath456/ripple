@@ -2,7 +2,6 @@
 
 import ast
 import subprocess
-import tokenize
 import warnings
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -11,6 +10,7 @@ from pathlib import Path
 from ripple.graph import build_dependency_graph
 from ripple.models import FileRecord, ImportRecord, RepositoryIndex, SymbolRecord
 from ripple.references import extract_references
+from ripple.source import SourceError, read_python_source
 from ripple.test_mapping import build_test_mappings
 
 
@@ -269,7 +269,7 @@ def _parse_error(error: SyntaxError) -> str:
     return f"{location}: {error.msg}"
 
 
-def _file_error(error: OSError | UnicodeError) -> str:
+def _file_error(error: Exception) -> str:
     if isinstance(error, OSError):
         detail = error.strerror or str(error)
     else:
@@ -288,12 +288,13 @@ def _scan_file(
     ast.Module | None,
 ]:
     try:
-        with (
-            tokenize.open(repo_root / path) as source_file,
-            warnings.catch_warnings(),
-        ):
+        with warnings.catch_warnings():
             warnings.simplefilter("ignore", SyntaxWarning)
-            tree = ast.parse(source_file.read(), filename=path.as_posix())
+            tree = ast.parse(
+                read_python_source(repo_root, path), filename=path.as_posix()
+            )
+            symbols = _extract_symbols(tree, path)
+            imports = _extract_imports(tree, path, module_name(path), module_paths)
     except SyntaxError as error:
         return (
             FileRecord(
@@ -306,7 +307,7 @@ def _scan_file(
             (),
             None,
         )
-    except (OSError, UnicodeError) as error:
+    except (OSError, UnicodeError, SourceError, RecursionError, LookupError) as error:
         return (
             FileRecord(
                 path=path,
@@ -319,8 +320,6 @@ def _scan_file(
             None,
         )
 
-    symbols = _extract_symbols(tree, path)
-    imports = _extract_imports(tree, path, module_name(path), module_paths)
     return (
         FileRecord(
             path=path,

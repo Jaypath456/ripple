@@ -3,7 +3,6 @@
 import ast
 import math
 import re
-import tokenize as source_tokenize
 import warnings
 from collections import Counter
 from dataclasses import dataclass
@@ -13,6 +12,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict
 
 from ripple.models import RepositoryIndex
+from ripple.source import SourceError, read_python_source
 
 _CAMEL_BOUNDARY = re.compile(r"([a-z0-9])([A-Z])")
 _ACRONYM_BOUNDARY = re.compile(r"([A-Z]+)([A-Z][a-z])")
@@ -60,13 +60,13 @@ def _string_documents(index: RepositoryIndex) -> tuple[_Document, ...]:
         if file.parse_error is not None:
             continue
         try:
-            with (
-                source_tokenize.open(index.repo_root / file.path) as source_file,
-                warnings.catch_warnings(),
-            ):
+            with warnings.catch_warnings():
                 warnings.simplefilter("ignore", SyntaxWarning)
-                tree = ast.parse(source_file.read(), filename=file.path.as_posix())
-        except (OSError, SyntaxError, UnicodeError):
+                tree = ast.parse(
+                    read_python_source(index.repo_root, file.path),
+                    filename=file.path.as_posix(),
+                )
+        except (OSError, SyntaxError, UnicodeError, SourceError, RecursionError):
             continue
         strings = sorted(
             (

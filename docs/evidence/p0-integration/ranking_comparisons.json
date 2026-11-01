@@ -1,0 +1,333 @@
+{
+  "cases": {
+    "rich-2301": {
+      "comparison": {
+        "base_commit": "695256ce5316482f15818962ba8f692a460f923f",
+        "changed_index_fields": [],
+        "complete": true,
+        "gate_passed": true,
+        "index_counts_after": {
+          "dependency_graph": 187,
+          "files": 187,
+          "imports": 1207,
+          "references": 6968,
+          "symbols": 1658,
+          "test_mappings": 176
+        },
+        "index_counts_before": {
+          "dependency_graph": 187,
+          "files": 187,
+          "imports": 1207,
+          "references": 6968,
+          "symbols": 1658,
+          "test_mappings": 176
+        },
+        "inference_calls": 0,
+        "normalized_index_identical": true,
+        "parallel_implementations": 2,
+        "rankings": {
+          "B0": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B1": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B2": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          }
+        },
+        "request_sha256": "fb45f43498484c2f247f5a439c428c93da59741a09988bce3a2408fef2cbe14a",
+        "runs": [
+          {
+            "exit_code": 0,
+            "implementation": "frozen",
+            "seconds": 7.763,
+            "timed_out": false
+          },
+          {
+            "exit_code": 0,
+            "implementation": "ported",
+            "seconds": 7.811,
+            "timed_out": false
+          }
+        ],
+        "task_id": "Textualize__rich-2301",
+        "timeout_rationale": "Full pinned Rich source and complete B0-B2 outputs, five-minute per-implementation budget.",
+        "timeout_seconds_per_implementation": 300
+      },
+      "normalized_index_sha256": "032735bb4e813b25b0250059827c7a4d30c1bfc72b6713b3b5cf8da100ee709a",
+      "output_detail": {
+        "B0": {
+          "source_predictions": {
+            "count": 123,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "dacb1c9c83eded2d4859b21fb97d0f4446ad8b38f27ca0d2b95e1067f61d0d19",
+            "full_output_sha256_before": "dacb1c9c83eded2d4859b21fb97d0f4446ad8b38f27ca0d2b95e1067f61d0d19"
+          },
+          "test_predictions": {
+            "count": 0,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "full_output_sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "B1": {
+          "source_predictions": {
+            "count": 123,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "a7651985121c0e228bce7fe8699b1d834c5dcabea591660d9588554f09a87e5a",
+            "full_output_sha256_before": "a7651985121c0e228bce7fe8699b1d834c5dcabea591660d9588554f09a87e5a"
+          },
+          "test_predictions": {
+            "count": 56,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "e8bc226e29e30e344c338e1256c132fd286d80e4f02dbfe46dcdcaa76209714a",
+            "full_output_sha256_before": "e8bc226e29e30e344c338e1256c132fd286d80e4f02dbfe46dcdcaa76209714a"
+          }
+        },
+        "B2": {
+          "source_predictions": {
+            "count": 123,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "ec6cb9d915f5e26e52d14df49468dc81c564210488887909e1a952f0d598bcd1",
+            "full_output_sha256_before": "ec6cb9d915f5e26e52d14df49468dc81c564210488887909e1a952f0d598bcd1"
+          },
+          "test_predictions": {
+            "count": 44,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "428156b33d8076e2523bfe8a8ddee81741e64afc3fb20f81216d36eca8679bda",
+            "full_output_sha256_before": "428156b33d8076e2523bfe8a8ddee81741e64afc3fb20f81216d36eca8679bda"
+          }
+        }
+      }
+    },
+    "rich-901": {
+      "comparison": {
+        "base_commit": "a9c0f917aed8d0bba232b7584742962f03a9a293",
+        "changed_index_fields": [],
+        "complete": true,
+        "gate_passed": true,
+        "index_counts_after": {
+          "dependency_graph": 155,
+          "files": 155,
+          "imports": 923,
+          "references": 4622,
+          "symbols": 1153,
+          "test_mappings": 148
+        },
+        "index_counts_before": {
+          "dependency_graph": 155,
+          "files": 155,
+          "imports": 923,
+          "references": 4622,
+          "symbols": 1153,
+          "test_mappings": 148
+        },
+        "inference_calls": 0,
+        "normalized_index_identical": true,
+        "parallel_implementations": 2,
+        "rankings": {
+          "B0": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B1": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B2": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          }
+        },
+        "request_sha256": "bc495f2c0408429912460b507741be2c6af8ab50520fe26aa15b6dcda015d2bd",
+        "runs": [
+          {
+            "exit_code": 0,
+            "implementation": "frozen",
+            "seconds": 6.809,
+            "timed_out": false
+          },
+          {
+            "exit_code": 0,
+            "implementation": "ported",
+            "seconds": 6.925,
+            "timed_out": false
+          }
+        ],
+        "task_id": "Textualize__rich-901",
+        "timeout_rationale": "Full pinned Rich source and complete B0-B2 outputs, five-minute per-implementation budget.",
+        "timeout_seconds_per_implementation": 300
+      },
+      "normalized_index_sha256": "8ac79609eac76fad1c98b09964b41d479533c01d627e2567c1752ad035158c39",
+      "output_detail": {
+        "B0": {
+          "source_predictions": {
+            "count": 96,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "1c715e0241470a995eccf52089bc604b41b6b2ff3b93debd172bd28c5233acd5",
+            "full_output_sha256_before": "1c715e0241470a995eccf52089bc604b41b6b2ff3b93debd172bd28c5233acd5"
+          },
+          "test_predictions": {
+            "count": 0,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "full_output_sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "B1": {
+          "source_predictions": {
+            "count": 96,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "920e0dffea4415f1d1f579ff95910652ea529e8bb519e0d89c7d34fba41c5ec1",
+            "full_output_sha256_before": "920e0dffea4415f1d1f579ff95910652ea529e8bb519e0d89c7d34fba41c5ec1"
+          },
+          "test_predictions": {
+            "count": 50,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "577672e7d1c756a084fed793cc259f07bc02612daab0eadf7d7a9f541f7b4bc3",
+            "full_output_sha256_before": "577672e7d1c756a084fed793cc259f07bc02612daab0eadf7d7a9f541f7b4bc3"
+          }
+        },
+        "B2": {
+          "source_predictions": {
+            "count": 96,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "97616af4946198a5d5981f34c0954c4570ec764fbfc6fc90a42b37722517eabe",
+            "full_output_sha256_before": "97616af4946198a5d5981f34c0954c4570ec764fbfc6fc90a42b37722517eabe"
+          },
+          "test_predictions": {
+            "count": 43,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "6f0ee72c95aaf7ce780533098889a11f8c3696498c75d30cbaea49929588f223",
+            "full_output_sha256_before": "6f0ee72c95aaf7ce780533098889a11f8c3696498c75d30cbaea49929588f223"
+          }
+        }
+      }
+    },
+    "sympy": {
+      "comparison": {
+        "base_commit": "e53b24ad345e11769dd1989e4873380c0f94b4e2",
+        "changed_index_fields": [],
+        "complete": true,
+        "gate_passed": true,
+        "index_counts_after": {
+          "dependency_graph": 1251,
+          "files": 1251,
+          "imports": 11084,
+          "references": 248832,
+          "symbols": 24987,
+          "test_mappings": 2720
+        },
+        "index_counts_before": {
+          "dependency_graph": 1251,
+          "files": 1251,
+          "imports": 11084,
+          "references": 248832,
+          "symbols": 24987,
+          "test_mappings": 2720
+        },
+        "inference_calls": 0,
+        "normalized_index_identical": true,
+        "parallel_implementations": 2,
+        "rankings": {
+          "B0": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B1": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          },
+          "B2": {
+            "identical": true,
+            "source_order_identical": true,
+            "test_order_identical": true
+          }
+        },
+        "request_sha256": "a3d3c7af4515ea8d0ae6c69450e499e5d4f5f1925551636e6a3bda78a5327535",
+        "runs": [
+          {
+            "exit_code": 0,
+            "implementation": "frozen",
+            "seconds": 361.012,
+            "timed_out": false
+          },
+          {
+            "exit_code": 0,
+            "implementation": "ported",
+            "seconds": 364.575,
+            "timed_out": false
+          }
+        ],
+        "task_id": "sympy__sympy-14928",
+        "timeout_rationale": "Full 1,251-file pinned SymPy repository, including generated integration rules and complete B0-B2 outputs; 15 minutes is 3.75 times the prior failed 240-second audit budget.",
+        "timeout_seconds_per_implementation": 900
+      },
+      "normalized_index_sha256": "f9d66473cba84b00ea609f6aa79a8a12370239f3b71ac669e0dcca0a7918126a",
+      "output_detail": {
+        "B0": {
+          "source_predictions": {
+            "count": 719,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "1df6c534922216d936fa3173afdc2cc17f8cdad9b904f8bcccbc5e554aeb6335",
+            "full_output_sha256_before": "1df6c534922216d936fa3173afdc2cc17f8cdad9b904f8bcccbc5e554aeb6335"
+          },
+          "test_predictions": {
+            "count": 0,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "full_output_sha256_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "B1": {
+          "source_predictions": {
+            "count": 719,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "4968f6b7d1d6800808ba898fc6c75a55391a76e1e1db1c7fc38d4f309c50e4b6",
+            "full_output_sha256_before": "4968f6b7d1d6800808ba898fc6c75a55391a76e1e1db1c7fc38d4f309c50e4b6"
+          },
+          "test_predictions": {
+            "count": 435,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "4bc4498576e9df6ee26a9580838267cc6ea8bfe70b573a32a2252942b205f540",
+            "full_output_sha256_before": "4bc4498576e9df6ee26a9580838267cc6ea8bfe70b573a32a2252942b205f540"
+          }
+        },
+        "B2": {
+          "source_predictions": {
+            "count": 719,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "75a8dd6fc858fe67373409cde84439996ec1690559e13030945abf4f963b6c75",
+            "full_output_sha256_before": "75a8dd6fc858fe67373409cde84439996ec1690559e13030945abf4f963b6c75"
+          },
+          "test_predictions": {
+            "count": 14,
+            "full_objects_identical": true,
+            "full_output_sha256_after": "26448ccf9adc23ff9e8ea3ba89165aea51fa139e36667e4201baea568380116f",
+            "full_output_sha256_before": "26448ccf9adc23ff9e8ea3ba89165aea51fa139e36667e4201baea568380116f"
+          }
+        }
+      }
+    }
+  },
+  "complete_comparisons": 3,
+  "normalized_index_excluded_fields": [
+    "schema_version",
+    "created_at",
+    "repo_root"
+  ],
+  "note": "All other index fields and complete B0/B1/B2 output objects, including scores, match. No timeout or assumed equality. Full ranking scope is the three targeted pins.",
+  "ranking_replayed_for_all_85_tasks": false
+}

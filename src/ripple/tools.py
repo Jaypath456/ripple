@@ -2,7 +2,6 @@
 
 import difflib
 import json
-import tokenize
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -14,9 +13,11 @@ from ripple.graph import fan_in, neighbors
 from ripple.history import HistoryError, co_changed
 from ripple.models import RepositoryIndex, SymbolRecord
 from ripple.search import SearchIndex
+from ripple.source import SourceError, read_python_source
 
 SEARCH_LIMIT = 15
 INSPECT_SOURCE_LINES = 120
+INSPECT_SOURCE_CHARACTERS = 12_000
 INSPECT_OUTLINE_SYMBOLS = 100
 REFERENCE_LIMIT = 40
 DEPENDENCY_LIMIT = 100
@@ -315,9 +316,8 @@ class ToolSession:
                 self._closest(symbol_id, [item.id for item in file_symbols]),
             )
         try:
-            with tokenize.open(self.index.repo_root / path) as source_file:
-                lines = source_file.read().splitlines()
-        except (OSError, SyntaxError, UnicodeError) as error:
+            lines = read_python_source(self.index.repo_root, path).splitlines()
+        except (OSError, SyntaxError, UnicodeError, SourceError) as error:
             return error_result(
                 evidence_id,
                 "parse_error",
@@ -326,6 +326,8 @@ class ToolSession:
         source_lines = lines[symbol.start_line - 1 : symbol.end_line]
         truncated = len(source_lines) > INSPECT_SOURCE_LINES
         source = "\n".join(source_lines[:INSPECT_SOURCE_LINES])
+        truncated = truncated or len(source) > INSPECT_SOURCE_CHARACTERS
+        source = source[:INSPECT_SOURCE_CHARACTERS]
         return ToolResult(
             ok=True,
             data={

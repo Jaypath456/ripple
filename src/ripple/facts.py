@@ -2,13 +2,13 @@
 
 import ast
 import json
-import tokenize
 from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
 from ripple.models import RepositoryIndex
+from ripple.source import SourceError, read_python_source
 
 FACT_LIMIT = 200
 FactKind = Literal["routes", "models", "settings", "migrations", "entry_points"]
@@ -345,9 +345,11 @@ def extract_repository_facts(
         if file.parse_error:
             continue
         try:
-            with tokenize.open(index.repo_root / file.path) as stream:
-                tree = ast.parse(stream.read(), filename=file.path.as_posix())
-        except (OSError, SyntaxError, UnicodeError):
+            tree = ast.parse(
+                read_python_source(index.repo_root, file.path),
+                filename=file.path.as_posix(),
+            )
+        except (OSError, SyntaxError, UnicodeError, SourceError, RecursionError):
             continue
         routes.extend(_decorator_routes(tree, file.path))
         routes.extend(_django_routes(tree, file.path))

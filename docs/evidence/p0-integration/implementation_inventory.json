@@ -1,0 +1,98 @@
+[
+  {
+    "path": "src/ripple/cache.py",
+    "bytes": 4549,
+    "sha256": "0451e91949ec9c93aad3c9e40bc9475ecba343df1a9b10576fd07a60b0913749",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/cli.py",
+    "bytes": 19780,
+    "sha256": "a5d979b230365d2f9898b5d6270ee5a9ef6bbbe592edf0e300e01e9be7c7429e",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/diffing.py",
+    "bytes": 10955,
+    "sha256": "30ef6a372d51d88327a06af152505eb052061038a83ab86b0d7e0d401d6e2b74",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/evaluation.py",
+    "bytes": 51548,
+    "sha256": "ba584f613614230682ae462cfb8684ed4c73cfd66df9e85f2800c0efe5e057e9",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/facts.py",
+    "bytes": 14676,
+    "sha256": "9679441ef8fc09f77b00f59a0cec0908c45313e4608f9fbf4b14a6624348b9d0",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/models.py",
+    "bytes": 2792,
+    "sha256": "1e0073923482a18d0c0c7e1b3d92ee393cd90d7cfc6230c2b0ae76a8189f4356",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/scanner.py",
+    "bytes": 13624,
+    "sha256": "e4c0787378fbf184ebbb2d0f3b0634128d90929646176402de89dbfdf7ff13e2",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/search.py",
+    "bytes": 7177,
+    "sha256": "03eb419ff5ee95eeb62aa86ab491cc837161ba642b01593884f52b5cdd61d3cb",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/source.py",
+    "bytes": 2168,
+    "sha256": "a8513b8b9dbc1723bcb31879aad778e46afbe0524af94d87fd998664da85e8a5",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/tools.py",
+    "bytes": 18986,
+    "sha256": "c12de7b4c649de13cfa5b734fcc9600c355ac9279ba98aa98884e380954714a7",
+    "kind": "production"
+  },
+  {
+    "path": "src/ripple/verification.py",
+    "bytes": 29560,
+    "sha256": "4a43bd525fd57e0f6f900e5e0b4dbf0bbcedb9059f08a02900157fb998a46a38",
+    "kind": "production"
+  },
+  {
+    "path": "tests/test_p0_cli.py",
+    "bytes": 2910,
+    "sha256": "e46df4d142a31c0e3daca5afd85440d69d46fa262b0a55b1efedf29dd76ede3c",
+    "kind": "regression_test"
+  },
+  {
+    "path": "tests/test_p0_security.py",
+    "bytes": 7234,
+    "sha256": "a7e5dc9c49393a537c4ff69fdd213f789fe890e21e6b1f0296c6e6d348259b08",
+    "kind": "regression_test"
+  },
+  {
+    "path": "tests/test_p0_source_security.py",
+    "bytes": 10953,
+    "sha256": "fda7e02d13f62a5bb65f99aaf7c91098500822246d2806404d8935cd809ed7b8",
+    "kind": "regression_test"
+  },
+  {
+    "path": "tests/test_p0_verification_security.py",
+    "bytes": 2649,
+    "sha256": "b3af097762eb9cd285f1441198b35c760545d17f6b4bf9f46d5c45a4bed542ca",
+    "kind": "regression_test"
+  },
+  {
+    "path": "tests/test_references.py",
+    "bytes": 6412,
+    "sha256": "7686720d56a4752a15a5241b1435ee823b2851c45f58e1c24bf65e74ae3302fe",
+    "kind": "regression_test"
+  }
+]

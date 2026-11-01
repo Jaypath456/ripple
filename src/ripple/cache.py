@@ -1,6 +1,7 @@
 """Small JSON cache for deterministic repository indexes."""
 
 import hashlib
+import json
 import os
 import tempfile
 from dataclasses import dataclass
@@ -8,6 +9,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from ripple import source
 from ripple.models import INDEX_SCHEMA_VERSION, RepositoryIndex
 from ripple.scanner import (
     ScanError,
@@ -15,8 +17,16 @@ from ripple.scanner import (
     _RepositoryState,
     _scan_repository_state,
 )
+from ripple.source import SourceError, checked_path, read_source_bytes
 
 CACHE_DIRECTORY = Path(".ripple/index")
+
+
+def _source_policy() -> dict[str, int]:
+    return {
+        "max_source_bytes": source.MAX_SOURCE_BYTES,
+        "max_line_characters": source.MAX_LINE_CHARACTERS,
+    }
 
 
 @dataclass(frozen=True)
@@ -35,12 +45,14 @@ def _dirty_digest(state: _RepositoryState) -> str:
         digest.update(len(encoded_path).to_bytes(8, "big"))
         digest.update(encoded_path)
         try:
-            content = (state.repo_root / path).read_bytes()
+            content = read_source_bytes(state.repo_root, path)
         except FileNotFoundError:
             digest.update(b"missing")
         except OSError as error:
             digest.update(b"unreadable")
             digest.update(str(error.errno).encode("ascii"))
+        except SourceError as error:
+            digest.update(str(error).encode("utf-8"))
         else:
             digest.update(b"content")
             digest.update(len(content).to_bytes(8, "big"))
@@ -58,7 +70,13 @@ def _cache_path(state: _RepositoryState) -> Path:
 
 def _load_cache(path: Path, state: _RepositoryState) -> RepositoryIndex | None:
     try:
-        index = RepositoryIndex.model_validate_json(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if (
+            not isinstance(payload, dict)
+            or payload.get("_source_policy") != _source_policy()
+        ):
+            return None
+        index = RepositoryIndex.model_validate(payload)
     except (OSError, ValidationError, ValueError):
         return None
 
@@ -84,7 +102,9 @@ def _write_cache(path: Path, index: RepositoryIndex) -> None:
         )
         temporary_path = Path(temporary_name)
         with os.fdopen(descriptor, "w", encoding="utf-8") as cache_file:
-            cache_file.write(index.model_dump_json(indent=2))
+            payload = index.model_dump(mode="json")
+            payload["_source_policy"] = _source_policy()
+            json.dump(payload, cache_file, indent=2, ensure_ascii=False)
             cache_file.write("\n")
             cache_file.flush()
             os.fsync(cache_file.fileno())
@@ -111,6 +131,10 @@ def scan_repository_cached(
         )
 
     path = _cache_path(state)
+    try:
+        checked_path(state.repo_root, path.relative_to(state.repo_root))
+    except SourceError as error:
+        raise ScanError(str(error)) from error
     cached_index = _load_cache(path, state)
     if cached_index is not None:
         return ScanResult(index=cached_index, cache_path=path, cache_hit=True)

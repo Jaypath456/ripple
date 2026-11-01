@@ -214,7 +214,7 @@ def run():
     rebuilt = scan_repository_cached(repository)
 
     assert rebuilt.cache_hit is False
-    assert rebuilt.index.schema_version == INDEX_SCHEMA_VERSION == 3
+    assert rebuilt.index.schema_version == INDEX_SCHEMA_VERSION == 4
     assert rebuilt.index.references[0].target_symbol == "module.py::helper"
     round_tripped = RepositoryIndex.model_validate_json(rebuilt.cache_path.read_text())
     assert round_tripped.references == rebuilt.index.references

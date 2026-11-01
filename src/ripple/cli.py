@@ -215,6 +215,11 @@ def _parser() -> argparse.ArgumentParser:
     verify_parser.add_argument(
         "--range", dest="git_range", required=True, help="Git range base..head"
     )
+    verify_parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="use deterministic verification without model calls",
+    )
     return parser
 
 
@@ -348,7 +353,6 @@ def _run_evaluate_agent(args: argparse.Namespace) -> int:
             workspace=args.workspace,
             output_path=args.output,
             llm=OpenAILLM.from_env(),
-            force=args.force,
             task_limit=args.task_limit,
             verbose=args.verbose,
         )
@@ -497,6 +501,7 @@ def _run_verify(args: argparse.Namespace) -> int:
             OpenAILLM.from_env()
             if os.environ.get("RIPPLE_LLM_API_KEY")
             and os.environ.get("RIPPLE_LLM_MODEL")
+            and not args.offline
             else None
         )
         run = verify_repository(

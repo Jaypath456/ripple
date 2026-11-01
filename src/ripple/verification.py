@@ -35,6 +35,7 @@ from ripple.history import HistoryError, co_changed
 from ripple.llm import LLMClient, LLMError
 from ripple.models import RepositoryIndex
 from ripple.scanner import is_test_file, scan_repository
+from ripple.source import checked_path
 from ripple.verification_render import render_verification_markdown
 from ripple.verify_tools import VerificationToolSession
 
@@ -120,7 +121,15 @@ def _checkout(repo: Path, commit: str, destination: Path) -> RepositoryIndex:
         raise VerificationError(
             result.stderr.strip() or "could not create local verification clone"
         )
-    _git(destination, "checkout", "--quiet", "--detach", commit)
+    _git(
+        destination,
+        "-c",
+        "core.hooksPath=/dev/null",
+        "checkout",
+        "--quiet",
+        "--detach",
+        commit,
+    )
     return scan_repository(destination)
 
 
@@ -545,6 +554,7 @@ def verify_repository(
 
     started = perf_counter()
     repo = repo.resolve()
+    checked_path(repo, Path(".ripple/reports"))
     report, report_path = load_report(repo, report_value)
     try:
         base, head, warning = resolve_range(repo, report.commit, requested_range)
@@ -556,6 +566,8 @@ def verify_repository(
         + f"-{head[:7]}-{uuid.uuid4().hex[:8]}"
     )
     root = output_root or repo / ".ripple" / "verifications"
+    if root.is_relative_to(repo):
+        checked_path(repo, root.relative_to(repo))
     trace_path = root / f"{verification_id}.jsonl"
     trace = TraceWriter(trace_path)
     trace.write(

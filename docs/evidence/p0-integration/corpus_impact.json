@@ -1,0 +1,18 @@
+{
+  "all_targeted_index_and_ranking_outputs_identical": true,
+  "audited_repositories": 32,
+  "audited_tasks": 85,
+  "complete_targeted_ranking_comparisons": 3,
+  "criterion": "User requires preserved benchmark evidence: zero new exclusions, no unexplained reader/AST/diagnostic changes, completed exact targeted index and B0-B2 comparisons.",
+  "inference_calls": 0,
+  "max_line_characters": 32768,
+  "max_source_bytes": 2097152,
+  "new_exclusions": 0,
+  "policy_gate_passed": true,
+  "python_file_observations": 45154,
+  "ranking_replayed_for_all_85_tasks": false,
+  "retrieval_errors": 0,
+  "status": "PASSED",
+  "unexplained_exclusions": 0,
+  "unexplained_reader_differences": 0
+}

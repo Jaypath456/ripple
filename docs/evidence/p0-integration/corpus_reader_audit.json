@@ -1,0 +1,1329 @@
+{
+  "aggregate_counts": {
+    "equivalent_ast_after_newline_translation": 97,
+    "identical_preexisting_read_errors": 1,
+    "identical_reader_inputs": 45056,
+    "preexisting_read_errors": 1,
+    "python_files": 45154,
+    "source_bytes": 478913064
+  },
+  "audited_repositories": 32,
+  "audited_tasks": 85,
+  "errors": [],
+  "expected_repositories": 32,
+  "expected_tasks": 85,
+  "gate_passed": true,
+  "historical_benchmark_artifacts_modified": false,
+  "inference_calls": 0,
+  "method": "Exact pinned Python source bytes, baseline tokenize.open reader versus the actual ported reader. Unchanged reader input or equal attributed ASTs when universal-newline decoding differs. No target code executed.",
+  "new_exclusions": [],
+  "policy": {
+    "max_line_characters": 32768,
+    "max_source_bytes": 2097152
+  },
+  "python_file_observations": 45154,
+  "ranking_scope": "This reader audit is not a full-index/ranking replay. Separate complete frozen/ported B0-B2 results are required for the pinned SymPy comparison.",
+  "raw_audit_report_sha256": "5c970481745b4c9488b603a9a7b5dc2d86ff327f49b0be2a6d43d563e3885f65",
+  "tasks": [
+    {
+      "base_commit": "f4560a183a09336bf6285d4d9f5d882715cde3e2",
+      "corpus_source_digest_sha256": "964053c4fe02160f24d853f5834dec42858ef554e88aa67a2f531e451b401952",
+      "counts": {
+        "identical_reader_inputs": 489,
+        "python_files": 489,
+        "source_bytes": 2712989
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Project-MONAI/MONAI",
+      "seconds": 0.48,
+      "task_id": "Project-MONAI__MONAI-1679",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "718d11abb2310ab74321256032a264488a7883b4",
+      "corpus_source_digest_sha256": "bc5fef8abc65c7ad62a73d10c9860d039d474f0c2393b1711bfa325e1a3156e8",
+      "counts": {
+        "identical_reader_inputs": 261,
+        "python_files": 261,
+        "source_bytes": 1120778
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Project-MONAI/MONAI",
+      "seconds": 0.42,
+      "task_id": "Project-MONAI__MONAI-465",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "e8c26a2baa539624c36aa1262e6de9009c74cfda",
+      "corpus_source_digest_sha256": "8dbed3b41946f45227f41ccb6a2c7e7fd3ca44ea79de0c14332b907afee702d3",
+      "counts": {
+        "identical_reader_inputs": 316,
+        "python_files": 316,
+        "source_bytes": 1416141
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Project-MONAI/MONAI",
+      "seconds": 0.47,
+      "task_id": "Project-MONAI__MONAI-639",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "97678fa75a851c411c713658059bac3b2ce5cf70",
+      "corpus_source_digest_sha256": "9ed613632965011ba35b6ec4bc492f19ca2818fd408b8bfd2f933e0024ea0156",
+      "counts": {
+        "identical_reader_inputs": 1116,
+        "python_files": 1116,
+        "source_bytes": 8635261
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Project-MONAI/MONAI",
+      "seconds": 1.42,
+      "task_id": "Project-MONAI__MONAI-7198",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "2252dee57bd7be9503242fa734bf0abc48c5ddf1",
+      "corpus_source_digest_sha256": "1b6eae1d3bffb6c19737e0424389807e3833f9b0986a1c4a5b55ed8f51357c06",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 5,
+        "identical_reader_inputs": 225,
+        "python_files": 230,
+        "source_bytes": 1066079
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "PyThaiNLP/pythainlp",
+      "seconds": 0.31,
+      "task_id": "PyThaiNLP__pythainlp-1054",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "131d9e66e8515aa81d776969d42f58c72bc68f86",
+      "corpus_source_digest_sha256": "216fe2ca9dd2a6c5ac2acc7f9807481d31a06abb0b51c5fb20f998789719d4c1",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 2,
+        "identical_reader_inputs": 363,
+        "python_files": 365,
+        "source_bytes": 2815353
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "RDFLib/rdflib",
+      "seconds": 0.41,
+      "task_id": "RDFLib__rdflib-1968",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "0c11debb5178157baeac27b735e49a757916d2a6",
+      "corpus_source_digest_sha256": "697418c849dee14952f6ef51bc92893e0f51b068b666a1785bc9371e2d508da3",
+      "counts": {
+        "identical_reader_inputs": 404,
+        "python_files": 404,
+        "source_bytes": 3213292
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "RDFLib/rdflib",
+      "seconds": 0.48,
+      "task_id": "RDFLib__rdflib-2877",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "695256ce5316482f15818962ba8f692a460f923f",
+      "corpus_source_digest_sha256": "1463aabdbe9775e6550e1fb2e1c8e1b385015f6d06c633be2551bd9d582a0615",
+      "counts": {
+        "identical_reader_inputs": 187,
+        "python_files": 187,
+        "source_bytes": 1340149
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Textualize/rich",
+      "seconds": 0.22,
+      "task_id": "Textualize__rich-2301",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a9c0f917aed8d0bba232b7584742962f03a9a293",
+      "corpus_source_digest_sha256": "f69e5a89258474c2002623311a169eaed5f7268ad7b6bb4bbacdc181d0e5e478",
+      "counts": {
+        "identical_reader_inputs": 155,
+        "python_files": 155,
+        "source_bytes": 968613
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "Textualize/rich",
+      "seconds": 0.27,
+      "task_id": "Textualize__rich-901",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a30301e5535be2f558cb948da6b3475df4e36a98",
+      "corpus_source_digest_sha256": "7f5131af00eba00f3b26a707677e3f09440c0295659b9875a7a98479f56e462c",
+      "counts": {
+        "identical_reader_inputs": 926,
+        "python_files": 926,
+        "source_bytes": 12701347
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "astropy/astropy",
+      "seconds": 1.3,
+      "task_id": "astropy__astropy-13676",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "ea875472867f296eee3ed75989ed402d55587940",
+      "corpus_source_digest_sha256": "7eda53f356511de0c376fa2fa92727bbe512d6f77f8c33cafe8fe0eab1f4ad43",
+      "counts": {
+        "identical_reader_inputs": 927,
+        "python_files": 927,
+        "source_bytes": 13245118
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "astropy/astropy",
+      "seconds": 1.3,
+      "task_id": "astropy__astropy-16135",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f5126c765a6a8db8abc7504275d9c2e90ffbd526",
+      "corpus_source_digest_sha256": "a258f387f876d141e9a71176133dcac6fb952b758fcc96e80b0b58193d869460",
+      "counts": {
+        "identical_reader_inputs": 923,
+        "python_files": 923,
+        "source_bytes": 13331676
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "astropy/astropy",
+      "seconds": 1.32,
+      "task_id": "astropy__astropy-16677",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "e222ffffbab7e38aec2134a31552c99aa90b0047",
+      "corpus_source_digest_sha256": "546a8f97c91aba88dd9e7061810249e0317dbe345eec736837255a3f44a6c0ef",
+      "counts": {
+        "identical_reader_inputs": 742,
+        "python_files": 742,
+        "source_bytes": 9175299
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "astropy/astropy",
+      "seconds": 1.29,
+      "task_id": "astropy__astropy-7970",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "3ff5132bdf894fb49da11cfaa7cbff7412d5675c",
+      "corpus_source_digest_sha256": "eef39a4f67ce2eefa0307454746c17143fd57cd7bce0d3389e5bf06c1285bdf6",
+      "counts": {
+        "identical_reader_inputs": 968,
+        "python_files": 968,
+        "source_bytes": 3009217
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "aws-powertools/powertools-lambda-python",
+      "seconds": 0.86,
+      "task_id": "aws-powertools__powertools-lambda-python-5588",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "1a39422883c7c7b04865e58fda201bcb93075669",
+      "corpus_source_digest_sha256": "4eda6522c86afd75b1b1c8badaceb528d86856bdaffd86438991e1f330be854e",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 4,
+        "identical_reader_inputs": 658,
+        "python_files": 662,
+        "source_bytes": 7158435
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "aws/sagemaker-python-sdk",
+      "seconds": 0.82,
+      "task_id": "aws__sagemaker-python-sdk-3432",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "ebc0f95261025aa02c474ec8ffa3e0a0604cb3c6",
+      "corpus_source_digest_sha256": "ec35f98080519d407684c409e1f29a7ea11aa5d402b148e4eb4b478a5fc28bf6",
+      "counts": {
+        "identical_reader_inputs": 28,
+        "python_files": 28,
+        "source_bytes": 243437
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "boto/boto3",
+      "seconds": 0.21,
+      "task_id": "boto__boto3-74",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "cca16a20fdfb66249b481d652d7eeeb59f6eb33a",
+      "corpus_source_digest_sha256": "2fb9beb970319a88b1385f855c8d2e0cc929bbf6f7f9719fde419107a6628950",
+      "counts": {
+        "identical_reader_inputs": 262,
+        "python_files": 262,
+        "source_bytes": 3558207
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "boto/botocore",
+      "seconds": 0.48,
+      "task_id": "boto__botocore-3271",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "51a077458b697dcd39e5eb64f1d33a6c52584081",
+      "corpus_source_digest_sha256": "4dfa4600e1cf595610fa99fa0ae400f01e2ac4d5397c7babf5fa35efa3035af2",
+      "counts": {
+        "identical_reader_inputs": 1124,
+        "python_files": 1124,
+        "source_bytes": 7489577
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.6,
+      "task_id": "conan-io__conan-10154",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "9c34ea7568ec8b7eb36a3fbc0fd2ec8a30716830",
+      "corpus_source_digest_sha256": "8c5cd39e2bc6d334804e4d99dabc6f61df4073bd665e44d9956b6d52078e7e16",
+      "counts": {
+        "identical_reader_inputs": 1142,
+        "python_files": 1142,
+        "source_bytes": 7597588
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.35,
+      "task_id": "conan-io__conan-10437",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "acf5d9a460adfa16bf95b6aadfc248f7d9ace643",
+      "corpus_source_digest_sha256": "9306319e71af482295a599355384f1fe6ffa7d3a481c5986d0041378d64a38b1",
+      "counts": {
+        "identical_reader_inputs": 1181,
+        "python_files": 1181,
+        "source_bytes": 7892541
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 0.99,
+      "task_id": "conan-io__conan-10874",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "db343feac208a000bc6546556104a8511a584f1e",
+      "corpus_source_digest_sha256": "b09a6c9cfe01974054346b6b0137a110da1bdd5287e1457169c9220b70c57df8",
+      "counts": {
+        "identical_reader_inputs": 1200,
+        "python_files": 1200,
+        "source_bytes": 8000185
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 0.96,
+      "task_id": "conan-io__conan-11284",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "27a4725d0213adc631ec09afde4bb7fabc8d80f4",
+      "corpus_source_digest_sha256": "5d8339210b238325bdc343edfd334ffa8f40f09aa55328b7e5262c71a24a9ddf",
+      "counts": {
+        "identical_reader_inputs": 1203,
+        "python_files": 1203,
+        "source_bytes": 8040378
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.32,
+      "task_id": "conan-io__conan-11443",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "b20b72beb77c063d8c27c55db37425349e232a26",
+      "corpus_source_digest_sha256": "72a5d0140b44b4512c16e1e54c7bf2e46ed400c0183cb5876c99ef6cf967df76",
+      "counts": {
+        "identical_reader_inputs": 1208,
+        "python_files": 1208,
+        "source_bytes": 8089672
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.05,
+      "task_id": "conan-io__conan-11585",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f3fb6c41246669646243f0c7d83c2c444743d896",
+      "corpus_source_digest_sha256": "ff7058fff49ecd01d6ac6c28c675bc66c030418914dc44ad502a1a808e35a9aa",
+      "counts": {
+        "identical_reader_inputs": 1234,
+        "python_files": 1234,
+        "source_bytes": 8420326
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.41,
+      "task_id": "conan-io__conan-12887",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "fed5f7f4ff8d0b003f76a161d9f9931cb3199f2e",
+      "corpus_source_digest_sha256": "c383741daa54394304d44d53b7a44496e566f5cdd5aad8bd4cc270def866ed96",
+      "counts": {
+        "identical_reader_inputs": 1010,
+        "python_files": 1010,
+        "source_bytes": 6016758
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.72,
+      "task_id": "conan-io__conan-16511",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "dac34c4c1c19b94969f7b0d2aef44d0650285e3a",
+      "corpus_source_digest_sha256": "5cd61804962dd0f83ce8a03d39dcd72993fff60a40cef4495a08506e591df57d",
+      "counts": {
+        "identical_reader_inputs": 421,
+        "python_files": 421,
+        "source_bytes": 2775759
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "conan-io/conan",
+      "seconds": 1.19,
+      "task_id": "conan-io__conan-1815",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a771d7f01511bcfe05ebd19961ee319865a5f3af",
+      "corpus_source_digest_sha256": "8d2ed58d4bfb9b1a976eb637d39e3b6859320bde23e60e2027baad66f3e04b7a",
+      "counts": {
+        "identical_reader_inputs": 312,
+        "python_files": 312,
+        "source_bytes": 1403172
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "deepset-ai/haystack",
+      "seconds": 0.59,
+      "task_id": "deepset-ai__haystack-6836",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "031b0bfbd836f128736220589917a62c43c9c512",
+      "corpus_source_digest_sha256": "c87b93cd23098c21621ba7a6fc63757f658170d589428fd9f529eb249ac56751",
+      "counts": {
+        "identical_reader_inputs": 347,
+        "python_files": 347,
+        "source_bytes": 2134678
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "deepset-ai/haystack",
+      "seconds": 0.65,
+      "task_id": "deepset-ai__haystack-8042",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f04279d5975f4a5c7fd5f5f284bfe14303b8f2a0",
+      "corpus_source_digest_sha256": "e03bb8ffbe311c584cfd841770e984feca1b797e14d780435157a90973277c5e",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 2,
+        "identical_reader_inputs": 687,
+        "python_files": 689,
+        "source_bytes": 2897614
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "embeddings-benchmark/mteb",
+      "seconds": 0.82,
+      "task_id": "embeddings-benchmark__mteb-1256",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "0fefca82a3e1f6f35f147af01c7daeebb0414d87",
+      "corpus_source_digest_sha256": "f9b8439483ff89fb05a94a1856c87856e3c162a88d0be22c54a25837fd7ee0bd",
+      "counts": {
+        "identical_reader_inputs": 82,
+        "python_files": 82,
+        "source_bytes": 460089
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "falconry/falcon",
+      "seconds": 0.22,
+      "task_id": "falconry__falcon-640",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "ee63e4500fbd412d778a1ea143237007e45a5628",
+      "corpus_source_digest_sha256": "a7d2bc1265acb9d25d15274934c22906a3ca0f305b0f26ee3d011d650b3ee544",
+      "counts": {
+        "identical_reader_inputs": 112,
+        "python_files": 112,
+        "source_bytes": 1007785
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "google-deepmind/optax",
+      "seconds": 0.23,
+      "task_id": "google-deepmind__optax-1063",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "6355f32201eeffa12f6233c97eabe56e85c4a7f9",
+      "corpus_source_digest_sha256": "7d26e92bd7b0cc8e6330075246e6ab6cc5f9d522d5f01c7027bf6b3404160ad0",
+      "counts": {
+        "identical_reader_inputs": 118,
+        "python_files": 118,
+        "source_bytes": 1077022
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "google-deepmind/optax",
+      "seconds": 0.26,
+      "task_id": "google-deepmind__optax-1117",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "35920a3712d71992429dc0bd605e75d31cbe2b21",
+      "corpus_source_digest_sha256": "fa6d804cb29e676340f1d38187cfd5caa7a6a99d73b0c70345d9b7741c3a2c19",
+      "counts": {
+        "identical_reader_inputs": 85,
+        "python_files": 85,
+        "source_bytes": 616522
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "google-deepmind/optax",
+      "seconds": 0.26,
+      "task_id": "google-deepmind__optax-632",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f45b2eb82ffdb8c22d57923b5039000539bed4bc",
+      "corpus_source_digest_sha256": "b5ffbfde925843e94ceda0ea7f063e2077a676d2d7802c5511c1a07026bc2d8b",
+      "counts": {
+        "identical_reader_inputs": 84,
+        "python_files": 84,
+        "source_bytes": 712180
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "google-deepmind/optax",
+      "seconds": 0.24,
+      "task_id": "google-deepmind__optax-865",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "246f002a64e21bcc8f0b1a3390eb4ee13da83ed5",
+      "corpus_source_digest_sha256": "79820d3e50a3a59e65e79c447d7304962d4e96ef88879129ceae6e7758f46163",
+      "counts": {
+        "identical_reader_inputs": 99,
+        "python_files": 99,
+        "source_bytes": 803283
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "google-deepmind/optax",
+      "seconds": 0.22,
+      "task_id": "google-deepmind__optax-897",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "8ede21e06381c096589c424960a6cfaca304badb",
+      "corpus_source_digest_sha256": "3e1856ca3f5acc6c483fb7463204fe20e1a0ddf42915ed4c693e2b217f47ba02",
+      "counts": {
+        "identical_reader_inputs": 143,
+        "python_files": 143,
+        "source_bytes": 424783
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "graphql-python/graphene",
+      "seconds": 0.23,
+      "task_id": "graphql-python__graphene-1506",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "4fc586f5af650a5711dc907fb613367d2f009c9a",
+      "corpus_source_digest_sha256": "e1522e6ae61435b779d4b523468331250857ce980dea9f2d420014a2e0658b99",
+      "counts": {
+        "identical_reader_inputs": 34,
+        "python_files": 34,
+        "source_bytes": 241505
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "huggingface/accelerate",
+      "seconds": 0.16,
+      "task_id": "huggingface__accelerate-255",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f9ef1ee270848e322f06e546751aeffde67349c5",
+      "corpus_source_digest_sha256": "bfed1ef551532efd91f6e1e9c90124900757428f516e34bc2d26b48a67d75b4c",
+      "counts": {
+        "identical_reader_inputs": 168,
+        "python_files": 168,
+        "source_bytes": 1329713
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "huggingface/datasets",
+      "seconds": 0.29,
+      "task_id": "huggingface__datasets-214",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a310d09e627fc1e1ddd6e88a3d65cab03fe22e4e",
+      "corpus_source_digest_sha256": "28508b32d6fe16812b54bef3de1e1cf2ca3fd8d6bea7a8fce5c9da35a916c661",
+      "counts": {
+        "identical_reader_inputs": 493,
+        "python_files": 493,
+        "source_bytes": 3928054
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "joke2k/faker",
+      "seconds": 0.76,
+      "task_id": "joke2k__faker-1247",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a40a4121db15d527fad8922dee3b8f889bb55be7",
+      "corpus_source_digest_sha256": "fc47bb824d9bf04448e24a877804d98297af3aa1f2d4edd1bb7f85b8dda07d87",
+      "counts": {
+        "identical_reader_inputs": 166,
+        "python_files": 166,
+        "source_bytes": 1126199
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "joke2k/faker",
+      "seconds": 0.56,
+      "task_id": "joke2k__faker-215",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "3d6c3da884fafae4654df68144391cfe9be6f134",
+      "corpus_source_digest_sha256": "3585e83824893590ce553a709d828ea1ab233861115f0e71bfae14a652a38844",
+      "counts": {
+        "identical_reader_inputs": 902,
+        "python_files": 902,
+        "source_bytes": 8427451
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "matplotlib/matplotlib",
+      "seconds": 1.48,
+      "task_id": "matplotlib__matplotlib-23692",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a4dca24d04f928a9e614db403c716237446140b2",
+      "corpus_source_digest_sha256": "4d6627f1676bb06bdbaba60bfbeea8535b7a0b50e225d262176b3e8c98896e75",
+      "counts": {
+        "identical_reader_inputs": 895,
+        "python_files": 895,
+        "source_bytes": 8636117
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "matplotlib/matplotlib",
+      "seconds": 1.42,
+      "task_id": "matplotlib__matplotlib-26293",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "7ed0659107c9b3768208d17890a28778001320e9",
+      "corpus_source_digest_sha256": "2af025ff000a72f60ac0a298647af6ae0ba90c375121f992139394ca257cf942",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 166,
+        "python_files": 167,
+        "source_bytes": 2419141
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pgmpy/pgmpy",
+      "seconds": 0.41,
+      "task_id": "pgmpy__pgmpy-1753",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "336c144b95aa21718e1898930934eb63474d1caf",
+      "corpus_source_digest_sha256": "2d80b3aba87c5eeca8e15d1cd4a05164d0c5551e826493cd4570312940a33ff2",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 166,
+        "python_files": 167,
+        "source_bytes": 2456308
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pgmpy/pgmpy",
+      "seconds": 0.28,
+      "task_id": "pgmpy__pgmpy-1797",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "10c8eb4a83069877dc89695fbad236a88e2094f9",
+      "corpus_source_digest_sha256": "1f18c1450f821f253c430cb0500f95c17ebe683d059f54e826cdd85b5b35b814",
+      "counts": {
+        "identical_reader_inputs": 28,
+        "python_files": 28,
+        "source_bytes": 203922
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "prometheus/client_python",
+      "seconds": 0.16,
+      "task_id": "prometheus__client_python-302",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "d5d1d66aae4913f0e23b9a79c655efa1bdafe5f4",
+      "corpus_source_digest_sha256": "1f53d390f9f8ca794f5da449bc527c5e2ff96ced1eeb677c9f871b18b0b5940a",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 115,
+        "python_files": 116,
+        "source_bytes": 1731142
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pvlib/pvlib-python",
+      "seconds": 0.31,
+      "task_id": "pvlib__pvlib-python-1391",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "dd6062afdf86ac113ac53d7a493710f5c79b8935",
+      "corpus_source_digest_sha256": "2d6c5a0438055c1d0f08e8739812ccd7988efe00e7f9d662e72dfb2c5feeab94",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 124,
+        "python_files": 125,
+        "source_bytes": 1791169
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pvlib/pvlib-python",
+      "seconds": 0.3,
+      "task_id": "pvlib__pvlib-python-1567",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "48290fa14accd3ac87768d3f73d69493b82b0be6",
+      "corpus_source_digest_sha256": "6562d14272d37613879f137a148dd6be60daca74e66af856a15da2d13e726caf",
+      "counts": {
+        "identical_reader_inputs": 165,
+        "python_files": 165,
+        "source_bytes": 4105463
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pydata/xarray",
+      "seconds": 0.28,
+      "task_id": "pydata__xarray-6135",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "0b9e449111cbf59d23c23a1a98eea67ddd56ddf6",
+      "corpus_source_digest_sha256": "ee0cc46d8971c60bbde9489c4cd4dc2dec7a46f77863cfc156b3dbc9e29c8a8c",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 57,
+        "identical_preexisting_read_errors": 1,
+        "identical_reader_inputs": 800,
+        "preexisting_read_errors": 1,
+        "python_files": 858,
+        "source_bytes": 2498679
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pylint-dev/pylint",
+      "seconds": 1.1,
+      "task_id": "pylint-dev__pylint-4810",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "b7737bd1ec44ae6ff86ca59642da29ea71d62900",
+      "corpus_source_digest_sha256": "ab282428bf5f5917438490d852af1f0ea068ea0f867774c5ecd716da5ca03b9f",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 385,
+        "python_files": 386,
+        "source_bytes": 4249555
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "pyvista/pyvista",
+      "seconds": 0.62,
+      "task_id": "pyvista__pyvista-4954",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "9bc2907c4907714da5b469fdfee7800f4cf9f09e",
+      "corpus_source_digest_sha256": "ef04cfaa4cb8788d1d0418c2a98c40025e12801f0eadaa658c4263055991c61e",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 113,
+        "python_files": 114,
+        "source_bytes": 770352
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.27,
+      "task_id": "roboflow__supervision-1237",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "fbce6e45d427fbbc2f610dfe1adf24bdf608d914",
+      "corpus_source_digest_sha256": "8bd55e58347cc53baca80c5c458f557de6954a6237d06eaee865bb63884d23a7",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 116,
+        "python_files": 117,
+        "source_bytes": 804116
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.24,
+      "task_id": "roboflow__supervision-1296",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "de896189b83a1f9434c0a37dd9192ee00d2a1283",
+      "corpus_source_digest_sha256": "ecada054827821dcbd8582b4eb3572d8bc3f92c8db1e1f4642c54cff39f695d3",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 117,
+        "python_files": 118,
+        "source_bytes": 881667
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.23,
+      "task_id": "roboflow__supervision-1340",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "36cdcf1b128e38cb9a086290fbfb0130fa64ac5b",
+      "corpus_source_digest_sha256": "706b34dbe7e84f5083e84944a4e6cbf4e8af6e29bd4dea0a8a8179ebec88104b",
+      "counts": {
+        "identical_reader_inputs": 50,
+        "python_files": 50,
+        "source_bytes": 225941
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.2,
+      "task_id": "roboflow__supervision-245",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "d423ff3b6c74f38713255f18e363ea2e1986f5dd",
+      "corpus_source_digest_sha256": "16decd84ef8800c4fa904b8958ba766e53c2eecc4dab601816d999a423cdd192",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 84,
+        "python_files": 85,
+        "source_bytes": 518871
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.51,
+      "task_id": "roboflow__supervision-847",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "0c0685987a57ffbcff8eea89bb16aff70846403e",
+      "corpus_source_digest_sha256": "f0b4f62b77f5040e435cef097ebfa8d9c832dcf20c65ff8eca607b1f3520a431",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 84,
+        "python_files": 85,
+        "source_bytes": 540233
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "roboflow/supervision",
+      "seconds": 0.24,
+      "task_id": "roboflow__supervision-910",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "0550793bd61b84beb60d3a92c3eb90cc788a27a8",
+      "corpus_source_digest_sha256": "aa0ce23ce8a531c9e999e7f1938f5549bac4ef8ed78922c7acbdfc51564781ad",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 3,
+        "identical_reader_inputs": 786,
+        "python_files": 789,
+        "source_bytes": 9770260
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "scikit-learn/scikit-learn",
+      "seconds": 1.46,
+      "task_id": "scikit-learn__scikit-learn-10591",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "989f9c764734efc21bbff21b0202b52a1112bfc3",
+      "corpus_source_digest_sha256": "580d263dda500601eb24801de7856e139ab94e3587d36681e417fb196ffbb57f",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 3,
+        "identical_reader_inputs": 694,
+        "python_files": 697,
+        "source_bytes": 8143904
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "scikit-learn/scikit-learn",
+      "seconds": 1.44,
+      "task_id": "scikit-learn__scikit-learn-11196",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "a91bae74aaca4979f5d927db327654b1d8e3ae58",
+      "corpus_source_digest_sha256": "6edca310776a02008bcc944b5179b60d693f7f21a404dee629951aeb2bfc0a28",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 3,
+        "identical_reader_inputs": 751,
+        "python_files": 754,
+        "source_bytes": 9140431
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "scikit-learn/scikit-learn",
+      "seconds": 1.5,
+      "task_id": "scikit-learn__scikit-learn-15010",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "2f26540ee99cb4519d7471933359913c7be36ac9",
+      "corpus_source_digest_sha256": "466cd1b1ff8fcf13285f87b6361a3f16fc8d3e5b4195ddab412ffa87ddffd6dd",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 3,
+        "identical_reader_inputs": 787,
+        "python_files": 790,
+        "source_bytes": 9634983
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "scikit-learn/scikit-learn",
+      "seconds": 1.32,
+      "task_id": "scikit-learn__scikit-learn-17225",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "312f64053d7249a326a19a07fa635ef5b5c6ed99",
+      "corpus_source_digest_sha256": "e182bc6be4c54ff48d4033e0e18a82b6fd22ea46300328dec31b0cef7ad5b31a",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 3,
+        "identical_reader_inputs": 690,
+        "python_files": 693,
+        "source_bytes": 8009507
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "scikit-learn/scikit-learn",
+      "seconds": 1.5,
+      "task_id": "scikit-learn__scikit-learn-8478",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "54ddf9ccdbfbffa281dd3d114c9102c6695a7cb8",
+      "corpus_source_digest_sha256": "522af67cc9cd21e0a7aa126098fb7c9c55c951e209edc92f06c58e087eb97391",
+      "counts": {
+        "identical_reader_inputs": 574,
+        "python_files": 574,
+        "source_bytes": 2614144
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "softlayer/softlayer-python",
+      "seconds": 0.52,
+      "task_id": "softlayer__softlayer-python-1668",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "00e6a0677efb00ce3cd0562939fb7e98e00b2f99",
+      "corpus_source_digest_sha256": "158fd69e477bd1dbe4598481a39154f453a257d486d3d4be011f54eef9093133",
+      "counts": {
+        "identical_reader_inputs": 583,
+        "python_files": 583,
+        "source_bytes": 2657995
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "softlayer/softlayer-python",
+      "seconds": 0.99,
+      "task_id": "softlayer__softlayer-python-1766",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "8ebebc36df35b308f3eade1a21f1f17e5de45ba2",
+      "corpus_source_digest_sha256": "8f039b3bcec7c8202a20199a175de2afb416bee7448875010ea5f05ca0ab6a86",
+      "counts": {
+        "identical_reader_inputs": 585,
+        "python_files": 585,
+        "source_bytes": 2675651
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "softlayer/softlayer-python",
+      "seconds": 0.54,
+      "task_id": "softlayer__softlayer-python-1818",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "182f7b3b73d28946c933f617cfe52bc604d6ef79",
+      "corpus_source_digest_sha256": "484644c1c27d389612338a4d3995497755025a5e9bb091c3d4a1c90c76ae87ef",
+      "counts": {
+        "identical_reader_inputs": 594,
+        "python_files": 594,
+        "source_bytes": 2720154
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "softlayer/softlayer-python",
+      "seconds": 0.93,
+      "task_id": "softlayer__softlayer-python-1910",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "fe65dc3e4978e1497f242e0318ed6d43f6659b0b",
+      "corpus_source_digest_sha256": "e400fd417a1925e04264360d505e9fa282b8e3046043e0b2f3a59aa8c33b1d56",
+      "counts": {
+        "identical_reader_inputs": 613,
+        "python_files": 613,
+        "source_bytes": 2800169
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "softlayer/softlayer-python",
+      "seconds": 0.6,
+      "task_id": "softlayer__softlayer-python-2073",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "b237e78f9c233170f271c326bf46b7fb3b103858",
+      "corpus_source_digest_sha256": "016d25369ca2a3406b682227057927e94e48fdf0a060f2bb7dce85c91dc230f3",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 537,
+        "python_files": 538,
+        "source_bytes": 3683915
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sphinx-doc/sphinx",
+      "seconds": 0.52,
+      "task_id": "sphinx-doc__sphinx-9131",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "d656acaba3258fa6e9beb75e8409412315efb107",
+      "corpus_source_digest_sha256": "2d4eb5ddf268d4d0699d5a2745c530a7a75640eaf56476691667961996c6022f",
+      "counts": {
+        "equivalent_ast_after_newline_translation": 1,
+        "identical_reader_inputs": 537,
+        "python_files": 538,
+        "source_bytes": 3682166
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sphinx-doc/sphinx",
+      "seconds": 0.97,
+      "task_id": "sphinx-doc__sphinx-9154",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f691f033ac90e760bb70f0f9d02c89a859565d6d",
+      "corpus_source_digest_sha256": "71dba05d62fbed15163d1309e6c76fda73ac823a01d4ae089f87726132832a8e",
+      "counts": {
+        "identical_reader_inputs": 303,
+        "python_files": 303,
+        "source_bytes": 2868468
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sqlfluff/sqlfluff",
+      "seconds": 0.41,
+      "task_id": "sqlfluff__sqlfluff-3937",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "6dd369352b0bda17c2dfef5a8faf0bfb794982ec",
+      "corpus_source_digest_sha256": "390e5485ba934981d53f8a8bf8fbc42d411a69b50451ec013705c78cf8b50fe4",
+      "counts": {
+        "identical_reader_inputs": 1115,
+        "python_files": 1115,
+        "source_bytes": 15384674
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 2.04,
+      "task_id": "sympy__sympy-12417",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "7e2f1b243e36ad0b5277b9b6f15cb79450c1f579",
+      "corpus_source_digest_sha256": "5884b9ca5b1ecf3831b97636bf1789fd5ca12b9d06876d55fba928467debacb5",
+      "counts": {
+        "identical_reader_inputs": 1174,
+        "python_files": 1174,
+        "source_bytes": 22884809
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.88,
+      "task_id": "sympy__sympy-13304",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "4526f0e02f7288d0e1214add48d21be346f3d28c",
+      "corpus_source_digest_sha256": "186d8cee26f51cda2da4db567d41b920495ad73b9e60fee6b2113d45906a3add",
+      "counts": {
+        "identical_reader_inputs": 1224,
+        "python_files": 1224,
+        "source_bytes": 23726421
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.89,
+      "task_id": "sympy__sympy-14745",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "267634a6e1de6835e5a5da047cadfdf2c2e97e1e",
+      "corpus_source_digest_sha256": "8eb51d32f5dee0c8924e717be32e6d9d88cc6aac4047b6eec3c028f847646aeb",
+      "counts": {
+        "identical_reader_inputs": 1231,
+        "python_files": 1231,
+        "source_bytes": 23819533
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.68,
+      "task_id": "sympy__sympy-14853",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "e53b24ad345e11769dd1989e4873380c0f94b4e2",
+      "corpus_source_digest_sha256": "74c9f4c9985324c8606dfdd0fcc42fed5c44097e757f958aa4b4c9801edcea8d",
+      "counts": {
+        "identical_reader_inputs": 1251,
+        "python_files": 1251,
+        "source_bytes": 24025804
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.6,
+      "task_id": "sympy__sympy-14928",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "fb98dbb5a50dc13489b365ea6558e1efc5e62377",
+      "corpus_source_digest_sha256": "1b1e7f8d4bc67fd22feb1127c56eeb0805bac119c7562610268d98a0116280da",
+      "counts": {
+        "identical_reader_inputs": 1308,
+        "python_files": 1308,
+        "source_bytes": 26714055
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.87,
+      "task_id": "sympy__sympy-16516",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "d10b94aa5a5863957c63eef687cee2a9d27bf99a",
+      "corpus_source_digest_sha256": "8cfccca3cd24b9c6e6a97aade83c897a04993bea09e36f68cd12c44f01e21a65",
+      "counts": {
+        "identical_reader_inputs": 1310,
+        "python_files": 1310,
+        "source_bytes": 26824152
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 0.86,
+      "task_id": "sympy__sympy-16685",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "bd7bbeaa9a12ab357df3b18416c0a949b3481d3d",
+      "corpus_source_digest_sha256": "23bd8d215449e79dab36f51c6b73cf7d8a1c1a0ec5a7883d85fae27c06392198",
+      "counts": {
+        "identical_reader_inputs": 1504,
+        "python_files": 1504,
+        "source_bytes": 23603091
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "sympy/sympy",
+      "seconds": 1.32,
+      "task_id": "sympy__sympy-24384",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "c371ac055a7546d8215d3a2acc0d1a64f43a07f1",
+      "corpus_source_digest_sha256": "1f88b56af1504203ea5454ddf84337c8bed7f1c877bfdf012df7e9fd0e222b9a",
+      "counts": {
+        "identical_reader_inputs": 133,
+        "python_files": 133,
+        "source_bytes": 1533678
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.37,
+      "task_id": "tobymao__sqlglot-1252",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "2a76eb8bcdf78c53f91f9e3f228dc6dad0223b03",
+      "corpus_source_digest_sha256": "05e00e54c3846c08022f118af455bda3bc76594d9587ee169d1b75192e44dac4",
+      "counts": {
+        "identical_reader_inputs": 136,
+        "python_files": 136,
+        "source_bytes": 1978168
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.3,
+      "task_id": "tobymao__sqlglot-2006",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "d6bac3e54c6445c52daa04015b1b2e4a6933e682",
+      "corpus_source_digest_sha256": "486231f62bc6840d6c91818bb2306179d4ac26e3d5a709e08d86625255ad8bba",
+      "counts": {
+        "identical_reader_inputs": 146,
+        "python_files": 146,
+        "source_bytes": 2673988
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.34,
+      "task_id": "tobymao__sqlglot-3145",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "f5bfd67341518d0ecb1c3693e0b41ed5c1cf0596",
+      "corpus_source_digest_sha256": "c2ec84c04f436e3ceca9cf142264a5ec982516f80ea56e1982402b73e0729911",
+      "counts": {
+        "identical_reader_inputs": 122,
+        "python_files": 122,
+        "source_bytes": 2805710
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.45,
+      "task_id": "tobymao__sqlglot-3991",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "dbb1ddef53e76ee51a1cf6a24a1de854a69c6093",
+      "corpus_source_digest_sha256": "7c00dbb159444f130d911b57bf9c8381454bba54e7ad96fa1e1a18b53245ca01",
+      "counts": {
+        "identical_reader_inputs": 122,
+        "python_files": 122,
+        "source_bytes": 2859181
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.32,
+      "task_id": "tobymao__sqlglot-4084",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "7f40ddd9b41f3dabdcbc3105cf5f06faacd82d75",
+      "corpus_source_digest_sha256": "52f377bee519343228e0c1a792abc795b849c11e958dde1928f58e744bfdcedb",
+      "counts": {
+        "identical_reader_inputs": 80,
+        "python_files": 80,
+        "source_bytes": 599069
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.21,
+      "task_id": "tobymao__sqlglot-415",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "6e4c0ef48ab0db1a336d634273dab35de17c80bc",
+      "corpus_source_digest_sha256": "7f0aca54780a8462002a3979b8a4beb3d5b839c3cce7e6e7f1c0169ceba6474a",
+      "counts": {
+        "identical_reader_inputs": 127,
+        "python_files": 127,
+        "source_bytes": 1300598
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.23,
+      "task_id": "tobymao__sqlglot-858",
+      "unexplained_reader_differences": []
+    },
+    {
+      "base_commit": "ef992fab86e6e01c226f0235f82bdf4e38c6e680",
+      "corpus_source_digest_sha256": "ed985f160bba7df98608b278aeb746751201a10540a10c179295b3bc4fe36217",
+      "counts": {
+        "identical_reader_inputs": 126,
+        "python_files": 126,
+        "source_bytes": 1321485
+      },
+      "gate_passed": true,
+      "new_exclusions": [],
+      "repository": "tobymao/sqlglot",
+      "seconds": 0.22,
+      "task_id": "tobymao__sqlglot-897",
+      "unexplained_reader_differences": []
+    }
+  ],
+  "unexplained_reader_differences": []
+}

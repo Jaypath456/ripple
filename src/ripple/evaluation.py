@@ -612,10 +612,40 @@ def prepare_repository(
 
     root = Path(workspace).resolve()
     root.mkdir(parents=True, exist_ok=True)
-    destination = (root / task.id).resolve()
+    requested = root / task.id
+    if requested.is_symlink():
+        raise EvaluationError("refusing symlink evaluation checkout")
+    destination = requested.resolve()
     if destination.parent != root:
         raise EvaluationError("task checkout escaped evaluation workspace")
+    ownership = {
+        "task_id": task.id,
+        "repository_url": task.repository_url,
+        "base_commit": task.base_commit,
+    }
     if destination.exists():
+        marker = destination / ".git/ripple-evaluation-owner.json"
+        try:
+            owned = (
+                not (destination / ".git").is_symlink()
+                and not marker.is_symlink()
+                and json.loads(marker.read_text()) == ownership
+            )
+        except (OSError, ValueError):
+            owned = False
+        if not owned:
+            raise EvaluationError(
+                f"refusing to replace existing unowned checkout: {destination}; choose a fresh --workspace"
+            )
+        if (
+            _git(destination, "rev-parse", "HEAD").stdout.strip() != task.base_commit
+            or _git(
+                destination, "status", "--porcelain=v1", "--untracked-files=all"
+            ).stdout
+        ):
+            raise EvaluationError(
+                f"refusing to replace modified evaluation checkout: {destination}"
+            )
         shutil.rmtree(destination)
     temporary = Path(tempfile.mkdtemp(prefix=f".{task.id}-", dir=root))
     try:
@@ -636,6 +666,9 @@ def prepare_repository(
             temporary, "for-each-ref", "--format=%(refname)"
         ).stdout.splitlines():
             _git(temporary, "update-ref", "-d", ref)
+        (temporary / ".git/ripple-evaluation-owner.json").write_text(
+            json.dumps(ownership, sort_keys=True) + "\n"
+        )
         temporary.rename(destination)
     except Exception:
         shutil.rmtree(temporary, ignore_errors=True)

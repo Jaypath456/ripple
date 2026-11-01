@@ -1,0 +1,14 @@
+{
+  "baseline_note": "Snapshot manifest documents its delivery lineage; integration tests and all preservation comparisons use frozen V2.1.1, not that inherited baseline.",
+  "delivery_zip_sha256": "387ce0b397848009f8475f55ca3363b74466b93fe0d000f05636feed722aebd0",
+  "frozen_commit": "f381d1c7c6f55e504cee3f9e6beb425d2387ec0d",
+  "imported_source_hashes_verified": 85,
+  "original_files_recorded": 8758,
+  "reverified_before_final_report": true,
+  "snapshot_checksum_entries_verified": 89,
+  "snapshot_commit": "674128c569468dd962b690baebee3a7e1a37b41f",
+  "snapshot_file_count": 90,
+  "snapshot_manifest_inherited_baseline": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+  "snapshot_objects_verified_from_local_published_repository": true,
+  "snapshot_parentless_root_verified": true
+}

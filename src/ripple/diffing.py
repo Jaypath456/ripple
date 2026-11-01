@@ -47,7 +47,7 @@ class DiffSnapshot:
 
 def _git(repo: Path, *arguments: str, check: bool = True) -> str:
     result = subprocess.run(
-        ["git", "-C", str(repo), *arguments],
+        ["git", "--literal-pathspecs", "-C", str(repo), *arguments],
         check=False,
         capture_output=True,
         text=True,
@@ -65,7 +65,9 @@ def _safe_path(raw: str) -> str:
 
 
 def resolve_commit(repo: Path, value: str) -> str:
-    resolved = _git(repo, "rev-parse", "--verify", f"{value}^{{commit}}")
+    resolved = _git(
+        repo, "rev-parse", "--verify", "--end-of-options", f"{value}^{{commit}}"
+    )
     commit = resolved.strip()
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise DiffError(f"invalid commit: {value}")
@@ -118,17 +120,33 @@ def _blob(repo: Path, commit: str, path: str) -> str | None:
 
 def _parse_name_status(output: str) -> list[tuple[str, str | None, str]]:
     changes: list[tuple[str, str | None, str]] = []
-    for line in output.splitlines():
-        fields = line.split("\t")
-        code = fields[0]
+    fields = output.split("\0")
+    if fields[-1] != "":
+        raise DiffError("unterminated name-status output")
+    fields.pop()
+    position = 0
+    while position < len(fields):
+        code = fields[position]
         status = code[0] if code else ""
-        if status == "R" and len(fields) == 3:
-            changes.append(("R", _safe_path(fields[1]), _safe_path(fields[2])))
-        elif status in {"A", "M", "D"} and len(fields) == 2:
-            path = _safe_path(fields[1])
+        count = 3 if status == "R" else 2
+        if position + count > len(fields):
+            raise DiffError("incomplete name-status record")
+        if status == "R":
+            changes.append(
+                (
+                    "R",
+                    _safe_path(fields[position + 1]),
+                    _safe_path(fields[position + 2]),
+                )
+            )
+        elif status in {"A", "M", "D", "T"}:
+            path = _safe_path(fields[position + 1])
+            # Type changes (e.g. file -> symlink) remain visible as modifications.
+            status = "M" if status == "T" else status
             changes.append((status, path if status == "D" else None, path))
         else:
-            raise DiffError(f"unsupported name-status record: {line}")
+            raise DiffError(f"unsupported name-status record: {code}")
+        position += count
     return changes
 
 
@@ -141,6 +159,7 @@ def _file_patch(
         "diff",
         "--no-color",
         "--no-ext-diff",
+        "--no-textconv",
         "--binary",
         "-U0",
         "-M",
@@ -276,7 +295,20 @@ def is_cosmetic_change(old_source: str | None, new_source: str | None) -> bool:
 def parse_diff(repo: Path, base: str, head: str) -> DiffSnapshot:
     """Parse A/M/D/R records and zero-context hunks without executing code."""
 
-    records = _parse_name_status(_git(repo, "diff", "--name-status", "-M", base, head))
+    records = _parse_name_status(
+        _git(
+            repo,
+            "diff",
+            "--no-ext-diff",
+            "--no-textconv",
+            "--name-status",
+            "-z",
+            "-M",
+            base,
+            head,
+            "--",
+        )
+    )
     files: list[ParsedFileDiff] = []
     for status, old_path, new_path in records:
         actual_old = old_path or new_path
