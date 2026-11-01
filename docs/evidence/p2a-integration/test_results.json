@@ -1,0 +1,117 @@
+{
+  "baseline": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 64.938
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.065
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.021
+      }
+    ],
+    "passed": 342,
+    "skipped": 6
+  },
+  "baseline_test_statuses_preserved": true,
+  "final": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 83.775
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.064
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.022
+      }
+    ],
+    "passed": 379,
+    "skipped": 6
+  },
+  "final_precommit": {
+    "checks": [
+      {
+        "check": "pytest",
+        "exit_code": 0,
+        "seconds": 82.34
+      },
+      {
+        "check": "ruff-check",
+        "exit_code": 0,
+        "seconds": 0.067
+      },
+      {
+        "check": "ruff-format",
+        "exit_code": 0,
+        "seconds": 0.022
+      }
+    ],
+    "passed": 379,
+    "pytest_reported_seconds": 81.83,
+    "skipped": 6,
+    "source_and_test_hashes_match_previous_final": true
+  },
+  "inference_calls": 0,
+  "new_regressions": {
+    "tests.test_p2a_report_retention::test_constructor_does_not_accept_truthy_strings_as_authorization": "passed",
+    "tests.test_p2a_report_retention::test_entrypoint_feature_flag_is_explicit[0]": "passed",
+    "tests.test_p2a_report_retention::test_entrypoint_feature_flag_is_explicit[1]": "passed",
+    "tests.test_p2a_report_retention::test_entrypoint_feature_flag_is_explicit[None]": "passed",
+    "tests.test_p2a_report_retention::test_entrypoint_feature_flag_is_explicit[true]": "passed",
+    "tests.test_p2a_report_retention::test_flag_cannot_bypass_validator_ablation": "passed",
+    "tests.test_p2a_report_retention::test_flag_cannot_change_historical_v1_protocol": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[bad_ids-invalid_confirmation_evidence]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[empty_ids-missing_confirmation_evidence]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[failed-failed_evidence]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[forged_checks-checks_incomplete]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[forged_lexical_strength-strong_evidence_required]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[history-missing_checkpoint_confirmation]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[lexical-strong_evidence_required]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[malformed_references-strong_evidence_required]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[mismatched-evidence_id_mismatch]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[missing_ledger_citation-confirmation_not_in_ledger_citations]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[not_presented-evidence_not_presented]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[refs-checks_incomplete]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[tests-checks_incomplete]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[unindexed-target_not_indexed]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[unindexed_symbol-target_not_indexed]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[unknown-unknown_evidence]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[unknown_tool-strong_evidence_required]": "passed",
+    "tests.test_p2a_report_retention::test_ineligible_confirmations_are_explicitly_refused[untouched-untouched_target]": "passed",
+    "tests.test_p2a_report_retention::test_no_new_confirmations_or_predictions_are_created[rejected]": "passed",
+    "tests.test_p2a_report_retention::test_no_new_confirmations_or_predictions_are_created[suspected]": "passed",
+    "tests.test_p2a_report_retention::test_omitted_confirmed_target_is_revalidated_with_original_citations": "passed",
+    "tests.test_p2a_report_retention::test_only_already_confirmed_files_are_retained_in_a_multi_file_report": "passed",
+    "tests.test_p2a_report_retention::test_ordinary_validator_cannot_be_bypassed": "passed",
+    "tests.test_p2a_report_retention::test_paired_scripted_reports_preserve_confirmations_without_extra_model_calls[fabricated_citations]": "passed",
+    "tests.test_p2a_report_retention::test_paired_scripted_reports_preserve_confirmations_without_extra_model_calls[misclassified_after_repair]": "passed",
+    "tests.test_p2a_report_retention::test_paired_scripted_reports_preserve_confirmations_without_extra_model_calls[omitted]": "passed",
+    "tests.test_p2a_report_retention::test_paired_scripted_reports_preserve_confirmations_without_extra_model_calls[valid]": "passed",
+    "tests.test_p2a_report_retention::test_refused_confirmation_is_visible_in_report_without_trace": "passed",
+    "tests.test_p2a_report_retention::test_test_files_and_parse_errors_are_not_retained": "passed",
+    "tests.test_p2a_report_retention::test_zero_confirmation_trajectory_is_unchanged": "passed"
+  },
+  "provider_operations": "scripted/mocked only; socket guard blocks network and strips API credentials",
+  "unchanged_optional_UI_skips": {
+    "tests.test_demo::test_every_showcase_page_renders[page_about]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_how]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_live]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_every_showcase_page_renders[page_results]": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_guided_demo_discloses_progressively": "could not import 'streamlit.testing.v1': No module named 'streamlit'",
+    "tests.test_demo::test_live_page_shows_a_compact_diagnosis_for_abstention": "could not import 'streamlit.testing.v1': No module named 'streamlit'"
+  }
+}

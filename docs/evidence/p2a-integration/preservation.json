@@ -1,0 +1,21 @@
+{
+  "all_model_prompts_and_existing_agent_methods_except_constructor_run_entrypoint_unchanged": true,
+  "all_preexisting_user_refs_preserved": true,
+  "all_prior_tracked_files_except_agent_unchanged": true,
+  "baseline_commit": "3ddf26245b5c932dfbfa22ea806fa8eac7f3a55e",
+  "branch": "integration/v2.1.1-p2",
+  "fresh_B0_B2_or_85_task_replay_performed": false,
+  "frozen_evaluation_files_verified": 870,
+  "inference_calls": 0,
+  "inherited_B0_B2_output_hashes_reverified": 3,
+  "internal_refs_note": "Codex capture/checkpoint refs may rotate; no task command wrote or restored them.",
+  "merges": 0,
+  "original_and_P1_checkout_state_unchanged": true,
+  "original_file_contents_verified": 8758,
+  "policy_and_budget_constants_unchanged": true,
+  "pushes": 0,
+  "record_phase": "Precommit preservation check; only the integration/v2.1.1-p2 branch may advance in the authorized local commit.",
+  "staged_files": 0,
+  "task_commits": 0,
+  "validator_ledger_models_provider_and_indexing_unchanged": true
+}

@@ -1,0 +1,31 @@
+{
+  "estimate": {
+    "cases": "Three fresh development requests; none from the inspected held-out cohorts.",
+    "comparison": "One captured trajectory per request, finalized locally twice: flag off/on on identical ledger, index, presented IDs and draft.",
+    "contingency_tokens": 50000,
+    "estimated_typical_total_tokens": 172500,
+    "expected_incremental_fallback_model_tokens": 0,
+    "incremental_fallback_model_requests": 0,
+    "independent_six_trajectory_alternative_reserve": 700000,
+    "limits": [
+      "Historical sample is incomplete and selection-biased; no confidence bound or cost guarantee.",
+      "Request-boundary admission is not a hard per-response or global billing cap.",
+      "Provider retries remain disabled; no pilot is executed or authorized by this estimate.",
+      "Capture index, ledger/evidence/history, presented IDs, draft and validated outputs privately; existing counters alone cannot support replay."
+    ],
+    "per_run_admission_ceiling_proposed": 100000,
+    "planning_reserve_total_tokens": 350000,
+    "proposed_live_trajectories": 3
+  },
+  "token_observations": {
+    "maximum": 112101,
+    "mean": 57500.05263157895,
+    "median": 54282.0,
+    "minimum": 20154,
+    "missing_token_samples": 52,
+    "p90_nearest_rank": 97188,
+    "selected_v211_slots": 90,
+    "source_summary_sha256": "720db488c89e4758598d495c5bc77a24a1bd47501aed9d565bf8aa7d30e44ad1",
+    "token_samples": 38
+  }
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "bytes": 61577,
+    "path": "src/ripple/agent.py",
+    "sha256": "3262e85c17e598a8087d886df7b8f641f4a1e425f599e2fb74d7b509bd702e85"
+  },
+  {
+    "bytes": 7509,
+    "path": "src/ripple/report_fallback.py",
+    "sha256": "9a57e7997d92a6c3a29453cb61c5fd54b7c45df296c4285cf07a434bebd86143"
+  },
+  {
+    "bytes": 15962,
+    "path": "tests/test_p2a_report_retention.py",
+    "sha256": "1806d3e4e7ac30ea9a470daf56553c1a249638f621abebaf5d1aa1a16e7c8f56"
+  }
+]

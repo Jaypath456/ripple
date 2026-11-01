@@ -35,6 +35,7 @@ from ripple.ledger import CandidateLedger, EvidenceRecord, LedgerOutcome
 from ripple.llm import LLMClient, LLMError, LLMResponse
 from ripple.models import RepositoryIndex
 from ripple.render import render_markdown
+from ripple.report_fallback import retain_confirmed_components
 from ripple.tools import ToolResult, ToolSession, validate_tool_arguments
 from ripple.validate import unvalidated_report_draft, validate_report_draft
 
@@ -342,12 +343,16 @@ class AgentController:
         output_root: Path | None = None,
         max_tokens: int | None = None,
         variant: AgentVariant = AGENT_VARIANTS["RIPPLE"],
+        retain_confirmed_report: bool = False,
     ) -> None:
+        if type(retain_confirmed_report) is not bool:
+            raise ValueError("report retention flag must be a boolean")
         self.index = index
         self.llm = llm
         self.output_root = output_root or index.repo_root / ".ripple"
         self.max_tokens = max_tokens
         self.variant = variant
+        self.retain_confirmed_report = retain_confirmed_report
         self.ledger = CandidateLedger(index, MAX_CANDIDATES)
         self.session = ToolSession(index)
         self.cache: dict[str, ToolResult] = {}
@@ -1204,6 +1209,11 @@ class AgentController:
             config_version=config_version,
             request=request.text,
             model=self.llm.model,
+            **(
+                {"report_retention_policy": "confirmed-checkpoint-v1"}
+                if self.retain_confirmed_report and self.v2 and self.variant.validator
+                else {}
+            ),
         )
         stop_reason = "unknown"
         requested_completion = False
@@ -1330,6 +1340,23 @@ class AgentController:
             status = "failed"
             stop_reason = "controller_error"
 
+        if self.retain_confirmed_report and self.v2 and self.variant.validator:
+            retention = retain_confirmed_components(
+                validated, self.index, self.ledger, self.presented
+            )
+            validated = retention.report
+            self.trace.write(
+                "report_retention_evaluated",
+                policy="confirmed-checkpoint-v1",
+                retained=list(retention.retained),
+                refused=[
+                    {"target": target, "reason_code": code}
+                    for target, code in retention.refused
+                ],
+            )
+            if retention.retained and status != "failed":
+                status = "partial"
+
         report = ChangeImpactReport(
             report_id=self.run_id,
             request=request.text,
@@ -1421,4 +1448,5 @@ def analyze_repository(
         output_root=output_root,
         max_tokens=max_tokens,
         variant=variant,
+        retain_confirmed_report=os.environ.get("RIPPLE_RETAIN_CONFIRMED_REPORT") == "1",
     ).run(request)
