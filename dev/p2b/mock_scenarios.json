@@ -1,0 +1,106 @@
+{
+  "P2B-DEV-001-STOCK-LOW-WATERMARK": {
+    "confirmed_targets": [
+      "warehouse/status.py::stock_status"
+    ],
+    "relevant": [
+      "warehouse/status.py"
+    ],
+    "search_terms": [
+      "stock_status",
+      "warning_threshold",
+      "reserved"
+    ],
+    "steps": [
+      [
+        "inspect_symbol",
+        {
+          "target": "warehouse/status.py"
+        }
+      ],
+      [
+        "find_references",
+        {
+          "symbol_id": "warehouse/status.py::stock_status"
+        }
+      ],
+      [
+        "find_tests",
+        {
+          "target": "warehouse/status.py"
+        }
+      ]
+    ]
+  },
+  "P2B-DEV-002-RESERVATION-CANCEL-NOTIFY": {
+    "confirmed_targets": [
+      "booking/service.py::cancel_booking",
+      "booking/notifications.py::format_confirmation"
+    ],
+    "relevant": [
+      "booking/service.py",
+      "booking/notifications.py"
+    ],
+    "search_terms": [
+      "cancel_booking",
+      "format_confirmation",
+      "NoticeSink"
+    ],
+    "steps": [
+      [
+        "inspect_symbol",
+        {
+          "target": "booking/service.py"
+        }
+      ],
+      [
+        "find_references",
+        {
+          "symbol_id": "booking/service.py::cancel_booking"
+        }
+      ],
+      [
+        "find_tests",
+        {
+          "target": "booking/service.py"
+        }
+      ],
+      [
+        "inspect_symbol",
+        {
+          "target": "booking/notifications.py"
+        }
+      ],
+      [
+        "find_references",
+        {
+          "symbol_id": "booking/notifications.py::format_confirmation"
+        }
+      ],
+      [
+        "find_tests",
+        {
+          "target": "booking/notifications.py"
+        }
+      ]
+    ]
+  },
+  "P2B-DEV-003-OUT-OF-REPO-IAM": {
+    "confirmed_targets": [],
+    "relevant": [],
+    "search_terms": [
+      "IAM",
+      "billing",
+      "cloud"
+    ],
+    "steps": [
+      [
+        "search_code",
+        {
+          "kind": "any",
+          "query": "IAM"
+        }
+      ]
+    ]
+  }
+}

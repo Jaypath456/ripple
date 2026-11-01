@@ -1,0 +1,8 @@
+{
+  "excluded_from_model_context": true,
+  "expected_existing_source_paths": [],
+  "label_kind": "Predeclared author-selected synthetic development surface, not a held-out benchmark or an independently collected real issue.",
+  "limitations": "Labels do not establish general accuracy; no reference implementation or task patch was applied.",
+  "scoring": "Exact repository-relative existing production .py file set, map symbols to file; test files reported separately. Empty-gold control passes only with no source predictions. Do not modify labels after viewing outputs.",
+  "task_id": "P2B-DEV-003-OUT-OF-REPO-IAM"
+}

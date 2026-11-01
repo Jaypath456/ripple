@@ -1,0 +1,74 @@
+{
+  "branch": "integration/v2.1.1-p2",
+  "counting_unit": "Every wire attempt, including Responses probes, Chat fallback, repairs and failures. No automatic transient retry.",
+  "execution_authorized": false,
+  "expected_total_tokens": 172500,
+  "go_no_go": "NO-GO for inference until explicit execution approval and all readiness gates in the Markdown plan pass.",
+  "inference_calls": 0,
+  "limits": {
+    "aggregate_wall_seconds": 7200,
+    "allow_request_replay": false,
+    "maximum_input_tokens_per_wire_attempt": 16000,
+    "maximum_live_concurrency": 1,
+    "maximum_output_tokens_per_wire_attempt": 2000,
+    "maximum_reserved_tokens_per_wire_attempt": 18000,
+    "request_deadline_seconds": 90,
+    "sdk_max_retries": 0,
+    "trajectory_wall_seconds": 2400
+  },
+  "live_trajectories": 3,
+  "local_finalizations_per_trajectory": 2,
+  "maximum_wire_requests": 72,
+  "p1_baseline": "3ddf26245b5c932dfbfa22ea806fa8eac7f3a55e",
+  "p2a_commit": "112092aae61d96891af192adead7bded833ea569",
+  "plan_date": "2026-11-01",
+  "planning_reserve_tokens": 350000,
+  "provider_assumptions": {
+    "exact_token_counter_verified": false,
+    "gateway": "BullsAI; endpoint must be verified before execution without guessing a URL",
+    "hard_billing_guarantee": false,
+    "model": "openai/gpt-oss-20b, historical identifier; availability and cap semantics unverified",
+    "pilot_transport_admission_harness_implemented": false,
+    "total_output_including_reasoning_cap_verified": false
+  },
+  "status": "PROPOSED_FOR_APPROVAL_NOT_EXECUTED",
+  "tasks": [
+    {
+      "expected_tokens": 57500,
+      "fixture": "fixtures/stock",
+      "kind": "focused source change",
+      "maximum_wire_requests": 24,
+      "oracle_file": "oracles/P2B-DEV-001-STOCK-LOW-WATERMARK.json",
+      "request": "Make the existing stock_status function accept an optional keyword-only warning_threshold, defaulting to 5. Available stock still subtracts reservations. A nonpositive threshold must raise ValueError. Keep the out/low/available result vocabulary, existing callers and default behavior unchanged. Identify affected existing source code; do not implement the change.",
+      "source_manifest": "manifests/P2B-DEV-001-STOCK-LOW-WATERMARK.SHA256SUMS",
+      "source_manifest_sha256": "2336d7e55909c70a38248687a55612964695abbbe27eda4ac425307be5f19df3",
+      "task_id": "P2B-DEV-001-STOCK-LOW-WATERMARK",
+      "token_allocation": 110000
+    },
+    {
+      "expected_tokens": 57500,
+      "fixture": "fixtures/booking",
+      "kind": "two-file diagnostic",
+      "maximum_wire_requests": 24,
+      "oracle_file": "oracles/P2B-DEV-002-RESERVATION-CANCEL-NOTIFY.json",
+      "request": "When an existing confirmed booking is cancelled, emit one cancellation notice using the existing notification sink. Add a dedicated cancellation formatter alongside the existing confirmation formatter and call it from the cancellation service. Repeated cancellation of an already cancelled booking must send no further notice. Preserve the public cancel_booking arguments and return value and the API entry point. Identify affected existing source code; do not implement the change.",
+      "source_manifest": "manifests/P2B-DEV-002-RESERVATION-CANCEL-NOTIFY.SHA256SUMS",
+      "source_manifest_sha256": "b74a70447aab57a64ff212e592c8221e7d3bdbb2789d53b96b6c865f1909bf07",
+      "task_id": "P2B-DEV-002-RESERVATION-CANCEL-NOTIFY",
+      "token_allocation": 130000
+    },
+    {
+      "expected_tokens": 57500,
+      "fixture": "fixtures/units",
+      "kind": "unsupported external-task negative control",
+      "maximum_wire_requests": 24,
+      "oracle_file": "oracles/P2B-DEV-003-OUT-OF-REPO-IAM.json",
+      "request": "An operator must rotate an existing AWS IAM access key and transfer the billing owner in their external cloud account. Identify any existing source files in this repository that must change for those external account operations. Do not build a new integration, change unrelated conversion behavior, attempt cloud operations or infer missing credentials. If this repository has no relevant integration, report that limitation without inventing affected source files.",
+      "source_manifest": "manifests/P2B-DEV-003-OUT-OF-REPO-IAM.SHA256SUMS",
+      "source_manifest_sha256": "44e3bc8b81595364bdbf9f38c5887fc31ef94539782e7c45830c53cf9324b7bf",
+      "task_id": "P2B-DEV-003-OUT-OF-REPO-IAM",
+      "token_allocation": 110000
+    }
+  ],
+  "timezone": "America/New_York"
+}

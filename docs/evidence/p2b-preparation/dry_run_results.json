@@ -1,0 +1,92 @@
+{
+  "inference_calls": 0,
+  "live_admission": "BLOCKED_UNVERIFIED_UB_DEPLOYMENT",
+  "mock_tokens": 3450,
+  "mock_wire_attempts": 23,
+  "mode": "MOCK_ONLY",
+  "raw_capture_exported": false,
+  "tasks": [
+    {
+      "additional_inference_for_replay": 0,
+      "checkpoint_count": 1,
+      "expected_source_paths": [
+        "warehouse/status.py"
+      ],
+      "flag_off_source_paths": [],
+      "flag_off_status": "abstained",
+      "flag_on_status": "partial",
+      "largest_mock_input_bound": 14953,
+      "mock_expectations_passed": true,
+      "off_live_replay_identical": true,
+      "on_source_paths": [
+        "warehouse/status.py"
+      ],
+      "provenance_identical": true,
+      "provenance_sha256": "e10d3b27ef0eed415f6848e4596f9cdb3b048935e4371e48f2b2ef79159a7b15",
+      "response_stream_sha256": "12376bf8de1c43f009d02424e153044d44de881e9f997d7d649f83125881a4c1",
+      "retained_targets": [
+        "warehouse/status.py::stock_status"
+      ],
+      "same_recorded_responses": true,
+      "source_commit": "05255a67fbd11650c0077497d698b47fdd4c89b5",
+      "stop_reason": "submitted",
+      "task_id": "P2B-DEV-001-STOCK-LOW-WATERMARK",
+      "tokens": 1050,
+      "wire_requests": 7
+    },
+    {
+      "additional_inference_for_replay": 0,
+      "checkpoint_count": 2,
+      "expected_source_paths": [
+        "booking/notifications.py",
+        "booking/service.py"
+      ],
+      "flag_off_source_paths": [],
+      "flag_off_status": "abstained",
+      "flag_on_status": "partial",
+      "largest_mock_input_bound": 15844,
+      "mock_expectations_passed": true,
+      "off_live_replay_identical": true,
+      "on_source_paths": [
+        "booking/notifications.py",
+        "booking/service.py"
+      ],
+      "provenance_identical": true,
+      "provenance_sha256": "2abba242d83dcb3a122239f68405897c25a2808a84f66c4e6670101ecc5cd8d6",
+      "response_stream_sha256": "8cc200998176a1e60a06d0477105b2f5865a757884015424ad7cc17d08b09ba2",
+      "retained_targets": [
+        "booking/notifications.py::format_confirmation",
+        "booking/service.py::cancel_booking"
+      ],
+      "same_recorded_responses": true,
+      "source_commit": "be78aee207a57940690351699153372c342ca75a",
+      "stop_reason": "submitted",
+      "task_id": "P2B-DEV-002-RESERVATION-CANCEL-NOTIFY",
+      "tokens": 1650,
+      "wire_requests": 11
+    },
+    {
+      "additional_inference_for_replay": 0,
+      "checkpoint_count": 0,
+      "expected_source_paths": [],
+      "flag_off_source_paths": [],
+      "flag_off_status": "abstained",
+      "flag_on_status": "abstained",
+      "largest_mock_input_bound": 8320,
+      "mock_expectations_passed": true,
+      "off_live_replay_identical": true,
+      "on_source_paths": [],
+      "provenance_identical": true,
+      "provenance_sha256": "3f56f3c6f712fe996fabc4d2d5c99b3e067a7ff0e39e66b7651eda0cbe530d1c",
+      "response_stream_sha256": "4ce5c3d01351ef7e89628c31e843a2db807ef13350d53a9dc8045c11ea037e55",
+      "retained_targets": [],
+      "same_recorded_responses": true,
+      "source_commit": "1e5e90d426e314f1f63ae1521c0d30fd1da1c5de",
+      "stop_reason": "no_progress",
+      "task_id": "P2B-DEV-003-OUT-OF-REPO-IAM",
+      "tokens": 750,
+      "wire_requests": 5
+    }
+  ],
+  "usage_note": "Artificial 100 input + 50 output tokens per response; not measured BullsAI usage or a cost/accuracy estimate. Positive scripts deliberately omit eligible checkpoint confirmations."
+}

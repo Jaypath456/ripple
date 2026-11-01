@@ -1,0 +1,18 @@
+{
+  "all_p2a_tracked_files_byte_identical": 1018,
+  "current_original_tracked_and_untracked_files_preserved": 963,
+  "earlier_original_files_preserved": 8758,
+  "frozen_evaluation_files_verified": 870,
+  "inference_calls": 0,
+  "inherited_B0_B2_complete_comparisons_reverified": 3,
+  "integration_commits": 0,
+  "merges": 0,
+  "new_B0_B2_or_heldout_replay": false,
+  "note": "Codex runtime capture refs may rotate externally; no task command wrote or restored them.",
+  "original_and_p2a_indexes_preserved": true,
+  "p2a_base": "112092aae61d96891af192adead7bded833ea569",
+  "p2a_checksum_entries_verified": 11,
+  "prediction_prompts_ledger_validator_models_provider_unchanged": true,
+  "protected_and_existing_user_refs_preserved": true,
+  "pushes": 0
+}

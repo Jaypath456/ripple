@@ -1,0 +1,14 @@
+{
+  "approved": false,
+  "contract_sha256": null,
+  "harness_sha256": null,
+  "instructions": "Copy outside this package. Do not set approved=true before explicit execution approval and reviewed UB primary evidence. Bind all hashes to the reviewed preparation; a remaining-phase approval must name tasks 2 and 3 and hash the reviewed first result.",
+  "output_directory": "/private/tmp/ripple-p2b-live-20261101",
+  "package_sha256": null,
+  "phase": "first",
+  "refs_sha256": null,
+  "reviewed_first_result_sha256": null,
+  "tasks": [
+    "P2B-DEV-001-STOCK-LOW-WATERMARK"
+  ]
+}

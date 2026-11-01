@@ -1,0 +1,182 @@
+[
+  {
+    "bytes": 579,
+    "path": "dev/p2b/APPROVAL_TEMPLATE.json",
+    "sha256": "c2fb721c5c8779039c6758ab1f4c626168327da8ab851301dd866db7dbf8bd03"
+  },
+  {
+    "bytes": 4090,
+    "path": "dev/p2b/README.md",
+    "sha256": "1599130bcf4b7563c893686367b3b0b410bd4754cce09ebe41ea3810f297d0d8"
+  },
+  {
+    "bytes": 57,
+    "path": "dev/p2b/fixtures/booking/booking/__init__.py",
+    "sha256": "49f1093cfb73dff3a097825b0ccd7a254e2efd71ebc0cc5d346e08416f080ca0"
+  },
+  {
+    "bytes": 253,
+    "path": "dev/p2b/fixtures/booking/booking/api.py",
+    "sha256": "db009dbb3c59c946e1c9b22a3d5d01eb5147bf54735f73efaa90b33425bd187f"
+  },
+  {
+    "bytes": 112,
+    "path": "dev/p2b/fixtures/booking/booking/models.py",
+    "sha256": "5918451d93e6946243e6a2050c21ff9ba1d001c19d0aa6603880d3267318a407"
+  },
+  {
+    "bytes": 200,
+    "path": "dev/p2b/fixtures/booking/booking/notifications.py",
+    "sha256": "26c3ac73beb6807387d0f83f4dff431730c49e3285a8ba5b79d9db458f6472fd"
+  },
+  {
+    "bytes": 473,
+    "path": "dev/p2b/fixtures/booking/booking/service.py",
+    "sha256": "a4c81b6496a429c231978e5fdf4123dd18cb8ab6fc14554fdbbe6cbe104772fe"
+  },
+  {
+    "bytes": 938,
+    "path": "dev/p2b/fixtures/booking/tests/test_booking.py",
+    "sha256": "04012ce928147701f12af8595fd3d6fbbb0d1c3fcbf12a7e307d6179bbe230ba"
+  },
+  {
+    "bytes": 493,
+    "path": "dev/p2b/fixtures/stock/tests/test_status.py",
+    "sha256": "fddffbf9bf8bd89be8ca58e2b2534bbd4ff3989e846c1ed143585645cf81ccfc"
+  },
+  {
+    "bytes": 57,
+    "path": "dev/p2b/fixtures/stock/warehouse/__init__.py",
+    "sha256": "49f1093cfb73dff3a097825b0ccd7a254e2efd71ebc0cc5d346e08416f080ca0"
+  },
+  {
+    "bytes": 167,
+    "path": "dev/p2b/fixtures/stock/warehouse/api.py",
+    "sha256": "a5f232f09101839089eb9f0f45892fde7816fe987eae12db9d7ec26d67fbf46e"
+  },
+  {
+    "bytes": 152,
+    "path": "dev/p2b/fixtures/stock/warehouse/availability.py",
+    "sha256": "81416a221b43d75c40cd9cec9b8c281cd5f1df529462e3842caa199e6601370a"
+  },
+  {
+    "bytes": 243,
+    "path": "dev/p2b/fixtures/stock/warehouse/status.py",
+    "sha256": "5208da51c3a56abe332e7e419e80e8ee1f9473041d08de5ccc9a1fdf6de41749"
+  },
+  {
+    "bytes": 406,
+    "path": "dev/p2b/fixtures/units/tests/test_units.py",
+    "sha256": "82354ccc8d0151a9ac25d23f9354cf30ce3a90208aa9fdae7122c7f331cea142"
+  },
+  {
+    "bytes": 57,
+    "path": "dev/p2b/fixtures/units/units/__init__.py",
+    "sha256": "49f1093cfb73dff3a097825b0ccd7a254e2efd71ebc0cc5d346e08416f080ca0"
+  },
+  {
+    "bytes": 152,
+    "path": "dev/p2b/fixtures/units/units/convert.py",
+    "sha256": "3257a976d319b20d70fe5d6eb3faed3955cf4aaeb933cb98568f9ddd8a4562fb"
+  },
+  {
+    "bytes": 152,
+    "path": "dev/p2b/fixtures/units/units/display.py",
+    "sha256": "22c3b512e01de80bd91644e8ed6151f1fd8146a55b999b1d75f74f3ffbf55625"
+  },
+  {
+    "bytes": 436,
+    "path": "dev/p2b/manifests/P2B-DEV-001-STOCK-LOW-WATERMARK.SHA256SUMS",
+    "sha256": "2336d7e55909c70a38248687a55612964695abbbe27eda4ac425307be5f19df3"
+  },
+  {
+    "bytes": 515,
+    "path": "dev/p2b/manifests/P2B-DEV-002-RESERVATION-CANCEL-NOTIFY.SHA256SUMS",
+    "sha256": "b74a70447aab57a64ff212e592c8221e7d3bdbb2789d53b96b6c865f1909bf07"
+  },
+  {
+    "bytes": 336,
+    "path": "dev/p2b/manifests/P2B-DEV-003-OUT-OF-REPO-IAM.SHA256SUMS",
+    "sha256": "44e3bc8b81595364bdbf9f38c5887fc31ef94539782e7c45830c53cf9324b7bf"
+  },
+  {
+    "bytes": 1980,
+    "path": "dev/p2b/mock_scenarios.json",
+    "sha256": "ba9566035c2a587549fd2eb429e2b8cad2d93f39403a5418dc8595cf4fcd23c9"
+  },
+  {
+    "bytes": 653,
+    "path": "dev/p2b/oracles/P2B-DEV-001-STOCK-LOW-WATERMARK.json",
+    "sha256": "a3fa3a6c8cd193ef420bab80f7579f4fcf888fb6cd2860f4377039d1394167bd"
+  },
+  {
+    "bytes": 690,
+    "path": "dev/p2b/oracles/P2B-DEV-002-RESERVATION-CANCEL-NOTIFY.json",
+    "sha256": "daf84446671e3a13c006e68d70b4328f163a026cf5cb975e6df652ff40ef4b96"
+  },
+  {
+    "bytes": 620,
+    "path": "dev/p2b/oracles/P2B-DEV-003-OUT-OF-REPO-IAM.json",
+    "sha256": "0d57a5c27c9caa5e7b41e50425b83f6c02570e20a87babb9b55fbd45c3db210e"
+  },
+  {
+    "bytes": 619,
+    "path": "dev/p2b/provider_contract.json",
+    "sha256": "d7ebe5bab54ae986443cb9eacbf68fd4717367b5b46e171430627ec9750b63bf"
+  },
+  {
+    "bytes": 585,
+    "path": "dev/p2b/run.sh",
+    "sha256": "d644ba9b239d7ed58125d142eb313f6e32089052f8f33654d6ea5eb84e7fedfb"
+  },
+  {
+    "bytes": 4455,
+    "path": "dev/p2b/tasks.json",
+    "sha256": "2d0d02928df3f50625f9971f9fa2fd6c27680e7e976c5dedd7454610fbc23fb6"
+  },
+  {
+    "bytes": 13866,
+    "path": "docs/RIPPLE_P2B_ADMISSION_REPORT.md",
+    "sha256": "f51fde77ec421c92916707a36ea6ca62b068909f672674eb3f356aaf82a8181d"
+  },
+  {
+    "bytes": 3429,
+    "path": "docs/evidence/p2b-preparation/dry_run_results.json",
+    "sha256": "b69e25bb218956049a56b85198bea9e5a1e89e77843e65c77229cdf20e3c7985"
+  },
+  {
+    "bytes": 754,
+    "path": "docs/evidence/p2b-preparation/preservation.json",
+    "sha256": "c59c16e35027d8b6262be47007e3d41ae69a101ac492607ebe08e60e3a14d99c"
+  },
+  {
+    "bytes": 1970,
+    "path": "docs/evidence/p2b-preparation/sdk_test_environment.json",
+    "sha256": "667d6bb1481b708bf580c08d1c48e723bdb72e3ee7e1b2df8f7db2bed6163880"
+  },
+  {
+    "bytes": 6662,
+    "path": "docs/evidence/p2b-preparation/test_results.json",
+    "sha256": "079f5fa43bb1cb4b6909b9ead841cb6a904a3bafcb3f1d11ec6660d1bdf97287"
+  },
+  {
+    "bytes": 1470,
+    "path": "docs/evidence/p2b-preparation/verification.json",
+    "sha256": "5e72a651592479113454c2974b1b7c7ec4936830f169d4da499a363b50ef7e69"
+  },
+  {
+    "bytes": 32824,
+    "path": "src/ripple/pilot.py",
+    "sha256": "661a9d9dfb925ba9c366a24801fbb076411f32a9fbd45091309078db014f7351"
+  },
+  {
+    "bytes": 14962,
+    "path": "src/ripple/pilot_admission.py",
+    "sha256": "cd9cb2a10c027b1235150bb1180caf62f9cbc42a1a5e71d5952e808a4810105a"
+  },
+  {
+    "bytes": 26458,
+    "path": "tests/test_p2b_pilot.py",
+    "sha256": "b5139345c312ec25d1d82b89196f4fcd6bea95a8a149850950b9584d30158a44"
+  }
+]

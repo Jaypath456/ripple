@@ -1,0 +1,16 @@
+{
+  "base_url": "https://gateway.bullsai.buffalo.edu/v1",
+  "context_limit": null,
+  "evidence": {},
+  "framing_token_upper_bound": null,
+  "input_bound_method": null,
+  "model": "openai/gpt-oss-20b",
+  "note": "BullsAI deployment contract is not verified. Public developer documentation returned 404; configured gh is unavailable and noninteractive Git authentication failed. Live admission must be denied.",
+  "output_includes_reasoning": null,
+  "output_limit": null,
+  "output_parameters": {},
+  "requests_per_minute": null,
+  "status": "UNVERIFIED",
+  "tokens_per_minute": null,
+  "usage_is_authoritative": null
+}
