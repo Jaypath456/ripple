@@ -70,6 +70,7 @@ def sync_directory(path):
 MAX_OBSERVED_TOKENS = 2**63 - 1
 OPERATIONS = {"interpret", "choose_next_action", "decide_candidates", "draft_report"}
 STOP_REASONS = {
+    "experimental_endpoint_changed",
     "added_component_provenance_failed",
     "clock_invalid",
     "clock_reset_requires_review",
@@ -105,7 +106,7 @@ STOP_REASONS = {
     "capture_write_failed",
 }
 EVENT_FIELDS = {
-    "task_started": ({"task", "allocation"}, set()),
+    "task_started": ({"task", "allocation"}, {"experiment"}),
     "wire_reserved": (
         {"attempt", "task", "endpoint", "input_bound", "reservation", "at", "request"},
         set(),
@@ -217,6 +218,24 @@ def validate_event(event, sequence):
         require(integer(event["attempt"], 1, 72))
     if kind == "task_started":
         require(integer(event["allocation"], 1, 130000))
+        if "experiment" in event:
+            experiment = event["experiment"]
+            require(isinstance(experiment, dict))
+            require(
+                set(experiment)
+                == {
+                    "profile",
+                    "provider_guarantees_verified",
+                    "reservation_floor",
+                    "ledger_sha256",
+                    "approval_sha256",
+                }
+            )
+            require(experiment["profile"] == "EXPERIMENTAL_UB_COURSE")
+            require(experiment["provider_guarantees_verified"] is False)
+            require(experiment["reservation_floor"] is True)
+            require(checksum(experiment["ledger_sha256"]))
+            require(checksum(experiment["approval_sha256"]))
     elif kind == "wire_reserved":
         require(
             event["endpoint"] in {"responses", "chat_completions"}
@@ -629,6 +648,8 @@ def observed_counts(response):
 def completion_summary(row):
     """Prepared evidence never claims standalone evaluation eligibility."""
     result = {key: row[key] for key in SUMMARY_FIELDS}
+    if "experiment" in row:
+        result["experiment"] = row["experiment"]
     result.update(
         status="COMPLETION_PREPARED",
         reason="completion_prepared",
@@ -742,6 +763,18 @@ def accounting_state(events, *, root=None):
                 ),
                 "task_after_uncertain_usage",
             )
+            if tasks:
+                previous = next(iter(tasks.values())).get("experiment")
+                experiment = event.get("experiment")
+                require(
+                    (previous is None and experiment is None)
+                    or (
+                        previous is not None
+                        and experiment is not None
+                        and previous["ledger_sha256"] == experiment["ledger_sha256"]
+                    ),
+                    "admission_profile_changed",
+                )
             current = task
             tasks[task] = {
                 "task": task,
@@ -749,6 +782,8 @@ def accounting_state(events, *, root=None):
                 "status": "UNFINISHED",
                 "reason": "execution_unfinished",
             }
+            if "experiment" in event:
+                tasks[task]["experiment"] = event["experiment"]
         elif kind == "wire_reserved":
             number = event["attempt"]
             require(
@@ -831,7 +866,7 @@ def accounting_state(events, *, root=None):
                 declared_unknown = event.get("unknown_cost", overrun or not complete)
                 expected = (
                     max(attempt["reservation"], counts[2])
-                    if declared_unknown
+                    if declared_unknown or "experiment" in tasks[current]
                     else counts[2]
                 )
                 require(
@@ -1020,8 +1055,34 @@ class Admission:
     """Durable accounting; a stopped or unfinished journal never admits resumption."""
 
     def __init__(
-        self, journal: Journal, contract: Contract, *, limits=None, clock=monotonic
+        self,
+        journal: Journal,
+        contract: Contract,
+        *,
+        limits=None,
+        clock=monotonic,
+        experiment=None,
     ):
+        if experiment is not None:
+            validate_event(
+                {
+                    "kind": "task_started",
+                    "task": "approval",
+                    "allocation": 1,
+                    "experiment": experiment,
+                },
+                0,
+            )
+        self.experiment = dict(experiment) if experiment is not None else None
+        for event in journal.events:
+            if event["kind"] == "task_started":
+                previous = event.get("experiment")
+                if (
+                    (previous is None) != (experiment is None)
+                    or previous is not None
+                    and previous["ledger_sha256"] != experiment["ledger_sha256"]
+                ):
+                    raise PilotStop("admission_profile_changed")
         self.journal, self.contract = journal, contract
         self.limits, self.clock = limits or Limits(), clock
         self.last_reason = None
@@ -1144,7 +1205,10 @@ class Admission:
             raise PilotStop("task_not_admissible")
         if not positive(allocation) or allocation > 130000:
             raise PilotStop("task_allocation")
-        self.append({"kind": "task_started", "task": task, "allocation": allocation})
+        event = {"kind": "task_started", "task": task, "allocation": allocation}
+        if self.experiment is not None:
+            event["experiment"] = self.experiment
+        self.append(event)
         self.started = self.clock()
 
     def reserve(self, endpoint: str, request):
@@ -1253,7 +1317,7 @@ class Admission:
         uncertain = overrun or not complete or usage_uncertain
         accounted = (
             max(self.pending["reservation"], total_tokens)
-            if uncertain
+            if uncertain or self.experiment is not None
             else total_tokens
         )
         self.append(
