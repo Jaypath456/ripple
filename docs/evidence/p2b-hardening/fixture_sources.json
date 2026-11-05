@@ -1,0 +1,17 @@
+[
+  {
+    "path": ".ripple/hardening-fixtures/sympy/sine.py",
+    "source": "https://raw.githubusercontent.com/sympy/sympy/e53b24ad345e11769dd1989e4873380c0f94b4e2/sympy/integrals/rubi/rules/sine.py",
+    "sha256": "843a524e21ba0ceff1a4e4756108f37ad61d0e6bb42c319973dfb913bfd33576"
+  },
+  {
+    "path": ".ripple/hardening-fixtures/rich/Textualize__rich-2301/tests/_card_render.py",
+    "source": "https://raw.githubusercontent.com/Textualize/rich/695256ce5316482f15818962ba8f692a460f923f/tests/_card_render.py",
+    "sha256": "9c11d1c7189972e98a865e4e3bdf877282839f8c9e7843a6f9a59a31c201b680"
+  },
+  {
+    "path": ".ripple/hardening-fixtures/rich/Textualize__rich-901/tests/_card_render.py",
+    "source": "https://raw.githubusercontent.com/Textualize/rich/a9c0f917aed8d0bba232b7584742962f03a9a293/tests/_card_render.py",
+    "sha256": "048ba0f89f19f8e77cefcc77a0678f6b0ad2bafde7816667c4a5dc05a70b622b"
+  }
+]

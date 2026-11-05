@@ -1,0 +1,47 @@
+{
+  "full_suite": {
+    "passed": 485,
+    "skipped": 6,
+    "additional_skips": 0,
+    "existing_passes": 443,
+    "new_hardening_passes": 42
+  },
+  "harness": {
+    "passed": 106,
+    "existing_identities": 64,
+    "new_tests": 42
+  },
+  "ruff": "passed",
+  "formatting": {
+    "status": "passed",
+    "python_files": 113
+  },
+  "pip_check": "passed",
+  "diff_check": "passed",
+  "privacy": {
+    "findings": [],
+    "configured_secret_exact_match_scan": "passed; values never printed or persisted",
+    "credential_pattern_scan": "passed",
+    "scope": "Changed tracked files and all untracked review artifacts; test outcome exports contain identities/statuses only, no raw captures.",
+    "limit": "Pattern and exact-value checks do not guarantee detection of every possible secret."
+  },
+  "environment": {
+    "recorded_sdk_distribution_versions_and_hashes_reproduced": 11,
+    "locked_distributions": 22,
+    "complete_historical_test_foundation_attestable": false,
+    "reason": "Historical preparation record did not pin its entire test foundation; selected preserved foundation now locked."
+  },
+  "source_changes": [
+    "src/ripple/pilot.py",
+    "src/ripple/pilot_admission.py",
+    "tests/test_p2b_pilot.py"
+  ],
+  "inference_calls": 0,
+  "BullsAI_requests": 0,
+  "live_calibration": false,
+  "live_admission": "BLOCKED_UNVERIFIED_CONTRACT",
+  "project_commits": 0,
+  "staged_files": 0,
+  "pushes": 0,
+  "merges": 0
+}

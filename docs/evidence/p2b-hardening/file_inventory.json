@@ -1,0 +1,90 @@
+{
+  "changed_files": [
+    "dev/p2b/check_offline.py",
+    "docs/RIPPLE_P2B_HARDENING_REPORT.md",
+    "docs/evidence/p2b-hardening/SHA256SUMS",
+    "docs/evidence/p2b-hardening/file_inventory.json",
+    "docs/evidence/p2b-hardening/fixture_sources.json",
+    "docs/evidence/p2b-hardening/frozen-evaluation.SHA256SUMS",
+    "docs/evidence/p2b-hardening/preservation.json",
+    "docs/evidence/p2b-hardening/test_results.json",
+    "docs/evidence/p2b-hardening/verification.json",
+    "requirements/p2b-hardening-environment.json",
+    "requirements/p2b-hardening.lock",
+    "src/ripple/pilot.py",
+    "src/ripple/pilot_admission.py",
+    "tests/test_p2b_hardening.py",
+    "tests/test_p2b_pilot.py"
+  ],
+  "hashes": [
+    {
+      "path": "dev/p2b/check_offline.py",
+      "bytes": 2129,
+      "sha256": "272bf146f8b86333f2ce232b1b8694f0905b6c22eddd2de6c0bee70d2b081fd5"
+    },
+    {
+      "path": "docs/RIPPLE_P2B_HARDENING_REPORT.md",
+      "bytes": 6738,
+      "sha256": "15e60bb679a9f148e28ed398df61b0afaccce6870cfb40f40c43603cc8ac3402"
+    },
+    {
+      "path": "docs/evidence/p2b-hardening/fixture_sources.json",
+      "bytes": 909,
+      "sha256": "85b566e95ecf93366bd0aa9bd2e0118ec4b3fce91a948e066368c3acc2f3874a"
+    },
+    {
+      "path": "docs/evidence/p2b-hardening/frozen-evaluation.SHA256SUMS",
+      "bytes": 111605,
+      "sha256": "7a48e94b70525803660b31791f8158e39549f1c3e3e93a35424ca6da4774337a"
+    },
+    {
+      "path": "docs/evidence/p2b-hardening/preservation.json",
+      "bytes": 1022,
+      "sha256": "58c30d7b494346a723fd104aa970fc5a619bb5852cf5dc6e62bbb3439d04187d"
+    },
+    {
+      "path": "docs/evidence/p2b-hardening/test_results.json",
+      "bytes": 63254,
+      "sha256": "7969c901dfd247b7c0151a67da0ab2aa9d608af04722bb5538b0e022f5338dff"
+    },
+    {
+      "path": "docs/evidence/p2b-hardening/verification.json",
+      "bytes": 1432,
+      "sha256": "2ad44086ad3025096cec4e0e74996f8a40bd25ef48207ba4d5a9916e1e1e0891"
+    },
+    {
+      "path": "requirements/p2b-hardening-environment.json",
+      "bytes": 4869,
+      "sha256": "0009fcdee25ee2dddf1fdc57f103cafd7beab830fa7e55542ef2c882ab42fd12"
+    },
+    {
+      "path": "requirements/p2b-hardening.lock",
+      "bytes": 2164,
+      "sha256": "3524b6aadbd2eedb91ca80235a10b227cc6d7abbf86730f4969304569ea97a96"
+    },
+    {
+      "path": "src/ripple/pilot.py",
+      "bytes": 41665,
+      "sha256": "09dfb2b2194f482bb76652a976cb3450894d0feb5371b86e59b3fde232907664"
+    },
+    {
+      "path": "src/ripple/pilot_admission.py",
+      "bytes": 23935,
+      "sha256": "5b26a66f5565ca5cfa3ce1bcb813efa39726ce926970bebb3dea8b85b3dea818"
+    },
+    {
+      "path": "tests/test_p2b_hardening.py",
+      "bytes": 17543,
+      "sha256": "07d31a66f2d9b835519760954cddd8d4087b05355466fcfebde42f449adb279b"
+    },
+    {
+      "path": "tests/test_p2b_pilot.py",
+      "bytes": 26622,
+      "sha256": "3db5072701177653dd7d727217204c3b012e7fcf5d261c06fee88e6bea73ff32"
+    }
+  ],
+  "hash_exclusions": [
+    "docs/evidence/p2b-hardening/SHA256SUMS",
+    "docs/evidence/p2b-hardening/file_inventory.json"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "base": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+  "branch": "integration/v2.1.1-p2b-hardening",
+  "head": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+  "frozen_evaluation_files": 870,
+  "frozen_mismatches": [],
+  "unexpected_evaluation_files": [],
+  "p2a_inherited_files": 1018,
+  "p2a_mismatches": [],
+  "protected_checkouts": {
+    "/Users/jayz/Documents/Projects/Ripple/ripple": {
+      "files_verified": 963,
+      "changed_files": [],
+      "head_unchanged": true,
+      "status_unchanged": true
+    },
+    "/Users/jayz/Documents/Projects/Ripple/ripple-p2b-audit": {
+      "files_verified": 1056,
+      "changed_files": [],
+      "head_unchanged": true,
+      "status_unchanged": true
+    }
+  },
+  "original_virtualenv_files_verified": 6638,
+  "original_virtualenv_changes": [],
+  "original_index_unchanged": true,
+  "protected_ref_changes": {},
+  "new_refs": [
+    "refs/heads/integration/v2.1.1-p2b-hardening"
+  ],
+  "no_provider_requests": true,
+  "no_live_inference": true,
+  "no_project_commits": true
+}

@@ -1,0 +1,36 @@
+{
+  "full_suite": {
+    "passed": 572,
+    "failed": 0,
+    "skipped": 6
+  },
+  "p2b_harness": {
+    "passed": 193,
+    "failed": 0,
+    "skipped": 0
+  },
+  "new_correctness_cases": 87,
+  "prior_485_statuses_preserved": true,
+  "original_443_passes_preserved": true,
+  "original_64_p2b_identities_preserved": true,
+  "optional_skip_set_unchanged": true,
+  "ruff": "passed",
+  "formatting": "passed",
+  "dependency_consistency": "passed",
+  "git_diff_check": "passed",
+  "network_requests": 0,
+  "provider_requests": 0,
+  "dependencies_installed_or_upgraded": false,
+  "live_admission": "NO-GO",
+  "credential_files_read": false,
+  "privacy": {
+    "status": "PASS",
+    "method": "Fixed credential/private-key patterns, strict changed-file allowlisting, and raw-content field checks on JSON evidence; configured credentials are not accessed.",
+    "findings": [],
+    "changed_files_scanned": 22,
+    "configured_credentials_accessed": false
+  },
+  "staged_files": 0,
+  "project_commits": 0,
+  "preservation_reverified_after_tests": true
+}

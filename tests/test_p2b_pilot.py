@@ -113,7 +113,10 @@ def test_inconsistent_or_excess_usage_is_not_credited(gate, counts):
     charged = gate.total_tokens
     with pytest.raises(PilotStop):
         gate.settle(1, {}, *counts)
-    assert gate.total_tokens == charged and gate.stopped
+    expected = (
+        max(charged, counts[2]) if counts[0] + counts[1] == counts[2] else charged
+    )
+    assert gate.total_tokens == expected and gate.stopped
 
 
 @pytest.mark.parametrize("delta,allowed", [(0, True), (-1, False)])
@@ -269,7 +272,8 @@ def test_bad_response_preserved_but_never_admits_more(gate, change):
     with pytest.raises(PilotStop):
         WireEndpoint(gate, "responses", lambda **kw: body(**change)).create(**request())
     assert any(e["kind"] == "wire_observed" for e in gate.journal.events)
-    assert gate.pending and gate.stopped
+    assert gate.stopped
+    assert bool(gate.pending) == (change.get("usage", "present") is None)
 
 
 def test_capture_write_failure_prevents_send(gate, monkeypatch):
@@ -323,7 +327,7 @@ def test_incomplete_run_refuses_restart_and_concurrent_open(tmp_path):
 def test_torn_or_replaced_journal_is_rejected(tmp_path, tamper):
     root = tmp_path / "journal"
     j = Journal(root)
-    j.append({"kind": "fixture"})
+    j.append({"kind": "task_started", "task": "fixture", "allocation": 110000})
     j.close()
     with (root / "journal.jsonl").open("ab") as stream:
         stream.write(tamper)

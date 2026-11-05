@@ -1,0 +1,222 @@
+{
+  "pre_fix_primary_run": {
+    "exit_code": 1,
+    "counts": {
+      "failed": 40,
+      "passed": 17
+    },
+    "tests": {
+      "tests/test_p2b_final_correctness.py::test_settled_task_summary_failure_never_eligible[False]": "failed",
+      "tests/test_p2b_final_correctness.py::test_settled_task_summary_failure_never_eligible[True]": "failed",
+      "tests/test_p2b_final_correctness.py::test_summary_failure_after_task_finished_preserves_identity": "failed",
+      "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[missing]": "failed",
+      "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[corrupt]": "failed",
+      "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[mismatch]": "failed",
+      "tests/test_p2b_final_correctness.py::test_completion_requires_journal_and_valid_terminal_evidence": "passed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[1]": "passed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[2]": "failed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[3]": "failed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[4]": "failed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later0]": "failed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later1]": "failed",
+      "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later2]": "failed",
+      "tests/test_p2b_final_correctness.py::test_consistent_observations_still_settle": "passed",
+      "tests/test_p2b_final_correctness.py::test_missing_observation_cannot_be_silently_corrected": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[missing-reservation-fields]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[task-type]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[negative-allocation]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[boolean-allocation]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[excess-allocation]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[fractional-allocation]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[unknown-kind]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[event-list]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[event-null]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[kind-type]": "failed",
+      "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[reason-type]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-True]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-0]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-73]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[input_bound--1]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[input_bound-16001]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation-3000]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation--1]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation-999999]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[at--1]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[at-clock]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[request-value10]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[endpoint-unverified]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[input_tokens--1]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[output_tokens-True]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[total_tokens-149]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[total_tokens-1208925819614629174706176]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[accounted_tokens-1]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[unknown_cost-false]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[complete-1]": "failed",
+      "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[overrun-no]": "failed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail0]": "passed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail1]": "passed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail2]": "passed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail3]": "passed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail4]": "passed",
+      "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail5]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_bytes_are_corrupt_without_repair[truncated]": "passed",
+      "tests/test_p2b_final_correctness.py::test_invalid_bytes_are_corrupt_without_repair[hash]": "passed",
+      "tests/test_p2b_final_correctness.py::test_runner_checks_fixture_hashes_before_pytest[missing]": "passed",
+      "tests/test_p2b_final_correctness.py::test_runner_checks_fixture_hashes_before_pytest[modified]": "failed"
+    },
+    "network": "Sockets blocked; no provider requests",
+    "output": "/private/tmp/ripple-p2b-hardening-check-ihuy8e9q"
+  },
+  "pre_fix_reader_run": {
+    "exit_code": 1,
+    "counts": {
+      "failed": 2
+    },
+    "tests": {
+      "tests/test_p2b_final_correctness.py::test_reader_does_not_treat_a_short_read_as_the_whole_journal": "failed",
+      "tests/test_p2b_final_correctness.py::test_reader_eof_before_stat_size_is_corrupt": "failed"
+    },
+    "network": "Sockets blocked; no provider requests",
+    "output": "/private/tmp/ripple-p2b-hardening-check-bx31wvnq"
+  },
+  "original_code_sha256": {
+    "dev/p2b/check_offline.py": "272bf146f8b86333f2ce232b1b8694f0905b6c22eddd2de6c0bee70d2b081fd5",
+    "src/ripple/pilot_admission.py": "5b26a66f5565ca5cfa3ce1bcb813efa39726ce926970bebb3dea8b85b3dea818"
+  },
+  "sequence": "Primary reproductions ran before implementation changes: 40 failed, 17 controls passed. Two reader regressions were separately demonstrated before changing the original one-read reader. Additional boundary/compatibility cases were then added. All 87 final tests pass.",
+  "features": {
+    "P1_terminal_completion": {
+      "original": "A summary write failure left task_finished authoritative after current became None; missing/corrupt/mismatched summaries were ignored.",
+      "corrected": "Prepared immutable summary is fsynced before hash-bound completion. Only matching verified evidence permits eligibility; failure markers latch failed writes without overwriting artifacts.",
+      "tests": [
+        "test_settled_task_summary_failure_never_eligible",
+        "test_summary_failure_after_task_finished_preserves_identity",
+        "test_terminal_evidence_must_exist_and_match",
+        "test_completion_requires_journal_and_valid_terminal_evidence",
+        "test_interruption_after_prepared_summary_is_ineligible",
+        "test_completion_append_error_keeps_failure_visible"
+      ],
+      "final_results": {
+        "tests/test_p2b_final_correctness.py::test_settled_task_summary_failure_never_eligible[False]": "passed",
+        "tests/test_p2b_final_correctness.py::test_settled_task_summary_failure_never_eligible[True]": "passed",
+        "tests/test_p2b_final_correctness.py::test_summary_failure_after_task_finished_preserves_identity": "passed",
+        "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[missing]": "passed",
+        "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[corrupt]": "passed",
+        "tests/test_p2b_final_correctness.py::test_terminal_evidence_must_exist_and_match[mismatch]": "passed",
+        "tests/test_p2b_final_correctness.py::test_completion_requires_journal_and_valid_terminal_evidence": "passed",
+        "tests/test_p2b_final_correctness.py::test_interruption_after_prepared_summary_is_ineligible": "passed",
+        "tests/test_p2b_final_correctness.py::test_completion_append_error_keeps_failure_visible": "passed"
+      }
+    },
+    "P2_usage_conflict": {
+      "original": "400001 then 150 followed by a 150 settlement could reduce accounting to 150, clear uncertainty and claim completion.",
+      "corrected": "All numeric observations are retained, maximum observed totals cannot be credited away, conflicts and inconsistent/missing observations remain uncertain and ineligible after reconstruction.",
+      "tests": [
+        "test_conflicting_observations_preserve_maximum_after_interruption",
+        "test_conflicting_components_cannot_be_resolved_by_settlement",
+        "test_inconsistent_components_remain_conflicted_and_uncertain",
+        "test_consistent_observations_still_settle",
+        "test_missing_observation_cannot_be_silently_corrected"
+      ],
+      "final_results": {
+        "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[2]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[3]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_observations_preserve_maximum_after_interruption[4]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later0]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_conflicting_components_cannot_be_resolved_by_settlement[later2]": "passed",
+        "tests/test_p2b_final_correctness.py::test_consistent_observations_still_settle": "passed",
+        "tests/test_p2b_final_correctness.py::test_missing_observation_cannot_be_silently_corrected": "passed",
+        "tests/test_p2b_final_correctness.py::test_inconsistent_components_remain_conflicted_and_uncertain[later0]": "passed",
+        "tests/test_p2b_final_correctness.py::test_inconsistent_components_remain_conflicted_and_uncertain[later1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_inconsistent_components_remain_conflicted_and_uncertain[later2]": "passed"
+      }
+    },
+    "P2_malformed_journal": {
+      "original": "Hash-valid events with missing fields could raise KeyError; wrong types and unknown events could be accepted or fail with unstructured exceptions.",
+      "corrected": "Recognized events have required/allowed fields, bounded typed values and validated transitions. Inspection returns CORRUPT with fixed diagnostics, unknown cost and no eligibility, without writing.",
+      "tests": [
+        "test_hash_valid_malformed_event_is_structured_corrupt",
+        "test_invalid_reservation_fields_are_corrupt",
+        "test_invalid_settlement_fields_are_corrupt",
+        "test_impossible_ordering_is_corrupt",
+        "test_every_event_kind_requires_its_schema",
+        "test_unexpected_reconstruction_error_is_structured_and_private"
+      ],
+      "final_results": {
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[missing-reservation-fields]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[task-type]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[negative-allocation]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[boolean-allocation]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[excess-allocation]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[fractional-allocation]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[unknown-kind]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[event-list]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[event-null]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[kind-type]": "passed",
+        "tests/test_p2b_final_correctness.py::test_hash_valid_malformed_event_is_structured_corrupt[reason-type]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-True]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-0]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[attempt-73]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[input_bound--1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[input_bound-16001]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation-3000]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation--1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[reservation-999999]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[at--1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[at-clock]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[request-value10]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_reservation_fields_are_corrupt[endpoint-unverified]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[input_tokens--1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[output_tokens-True]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[total_tokens-149]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[total_tokens-1208925819614629174706176]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[accounted_tokens-1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[unknown_cost-false]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[complete-1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_invalid_settlement_fields_are_corrupt[overrun-no]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail0]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail1]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail2]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail3]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail4]": "passed",
+        "tests/test_p2b_final_correctness.py::test_impossible_ordering_is_corrupt[tail5]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[logical_request]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[logical_response]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[stop]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[task_finished]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[task_started]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[usage_unknown]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[wire_metadata]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[wire_observed]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[wire_reserved]": "passed",
+        "tests/test_p2b_final_correctness.py::test_every_event_kind_requires_its_schema[wire_settled]": "passed",
+        "tests/test_p2b_final_correctness.py::test_unexpected_reconstruction_error_is_structured_and_private": "passed"
+      }
+    },
+    "offline_fixture_verification": {
+      "original": "Modified but existing fixtures could reach pytest; only existence was checked.",
+      "corrected": "All three fixtures must match the unchanged fixture_sources.json SHA256 values before pytest or its output directory starts.",
+      "tests": [
+        "test_runner_checks_fixture_hashes_before_pytest"
+      ],
+      "final_results": {
+        "tests/test_p2b_final_correctness.py::test_runner_checks_fixture_hashes_before_pytest[missing]": "passed",
+        "tests/test_p2b_final_correctness.py::test_runner_checks_fixture_hashes_before_pytest[modified]": "passed"
+      }
+    },
+    "bounded_complete_reader": {
+      "original": "A short read ending on a valid record could cause only a prefix to be reconstructed, understating attempts and usage.",
+      "corrected": "Bounded reads consume exactly the stat size; early EOF returns structured CORRUPT rather than zero usage.",
+      "tests": [
+        "test_reader_does_not_treat_a_short_read_as_the_whole_journal",
+        "test_reader_eof_before_stat_size_is_corrupt"
+      ],
+      "final_results": {
+        "tests/test_p2b_final_correctness.py::test_reader_does_not_treat_a_short_read_as_the_whole_journal": "passed",
+        "tests/test_p2b_final_correctness.py::test_reader_eof_before_stat_size_is_corrupt": "passed"
+      }
+    }
+  }
+}

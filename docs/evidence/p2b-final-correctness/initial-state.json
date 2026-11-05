@@ -1,0 +1,34 @@
+{
+  "hardening_head": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+  "hardening_branch": "integration/v2.1.1-p2b-hardening",
+  "hardening_status": " M src/ripple/pilot.py\n M src/ripple/pilot_admission.py\n M tests/test_p2b_pilot.py\n?? dev/p2b/check_offline.py\n?? docs/RIPPLE_P2B_HARDENING_REPORT.md\n?? docs/evidence/p2b-hardening/SHA256SUMS\n?? docs/evidence/p2b-hardening/file_inventory.json\n?? docs/evidence/p2b-hardening/fixture_sources.json\n?? docs/evidence/p2b-hardening/frozen-evaluation.SHA256SUMS\n?? docs/evidence/p2b-hardening/preservation.json\n?? docs/evidence/p2b-hardening/test_results.json\n?? docs/evidence/p2b-hardening/verification.json\n?? requirements/p2b-hardening-environment.json\n?? requirements/p2b-hardening.lock\n?? tests/test_p2b_hardening.py\n",
+  "initial_changed_files": {
+    "dev/p2b/check_offline.py": "272bf146f8b86333f2ce232b1b8694f0905b6c22eddd2de6c0bee70d2b081fd5",
+    "docs/RIPPLE_P2B_HARDENING_REPORT.md": "15e60bb679a9f148e28ed398df61b0afaccce6870cfb40f40c43603cc8ac3402",
+    "docs/evidence/p2b-hardening/SHA256SUMS": "8bd43daacb7be461f950ccf0d731af66ef50c5d97ed14fed79cefbcf954269b3",
+    "docs/evidence/p2b-hardening/file_inventory.json": "af060d666d39909f996da3d7851cecd727c8e6274a9e32a831b26d8e73480f7c",
+    "docs/evidence/p2b-hardening/fixture_sources.json": "85b566e95ecf93366bd0aa9bd2e0118ec4b3fce91a948e066368c3acc2f3874a",
+    "docs/evidence/p2b-hardening/frozen-evaluation.SHA256SUMS": "7a48e94b70525803660b31791f8158e39549f1c3e3e93a35424ca6da4774337a",
+    "docs/evidence/p2b-hardening/preservation.json": "58c30d7b494346a723fd104aa970fc5a619bb5852cf5dc6e62bbb3439d04187d",
+    "docs/evidence/p2b-hardening/test_results.json": "7969c901dfd247b7c0151a67da0ab2aa9d608af04722bb5538b0e022f5338dff",
+    "docs/evidence/p2b-hardening/verification.json": "2ad44086ad3025096cec4e0e74996f8a40bd25ef48207ba4d5a9916e1e1e0891",
+    "requirements/p2b-hardening-environment.json": "0009fcdee25ee2dddf1fdc57f103cafd7beab830fa7e55542ef2c882ab42fd12",
+    "requirements/p2b-hardening.lock": "3524b6aadbd2eedb91ca80235a10b227cc6d7abbf86730f4969304569ea97a96",
+    "src/ripple/pilot.py": "09dfb2b2194f482bb76652a976cb3450894d0feb5371b86e59b3fde232907664",
+    "src/ripple/pilot_admission.py": "5b26a66f5565ca5cfa3ce1bcb813efa39726ce926970bebb3dea8b85b3dea818",
+    "tests/test_p2b_hardening.py": "07d31a66f2d9b835519760954cddd8d4087b05355466fcfebde42f449adb279b",
+    "tests/test_p2b_pilot.py": "3db5072701177653dd7d727217204c3b012e7fcf5d261c06fee88e6bea73ff32"
+  },
+  "protected_refs": {
+    "refs/heads/integration/v2.1.1-p0": "fef4c3d0958b64f4add2a5b71f8f9a9bffb9f108",
+    "refs/heads/integration/v2.1.1-p1": "3ddf26245b5c932dfbfa22ea806fa8eac7f3a55e",
+    "refs/heads/integration/v2.1.1-p2": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+    "refs/heads/integration/v2.1.1-p2b-hardening": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+    "refs/heads/main": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+    "refs/heads/review/ripple-accuracy": "da7cf2577c26f546e9d3ac4551356df533159ab1",
+    "refs/remotes/origin/HEAD": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+    "refs/remotes/origin/main": "358dbff3f63b1ed3b1048d5c032f66702cee0f6f",
+    "refs/remotes/origin/ripple-v2.1": "0119bee5666dfbabecbdf50790bccfe560717c2a",
+    "refs/tags/ripple-v2.1.1-frozen": "f381d1c7c6f55e504cee3f9e6beb425d2387ec0d"
+  }
+}

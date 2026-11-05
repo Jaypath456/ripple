@@ -1,0 +1,41 @@
+{
+  "branch": "integration/v2.1.1-p2b-hardening",
+  "head": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+  "base": "cf4e6b29f98dccf8c2280e49be803e431c11c56d",
+  "protected_refs_unchanged": true,
+  "frozen_evaluation_files": 870,
+  "frozen_mismatches": [],
+  "evaluation_file_set_unchanged": true,
+  "p2a_inherited_files": 1018,
+  "p2a_mismatches": [],
+  "protected_checkouts": {
+    "/Users/jayz/Documents/Projects/Ripple/ripple": {
+      "verified_files": 963,
+      "changed_files": [],
+      "head_and_status_unchanged": true
+    },
+    "/Users/jayz/Documents/Projects/Ripple/ripple-p2b-audit": {
+      "verified_files": 1056,
+      "changed_files": [],
+      "head_and_status_unchanged": true
+    }
+  },
+  "original_index_unchanged": true,
+  "prior_uncommitted_files_preserved_or_intentionally_extended": 15,
+  "prior_files_extended_this_pass": [
+    "dev/p2b/check_offline.py",
+    "src/ripple/pilot_admission.py",
+    "tests/test_p2b_pilot.py"
+  ],
+  "other_12_prior_files_byte_identical": true,
+  "initial_backup": ".ripple/final-correctness/initial-files",
+  "dependencies_installed_or_upgraded": false,
+  "network_requests": 0,
+  "model_provider_requests": 0,
+  "staged_files": 0,
+  "project_commits": 0,
+  "pushes": 0,
+  "merges": 0,
+  "credential_files_read": false,
+  "provider_authentication_performed": false
+}

@@ -35,6 +35,7 @@ from ripple.pilot_admission import (
     PilotStop,
     canonical,
     digest,
+    inspect_journal,
     private_write,
 )
 from ripple.scanner import scan_repository
@@ -126,6 +127,21 @@ def semantic(report):
 
 
 @contextmanager
+def execution_interrupts():
+    """Graceful termination records a terminal outcome; SIGKILL remains inspectable."""
+    previous = signal.getsignal(signal.SIGTERM)
+
+    def interrupted(*args):
+        raise KeyboardInterrupt()
+
+    signal.signal(signal.SIGTERM, interrupted)
+    try:
+        yield
+    finally:
+        signal.signal(signal.SIGTERM, previous)
+
+
+@contextmanager
 def request_deadline(seconds):
     """An absolute deadline, in addition to SDK per-I/O timeouts (main thread)."""
     if signal.getitimer(signal.ITIMER_REAL)[0]:
@@ -142,6 +158,162 @@ def request_deadline(seconds):
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, previous)
+
+
+def protected_roots():
+    """All registered repositories and their shared Git storage are protected."""
+    root = Path(__file__).resolve().parents[2]
+    common = Path(
+        subprocess.check_output(
+            [
+                "git",
+                "-C",
+                str(root),
+                "rev-parse",
+                "--path-format=absolute",
+                "--git-common-dir",
+            ]
+        )
+        .decode()
+        .strip()
+    )
+    entries = (
+        subprocess.check_output(
+            ["git", "-C", str(root), "worktree", "list", "--porcelain"]
+        )
+        .decode()
+        .splitlines()
+    )
+    return [root, common, common.parent] + [
+        Path(line[len("worktree ") :])
+        for line in entries
+        if line.startswith("worktree ")
+    ]
+
+
+def validate_output_destination(output, package, manifest):
+    """Check disjoint canonical paths before creating any output artifact."""
+    path = output.absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)):
+        raise PilotStop("output_symlink")
+    destination = path.resolve()
+    protected = [*protected_roots(), package]
+    protected.extend(package / row["fixture"] for row in manifest["tasks"])
+    for entry in protected:
+        entry = entry.resolve()
+        if (
+            destination == entry
+            or destination in entry.parents
+            or entry in destination.parents
+        ):
+            raise PilotStop("output_overlaps_protected_path")
+    return destination
+
+
+def verify_evaluation_entries(root, files):
+    """Frozen trees reject added files, directories and symlinks as well as edits."""
+    expected = set()
+    for name in files:
+        path = Path(name)
+        expected.add(path.as_posix())
+        expected.update(p.as_posix() for p in path.parents if p != Path("."))
+    actual = {p.relative_to(root).as_posix() for p in (root / "evaluation").rglob("*")}
+    actual.add("evaluation")
+    if actual != expected or any((root / name).is_symlink() for name in actual):
+        raise PilotStop("frozen_evaluation_entries_changed")
+
+
+def response_metadata(endpoint, requested_model, raw):
+    """Allowlisted provider metadata; missing fields are never supplied defaults."""
+    returned = raw.get("model")
+    invalid_model = returned is not None and (
+        not isinstance(returned, str)
+        or re.fullmatch(r"[A-Za-z0-9._:/+-]{1,160}", returned) is None
+    )
+    if not isinstance(returned, str) or invalid_model:
+        returned = None
+    result = {
+        "requested_model": requested_model,
+        "returned_model": returned,
+        "fallback_derived_model": requested_model if returned is None else None,
+        "model_origin": "provider" if returned is not None else "configured_fallback",
+        "usage_present": "usage" in raw,
+    }
+    if invalid_model:
+        result["invalid_returned_model"] = True
+    if endpoint == "responses":
+        if raw.get("status") in {
+            "completed",
+            "incomplete",
+            "failed",
+            "cancelled",
+            "in_progress",
+            "queued",
+        }:
+            result["completion_status"] = raw["status"]
+        elif "status" in raw:
+            result["invalid_completion_status"] = True
+        details = raw.get("incomplete_details")
+        if isinstance(details, dict) and details.get("reason") in {
+            "max_output_tokens",
+            "content_filter",
+        }:
+            result["incomplete_details"] = {"reason": details["reason"]}
+    else:
+        result["choice_count"] = len(raw.get("choices", []))
+        result["finish_reasons"] = [
+            choice["finish_reason"]
+            for choice in raw.get("choices", [])
+            if isinstance(choice, dict)
+            and choice.get("finish_reason")
+            in {"stop", "length", "tool_calls", "content_filter", "function_call", None}
+            and "finish_reason" in choice
+        ]
+    usage = raw.get("usage")
+    allowed = {
+        "input_tokens",
+        "output_tokens",
+        "total_tokens",
+        "prompt_tokens",
+        "completion_tokens",
+        "cached_tokens",
+        "reasoning_tokens",
+        "audio_tokens",
+        "accepted_prediction_tokens",
+        "rejected_prediction_tokens",
+    }
+    detail_names = {
+        "input_tokens_details",
+        "output_tokens_details",
+        "prompt_tokens_details",
+        "completion_tokens_details",
+    }
+    invalid = []
+
+    def filtered(data, prefix="usage"):
+        output = {}
+        for key, value in data.items():
+            if key in allowed:
+                if value is None or (type(value) is int and value >= 0):
+                    output[key] = value
+                else:
+                    invalid.append(prefix + "." + key)
+            elif key in detail_names:
+                if isinstance(value, dict):
+                    output[key] = filtered(value, prefix + "." + key)
+                elif value is None:
+                    output[key] = None
+                else:
+                    invalid.append(prefix + "." + key)
+        return output
+
+    if isinstance(usage, dict):
+        result["usage"] = filtered(usage)
+    elif "usage" in raw:
+        result["usage"] = None
+    if invalid:
+        result["invalid_usage_fields"] = invalid
+    return result
 
 
 class WireEndpoint:
@@ -169,43 +341,49 @@ class WireEndpoint:
         try:
             with request_deadline(gate.limits.request_seconds):
                 response = self.send(**kwargs)
-            raw = response.model_dump(mode="json")
-            # Store the response body only: never request headers, keys or error text.
+            raw = response.model_dump(mode="json", exclude_unset=True)
+            # Persist safe usage before a body-size or capture failure can reject it.
+            metadata = response_metadata(self.endpoint, kwargs["model"], raw)
+            gate.append({"kind": "wire_metadata", "attempt": attempt, **metadata})
             if len(canonical(raw)) > 2 * 1024 * 1024:
                 gate.stop("response_size")
             gate.append({"kind": "wire_observed", "attempt": attempt, "response": raw})
-            if response.model != gate.contract.model:
-                gate.stop("response_model_mismatch")
-            if gate.clock() - started >= gate.limits.request_seconds:
-                gate.stop("request_deadline")
             if self.endpoint == "responses":
-                complete = response.status == "completed"
-                usage = response.usage
-                counts = (
-                    (usage.input_tokens, usage.output_tokens, usage.total_tokens)
-                    if usage
-                    else (None, None, None)
-                )
+                complete = raw.get("status") == "completed"
             else:
                 complete = (
-                    len(response.choices) == 1
-                    and response.choices[0].finish_reason == "stop"
+                    len(raw.get("choices", [])) == 1
+                    and raw["choices"][0].get("finish_reason") == "stop"
                 )
-                usage = response.usage
-                counts = (
-                    (usage.prompt_tokens, usage.completion_tokens, usage.total_tokens)
-                    if usage
-                    else (None, None, None)
-                )
-            if not complete:
-                gate.stop("response_incomplete")
-            gate.settle(attempt, raw, *counts)
+            reason = "response_incomplete"
+            if metadata["returned_model"] != gate.contract.model:
+                complete, reason = False, "response_model_mismatch"
+            if gate.clock() - started >= gate.limits.request_seconds:
+                complete, reason = False, "request_deadline"
+            usage = raw.get("usage") or {}
+            if not isinstance(usage, dict):
+                usage = {}
+            gate.settle(
+                attempt,
+                raw,
+                usage.get("input_tokens", usage.get("prompt_tokens")),
+                usage.get("output_tokens", usage.get("completion_tokens")),
+                usage.get("total_tokens"),
+                complete=complete,
+                stop_reason=reason,
+            )
             return response
         except PilotStop:
             raise
-        except BaseException:  # noqa: BLE001 - latch admission on cancellation too
-            # Do not assume a timeout, 404, 429 or 503 was unbilled.
-            gate.stop("provider_failure_or_interruption")
+        except BaseException as error:  # noqa: BLE001 - cancellations latch too
+            reason = (
+                "execution_interrupted"
+                if isinstance(error, (KeyboardInterrupt, SystemExit))
+                else "request_deadline"
+                if isinstance(error, TimeoutError)
+                else "provider_failure_or_interruption"
+            )
+            gate.stop(reason)
 
 
 def attach_gate(client: OpenAILLM, gate: Admission):
@@ -580,6 +758,10 @@ def verify_runtime():
         capture_output=True,
     ).returncode:
         raise PilotStop("runtime_base_mismatch")
+    evaluation_files = (
+        git("ls-tree", "-r", "--name-only", BASE, "evaluation").decode().splitlines()
+    )
+    verify_evaluation_entries(root, evaluation_files)
     for entry in git("ls-tree", "-r", "-z", BASE, "src/ripple", "evaluation").split(
         b"\0"
     ):
@@ -719,8 +901,10 @@ def expected_comparison(package, task, result):
     return {"expected_source_paths": sorted(expected), "comparisons": scores}
 
 
+@execution_interrupts()
 def dry_run(package, output):
     manifest = verify_package(package)
+    output = validate_output_destination(output, package, manifest)
     journal = Journal(output)
     try:
         gate = Admission(journal, mock_contract())
@@ -763,12 +947,28 @@ def dry_run(package, output):
         }
         private_write(output / "dry_run_results.json", summary)
         return summary
+    except BaseException as error:
+        if "gate" in locals() and gate.current and not gate.stopped:
+            reason = (
+                "execution_interrupted"
+                if isinstance(error, (KeyboardInterrupt, SystemExit))
+                else "capture_or_execution_failed"
+            )
+            try:
+                gate.stop(reason)
+            except PilotStop:
+                pass
+        raise
     finally:
+        if "gate" in locals():
+            gate.persist_summary()
         journal.close()
 
 
+@execution_interrupts()
 def execute_one(package, output, task_id, contract_path, approval_path):
     manifest = verify_package(package)
+    output = validate_output_destination(output, package, manifest)
     contract = Contract.load(
         contract_path
     )  # Fail before credentials or SDK initialization.
@@ -831,6 +1031,7 @@ def execute_one(package, output, task_id, contract_path, approval_path):
                 gate.stop("request_identity_changed")
 
         gate.preflight = preflight
+        verify_environment()
         client = OpenAILLM(
             api_key=os.environ.get("RIPPLE_LLM_API_KEY", ""),
             model=MODEL,
@@ -847,15 +1048,60 @@ def execute_one(package, output, task_id, contract_path, approval_path):
             gate.stop("runtime_or_refs_changed")
         gate.finish()
         return result
+    except BaseException as error:
+        if "gate" in locals() and gate.current and not gate.stopped:
+            reason = (
+                "execution_interrupted"
+                if isinstance(error, (KeyboardInterrupt, SystemExit))
+                else "capture_or_execution_failed"
+            )
+            try:
+                gate.stop(reason)
+            except PilotStop:
+                pass
+        raise
     finally:
+        if "gate" in locals():
+            gate.persist_summary()
         journal.close()
 
 
+def verify_environment():
+    """Refuse live SDK construction outside the reviewed locked environment."""
+    import platform
+    from importlib.metadata import PackageNotFoundError, version
+
+    root = Path(__file__).resolve().parents[2]
+    specification = json.loads(
+        (root / "requirements/p2b-hardening-environment.json").read_text()
+    )
+    if (
+        platform.python_version() != specification["python"]
+        or platform.system() != "Darwin"
+        or platform.machine() != "arm64"
+    ):
+        raise PilotStop("runtime_environment_unverified")
+    for package in specification["packages"]:
+        try:
+            installed = version(package["name"])
+        except PackageNotFoundError:
+            raise PilotStop("runtime_environment_unverified") from None
+        if installed != package["version"]:
+            raise PilotStop("runtime_environment_unverified")
+    return digest(specification)
+
+
 def harness_hash():
+    root = Path(__file__).resolve().parents[2]
     return digest(
         {
-            p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in (Path(__file__), Path(__file__).with_name("pilot_admission.py"))
+            p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in (
+                Path(__file__),
+                Path(__file__).with_name("pilot_admission.py"),
+                root / "requirements/p2b-hardening.lock",
+                root / "requirements/p2b-hardening-environment.json",
+            )
         }
     )
 
@@ -871,9 +1117,13 @@ def main(argv=None):
             sub.add_argument("--task", required=True, choices=TASKS)
             sub.add_argument("--contract", type=Path, required=True)
             sub.add_argument("--approval", type=Path, required=True)
+    inspector = commands.add_parser("inspect", help="Read an existing journal offline")
+    inspector.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        if args.command == "dry-run":
+        if args.command == "inspect":
+            print(json.dumps(inspect_journal(args.output), indent=2))
+        elif args.command == "dry-run":
             result = dry_run(args.package, args.output)
             print(
                 json.dumps({k: v for k, v in result.items() if k != "tasks"}, indent=2)
@@ -890,7 +1140,7 @@ def main(argv=None):
                     }
                 )
             )
-    except (PilotStop, OSError, ValueError, KeyError) as error:
+    except (Exception, KeyboardInterrupt) as error:  # noqa: BLE001 - private CLI boundary
         # Do not print provider text, credentials or private filesystem details.
         print(
             json.dumps(
