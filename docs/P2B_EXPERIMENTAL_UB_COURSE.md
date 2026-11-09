@@ -119,3 +119,27 @@ Two prior operator-reported calibrations observed capped reasoning-inclusive
 output at caps 256 and 32. They are observations, not general guarantees. Deployed
 context, supported maximum output, tokenizer/framing, authoritative usage/billing,
 rate/concurrency limits, cancellation and parameter guarantees remain unverified.
+
+## Reviewed P3 integration
+
+The integrated experimental profile uses `RIPPLE_V2_BOUNDED`: bounded request
+context is enabled, while `proof_selection`, `diverse_seeding`,
+`review_progression`, `precision_guard` and `confidence_tiers` are all false.
+The full variant dictionary and compact-formatting policy are part of each exact
+approval binding. No combined P3 accuracy configuration is enabled.
+
+The strict pilot still defaults to plain `RIPPLE_V2`. Its reviewed runtime baseline
+is the Track B commit; inherited-byte, frozen-evaluation and provider-contract
+checks remain enforced. The experimental base is the separately committed strict
+harness integration, so old approval fingerprints are invalid.
+
+Capture uses retention OFF; identical-response replay uses retention OFF and ON
+with the same bounded variant. The existing provenance and evidence validators
+remain active. A local `context_budget` stop is durably classified CENSORED and
+ineligible, with no accuracy comparison or correct-negative classification. This
+conservative classification differs from the integration plan's suggestion of a
+completed terminal run; it preserves the existing budget-stop admission rule and
+prevents continuation to another task after incomplete exploration.
+
+Use a fresh campaign and an unapproved template from the final integrated commit.
+Never resume or inspect the previous stopped campaign as part of integration.

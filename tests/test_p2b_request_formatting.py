@@ -126,6 +126,78 @@ def test_multiline_and_retry_text_is_preserved_and_idempotent():
     assert structured_context(once) == structured_context(prompt)
 
 
+def _structured_prompt_argument(tree, call):
+    """Recognize only a literal, the local dict, or its reviewed bounded callback."""
+
+    value = call.args[1]
+    if isinstance(value, ast.Dict):
+        return True
+    parents = {
+        child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)
+    }
+    owner = call
+    while owner in parents and not isinstance(owner, ast.FunctionDef):
+        owner = parents[owner]
+    if not isinstance(owner, ast.FunctionDef) or owner.name != "_decision_prompt":
+        return False
+    if (
+        not isinstance(parents.get(owner), ast.ClassDef)
+        or parents[owner].name != "AgentController"
+    ):
+        return False
+    stores = [
+        node
+        for node in ast.walk(owner)
+        if isinstance(node, ast.Name)
+        and node.id == "context"
+        and isinstance(node.ctx, ast.Store)
+    ]
+    if len(stores) != 1:
+        return False
+    assignment = parents[stores[0]]
+    if (
+        not isinstance(assignment, ast.Assign)
+        or len(assignment.targets) != 1
+        or not isinstance(assignment.value, ast.Dict)
+    ):
+        return False
+    if isinstance(value, ast.Name) and value.id == "context":
+        return True
+    if not isinstance(value, ast.Name) or value.id != "data":
+        return False
+    expression = parents.get(call)
+    callback = parents.get(expression)
+    bounded = parents.get(callback)
+    return (
+        isinstance(expression, ast.BinOp)
+        and isinstance(expression.op, ast.Add)
+        and isinstance(expression.left, ast.Name)
+        and expression.left.id == "instructions"
+        and expression.right is call
+        and isinstance(callback, ast.Lambda)
+        and callback.body is expression
+        and len(callback.args.args) == 1
+        and callback.args.args[0].arg == "data"
+        and not callback.args.posonlyargs
+        and not callback.args.kwonlyargs
+        and not callback.args.defaults
+        and callback.args.vararg is None
+        and callback.args.kwarg is None
+        and isinstance(bounded, ast.Call)
+        and isinstance(bounded.func, ast.Name)
+        and bounded.func.id == "bound_decision_context"
+        and len(bounded.args) == 2
+        and isinstance(bounded.args[0], ast.Name)
+        and bounded.args[0].id == "context"
+        and bounded.args[1] is callback
+        and {keyword.arg for keyword in bounded.keywords} == {"focus", "protected"}
+        and len(call.args) == 2
+        and isinstance(call.args[0], ast.Constant)
+        and call.args[0].value == "repository_data"
+        and not call.keywords
+    )
+
+
 def test_inherited_structured_call_sites_pass_objects_not_raw_text():
     """Compaction is limited to operations whose repository_data is never a str."""
 
@@ -140,13 +212,122 @@ def test_inherited_structured_call_sites_pass_objects_not_raw_text():
                     and getattr(call.func, "id", None) == "_prompt_data"
                 ):
                     seen += 1
-                    value = call.args[1]
-                    assert isinstance(value, ast.Dict) or (
-                        isinstance(value, ast.Name) and value.id == "context"
-                    )
+                    assert _structured_prompt_argument(tree, call)
     assert seen == 5
+    # The callback's data has exactly one binding: dict(context). Every callback
+    # invocation receives that dictionary, never raw repository text.
+    budget_tree = ast.parse((ROOT / "src/ripple/context_budget.py").read_text())
+    bounded = next(
+        node
+        for node in budget_tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "bound_decision_context"
+    )
+    bindings = [
+        node
+        for node in ast.walk(bounded)
+        if isinstance(node, ast.Name)
+        and node.id == "data"
+        and isinstance(node.ctx, ast.Store)
+    ]
+    assert len(bindings) == 1
+    parents = {
+        child: node
+        for node in ast.walk(bounded)
+        for child in ast.iter_child_nodes(node)
+    }
+    binding = parents[bindings[0]]
+    assert isinstance(binding, ast.Assign) and len(binding.targets) == 1
+    assert ast.dump(binding.value) == ast.dump(
+        ast.parse("dict(context)", mode="eval").body
+    )
+    uses = [
+        node
+        for node in ast.walk(bounded)
+        if isinstance(node, ast.Name)
+        and node.id == "render"
+        and isinstance(node.ctx, ast.Load)
+    ]
+    assert len(uses) == 1
+    invocation = parents[uses[0]]
+    assert isinstance(invocation, ast.Call)
+    assert len(invocation.args) == 1 and not invocation.keywords
+    assert isinstance(invocation.args[0], ast.Name) and invocation.args[0].id == "data"
     # The inherited agent itself is still verified byte-for-byte.
     assert pilot.verify_runtime()["base"] == pilot.BASE
+
+
+@pytest.mark.parametrize(
+    "expression",
+    [
+        '_prompt_data("repository_data", data)',
+        'other_renderer(context, lambda data: instructions + _prompt_data("repository_data", data), focus=set(), protected=set())',
+        'bound_decision_context("raw untrusted text", lambda data: instructions + _prompt_data("repository_data", data), focus=set(), protected=set())',
+        'bound_decision_context(context, lambda data: instructions + _prompt_data("repository_data", "raw untrusted text"), focus=set(), protected=set())',
+        'bound_decision_context(context, lambda data: instructions + _prompt_data("repository_data", raw_text), focus=set(), protected=set())',
+        'bound_decision_context(context, lambda data: instructions + _prompt_data("repository_data", str(data)), focus=set(), protected=set())',
+    ],
+)
+def test_structured_origin_rejects_raw_strings_and_callback_lookalikes(expression):
+    tree = ast.parse(
+        "class AgentController:\n    def _decision_prompt(self, intent):\n        context = {}\n        instructions = 'fixed'\n        return "
+        + expression
+    )
+    call = next(
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and getattr(node.func, "id", None) == "_prompt_data"
+    )
+    assert not _structured_prompt_argument(tree, call)
+
+
+def test_structured_origin_rejects_raw_context_even_in_the_bounded_callback():
+    tree = ast.parse(
+        'class AgentController:\n    def _decision_prompt(self, intent):\n        context = "untrusted text"\n        return bound_decision_context(context, lambda data: instructions + _prompt_data("repository_data", data), focus=set(), protected=set())'
+    )
+    call = next(
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and getattr(node.func, "id", None) == "_prompt_data"
+    )
+    assert not _structured_prompt_argument(tree, call)
+
+
+def test_bounded_callback_receives_dicts_at_every_selection_level():
+    from ripple.context_budget import (
+        LEVELS,
+        ContextBudgetExceeded,
+        bound_decision_context,
+    )
+
+    seen = []
+
+    def render(data):
+        assert type(data) is dict
+        seen.append(data)
+        return rendered(data)
+
+    with pytest.raises(ContextBudgetExceeded):
+        bound_decision_context(TRICKY, render, focus=set(), protected=set(), budget=0)
+    assert len(seen) == len(LEVELS)
+    assert all(type(value) is dict for value in seen)
+
+
+def test_bounded_callback_compaction_preserves_untrusted_nested_strings():
+    from ripple.context_budget import bound_decision_context
+
+    def render(data):
+        assert type(data) is dict
+        return rendered(data)
+
+    prompt, record = bound_decision_context(
+        TRICKY, render, focus=set(), protected=set(), budget=1000000
+    )
+    compact = compact_prompt("choose_next_action", prompt)
+    assert record["level"] == 0
+    assert structured_context(compact) == structured_context(prompt) == [TRICKY]
+    assert outside_blocks(compact) == outside_blocks(prompt)
 
 
 def test_real_agent_trajectory_requests_compact_losslessly(tmp_path):

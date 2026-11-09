@@ -733,7 +733,7 @@ def test_execute_failure_has_durable_experimental_terminal_summary(
     path = tmp_path / "approval.json"
     private_write(path, approval)
 
-    def fail(index, task, capture, folder):
+    def fail(index, task, capture, folder, **kwargs):
         if failure == "interrupt":
             raise KeyboardInterrupt()
         if failure == "identity":

@@ -14,6 +14,7 @@ import subprocess
 from pathlib import Path
 
 from ripple import pilot
+from ripple.agent import RIPPLE_V2_BOUNDED
 from ripple.llm import OpenAILLM, RetryPolicy
 from ripple.pilot_admission import (
     Admission,
@@ -27,10 +28,14 @@ from ripple.pilot_admission import (
     read_private_artifact,
     unique_object,
 )
-from ripple.pilot_formatting import FORMAT_ID, FormattingClient
+from ripple.pilot_formatting import (
+    FORMAT_ID,
+    FormattingClient,
+    verify_journal_formatting,
+)
 
 PROFILE = "EXPERIMENTAL_UB_COURSE"
-BASE = "8d750d89f36ae0f8f1cd7aba00d1d87e13f471fe"
+BASE = "af167f08c36240eb4dc3b2aff23230d3036497e4"
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -52,6 +57,8 @@ def specification():
         # Lossless whitespace-only compaction of proven structured prompt context,
         # applied identically to capture and both replays.
         "request_formatting": FORMAT_ID,
+        # Operational context bounding only; every new accuracy policy stays off.
+        "agent_variant": dataclasses.asdict(RIPPLE_V2_BOUNDED),
         "local_assumptions": {
             "input_estimator": "serialized_request_utf8_bytes_plus_allowance",
             "framing_allowance": 4096,
@@ -299,13 +306,23 @@ def execute_one(package, output, task_id, approval_path, *, profile, acknowledge
         capture = pilot.CaptureClient(
             FormattingClient(pilot.attach_gate(client, gate)), gate
         )
-        result = pilot.run_pair(index, task, capture, folder)
-        result.update(pilot.expected_comparison(package, task, result))
+        result = pilot.run_pair(index, task, capture, folder, variant=RIPPLE_V2_BOUNDED)
+        verify_journal_formatting(gate.journal.events)
         result["experiment"] = {
             **metadata,
             "policy": specification(),
             "production_guarantees": "UNVERIFIED",
         }
+        if any(
+            result[arm]["run_stats"]["stop_reason"] == "context_budget"
+            for arm in ("off", "on")
+        ):
+            # A local context stop is not an eligible abstention/correct negative.
+            # Preserve partial capture/replay evidence without scoring predictions.
+            result.update(accuracy_evaluable=False, terminal_reason="context_budget")
+            private_write(folder / "result.json", result)
+            gate.stop("context_budget")
+        result.update(pilot.expected_comparison(package, task, result))
         private_write(folder / "result.json", result)
         if result["comparisons"]["on"]["false_positive"]:
             gate.stop("unexpected_source_prediction")

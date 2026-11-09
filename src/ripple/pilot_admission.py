@@ -70,6 +70,7 @@ def sync_directory(path):
 MAX_OBSERVED_TOKENS = 2**63 - 1
 OPERATIONS = {"interpret", "choose_next_action", "decide_candidates", "draft_report"}
 STOP_REASONS = {
+    "context_budget",
     "experimental_endpoint_changed",
     "added_component_provenance_failed",
     "clock_invalid",
@@ -930,6 +931,7 @@ def accounting_state(events, *, root=None):
                     "request_limit",
                     "time_boundary",
                     "context_or_output_limit",
+                    "context_budget",
                     "provider_rate_limit",
                 }
                 else "INTERRUPTED"
