@@ -62,6 +62,21 @@ class CandidateLedger:
         # Isolate the recorded observation from later caller-owned mutations.
         record = deepcopy(record)
         self.evidence[record.evidence_id] = record
+        self._credit_checks(record)
+
+    def credit_recorded_checks(self) -> None:
+        """Opt-in: credit already-recorded successful checks to later candidates.
+
+        ``add_evidence`` credits only candidates that exist when the evidence
+        arrives. A candidate admitted afterwards would otherwise need a repeated
+        call, which the V2 controller answers from its cache without recording new
+        evidence, so the check could never be credited. The rule is unchanged.
+        """
+
+        for record in self.evidence.values():
+            self._credit_checks(record)
+
+    def _credit_checks(self, record: EvidenceRecord) -> None:
         if not record.result.ok:
             return
         if record.tool_name not in {"find_references", "find_tests"}:

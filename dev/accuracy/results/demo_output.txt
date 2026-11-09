@@ -1,0 +1,100 @@
+RIPPLE offline demo: config=GT-combined+tiers, simulated policy=observed. No provider is contacted; the model is a deterministic simulation.
+
+== P3-DEV-01-LOYALTY-DISCOUNT (single-file)
+1. Request: Add a loyalty discount code that applies a percentage discount to the order total.
+2. Indexed: 8 Python files, 8 symbols, 2 test mappings at 40996e0e46f7
+3. Seeded candidates (files): shop/api.py, shop/cart.py, shop/pricing.py
+4. Tool calls:
+     e1 search_code(kind=any, limit=15, query=loyalty discount code percentage apply_discount) ok=True <- controller: seed search
+     e2 inspect_symbol(target=shop/pricing.py::apply_discount) ok=True <- model
+     e3 find_references(limit=10, symbol_id=shop/pricing.py::apply_discount) ok=True <- model
+     e4 search_code(kind=any, limit=10, query=loyalty discount code) ok=True <- model
+     e5 get_dependencies(depth=1, direction=imported_by, path=shop/pricing.py) ok=True <- controller: structural expansion
+     e6 get_dependencies(depth=1, direction=imports, path=shop/pricing.py) ok=True <- controller: structural expansion
+     e7 inspect_symbol(target=shop/cart.py::cart_total) ok=True <- controller: structural expansion
+     e8 find_references(limit=40, symbol_id=shop/cart.py::cart_total) ok=True <- controller: structural expansion
+     e9 find_tests(target=shop/pricing.py::apply_discount) ok=True <- controller: proof policy (duplicate_call)
+    e10 get_dependencies(depth=1, direction=imported_by, path=shop/cart.py) ok=True <- controller: structural expansion
+    e11 get_dependencies(depth=1, direction=imports, path=shop/cart.py) ok=True <- controller: structural expansion
+    e12 inspect_symbol(target=shop/api.py) ok=True <- controller: structural expansion
+    e13 find_references(limit=40, symbol_id=shop/api.py::checkout_handler) ok=True <- controller: structural expansion
+    e14 find_tests(target=shop/pricing.py) ok=True <- model
+    e15 find_tests(target=shop/cart.py::cart_total) ok=True <- controller: proof policy (duplicate_call)
+    e16 inspect_symbol(target=shop/cart.py) ok=True <- controller: proof policy (presubmission_proof)
+    e17 inspect_symbol(target=shop/shipping.py) ok=True <- controller: proof policy (presubmission_proof)
+    e18 inspect_symbol(target=shop/tax.py) ok=True <- controller: proof policy (presubmission_proof)
+    e19 find_tests(target=shop/api.py) ok=True <- controller: proof policy (presubmission_proof)
+    e20 inspect_symbol(target=shop/api.py::checkout_handler) ok=True <- controller: proof policy (presubmission_proof)
+    e21 find_references(limit=40, symbol_id=shop/shipping.py::shipping_cost) ok=True <- controller: proof policy (presubmission_proof)
+   + 7 deterministic report-Expand calls after the loop (regression areas, tests; not candidate evidence for decisions)
+5-6. Checkpoint decisions (Python-verified):
+   confirm shop/pricing.py::apply_discount cites ['e2'] -> accepted
+      keep shop/cart.py::cart_total cites [] -> no change
+   confirm shop/pricing.py cites ['e5'] -> refused: direct_evidence_required
+   confirm shop/cart.py::cart_total cites ['e7'] -> accepted
+      keep shop/api.py cites [] -> no change
+   confirm shop/cart.py cites ['e16'] -> accepted
+    reject shop/api.py cites ['e12'] -> accepted
+   confirm shop/pricing.py cites ['e5'] -> refused: direct_evidence_required
+7. Report: status=partial stop=submitted predicted=['shop/cart.py', 'shop/pricing.py']
+8. Gold: ['shop/pricing.py'] -> TP=1 FP=1 FN=0
+
+== P3-DEV-02-TAX-ON-SHIPPING (multi-file)
+1. Request: Charge sales tax on shipping costs in the cart total for taxable regions.
+2. Indexed: 8 Python files, 8 symbols, 2 test mappings at 40996e0e46f7
+3. Seeded candidates (files): shop/api.py, shop/cart.py, shop/shipping.py, shop/tax.py
+4. Tool calls:
+     e1 search_code(kind=any, limit=15, query=sales_tax shipping cart_total tax region) ok=True <- controller: seed search
+     e2 inspect_symbol(target=shop/tax.py::sales_tax) ok=True <- model
+     e3 find_references(limit=10, symbol_id=shop/tax.py::sales_tax) ok=True <- model
+     e4 search_code(kind=any, limit=10, query=sales_tax shipping cart_total) ok=True <- model
+     e5 get_dependencies(depth=1, direction=imported_by, path=shop/tax.py) ok=True <- controller: structural expansion
+     e6 get_dependencies(depth=1, direction=imports, path=shop/tax.py) ok=True <- controller: structural expansion
+     e7 inspect_symbol(target=shop/cart.py) ok=True <- controller: structural expansion
+     e8 find_tests(target=shop/cart.py) ok=True <- controller: structural expansion
+     e9 find_tests(target=shop/tax.py::sales_tax) ok=True <- controller: proof policy (duplicate_call)
+    e10 get_dependencies(depth=1, direction=imported_by, path=shop/cart.py) ok=True <- controller: structural expansion
+    e11 get_dependencies(depth=1, direction=imports, path=shop/cart.py) ok=True <- controller: structural expansion
+    e12 find_tests(target=shop/tax.py) ok=True <- model
+    e13 inspect_symbol(target=shop/cart.py::cart_total) ok=True <- model
+    e14 find_references(limit=10, symbol_id=shop/cart.py::cart_total) ok=True <- model
+    e15 inspect_symbol(target=shop/api.py) ok=True <- controller: structural expansion
+    e16 find_references(limit=40, symbol_id=shop/api.py::checkout_handler) ok=True <- controller: structural expansion
+    e17 inspect_symbol(target=shop/shipping.py) ok=True <- controller: structural expansion
+    e18 find_tests(target=shop/shipping.py) ok=True <- controller: structural expansion
+    e19 inspect_symbol(target=shop/pricing.py) ok=True <- controller: proof policy (presubmission_proof)
+    e20 find_references(limit=40, symbol_id=shop/shipping.py::shipping_cost) ok=True <- controller: proof policy (presubmission_proof)
+    e21 find_tests(target=shop/api.py) ok=True <- controller: proof policy (presubmission_proof)
+    e22 inspect_symbol(target=shop/api.py::checkout_handler) ok=True <- controller: proof policy (presubmission_proof)
+    e23 inspect_symbol(target=shop/shipping.py::shipping_cost) ok=True <- controller: proof policy (presubmission_proof)
+    e24 find_references(limit=40, symbol_id=shop/pricing.py::unit_price) ok=True <- controller: proof policy (presubmission_proof)
+   + 8 deterministic report-Expand calls after the loop (regression areas, tests; not candidate evidence for decisions)
+5-6. Checkpoint decisions (Python-verified):
+   confirm shop/tax.py::sales_tax cites ['e2'] -> accepted
+   confirm shop/cart.py::cart_total cites ['e3'] -> refused: direct_evidence_required
+      keep shop/cart.py cites [] -> no change
+   confirm shop/tax.py cites ['e5'] -> refused: direct_evidence_required
+   confirm shop/cart.py cites ['e7'] -> accepted
+   confirm shop/cart.py::cart_total cites ['e7'] -> accepted
+   confirm shop/tax.py cites ['e5'] -> refused: direct_evidence_required
+      keep shop/api.py cites [] -> no change
+      keep shop/shipping.py cites [] -> no change
+    reject shop/api.py cites ['e15'] -> accepted
+   confirm shop/shipping.py::shipping_cost cites ['e17'] -> accepted
+   confirm shop/shipping.py cites ['e17'] -> accepted
+      keep shop/pricing.py cites [] -> no change
+7. Report: status=partial stop=submitted predicted=['shop/cart.py', 'shop/shipping.py', 'shop/tax.py']
+8. Gold: ['shop/cart.py', 'shop/tax.py'] -> TP=2 FP=1 FN=0
+
+== P3-DEV-09-IAM-ROTATION (abstain: out of repository)
+1. Request: Rotate the AWS IAM access keys used by the deployment pipeline.
+2. Indexed: 7 Python files, 11 symbols, 1 test mappings at c932ef1adfdb
+3. Seeded candidates (files): none
+4. Tool calls:
+     e1 search_code(kind=any, limit=15, query=aws iam access keys rotate deployment) ok=False <- controller: seed search
+     e2 search_code(kind=any, limit=10, query=aws iam access) ok=False <- model
+   + 4 deterministic report-Expand calls after the loop (regression areas, tests; not candidate evidence for decisions)
+5-6. Checkpoint decisions (Python-verified):
+   none (no candidate had non-lexical evidence to decide)
+7. Report: status=abstained stop=no_progress predicted=nothing (abstained)
+8. Gold: none (abstention expected) -> TP=0 FP=0 FN=0
