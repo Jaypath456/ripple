@@ -41,7 +41,7 @@ from ripple.pilot_admission import (
 from ripple.scanner import scan_repository
 from ripple.validate import validate_report_draft
 
-BASE = "112092aae61d96891af192adead7bded833ea569"
+BASE = "0c1d96371451033f7f317ef030070740229f4255"
 MODEL = "openai/gpt-oss-20b"
 URL = "https://gateway.bullsai.buffalo.edu/v1"
 TASKS = (
@@ -600,7 +600,7 @@ def fixture_index(package, task, root):
     return index
 
 
-def run_pair(index, task, capture, root):
+def run_pair(index, task, capture, root, *, variant=RIPPLE_V2):
     request = FeatureRequest(text=task["request"])
     identity = source_identity(index)
 
@@ -608,7 +608,7 @@ def run_pair(index, task, capture, root):
         return AgentController(
             index,
             client,
-            variant=RIPPLE_V2,
+            variant=variant,
             retain_confirmed_report=enabled,
             max_tokens=task["token_allocation"],
             output_root=root / label,

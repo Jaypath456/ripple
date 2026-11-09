@@ -20,7 +20,7 @@
   "local_finalizations_per_trajectory": 2,
   "maximum_wire_requests": 72,
   "p1_baseline": "3ddf26245b5c932dfbfa22ea806fa8eac7f3a55e",
-  "p2a_commit": "112092aae61d96891af192adead7bded833ea569",
+  "p2a_commit": "0c1d96371451033f7f317ef030070740229f4255",
   "plan_date": "2026-11-01",
   "planning_reserve_tokens": 350000,
   "provider_assumptions": {

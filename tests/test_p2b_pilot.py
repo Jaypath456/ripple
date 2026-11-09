@@ -454,7 +454,7 @@ def test_shipped_contract_blocks_before_credentials_or_client(tmp_path, monkeypa
 def test_all_fixture_and_oracle_hashes_and_runtime_preserved():
     assert len(verify_package(PACKAGE)["tasks"]) == 3
     assert len(package_hash(PACKAGE)) == 64
-    assert verify_runtime()["base"].startswith("112092")
+    assert verify_runtime()["base"] == verify_package(PACKAGE)["p2a_commit"]
 
 
 def test_fixture_tampering_stops_before_execution(tmp_path):
