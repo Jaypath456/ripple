@@ -13,6 +13,8 @@ import os
 import subprocess
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from ripple import pilot
 from ripple.agent import RIPPLE_V2_BOUNDED
 from ripple.llm import OpenAILLM, RetryPolicy
@@ -122,6 +124,36 @@ class ExperimentalAdmission(Admission):
             reasoning is not None and (output is None or reasoning > output)
         ):
             self.stop("usage_unknown_or_inconsistent")
+
+
+class ExperimentalSchemaGuard:
+    """Validate paid responses before capture can accept a logical response.
+
+    The wrapped gated client settles usage before returning. Validation failures
+    never enter the inherited controller's schema-recovery loop or expose payloads.
+    """
+
+    def __init__(self, client, gate):
+        self.client, self.gate, self.model = client, gate, client.model
+
+    def drain_diagnostics(self):
+        return self.client.drain_diagnostics()
+
+    def __getattr__(self, operation):
+        if operation not in pilot.SCHEMAS:
+            raise AttributeError(operation)
+
+        def call(prompt):
+            if self.gate.stopped:
+                raise PilotStop("admission_closed")
+            response = getattr(self.client, operation)(prompt)
+            try:
+                pilot.SCHEMAS[operation].model_validate(response.payload)
+            except ValidationError:
+                self.gate.stop("response_schema_invalid")
+            return response
+
+        return call
 
 
 def repository_identity(*, require_clean):
@@ -304,7 +336,10 @@ def execute_one(package, output, task_id, approval_path, *, profile, acknowledge
         # logical prompt (which identical replay must reproduce) and the compact
         # wire request that was admitted and dispatched.
         capture = pilot.CaptureClient(
-            FormattingClient(pilot.attach_gate(client, gate)), gate
+            ExperimentalSchemaGuard(
+                FormattingClient(pilot.attach_gate(client, gate)), gate
+            ),
+            gate,
         )
         result = pilot.run_pair(index, task, capture, folder, variant=RIPPLE_V2_BOUNDED)
         verify_journal_formatting(gate.journal.events)

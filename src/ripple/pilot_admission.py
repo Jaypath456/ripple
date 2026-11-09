@@ -70,6 +70,9 @@ def sync_directory(path):
 MAX_OBSERVED_TOKENS = 2**63 - 1
 OPERATIONS = {"interpret", "choose_next_action", "decide_candidates", "draft_report"}
 STOP_REASONS = {
+    "response_schema_invalid",
+    "local_request_rate_limit",
+    "local_reserved_token_rate_limit",
     "context_budget",
     "experimental_endpoint_changed",
     "added_component_provenance_failed",
@@ -933,6 +936,9 @@ def accounting_state(events, *, root=None):
                     "context_or_output_limit",
                     "context_budget",
                     "provider_rate_limit",
+                    "response_schema_invalid",
+                    "local_request_rate_limit",
+                    "local_reserved_token_rate_limit",
                 }
                 else "INTERRUPTED"
                 if reason == "execution_interrupted"
@@ -1245,16 +1251,30 @@ class Admission:
         if any(at > now for at, _ in self.recent):
             self.stop("clock_reset_requires_review")
         recent = [(at, cost) for at, cost in self.recent if now - at < 60]
-        if (
-            len(recent) >= self.contract.requests_per_minute
-            or sum(cost for _, cost in recent) + reservation
-            > self.contract.tokens_per_minute
-        ):
-            self.stop("provider_rate_limit")
-        if (
+        budget_exceeded = (
             self.task_tokens + reservation > self.allocation
             or self.total_tokens + reservation > limits.aggregate_tokens
+        )
+        # Experiments distinguish a permanent budget stop from local pacing.
+        # The strict path retains its historical ordering and stop reason.
+        if self.experiment is not None and budget_exceeded:
+            self.stop("token_limit")
+        if len(recent) >= self.contract.requests_per_minute:
+            self.stop(
+                "local_request_rate_limit"
+                if self.experiment is not None
+                else "provider_rate_limit"
+            )
+        if (
+            sum(cost for _, cost in recent) + reservation
+            > self.contract.tokens_per_minute
         ):
+            self.stop(
+                "local_reserved_token_rate_limit"
+                if self.experiment is not None
+                else "provider_rate_limit"
+            )
+        if budget_exceeded:
             self.stop("token_limit")
         event = {
             "kind": "wire_reserved",

@@ -143,3 +143,25 @@ prevents continuation to another task after incomplete exploration.
 
 Use a fresh campaign and an unapproved template from the final integrated commit.
 Never resume or inspect the previous stopped campaign as part of integration.
+
+## Experimental response and local-stop policy
+
+All four structured operations (`interpret`, `choose_next_action`,
+`decide_candidates`, `draft_report`) are validated against the existing schemas
+only after wire usage settlement and before logical capture acceptance. A malformed
+response stops immediately with `response_schema_invalid`; there is no schema
+repair loop or additional request. Its durable task summary is CENSORED and unscored.
+Valid observed usage and the full reservation floor remain recorded. Incomplete
+responses and usage safeguards run first and retain their existing stop reasons.
+
+Experimental admission checks task/aggregate token exhaustion before local rolling
+pacing. `token_limit` is permanent budget exhaustion; `local_request_rate_limit`
+and `local_reserved_token_rate_limit` identify local pacing ceilings, not provider
+429s. Actual HTTP failures (including 429) retain the existing generic
+`provider_failure_or_interruption` stop and uncertain pending reservation; no
+HTTP status is invented. Historical `provider_rate_limit` journal entries retain
+their original interpretation. Strict admission ordering, reasons and accounting
+are unchanged. No ceilings, framing allowances, accuracy defaults or validators
+are changed. Updated code changes the harness binding; previous approvals do not
+authorize it. A future experiment requires a fresh reviewed commit, campaign and
+explicit approval.
