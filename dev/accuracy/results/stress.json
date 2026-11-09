@@ -1,0 +1,545 @@
+[
+  {
+    "bounded": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3596,
+      "max_by_operation": {
+        "choose_next_action": 12404,
+        "decide_candidates": 9516,
+        "draft_report": 10458,
+        "interpret": 6137
+      },
+      "max_estimate": 12404,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 8,
+      "status": "completed",
+      "stop_reason": "submitted"
+    },
+    "original": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3596,
+      "max_by_operation": {
+        "choose_next_action": 12404,
+        "decide_candidates": 9466,
+        "draft_report": 10939,
+        "interpret": 6129
+      },
+      "max_estimate": 12404,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 8,
+      "status": "completed",
+      "stop_reason": "submitted"
+    },
+    "scenario": "small-single-file"
+  },
+  {
+    "bounded": {
+      "candidates": 7,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 2557,
+      "max_by_operation": {
+        "choose_next_action": 13443,
+        "decide_candidates": 11563,
+        "interpret": 6138
+      },
+      "max_estimate": 13443,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "original": {
+      "candidates": 7,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 2557,
+      "max_by_operation": {
+        "choose_next_action": 13443,
+        "decide_candidates": 11463,
+        "interpret": 6130
+      },
+      "max_estimate": 13443,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "scenario": "small-long-horizon"
+  },
+  {
+    "bounded": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3596,
+      "max_by_operation": {
+        "choose_next_action": 12404,
+        "decide_candidates": 9516,
+        "interpret": 6146
+      },
+      "max_estimate": 12404,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "partial",
+      "stop_reason": "no_ledger_progress"
+    },
+    "original": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3596,
+      "max_by_operation": {
+        "choose_next_action": 12404,
+        "decide_candidates": 9466,
+        "interpret": 6138
+      },
+      "max_estimate": 12404,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "partial",
+      "stop_reason": "no_ledger_progress"
+    },
+    "scenario": "small-conflicting-evidence"
+  },
+  {
+    "bounded": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3779,
+      "max_by_operation": {
+        "choose_next_action": 12221,
+        "decide_candidates": 8240,
+        "interpret": 6145
+      },
+      "max_estimate": 12221,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 7,
+      "status": "abstained",
+      "stop_reason": "no_progress"
+    },
+    "original": {
+      "candidates": 4,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 3779,
+      "max_by_operation": {
+        "choose_next_action": 12221,
+        "decide_candidates": 8215,
+        "interpret": 6137
+      },
+      "max_estimate": 12221,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 7,
+      "status": "abstained",
+      "stop_reason": "no_progress"
+    },
+    "scenario": "small-repeated-inspection"
+  },
+  {
+    "bounded": {
+      "candidates": 1,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 6826,
+      "max_by_operation": {
+        "choose_next_action": 9174,
+        "interpret": 6201
+      },
+      "max_estimate": 9174,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 6,
+      "status": "abstained",
+      "stop_reason": "no_progress"
+    },
+    "original": {
+      "candidates": 1,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 6826,
+      "max_by_operation": {
+        "choose_next_action": 9174,
+        "interpret": 6193
+      },
+      "max_estimate": 9174,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 0,
+      "requests": 6,
+      "status": "abstained",
+      "stop_reason": "no_progress"
+    },
+    "scenario": "small-empty-results"
+  },
+  {
+    "bounded": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 1791,
+      "max_by_operation": {
+        "choose_next_action": 14209,
+        "decide_candidates": 13746,
+        "interpret": 7804
+      },
+      "max_estimate": 14209,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 12,
+        "latest_observation_hits": 43,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 7,
+        "ledger_details": 33,
+        "observation_payloads": 13,
+        "older_observation_summaries": 9
+      },
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "original": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -23995,
+      "max_by_operation": {
+        "choose_next_action": 39995,
+        "decide_candidates": 27937,
+        "interpret": 7796
+      },
+      "max_estimate": 39995,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 9,
+      "requests": 10,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "scenario": "large-max-window"
+  },
+  {
+    "bounded": {
+      "candidates": 11,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 1,
+      "correctness_problems": [],
+      "headroom": 2067,
+      "max_by_operation": {
+        "choose_next_action": 13933,
+        "decide_candidates": 13746,
+        "interpret": 7808
+      },
+      "max_estimate": 13933,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 16,
+        "latest_observation_hits": 45,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 7,
+        "ledger_details": 39,
+        "observation_payloads": 11,
+        "older_observation_summaries": 7
+      },
+      "over_cap_requests": 0,
+      "requests": 12,
+      "status": "abstained",
+      "stop_reason": "context_budget"
+    },
+    "original": {
+      "candidates": 30,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -32625,
+      "max_by_operation": {
+        "choose_next_action": 48625,
+        "decide_candidates": 34224,
+        "interpret": 7800
+      },
+      "max_estimate": 48625,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 15,
+      "requests": 16,
+      "status": "abstained",
+      "stop_reason": "candidate_cap"
+    },
+    "scenario": "large-max-candidates"
+  },
+  {
+    "bounded": {
+      "candidates": 11,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 1,
+      "correctness_problems": [],
+      "headroom": 2171,
+      "max_by_operation": {
+        "choose_next_action": 13829,
+        "decide_candidates": 13746,
+        "interpret": 7812
+      },
+      "max_estimate": 13829,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 18,
+        "latest_observation_hits": 45,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 7,
+        "ledger_details": 39,
+        "observation_payloads": 11,
+        "older_observation_summaries": 7
+      },
+      "over_cap_requests": 0,
+      "requests": 12,
+      "status": "partial",
+      "stop_reason": "context_budget"
+    },
+    "original": {
+      "candidates": 30,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -31649,
+      "max_by_operation": {
+        "choose_next_action": 47649,
+        "decide_candidates": 34224,
+        "interpret": 7804
+      },
+      "max_estimate": 47649,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 16,
+      "requests": 17,
+      "status": "partial",
+      "stop_reason": "candidate_cap"
+    },
+    "scenario": "large-checkpoint-history"
+  },
+  {
+    "bounded": {
+      "candidates": 11,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 1,
+      "correctness_problems": [],
+      "headroom": 2171,
+      "max_by_operation": {
+        "choose_next_action": 13829,
+        "decide_candidates": 13746,
+        "interpret": 7812
+      },
+      "max_estimate": 13829,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 18,
+        "latest_observation_hits": 45,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 7,
+        "ledger_details": 39,
+        "observation_payloads": 11,
+        "older_observation_summaries": 7
+      },
+      "over_cap_requests": 0,
+      "requests": 12,
+      "status": "partial",
+      "stop_reason": "context_budget"
+    },
+    "original": {
+      "candidates": 30,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -31649,
+      "max_by_operation": {
+        "choose_next_action": 47649,
+        "decide_candidates": 27929,
+        "interpret": 7804
+      },
+      "max_estimate": 47649,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 15,
+      "requests": 16,
+      "status": "partial",
+      "stop_reason": "candidate_cap"
+    },
+    "scenario": "large-multi-file-confirm"
+  },
+  {
+    "bounded": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 1,
+      "correctness_problems": [],
+      "headroom": 1624,
+      "max_by_operation": {
+        "choose_next_action": 14376,
+        "interpret": 7806
+      },
+      "max_estimate": 14376,
+      "max_level": 5,
+      "omitted": {
+        "latest_observation_hits": 30,
+        "ledger_details": 20,
+        "observation_payloads": 5,
+        "older_observation_summaries": 1
+      },
+      "over_cap_requests": 0,
+      "requests": 5,
+      "status": "abstained",
+      "stop_reason": "context_budget"
+    },
+    "original": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -23995,
+      "max_by_operation": {
+        "choose_next_action": 39995,
+        "interpret": 7798
+      },
+      "max_estimate": 39995,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 6,
+      "requests": 7,
+      "status": "abstained",
+      "stop_reason": "no_progress"
+    },
+    "scenario": "large-failed-tools"
+  },
+  {
+    "bounded": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": 1788,
+      "max_by_operation": {
+        "choose_next_action": 14212,
+        "decide_candidates": 14064,
+        "interpret": 7814
+      },
+      "max_estimate": 14212,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 12,
+        "latest_observation_hits": 43,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 11,
+        "ledger_details": 33,
+        "observation_payloads": 13,
+        "older_observation_summaries": 9
+      },
+      "over_cap_requests": 0,
+      "requests": 13,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "original": {
+      "candidates": 8,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -24045,
+      "max_by_operation": {
+        "choose_next_action": 40045,
+        "decide_candidates": 29211,
+        "interpret": 7806
+      },
+      "max_estimate": 40045,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 9,
+      "requests": 10,
+      "status": "abstained",
+      "stop_reason": "no_ledger_progress"
+    },
+    "scenario": "large-symbols-long-outputs"
+  },
+  {
+    "bounded": {
+      "candidates": 11,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 1,
+      "correctness_problems": [],
+      "headroom": 1634,
+      "max_by_operation": {
+        "choose_next_action": 14366,
+        "decide_candidates": 13854,
+        "interpret": 7860
+      },
+      "max_estimate": 14366,
+      "max_level": 4,
+      "omitted": {
+        "checkpoint_candidates_deferred": 16,
+        "latest_observation_hits": 44,
+        "latest_observation_neighbors": 9,
+        "latest_observation_outline": 7,
+        "ledger_details": 37,
+        "observation_payloads": 11,
+        "older_observation_summaries": 4
+      },
+      "over_cap_requests": 0,
+      "requests": 12,
+      "status": "abstained",
+      "stop_reason": "context_budget"
+    },
+    "original": {
+      "candidates": 30,
+      "checkpoints_deferred_for_budget": 0,
+      "context_refusals": 0,
+      "correctness_problems": [],
+      "headroom": -35033,
+      "max_by_operation": {
+        "choose_next_action": 51033,
+        "decide_candidates": 34704,
+        "interpret": 7852
+      },
+      "max_estimate": 51033,
+      "max_level": 0,
+      "omitted": {},
+      "over_cap_requests": 16,
+      "requests": 17,
+      "status": "abstained",
+      "stop_reason": "candidate_cap"
+    },
+    "scenario": "unicode-paths-and-text"
+  }
+]

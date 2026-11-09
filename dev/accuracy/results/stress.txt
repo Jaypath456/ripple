@@ -1,0 +1,13 @@
+scenario                       orig max  bounded headroom lvl  stop / omitted
+small-single-file                 12404    12404     3596   0  submitted {} []
+small-long-horizon                13443    13443     2557   0  no_ledger_progress {} []
+small-conflicting-evidence        12404    12404     3596   0  no_ledger_progress {} []
+small-repeated-inspection         12221    12221     3779   0  no_progress {} []
+small-empty-results                9174     9174     6826   0  no_progress {} []
+large-max-window                  39995    14209     1791   4  no_ledger_progress {'checkpoint_candidates_deferred': 12, 'latest_observation_hits': 43, 'latest_observation_neighbors': 9, 'latest_observation_outline': 7, 'ledger_details': 33, 'observation_payloads': 13, 'older_observation_summaries': 9} []
+large-max-candidates              48625    13933     2067   4  context_budget {'checkpoint_candidates_deferred': 16, 'latest_observation_hits': 45, 'latest_observation_neighbors': 9, 'latest_observation_outline': 7, 'ledger_details': 39, 'observation_payloads': 11, 'older_observation_summaries': 7} []
+large-checkpoint-history          47649    13829     2171   4  context_budget {'checkpoint_candidates_deferred': 18, 'latest_observation_hits': 45, 'latest_observation_neighbors': 9, 'latest_observation_outline': 7, 'ledger_details': 39, 'observation_payloads': 11, 'older_observation_summaries': 7} []
+large-multi-file-confirm          47649    13829     2171   4  context_budget {'checkpoint_candidates_deferred': 18, 'latest_observation_hits': 45, 'latest_observation_neighbors': 9, 'latest_observation_outline': 7, 'ledger_details': 39, 'observation_payloads': 11, 'older_observation_summaries': 7} []
+large-failed-tools                39995    14376     1624   5  context_budget {'latest_observation_hits': 30, 'ledger_details': 20, 'observation_payloads': 5, 'older_observation_summaries': 1} []
+large-symbols-long-outputs        40045    14212     1788   4  no_ledger_progress {'checkpoint_candidates_deferred': 12, 'latest_observation_hits': 43, 'latest_observation_neighbors': 9, 'latest_observation_outline': 11, 'ledger_details': 33, 'observation_payloads': 13, 'older_observation_summaries': 9} []
+unicode-paths-and-text            51033    14366     1634   4  context_budget {'checkpoint_candidates_deferred': 16, 'latest_observation_hits': 44, 'latest_observation_neighbors': 9, 'latest_observation_outline': 7, 'ledger_details': 37, 'observation_payloads': 11, 'older_observation_summaries': 4} []
