@@ -77,6 +77,7 @@ lock and the single-pending-attempt rule serialize its entire campaign task.
 | Transport | SDK retries 0; application replay retries off; redirects off; no endpoint fallback |
 | Concurrency | One pending request and exclusive campaign journal lock |
 | Accounting | Reserve before dispatch; retain max(reservation, valid observed total); never refund |
+| Request formatting | `compact-structured-json-v1`: proven default-`json.dumps` `repository_data` objects are re-emitted with compact separators before admission; parsed context, all other prompt bytes and the logical journal prompt are unchanged; bound into the approval |
 | Failures | Durable private censored/failed/interrupted summaries; unknown cost retained; no resumption |
 
 The framing allowance, context planning ceiling and rate ceilings are LOCAL

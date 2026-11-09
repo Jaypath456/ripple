@@ -1,0 +1,544 @@
+[
+  {
+    "candidates": 6,
+    "compact_headroom": 1487,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": null,
+    "max_by_operation": {
+      "choose_next_action": 14513,
+      "decide_candidates": 9222,
+      "draft_report": 11562,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 14513,
+    "max_estimate": 14969,
+    "max_proposal_by_operation": {
+      "choose_next_action": 13156,
+      "decide_candidates": 9268,
+      "draft_report": 11562,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 13156,
+    "requests": 7,
+    "scenario": "stock-focused-submit",
+    "stop_reason": "submitted",
+    "tool_calls": 4,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4487
+      ],
+      [
+        "ledger",
+        2756
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 14513,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 6,
+    "compact_headroom": 1487,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": null,
+    "max_by_operation": {
+      "choose_next_action": 14513,
+      "decide_candidates": 9467,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 14513,
+    "max_estimate": 14969,
+    "max_proposal_by_operation": {
+      "choose_next_action": 13237,
+      "decide_candidates": 9513,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 13237,
+    "requests": 11,
+    "scenario": "stock-long-horizon-keep",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4487
+      ],
+      [
+        "ledger",
+        2756
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 14513,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 10,
+    "compact_headroom": 432,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": 5,
+    "max_by_operation": {
+      "choose_next_action": 15568,
+      "decide_candidates": 12712,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 15568,
+    "max_estimate": 16089,
+    "max_proposal_by_operation": {
+      "choose_next_action": 14338,
+      "decide_candidates": 12354,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 14338,
+    "requests": 20,
+    "scenario": "stock-long-horizon-suspect",
+    "stop_reason": "no_progress",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4242
+      ],
+      [
+        "ledger",
+        3995
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        95
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 15568,
+      "operation": "choose_next_action",
+      "request": 5
+    }
+  },
+  {
+    "candidates": 10,
+    "compact_headroom": 432,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": 5,
+    "max_by_operation": {
+      "choose_next_action": 15568,
+      "decide_candidates": 12262,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 15568,
+    "max_estimate": 16089,
+    "max_proposal_by_operation": {
+      "choose_next_action": 14338,
+      "decide_candidates": 12354,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 14338,
+    "requests": 20,
+    "scenario": "stock-long-horizon-confirm-late",
+    "stop_reason": "no_progress",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4242
+      ],
+      [
+        "ledger",
+        3995
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        95
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 15568,
+      "operation": "choose_next_action",
+      "request": 5
+    }
+  },
+  {
+    "candidates": 8,
+    "compact_headroom": -23014,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 39014,
+      "decide_candidates": 27534,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 39014,
+    "max_estimate": 39601,
+    "max_proposal_by_operation": {
+      "choose_next_action": 20792,
+      "decide_candidates": 27718,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 27718,
+    "requests": 10,
+    "scenario": "stress-max-window-ascii",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        21610
+      ],
+      [
+        "ledger",
+        10124
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 39014,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -31787,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 47787,
+      "decide_candidates": 33792,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 47787,
+    "max_estimate": 48790,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24678,
+      "decide_candidates": 33976,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 33976,
+    "requests": 16,
+    "scenario": "stress-max-candidates-ascii",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "ledger",
+        27392
+      ],
+      [
+        "last_three_observations",
+        12538
+      ],
+      [
+        "older_observation_summaries",
+        608
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        130
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 47787,
+      "operation": "choose_next_action",
+      "request": 16
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -30589,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 46589,
+      "decide_candidates": 27526,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 46589,
+    "max_estimate": 47325,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24469,
+      "decide_candidates": 27710,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 27710,
+    "requests": 16,
+    "scenario": "stress-checkpoint-and-report-ascii",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 13,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        22314
+      ],
+      [
+        "ledger",
+        16994
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 46589,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 8,
+    "compact_headroom": -25714,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 41714,
+      "decide_candidates": 27534,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 41714,
+    "max_estimate": 42301,
+    "max_proposal_by_operation": {
+      "choose_next_action": 20359,
+      "decide_candidates": 27718,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 27718,
+    "requests": 10,
+    "scenario": "stress-max-window-unicode",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        24310
+      ],
+      [
+        "ledger",
+        10124
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 41714,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -33449,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 49449,
+      "decide_candidates": 33792,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 49449,
+    "max_estimate": 50150,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24678,
+      "decide_candidates": 33976,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 33976,
+    "requests": 16,
+    "scenario": "stress-max-candidates-unicode",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        24310
+      ],
+      [
+        "ledger",
+        17858
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 49449,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -33289,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 49289,
+      "decide_candidates": 27526,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 49289,
+    "max_estimate": 50025,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24469,
+      "decide_candidates": 27710,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 27710,
+    "requests": 16,
+    "scenario": "stress-checkpoint-and-report-unicode",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 13,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        25014
+      ],
+      [
+        "ledger",
+        16994
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 49289,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  }
+]

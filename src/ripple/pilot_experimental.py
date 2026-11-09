@@ -27,6 +27,7 @@ from ripple.pilot_admission import (
     read_private_artifact,
     unique_object,
 )
+from ripple.pilot_formatting import FORMAT_ID, FormattingClient
 
 PROFILE = "EXPERIMENTAL_UB_COURSE"
 BASE = "8d750d89f36ae0f8f1cd7aba00d1d87e13f471fe"
@@ -48,6 +49,9 @@ def specification():
         "endpoint": "responses",
         "output_parameter": "max_output_tokens",
         "accounting": "retain_full_reservation_or_larger_observation",
+        # Lossless whitespace-only compaction of proven structured prompt context,
+        # applied identically to capture and both replays.
+        "request_formatting": FORMAT_ID,
         "local_assumptions": {
             "input_estimator": "serialized_request_utf8_bytes_plus_allowance",
             "framing_allowance": 4096,
@@ -289,7 +293,12 @@ def execute_one(package, output, task_id, approval_path, *, profile, acknowledge
             base_url=pilot.URL,
             retry_policy=RetryPolicy(allow_request_replay=False),
         )
-        capture = pilot.CaptureClient(pilot.attach_gate(client, gate), gate)
+        # Formatting wraps the gated client: the journal keeps the agent-rendered
+        # logical prompt (which identical replay must reproduce) and the compact
+        # wire request that was admitted and dispatched.
+        capture = pilot.CaptureClient(
+            FormattingClient(pilot.attach_gate(client, gate)), gate
+        )
         result = pilot.run_pair(index, task, capture, folder)
         result.update(pilot.expected_comparison(package, task, result))
         result["experiment"] = {

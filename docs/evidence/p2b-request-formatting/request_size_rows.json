@@ -1,0 +1,2575 @@
+[
+  {
+    "candidates": 6,
+    "compact_headroom": 1487,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": null,
+    "max_by_operation": {
+      "choose_next_action": 14513,
+      "decide_candidates": 9222,
+      "draft_report": 11562,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 14513,
+    "max_estimate": 14969,
+    "max_proposal_by_operation": {
+      "choose_next_action": 13156,
+      "decide_candidates": 9268,
+      "draft_report": 11562,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 13156,
+    "observations": 11,
+    "requests": 7,
+    "rows": [
+      {
+        "compact_estimate": 6216,
+        "estimate": 6216,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 6216,
+        "request": 1
+      },
+      {
+        "compact_estimate": 13126,
+        "estimate": 13465,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 2774,
+          "ledger": 3082,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13156,
+        "request": 2
+      },
+      {
+        "compact_estimate": 13510,
+        "estimate": 13883,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3234,
+          "ledger": 3006,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11047,
+        "request": 3
+      },
+      {
+        "compact_estimate": 14513,
+        "estimate": 14969,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4487,
+          "ledger": 2756,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11800,
+        "request": 4
+      },
+      {
+        "compact_estimate": 9222,
+        "estimate": 9322,
+        "fields": {
+          "candidates": 1643,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 9268,
+        "request": 5
+      },
+      {
+        "compact_estimate": 12295,
+        "estimate": 12586,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 2207,
+          "ledger": 2758,
+          "older_observation_summaries": 95,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11065,
+        "request": 6
+      },
+      {
+        "compact_estimate": 11562,
+        "estimate": 11666,
+        "fields": {
+          "deterministic_expand": 867,
+          "intent": 198,
+          "ledger": 1225,
+          "request": 148
+        },
+        "operation": "draft_report",
+        "proposal_estimate": 11562,
+        "request": 7
+      }
+    ],
+    "scenario": "stock-focused-submit",
+    "stop_reason": "submitted",
+    "tool_calls": 4,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4487
+      ],
+      [
+        "ledger",
+        2756
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 14513,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 6,
+    "compact_headroom": 1487,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": null,
+    "max_by_operation": {
+      "choose_next_action": 14513,
+      "decide_candidates": 9467,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 14513,
+    "max_estimate": 14969,
+    "max_proposal_by_operation": {
+      "choose_next_action": 13237,
+      "decide_candidates": 9513,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 13237,
+    "observations": 13,
+    "requests": 11,
+    "rows": [
+      {
+        "compact_estimate": 6216,
+        "estimate": 6216,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 6216,
+        "request": 1
+      },
+      {
+        "compact_estimate": 13126,
+        "estimate": 13465,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 2774,
+          "ledger": 3082,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13156,
+        "request": 2
+      },
+      {
+        "compact_estimate": 13510,
+        "estimate": 13883,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3234,
+          "ledger": 3006,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11047,
+        "request": 3
+      },
+      {
+        "compact_estimate": 14513,
+        "estimate": 14969,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4487,
+          "ledger": 2756,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11800,
+        "request": 4
+      },
+      {
+        "compact_estimate": 9467,
+        "estimate": 9582,
+        "fields": {
+          "candidates": 1888,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 9513,
+        "request": 5
+      },
+      {
+        "compact_estimate": 14467,
+        "estimate": 14936,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4242,
+          "ledger": 2894,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13237,
+        "request": 6
+      },
+      {
+        "compact_estimate": 14345,
+        "estimate": 14795,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4055,
+          "ledger": 2894,
+          "older_observation_summaries": 160,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11107,
+        "request": 7
+      },
+      {
+        "compact_estimate": 8531,
+        "estimate": 8590,
+        "fields": {
+          "candidates": 952,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 8554,
+        "request": 8
+      },
+      {
+        "compact_estimate": 13638,
+        "estimate": 14048,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 3267,
+          "ledger": 2908,
+          "older_observation_summaries": 226,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11408,
+        "request": 9
+      },
+      {
+        "compact_estimate": 11633,
+        "estimate": 11885,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1200,
+          "ledger": 2908,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11404,
+        "request": 10
+      },
+      {
+        "compact_estimate": 11613,
+        "estimate": 11882,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1178,
+          "ledger": 2846,
+          "older_observation_summaries": 352,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 11205,
+        "request": 11
+      }
+    ],
+    "scenario": "stock-long-horizon-keep",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4487
+      ],
+      [
+        "ledger",
+        2756
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 14513,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 10,
+    "compact_headroom": 432,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": 5,
+    "max_by_operation": {
+      "choose_next_action": 15568,
+      "decide_candidates": 12712,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 15568,
+    "max_estimate": 16089,
+    "max_proposal_by_operation": {
+      "choose_next_action": 14338,
+      "decide_candidates": 12354,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 14338,
+    "observations": 22,
+    "requests": 20,
+    "rows": [
+      {
+        "compact_estimate": 6216,
+        "estimate": 6216,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 6216,
+        "request": 1
+      },
+      {
+        "compact_estimate": 13126,
+        "estimate": 13465,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 2774,
+          "ledger": 3082,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13156,
+        "request": 2
+      },
+      {
+        "compact_estimate": 14473,
+        "estimate": 14882,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3234,
+          "ledger": 3969,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12010,
+        "request": 3
+      },
+      {
+        "compact_estimate": 15347,
+        "estimate": 15838,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4487,
+          "ledger": 3590,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12634,
+        "request": 4
+      },
+      {
+        "compact_estimate": 15568,
+        "estimate": 16089,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4242,
+          "ledger": 3995,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 14338,
+        "request": 5
+      },
+      {
+        "compact_estimate": 15446,
+        "estimate": 15948,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4055,
+          "ledger": 3995,
+          "older_observation_summaries": 160,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12208,
+        "request": 6
+      },
+      {
+        "compact_estimate": 14752,
+        "estimate": 15216,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3267,
+          "ledger": 4023,
+          "older_observation_summaries": 226,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12522,
+        "request": 7
+      },
+      {
+        "compact_estimate": 12262,
+        "estimate": 12539,
+        "fields": {
+          "candidates": 4683,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 12354,
+        "request": 8
+      },
+      {
+        "compact_estimate": 13010,
+        "estimate": 13330,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1200,
+          "ledger": 4285,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12781,
+        "request": 9
+      },
+      {
+        "compact_estimate": 12990,
+        "estimate": 13327,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1178,
+          "ledger": 4223,
+          "older_observation_summaries": 352,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12582,
+        "request": 10
+      },
+      {
+        "compact_estimate": 12954,
+        "estimate": 13286,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1077,
+          "ledger": 4223,
+          "older_observation_summaries": 417,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12764,
+        "request": 11
+      },
+      {
+        "compact_estimate": 13977,
+        "estimate": 14377,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1991,
+          "ledger": 4265,
+          "older_observation_summaries": 484,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13964,
+        "request": 12
+      },
+      {
+        "compact_estimate": 14838,
+        "estimate": 15302,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 2340,
+          "ledger": 4714,
+          "older_observation_summaries": 545,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13787,
+        "request": 13
+      },
+      {
+        "compact_estimate": 14825,
+        "estimate": 15297,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 2261,
+          "ledger": 4714,
+          "older_observation_summaries": 611,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13333,
+        "request": 14
+      },
+      {
+        "compact_estimate": 13999,
+        "estimate": 14417,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1373,
+          "ledger": 4714,
+          "older_observation_summaries": 673,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13545,
+        "request": 15
+      },
+      {
+        "compact_estimate": 12712,
+        "estimate": 13004,
+        "fields": {
+          "candidates": 5133,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 12213,
+        "request": 16
+      },
+      {
+        "compact_estimate": 13914,
+        "estimate": 14322,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1239,
+          "ledger": 4701,
+          "older_observation_summaries": 735,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13575,
+        "request": 17
+      },
+      {
+        "compact_estimate": 14157,
+        "estimate": 14576,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1419,
+          "ledger": 4701,
+          "older_observation_summaries": 798,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13496,
+        "request": 18
+      },
+      {
+        "compact_estimate": 14228,
+        "estimate": 14649,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1425,
+          "ledger": 4701,
+          "older_observation_summaries": 863,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13492,
+        "request": 19
+      },
+      {
+        "compact_estimate": 14289,
+        "estimate": 14716,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1424,
+          "ledger": 4701,
+          "older_observation_summaries": 925,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13488,
+        "request": 20
+      }
+    ],
+    "scenario": "stock-long-horizon-suspect",
+    "stop_reason": "no_progress",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4242
+      ],
+      [
+        "ledger",
+        3995
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        95
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 15568,
+      "operation": "choose_next_action",
+      "request": 5
+    }
+  },
+  {
+    "candidates": 10,
+    "compact_headroom": 432,
+    "first_compact_request_over_cap": null,
+    "first_request_over_cap": 5,
+    "max_by_operation": {
+      "choose_next_action": 15568,
+      "decide_candidates": 12262,
+      "interpret": 6216
+    },
+    "max_compact_estimate": 15568,
+    "max_estimate": 16089,
+    "max_proposal_by_operation": {
+      "choose_next_action": 14338,
+      "decide_candidates": 12354,
+      "interpret": 6216
+    },
+    "max_proposal_estimate": 14338,
+    "observations": 28,
+    "requests": 20,
+    "rows": [
+      {
+        "compact_estimate": 6216,
+        "estimate": 6216,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 6216,
+        "request": 1
+      },
+      {
+        "compact_estimate": 13126,
+        "estimate": 13465,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 2774,
+          "ledger": 3082,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13156,
+        "request": 2
+      },
+      {
+        "compact_estimate": 14473,
+        "estimate": 14882,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3234,
+          "ledger": 3969,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12010,
+        "request": 3
+      },
+      {
+        "compact_estimate": 15347,
+        "estimate": 15838,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4487,
+          "ledger": 3590,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12634,
+        "request": 4
+      },
+      {
+        "compact_estimate": 15568,
+        "estimate": 16089,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4242,
+          "ledger": 3995,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 14338,
+        "request": 5
+      },
+      {
+        "compact_estimate": 15446,
+        "estimate": 15948,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 4055,
+          "ledger": 3995,
+          "older_observation_summaries": 160,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12208,
+        "request": 6
+      },
+      {
+        "compact_estimate": 14752,
+        "estimate": 15216,
+        "fields": {
+          "budgets": 127,
+          "intent": 198,
+          "last_three_observations": 3267,
+          "ledger": 4023,
+          "older_observation_summaries": 226,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12522,
+        "request": 7
+      },
+      {
+        "compact_estimate": 12262,
+        "estimate": 12539,
+        "fields": {
+          "candidates": 4683,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 12354,
+        "request": 8
+      },
+      {
+        "compact_estimate": 12883,
+        "estimate": 13199,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1200,
+          "ledger": 4158,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12654,
+        "request": 9
+      },
+      {
+        "compact_estimate": 12863,
+        "estimate": 13196,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1178,
+          "ledger": 4096,
+          "older_observation_summaries": 352,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12455,
+        "request": 10
+      },
+      {
+        "compact_estimate": 12827,
+        "estimate": 13155,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1077,
+          "ledger": 4096,
+          "older_observation_summaries": 417,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 12637,
+        "request": 11
+      },
+      {
+        "compact_estimate": 13850,
+        "estimate": 14246,
+        "fields": {
+          "budgets": 128,
+          "intent": 198,
+          "last_three_observations": 1991,
+          "ledger": 4138,
+          "older_observation_summaries": 484,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13837,
+        "request": 12
+      },
+      {
+        "compact_estimate": 14711,
+        "estimate": 15171,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 2340,
+          "ledger": 4587,
+          "older_observation_summaries": 545,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13660,
+        "request": 13
+      },
+      {
+        "compact_estimate": 14698,
+        "estimate": 15166,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 2261,
+          "ledger": 4587,
+          "older_observation_summaries": 611,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13206,
+        "request": 14
+      },
+      {
+        "compact_estimate": 13872,
+        "estimate": 14286,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1373,
+          "ledger": 4587,
+          "older_observation_summaries": 673,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13418,
+        "request": 15
+      },
+      {
+        "compact_estimate": 10782,
+        "estimate": 10966,
+        "fields": {
+          "candidates": 3203,
+          "interpreted_intent": 117,
+          "request": 148
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 10544,
+        "request": 16
+      },
+      {
+        "compact_estimate": 13711,
+        "estimate": 14113,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1239,
+          "ledger": 4498,
+          "older_observation_summaries": 735,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13372,
+        "request": 17
+      },
+      {
+        "compact_estimate": 13954,
+        "estimate": 14367,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1419,
+          "ledger": 4498,
+          "older_observation_summaries": 798,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13293,
+        "request": 18
+      },
+      {
+        "compact_estimate": 14025,
+        "estimate": 14440,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1425,
+          "ledger": 4498,
+          "older_observation_summaries": 863,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13289,
+        "request": 19
+      },
+      {
+        "compact_estimate": 14086,
+        "estimate": 14507,
+        "fields": {
+          "budgets": 130,
+          "intent": 198,
+          "last_three_observations": 1424,
+          "ledger": 4498,
+          "older_observation_summaries": 925,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13285,
+        "request": 20
+      }
+    ],
+    "scenario": "stock-long-horizon-confirm-late",
+    "stop_reason": "no_progress",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        4242
+      ],
+      [
+        "ledger",
+        3995
+      ],
+      [
+        "intent",
+        198
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        95
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 15568,
+      "operation": "choose_next_action",
+      "request": 5
+    }
+  },
+  {
+    "candidates": 8,
+    "compact_headroom": -23014,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 39014,
+      "decide_candidates": 27534,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 39014,
+    "max_estimate": 39601,
+    "max_proposal_by_operation": {
+      "choose_next_action": 20792,
+      "decide_candidates": 27718,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 27718,
+    "observations": 13,
+    "requests": 10,
+    "rows": [
+      {
+        "compact_estimate": 7822,
+        "estimate": 7822,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7822,
+        "request": 1
+      },
+      {
+        "compact_estimate": 28172,
+        "estimate": 28549,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 10824,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20490,
+        "request": 2
+      },
+      {
+        "compact_estimate": 39014,
+        "estimate": 39601,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 21610,
+          "ledger": 10124,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20792,
+        "request": 3
+      },
+      {
+        "compact_estimate": 37565,
+        "estimate": 38168,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 22314,
+          "ledger": 7971,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 16514,
+        "request": 4
+      },
+      {
+        "compact_estimate": 27534,
+        "estimate": 27986,
+        "fields": {
+          "candidates": 20022,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27718,
+        "request": 5
+      },
+      {
+        "compact_estimate": 29199,
+        "estimate": 29739,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 15687,
+          "ledger": 6171,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 18034,
+        "request": 6
+      },
+      {
+        "compact_estimate": 21712,
+        "estimate": 22134,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 6171,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 17706,
+        "request": 7
+      },
+      {
+        "compact_estimate": 19708,
+        "estimate": 20141,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 4083,
+          "older_observation_summaries": 223,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13155,
+        "request": 8
+      },
+      {
+        "compact_estimate": 26443,
+        "estimate": 26974,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 14769,
+          "ledger": 4139,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 15620,
+        "request": 9
+      },
+      {
+        "compact_estimate": 25781,
+        "estimate": 26249,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 14040,
+          "ledger": 4139,
+          "older_observation_summaries": 355,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 14933,
+        "request": 10
+      }
+    ],
+    "scenario": "stress-max-window-ascii",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        21610
+      ],
+      [
+        "ledger",
+        10124
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 39014,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -31787,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 47787,
+      "decide_candidates": 33792,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 47787,
+    "max_estimate": 48790,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24678,
+      "decide_candidates": 33976,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 33976,
+    "observations": 17,
+    "requests": 16,
+    "rows": [
+      {
+        "compact_estimate": 7822,
+        "estimate": 7822,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7822,
+        "request": 1
+      },
+      {
+        "compact_estimate": 28172,
+        "estimate": 28549,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 10824,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20490,
+        "request": 2
+      },
+      {
+        "compact_estimate": 46749,
+        "estimate": 47450,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 21610,
+          "ledger": 17858,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24579,
+        "request": 3
+      },
+      {
+        "compact_estimate": 46589,
+        "estimate": 47325,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 22314,
+          "ledger": 16994,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20603,
+        "request": 4
+      },
+      {
+        "compact_estimate": 37783,
+        "estimate": 38440,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 15687,
+          "ledger": 14754,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21683,
+        "request": 5
+      },
+      {
+        "compact_estimate": 30296,
+        "estimate": 30835,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 14754,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21355,
+        "request": 6
+      },
+      {
+        "compact_estimate": 27526,
+        "estimate": 27978,
+        "fields": {
+          "candidates": 20014,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27710,
+        "request": 7
+      },
+      {
+        "compact_estimate": 37128,
+        "estimate": 37798,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 21502,
+          "older_observation_summaries": 223,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 19126,
+        "request": 8
+      },
+      {
+        "compact_estimate": 43919,
+        "estimate": 44695,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14769,
+          "ledger": 21614,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21598,
+        "request": 9
+      },
+      {
+        "compact_estimate": 43257,
+        "estimate": 43970,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14040,
+          "ledger": 21614,
+          "older_observation_summaries": 355,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20911,
+        "request": 10
+      },
+      {
+        "compact_estimate": 22350,
+        "estimate": 22570,
+        "fields": {
+          "candidates": 14838,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 22488,
+        "request": 11
+      },
+      {
+        "compact_estimate": 44185,
+        "estimate": 44911,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14577,
+          "ledger": 21944,
+          "older_observation_summaries": 416,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21957,
+        "request": 12
+      },
+      {
+        "compact_estimate": 33792,
+        "estimate": 34366,
+        "fields": {
+          "candidates": 26280,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 33976,
+        "request": 13
+      },
+      {
+        "compact_estimate": 36073,
+        "estimate": 36737,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 7964,
+          "ledger": 20383,
+          "older_observation_summaries": 478,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24678,
+        "request": 14
+      },
+      {
+        "compact_estimate": 38811,
+        "estimate": 39609,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 9626,
+          "ledger": 21394,
+          "older_observation_summaries": 542,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 22926,
+        "request": 15
+      },
+      {
+        "compact_estimate": 47787,
+        "estimate": 48790,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12538,
+          "ledger": 27392,
+          "older_observation_summaries": 608,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23869,
+        "request": 16
+      }
+    ],
+    "scenario": "stress-max-candidates-ascii",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "ledger",
+        27392
+      ],
+      [
+        "last_three_observations",
+        12538
+      ],
+      [
+        "older_observation_summaries",
+        608
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        130
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 47787,
+      "operation": "choose_next_action",
+      "request": 16
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -30589,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 46589,
+      "decide_candidates": 27526,
+      "interpret": 7822
+    },
+    "max_compact_estimate": 46589,
+    "max_estimate": 47325,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24469,
+      "decide_candidates": 27710,
+      "interpret": 7822
+    },
+    "max_proposal_estimate": 27710,
+    "observations": 27,
+    "requests": 16,
+    "rows": [
+      {
+        "compact_estimate": 7822,
+        "estimate": 7822,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7822,
+        "request": 1
+      },
+      {
+        "compact_estimate": 28172,
+        "estimate": 28549,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 10824,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20490,
+        "request": 2
+      },
+      {
+        "compact_estimate": 44171,
+        "estimate": 44834,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 21610,
+          "ledger": 15280,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23975,
+        "request": 3
+      },
+      {
+        "compact_estimate": 46589,
+        "estimate": 47325,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 22314,
+          "ledger": 16994,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20603,
+        "request": 4
+      },
+      {
+        "compact_estimate": 37783,
+        "estimate": 38440,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 15687,
+          "ledger": 14754,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21683,
+        "request": 5
+      },
+      {
+        "compact_estimate": 30296,
+        "estimate": 30835,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 14754,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21355,
+        "request": 6
+      },
+      {
+        "compact_estimate": 27526,
+        "estimate": 27978,
+        "fields": {
+          "candidates": 20014,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27710,
+        "request": 7
+      },
+      {
+        "compact_estimate": 33925,
+        "estimate": 34545,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 18300,
+          "older_observation_summaries": 223,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 18193,
+        "request": 8
+      },
+      {
+        "compact_estimate": 40716,
+        "estimate": 41442,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14769,
+          "ledger": 18412,
+          "older_observation_summaries": 288,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20665,
+        "request": 9
+      },
+      {
+        "compact_estimate": 40054,
+        "estimate": 40717,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14040,
+          "ledger": 18412,
+          "older_observation_summaries": 355,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 19978,
+        "request": 10
+      },
+      {
+        "compact_estimate": 18000,
+        "estimate": 18164,
+        "fields": {
+          "candidates": 10488,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 18092,
+        "request": 11
+      },
+      {
+        "compact_estimate": 40721,
+        "estimate": 41389,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 14577,
+          "ledger": 18480,
+          "older_observation_summaries": 416,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20873,
+        "request": 12
+      },
+      {
+        "compact_estimate": 32224,
+        "estimate": 32816,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 7964,
+          "ledger": 16534,
+          "older_observation_summaries": 478,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24469,
+        "request": 13
+      },
+      {
+        "compact_estimate": 34962,
+        "estimate": 35688,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 9626,
+          "ledger": 17545,
+          "older_observation_summaries": 542,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 22733,
+        "request": 14
+      },
+      {
+        "compact_estimate": 41944,
+        "estimate": 42841,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12538,
+          "ledger": 21549,
+          "older_observation_summaries": 608,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23074,
+        "request": 15
+      },
+      {
+        "compact_estimate": 46014,
+        "estimate": 46987,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12539,
+          "ledger": 25553,
+          "older_observation_summaries": 673,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24283,
+        "request": 16
+      }
+    ],
+    "scenario": "stress-checkpoint-and-report-ascii",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 13,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        22314
+      ],
+      [
+        "ledger",
+        16994
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 46589,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  },
+  {
+    "candidates": 8,
+    "compact_headroom": -25714,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 41714,
+      "decide_candidates": 27534,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 41714,
+    "max_estimate": 42301,
+    "max_proposal_by_operation": {
+      "choose_next_action": 20359,
+      "decide_candidates": 27718,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 27718,
+    "observations": 13,
+    "requests": 10,
+    "rows": [
+      {
+        "compact_estimate": 7824,
+        "estimate": 7824,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7824,
+        "request": 1
+      },
+      {
+        "compact_estimate": 29522,
+        "estimate": 29899,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 12174,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20057,
+        "request": 2
+      },
+      {
+        "compact_estimate": 41714,
+        "estimate": 42301,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 24310,
+          "ledger": 10124,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20359,
+        "request": 3
+      },
+      {
+        "compact_estimate": 40265,
+        "estimate": 40868,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 25014,
+          "ledger": 7971,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 16514,
+        "request": 4
+      },
+      {
+        "compact_estimate": 27534,
+        "estimate": 27986,
+        "fields": {
+          "candidates": 20022,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27718,
+        "request": 5
+      },
+      {
+        "compact_estimate": 30549,
+        "estimate": 31089,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 17037,
+          "ledger": 6171,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 18034,
+        "request": 6
+      },
+      {
+        "compact_estimate": 21712,
+        "estimate": 22134,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 6171,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 17706,
+        "request": 7
+      },
+      {
+        "compact_estimate": 19708,
+        "estimate": 20141,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 4083,
+          "older_observation_summaries": 223,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 13155,
+        "request": 8
+      },
+      {
+        "compact_estimate": 27793,
+        "estimate": 28324,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 16119,
+          "ledger": 4139,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 15187,
+        "request": 9
+      },
+      {
+        "compact_estimate": 27131,
+        "estimate": 27599,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 15390,
+          "ledger": 4139,
+          "older_observation_summaries": 355,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 14933,
+        "request": 10
+      }
+    ],
+    "scenario": "stress-max-window-unicode",
+    "stop_reason": "no_ledger_progress",
+    "tool_calls": 8,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        24310
+      ],
+      [
+        "ledger",
+        10124
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        127
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 41714,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -33449,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 49449,
+      "decide_candidates": 33792,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 49449,
+    "max_estimate": 50150,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24678,
+      "decide_candidates": 33976,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 33976,
+    "observations": 17,
+    "requests": 16,
+    "rows": [
+      {
+        "compact_estimate": 7824,
+        "estimate": 7824,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7824,
+        "request": 1
+      },
+      {
+        "compact_estimate": 29522,
+        "estimate": 29899,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 12174,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20057,
+        "request": 2
+      },
+      {
+        "compact_estimate": 49449,
+        "estimate": 50150,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 24310,
+          "ledger": 17858,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24146,
+        "request": 3
+      },
+      {
+        "compact_estimate": 49289,
+        "estimate": 50025,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 25014,
+          "ledger": 16994,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20603,
+        "request": 4
+      },
+      {
+        "compact_estimate": 39133,
+        "estimate": 39790,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 17037,
+          "ledger": 14754,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21683,
+        "request": 5
+      },
+      {
+        "compact_estimate": 30296,
+        "estimate": 30835,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 14754,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21355,
+        "request": 6
+      },
+      {
+        "compact_estimate": 27526,
+        "estimate": 27978,
+        "fields": {
+          "candidates": 20014,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27710,
+        "request": 7
+      },
+      {
+        "compact_estimate": 37128,
+        "estimate": 37798,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 21502,
+          "older_observation_summaries": 223,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 19126,
+        "request": 8
+      },
+      {
+        "compact_estimate": 45269,
+        "estimate": 46045,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 16119,
+          "ledger": 21614,
+          "older_observation_summaries": 288,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21165,
+        "request": 9
+      },
+      {
+        "compact_estimate": 44607,
+        "estimate": 45320,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 15390,
+          "ledger": 21614,
+          "older_observation_summaries": 355,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20911,
+        "request": 10
+      },
+      {
+        "compact_estimate": 22350,
+        "estimate": 22570,
+        "fields": {
+          "candidates": 14838,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 22488,
+        "request": 11
+      },
+      {
+        "compact_estimate": 45535,
+        "estimate": 46261,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 15927,
+          "ledger": 21944,
+          "older_observation_summaries": 416,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21957,
+        "request": 12
+      },
+      {
+        "compact_estimate": 33792,
+        "estimate": 34366,
+        "fields": {
+          "candidates": 26280,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 33976,
+        "request": 13
+      },
+      {
+        "compact_estimate": 36073,
+        "estimate": 36737,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 7964,
+          "ledger": 20383,
+          "older_observation_summaries": 478,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24678,
+        "request": 14
+      },
+      {
+        "compact_estimate": 38811,
+        "estimate": 39609,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 9626,
+          "ledger": 21394,
+          "older_observation_summaries": 542,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 22926,
+        "request": 15
+      },
+      {
+        "compact_estimate": 47787,
+        "estimate": 48790,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12538,
+          "ledger": 27392,
+          "older_observation_summaries": 608,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23869,
+        "request": 16
+      }
+    ],
+    "scenario": "stress-max-candidates-unicode",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 12,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        24310
+      ],
+      [
+        "ledger",
+        17858
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 49449,
+      "operation": "choose_next_action",
+      "request": 3
+    }
+  },
+  {
+    "candidates": 30,
+    "compact_headroom": -33289,
+    "first_compact_request_over_cap": 2,
+    "first_request_over_cap": 2,
+    "max_by_operation": {
+      "choose_next_action": 49289,
+      "decide_candidates": 27526,
+      "interpret": 7824
+    },
+    "max_compact_estimate": 49289,
+    "max_estimate": 50025,
+    "max_proposal_by_operation": {
+      "choose_next_action": 24469,
+      "decide_candidates": 27710,
+      "interpret": 7824
+    },
+    "max_proposal_estimate": 27710,
+    "observations": 27,
+    "requests": 16,
+    "rows": [
+      {
+        "compact_estimate": 7824,
+        "estimate": 7824,
+        "fields": {},
+        "operation": "interpret",
+        "proposal_estimate": 7824,
+        "request": 1
+      },
+      {
+        "compact_estimate": 29522,
+        "estimate": 29899,
+        "fields": {
+          "budgets": 127,
+          "intent": 208,
+          "last_three_observations": 12174,
+          "ledger": 10068,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20057,
+        "request": 2
+      },
+      {
+        "compact_estimate": 46871,
+        "estimate": 47534,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 24310,
+          "ledger": 15280,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23542,
+        "request": 3
+      },
+      {
+        "compact_estimate": 49289,
+        "estimate": 50025,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 25014,
+          "ledger": 16994,
+          "older_observation_summaries": 34,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20603,
+        "request": 4
+      },
+      {
+        "compact_estimate": 39133,
+        "estimate": 39790,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 17037,
+          "ledger": 14754,
+          "older_observation_summaries": 95,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21683,
+        "request": 5
+      },
+      {
+        "compact_estimate": 30296,
+        "estimate": 30835,
+        "fields": {
+          "budgets": 128,
+          "intent": 208,
+          "last_three_observations": 8138,
+          "ledger": 14754,
+          "older_observation_summaries": 157,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 21355,
+        "request": 6
+      },
+      {
+        "compact_estimate": 27526,
+        "estimate": 27978,
+        "fields": {
+          "candidates": 20014,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 27710,
+        "request": 7
+      },
+      {
+        "compact_estimate": 33925,
+        "estimate": 34545,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 8155,
+          "ledger": 18300,
+          "older_observation_summaries": 223,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 18193,
+        "request": 8
+      },
+      {
+        "compact_estimate": 42066,
+        "estimate": 42792,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 16119,
+          "ledger": 18412,
+          "older_observation_summaries": 288,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20232,
+        "request": 9
+      },
+      {
+        "compact_estimate": 41404,
+        "estimate": 42067,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 15390,
+          "ledger": 18412,
+          "older_observation_summaries": 355,
+          "submission_ready": 25
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 19978,
+        "request": 10
+      },
+      {
+        "compact_estimate": 18000,
+        "estimate": 18164,
+        "fields": {
+          "candidates": 10488,
+          "interpreted_intent": 117,
+          "request": 81
+        },
+        "operation": "decide_candidates",
+        "proposal_estimate": 18092,
+        "request": 11
+      },
+      {
+        "compact_estimate": 42071,
+        "estimate": 42739,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 15927,
+          "ledger": 18480,
+          "older_observation_summaries": 416,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 20873,
+        "request": 12
+      },
+      {
+        "compact_estimate": 32224,
+        "estimate": 32816,
+        "fields": {
+          "budgets": 129,
+          "intent": 208,
+          "last_three_observations": 7964,
+          "ledger": 16534,
+          "older_observation_summaries": 478,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24469,
+        "request": 13
+      },
+      {
+        "compact_estimate": 34962,
+        "estimate": 35688,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 9626,
+          "ledger": 17545,
+          "older_observation_summaries": 542,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 22733,
+        "request": 14
+      },
+      {
+        "compact_estimate": 41944,
+        "estimate": 42841,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12538,
+          "ledger": 21549,
+          "older_observation_summaries": 608,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 23074,
+        "request": 15
+      },
+      {
+        "compact_estimate": 46014,
+        "estimate": 46987,
+        "fields": {
+          "budgets": 130,
+          "intent": 208,
+          "last_three_observations": 12539,
+          "ledger": 25553,
+          "older_observation_summaries": 673,
+          "submission_ready": 26
+        },
+        "operation": "choose_next_action",
+        "proposal_estimate": 24283,
+        "request": 16
+      }
+    ],
+    "scenario": "stress-checkpoint-and-report-unicode",
+    "stop_reason": "candidate_cap",
+    "tool_calls": 13,
+    "worst_fields": [
+      [
+        "last_three_observations",
+        25014
+      ],
+      [
+        "ledger",
+        16994
+      ],
+      [
+        "intent",
+        208
+      ],
+      [
+        "budgets",
+        128
+      ],
+      [
+        "older_observation_summaries",
+        34
+      ],
+      [
+        "submission_ready",
+        26
+      ]
+    ],
+    "worst_request": {
+      "compact_estimate": 49289,
+      "operation": "choose_next_action",
+      "request": 4
+    }
+  }
+]
